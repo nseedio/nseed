@@ -16,6 +16,8 @@ The technical solution is a combination of the approaches found in the following
 - [BenchmarkDotNet](https://benchmarkdotnet.org/index.html) ([Source](https://github.com/dotnet/BenchmarkDotNet))
 - [Nuke](https://nuke.build/) ([Source](https://github.com/nuke-build/nuke))
 
+For the reason behind this technical choice see the lab experiment ["Dynamic Assembly Loading"](https://github.com/nseedio/nseed/tree/master/lab/DynamicAssemblyLoading).
+
 Every *Seed Bucket* is a self-contained executable with the following `Main()` method:
 
     class Seeds : SeedBucket
