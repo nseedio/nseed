@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>SmokeTests.BusinessModel.Services</AssemblyName>
+    <RootNamespace>SmokeTests.BusinessModel.Services</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;DotNetCore</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DotNetCore</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Common\BusinessModel.Services\Users\IUserService.cs" Link="Users\IUserService.cs" />
+    <Compile Include="..\..\Common\BusinessModel.Services\Users\NewUser.cs" Link="Users\NewUser.cs" />
+    <Compile Include="..\..\Common\BusinessModel.Services\Users\UserService.cs" Link="Users\UserService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\BusinessModel.Entities\BusinessModel.Entities.csproj" />
+    <ProjectReference Include="..\Persistence.Repositories\Persistence.Repositories.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Users\" />
+  </ItemGroup>
+
+</Project>

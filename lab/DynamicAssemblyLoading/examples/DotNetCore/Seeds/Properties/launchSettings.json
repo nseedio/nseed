@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Seeds": {
+      "commandName": "Project",
+      "commandLineArgs": "seed"
+    }
+  }
+}

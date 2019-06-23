@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>SmokeTests.Seeds</AssemblyName>
+    <RootNamespace>SmokeTests.Seeds</RootNamespace>
+    <LangVersion>7.3</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;DotNetCore</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;DotNetCore</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Common\Seeds\Seeds.cs" Link="Seeds.cs" />
+    <Compile Include="..\..\Common\Seeds\Users\Administrators.cs" Link="Users\Administrators.cs" />
+    <Compile Include="..\..\Common\Seeds\Users\RegularUsers.cs" Link="Users\RegularUsers.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\Common\Seeds\appsettings.Seeds.json" Link="appsettings.Seeds.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Client.RestApi\appsettings.Development.json" Link="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Client.RestApi\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="27.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
+    <PackageReference Include="NSeed" Version="0.1.5" />
+    <PackageReference Include="NSeed.Seeding" Version="0.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\BusinessModel.Entities\BusinessModel.Entities.csproj" />
+    <ProjectReference Include="..\BusinessModel.Services\BusinessModel.Services.csproj" />
+    <ProjectReference Include="..\ServiceConfiguration\ServiceConfiguration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Users\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,4 @@
+# Local NuGet Packages Directory
+local-nuget-feed/**
+!README.md
+!Publish.bat

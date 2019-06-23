@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AssemblyName>SmokeTests.Persistance.Repositories.EntityFrameworkCore</AssemblyName>
+    <RootNamespace>SmokeTests.Persistance.Repositories.EntityFrameworkCore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\BusinessModel.Entities\BusinessModel.Entities.csproj" />
+    <ProjectReference Include="..\Persistence.Repositories\Persistence.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
