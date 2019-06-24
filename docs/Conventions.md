@@ -41,3 +41,7 @@ We do not use underscores to prefix field names.
 We have a common .editorconfig across all code repositories.
 We do not have commented code.
 We have "Warnings as errors" on all projects across all code repositories.
+
+## Exception Handling
+
+Exceptions are propagated and handled in general by the top level caller. If applicable some of the middle callers in the chain can catch them, but only if they know how to handle them.
