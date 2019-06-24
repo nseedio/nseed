@@ -29,12 +29,17 @@ class Build : NukeBuild
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath OutputDirectory => RootDirectory / "output";
 
+    void DeleteOutputFiles()
+    {
+        OutputDirectory.GlobFiles("*.nupkg", "*.snupkg").ForEach(DeleteFile);
+    }
+
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(OutputDirectory);
+            DeleteOutputFiles();
         });
 
     Target Restore => _ => _
@@ -49,8 +54,22 @@ class Build : NukeBuild
         .Executes(() =>
         {
             DotNetBuild(s => s
+                .EnableNoRestore()
                 .SetProjectFile(Solution)
+                .SetConfiguration(Configuration));
+        });
+
+    Target Pack => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DeleteOutputFiles();
+            DotNetPack(s => s
+                .EnableNoBuild()
+                .SetProject(Solution)                
                 .SetConfiguration(Configuration)
-                .EnableNoRestore());
+                .EnableIncludeSymbols()
+                .SetSymbolPackageFormat(DotNetSymbolPackageFormat.snupkg)
+                .SetOutputDirectory(OutputDirectory));
         });
 }

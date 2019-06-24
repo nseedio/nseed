@@ -69,6 +69,9 @@ DocProject/Help/html
 packages/**
 !README.md
 
+# Build Output
+output/**
+!README.md
 
 # Others
 [Bb]in

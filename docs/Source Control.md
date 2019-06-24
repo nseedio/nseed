@@ -26,6 +26,7 @@ For code repositories:
     [lab]
       [FirstExperiment]
       [SecondExperiment]
+    [output]
     [src]
     [tests]
       [acceptance]
