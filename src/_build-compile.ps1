@@ -1,0 +1,1 @@
+﻿..\build\private\build.ps1 --target compile
