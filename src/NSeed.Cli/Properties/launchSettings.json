@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NSeed.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "new"
+    }
+  }
+}
