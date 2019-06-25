@@ -22,6 +22,9 @@ Project names correspond to their folder names:
 ## Unit Testing
 
 We use [xUnit](https://xunit.net/).
+We use [Fluent Assertions](https://fluentassertions.com/).
+We use [Moq](https://github.com/moq/moq4).
+
 Test project names follow the convention `<ProjectName>.Tests.<TestType>`:
 
     NSeed.Tests.Unit.csproj
@@ -29,11 +32,16 @@ Test project names follow the convention `<ProjectName>.Tests.<TestType>`:
     NSeed.Cli.Tests.Integration.csproj
 
 Test projects have the same internal folder and namespace structrue as the projects that they test.
-Test classes have the same name as the classes they test with the suffix "Tests".
+Test class file names have the same name as the class file names they test with the suffix ".<MemberUnderTest>.Tests".
+Test classes have the same name as the classes they test with the suffix "ﾠ<MemberUnderTest>ﾠTests".
 
-Test methods (facts) follow the convention `<MemberUnderTest>__<Precondition_description>__<Expected_result_description>`:
+Test methods (facts) follow the convention `Shouldﾠ<Expectedﾠresultﾠdescription>ﾠwhenﾠ<preconditionﾠdescription>`:
 
-    Validate__Solution_not_defined_multiple_solutions__Error()
+    Shouldﾠextractﾠtypeﾠwhenﾠtypeﾠisﾠnotﾠnull()
+
+We use [Hangul the Filler](http://thehumbleprogrammer.com/his-majesty-hangul-the-filler/) as "space": (ﾠ).
+
+For automatic acceptance tests we use BDD approach and write the tests in the *Given-When-Then* form.
 
 ## General Coding Conventions
 
@@ -45,3 +53,9 @@ We have "Warnings as errors" on all projects across all code repositories.
 ## Exception Handling
 
 Exceptions are propagated and handled in general by the top level caller. If applicable some of the middle callers in the chain can catch them, but only if they know how to handle them.
+
+We throw appropriate Argument Exceptions on all public APIs.
+We throw appropriate NSeed Internal Error Exceptions on all internal APIs.
+We use `System.Diagnostics.Debug.Assert()` on private members.
+
+We use [Light.GuardClauses](https://github.com/feO2x/Light.GuardClauses), not as a NuGet package but as a [<single source file embedded in our projects](https://github.com/feO2x/Light.GuardClauses/wiki/Including-Light.GuardClauses-as-source-code).

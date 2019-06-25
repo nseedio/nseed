@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.705
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed", "NSeed\NSeed.csproj", "{DDCE86C6-1580-4A4F-BE26-337089BABC86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Tests.Unit", "NSeed.Tests.Unit\NSeed.Tests.Unit.csproj", "{3B908412-1059-404F-9925-BFD032D246AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B908412-1059-404F-9925-BFD032D246AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B908412-1059-404F-9925-BFD032D246AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B908412-1059-404F-9925-BFD032D246AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B908412-1059-404F-9925-BFD032D246AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
