@@ -4,7 +4,7 @@ using FluentAssertions;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
 using NSeed.Guards;
-using Humanizer;
+using NSeed.Extensions;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {

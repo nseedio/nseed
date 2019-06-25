@@ -1,12 +1,11 @@
 ﻿using JetBrains.Annotations;
-using Light.GuardClauses.Exceptions;
-using NSeed;
 using NSeed.Extensions;
+using NSeed.Guards.Exceptions;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace Light.GuardClauses
+namespace NSeed.Guards
 {
     internal static partial class Check
     {
@@ -31,7 +30,7 @@ namespace Light.GuardClauses
     }
 }
 
-namespace Light.GuardClauses.Exceptions
+namespace NSeed.Guards.Exceptions
 {
     internal static partial class Throw
     {

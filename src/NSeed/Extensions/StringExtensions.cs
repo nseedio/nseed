@@ -1,6 +1,5 @@
 ﻿using System;
 using NSeed.Guards;
-using Light.GuardClauses;
 
 namespace NSeed.Extensions
 {

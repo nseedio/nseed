@@ -1,12 +1,17 @@
-﻿using System.Linq;
+﻿// Taken and adapted from:
+// https://github.com/Humanizr/Humanizer/blob/10e1be770c00ce59c08d5efbe551800400f02c53/src/Humanizer/StringHumanizeExtensions.cs
+// https://github.com/Humanizr/Humanizer/blob/10e1be770c00ce59c08d5efbe551800400f02c53/src/Humanizer/RegexOptionsUtil.cs
+
+using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Humanizer
+namespace NSeed.Extensions
 {
     /// <summary>
     /// Contains extension methods for humanizing string values.
     /// </summary>
-    public static class StringHumanizeExtensions
+    internal static class StringHumanizeExtensions
     {
         private static readonly Regex PascalCaseWordPartsRegex;
         private static readonly Regex FreestandingSpacingCharRegex;
@@ -63,5 +68,15 @@ namespace Humanizer
 
             return FromPascalCase(input);
         }
+    }
+
+    internal static class RegexOptionsUtil
+    {
+        static RegexOptionsUtil()
+        {
+            Compiled = Enum.TryParse("Compiled", out RegexOptions compiled) ? compiled : RegexOptions.None;
+        }
+
+        public static RegexOptions Compiled { get; }
     }
 }

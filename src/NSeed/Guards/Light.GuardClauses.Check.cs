@@ -1,3 +1,7 @@
+// Taken and adapted from:
+// https://github.com/feO2x/Light.GuardClauses/blob/8cc1730d96002d7566548d9533b09b8f33eef9a9/Light.GuardClauses.SingleFile.cs
+
+
 /* ------------------------------
    Light.GuardClauses 6.2.0
    ------------------------------
@@ -12,7 +16,7 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and / or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+furnished to do so, subject to the folloBwing conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -37,10 +41,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using Light.GuardClauses.Exceptions;
-using Light.GuardClauses.FrameworkExtensions;
+using NSeed.Guards.Exceptions;
+using NSeed.Guards.FrameworkExtensions;
 
-namespace Light.GuardClauses
+namespace NSeed.Guards
 {
     /// <summary>
     /// The <see cref = "Check"/> class provides access to all assertions of Light.GuardClauses.
@@ -3059,7 +3063,7 @@ namespace Light.GuardClauses
     }
 }
 
-namespace Light.GuardClauses.Exceptions
+namespace NSeed.Guards.Exceptions
 {
     /// <summary>
     /// This exception indicates that an URI is absolute instead of relative.
@@ -3844,7 +3848,7 @@ namespace Light.GuardClauses.Exceptions
     }
 }
 
-namespace Light.GuardClauses.FrameworkExtensions
+namespace NSeed.Guards.FrameworkExtensions
 {
     /// <summary>
     /// Provides extension methods for the <see cref = "IEnumerable{T}"/> interface.

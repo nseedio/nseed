@@ -58,4 +58,19 @@ We throw appropriate Argument Exceptions on all public APIs.
 We throw appropriate NSeed Internal Error Exceptions on all internal APIs.
 We use `System.Diagnostics.Debug.Assert()` on private members.
 
-We use [Light.GuardClauses](https://github.com/feO2x/Light.GuardClauses), not as a NuGet package but as a [<single source file embedded in our projects](https://github.com/feO2x/Light.GuardClauses/wiki/Including-Light.GuardClauses-as-source-code).
+We use [Light.GuardClauses](https://github.com/feO2x/Light.GuardClauses).
+In the *Engine* we use it not as a NuGet package but as a [single source file embedded in our projects](https://github.com/feO2x/Light.GuardClauses/wiki/Including-Light.GuardClauses-as-source-code).
+
+## Embedding Third-Party Source Code
+
+In case of embedding a single source file, we "nseedify" it, means we change the namespace etc.
+To distinguish such code on the file level, the file names will contain the original namespace as prefix.
+E.g.
+
+    Light.GuardClauses.Check.cs
+    Humanizer.StringHumanizeExtensions.cs
+
+At the top of the file, we put links to the original source code in the following form:
+
+    // Taken and adapted from:
+    // <link>

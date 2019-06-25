@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
-    <Compile Include="..\Common\Guards\Light.GuardClauses.SingleFile.cs" Link="Guards\Light.GuardClauses.SingleFile.cs" />
     <Compile Include="..\Common\Guards\NSeedInternalErrorArgumentException.cs" Link="Guards\NSeedInternalErrorArgumentException.cs" />
     <Compile Include="..\Common\Guards\NSeedInternalErrorArgumentNullException.cs" Link="Guards\NSeedInternalErrorArgumentNullException.cs" />
   </ItemGroup>

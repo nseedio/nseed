@@ -1,8 +1,7 @@
 ﻿using System;
-using Light.GuardClauses;
 using NSeed.Guards;
 using System.Linq;
-using Humanizer;
+using NSeed.Extensions;
 
 namespace NSeed.Discovery.Seed.ReflectionBased
 {

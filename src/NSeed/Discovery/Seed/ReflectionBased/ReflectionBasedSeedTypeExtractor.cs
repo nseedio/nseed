@@ -1,5 +1,4 @@
 ﻿using System;
-using Light.GuardClauses;
 using NSeed.Guards;
 
 namespace NSeed.Discovery.Seed.ReflectionBased
