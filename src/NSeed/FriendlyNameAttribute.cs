@@ -10,8 +10,15 @@ namespace NSeed
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class FriendlyNameAttribute : Attribute
     {
+        /// <summary>
+        /// The friendly name.
+        /// </summary>
         public string FriendlyName { get; }
 
+        /// <summary>
+        /// Creates new <see cref="FriendlyNameAttribute"/> with the specified friendly name.
+        /// </summary>
+        /// <param name="friendlyName">The friendly name.</param>
         public FriendlyNameAttribute(string friendlyName)
         {
             FriendlyName = friendlyName.MustNotBeNull(nameof(friendlyName));

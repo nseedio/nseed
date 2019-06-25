@@ -17,7 +17,7 @@ namespace NSeed
         /// The full name of the seed.
         /// </summary>
         /// <remarks>
-        /// If the <see cref="Type"/> exists, this property is equal to <see cref="SeedInfo.Type.FullName"/>.
+        /// If the <see cref="Type"/> exists, this property is equal to its <see cref="Type.FullName"/>.
         /// </remarks>
         public string FullName { get; }
 
