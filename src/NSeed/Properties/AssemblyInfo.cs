@@ -1,13 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 
 [assembly:InternalsVisibleTo("NSeed.Tests.Unit")]
-// ReSharper disable CheckNamespace
-internal static partial class AssemblyDescription
-{
-    public const string Title = "NSeed";
 
-    public const string Description = "Seeding framework for .NET.";
-
-    public const string InformationalVersion = Version;
-}
-// ReSharper restore CheckNamespace
+[assembly: AssemblyTitle("NSeed")]
+[assembly: AssemblyDescription("Seeding framework for .NET.")]
