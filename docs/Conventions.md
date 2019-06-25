@@ -74,3 +74,7 @@ At the top of the file, we put links to the original source code in the followin
 
     // Taken and adapted from:
     // <link>
+
+## Extension Classes
+
+Extension classes have the following name "<ExtendedType>Extensions" and are placed in the folder and namespace "Extensions".

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace NSeed.Cli.Extensions
 {
-    public static class CommandLineUtils
+    public static class ConventionContextExtensions
     {
         public static T GetValue<T>(this ConventionContext context, string parameterName) where T : class
         {
