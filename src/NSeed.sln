@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.705
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed", "NSeed\NSeed.csproj", "{DDCE86C6-1580-4A4F-BE26-337089BABC86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli", "NSeed.Cli\NSeed.Cli.csproj", "{66C8DA2A-0836-40CF-A6AF-0558A84EE568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli.Tests.Unit", "NSeed.Cli.Tests.Unit\NSeed.Cli.Tests.Unit.csproj", "{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli.Tests.Integration", "NSeed.Cli.Tests.Integration\NSeed.Cli.Tests.Integration.csproj", "{14683494-B43F-44CD-AB16-C160BF22AE31}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Tests.Unit", "NSeed.Tests.Unit\NSeed.Tests.Unit.csproj", "{3B908412-1059-404F-9925-BFD032D246AA}"
 EndProject
@@ -17,6 +23,18 @@ Global
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DDCE86C6-1580-4A4F-BE26-337089BABC86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66C8DA2A-0836-40CF-A6AF-0558A84EE568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66C8DA2A-0836-40CF-A6AF-0558A84EE568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66C8DA2A-0836-40CF-A6AF-0558A84EE568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66C8DA2A-0836-40CF-A6AF-0558A84EE568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14683494-B43F-44CD-AB16-C160BF22AE31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14683494-B43F-44CD-AB16-C160BF22AE31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14683494-B43F-44CD-AB16-C160BF22AE31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14683494-B43F-44CD-AB16-C160BF22AE31}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B908412-1059-404F-9925-BFD032D246AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B908412-1059-404F-9925-BFD032D246AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B908412-1059-404F-9925-BFD032D246AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
