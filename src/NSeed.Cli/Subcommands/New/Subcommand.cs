@@ -24,9 +24,9 @@ namespace NSeed.Cli.Subcommands.New
         [NameDefaultValueProvider(New.DefaultProjectName)]
         public string Name { get; private set; }
 
-        private async Task OnExecute(CommandLineApplication app)
+        private Task OnExecute(CommandLineApplication app)
         {
-
+            return Task.CompletedTask;
         }
     }
 }
