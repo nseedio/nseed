@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="difflib" Version="2017.7.26.1241" />
     <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.3.4" />
     <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="2.3.4" />
