@@ -11,7 +11,7 @@ using System.Reflection;
 namespace NSeed.Cli.Subcommands.New.ValueProviders
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class FrameworkDefaultValueProvider : Attribute, IMemberConvention
+    internal class FrameworkDefaultValueProvider : Attribute, IMemberConvention
     {
         public void Apply(ConventionContext context, MemberInfo member)
         {

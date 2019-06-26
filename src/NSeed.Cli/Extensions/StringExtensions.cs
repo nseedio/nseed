@@ -1,6 +1,6 @@
 ﻿namespace NSeed.Cli.Extensions
 {
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         public static bool IsNotProvidedByUser(this string item)
         {

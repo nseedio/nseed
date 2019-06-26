@@ -3,7 +3,7 @@ using System.IO.Abstractions;
 
 namespace NSeed.Cli.Services
 {
-    public interface IFileSystemService
+    internal interface IFileSystemService
     {
         IFile File { get; }
         IPath Path { get; }

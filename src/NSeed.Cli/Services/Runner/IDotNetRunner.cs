@@ -1,6 +1,6 @@
 ﻿namespace NSeed.Cli.Services
 {
-    public interface IDotNetRunner
+    internal interface IDotNetRunner
     {
         RunStatus Run(string workingDirectory, string[] arguments);
     }

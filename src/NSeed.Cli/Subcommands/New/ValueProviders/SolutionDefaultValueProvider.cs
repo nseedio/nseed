@@ -9,7 +9,7 @@ using static NSeed.Cli.Resources.Resources;
 namespace NSeed.Cli.Subcommands.New.ValueProviders
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class SolutionDefaultValueProvider : Attribute, IMemberConvention
+    internal class SolutionDefaultValueProvider : Attribute, IMemberConvention
     {
         public void Apply(ConventionContext context, MemberInfo member)
         {

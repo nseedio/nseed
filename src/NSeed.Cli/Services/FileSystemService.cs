@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace NSeed.Cli.Services
 {
 
-    public class FileSystemService : FileSystem, IFileSystemService  
+    internal class FileSystemService : FileSystem, IFileSystemService  
     {
         public const string SolutionPrefix = "sln";
 

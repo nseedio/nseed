@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace NSeed.Cli.Services
 {
-    public class DependencyGraphService : IDependencyGraphService
+    internal class DependencyGraphService : IDependencyGraphService
     {
         private readonly IDotNetRunner DotNetRunner;
         private readonly IFileSystemService FileSystemService;

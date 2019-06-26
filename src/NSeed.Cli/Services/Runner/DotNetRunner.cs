@@ -11,7 +11,7 @@ namespace NSeed.Cli.Services
 {
     //TODO:am Replace DotNetRunner u common project so that evryone can use that
 
-    public class DotNetRunner : IDotNetRunner
+    internal class DotNetRunner : IDotNetRunner
     {
         public RunStatus Run(string workingDirectory, string[] arguments)
         {

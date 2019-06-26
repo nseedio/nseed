@@ -2,7 +2,7 @@
 
 namespace NSeed.Cli.Services
 {
-    public interface IDependencyGraphService
+    internal interface IDependencyGraphService
     {
         DependencyGraphSpec GenerateDependencyGraph(string projectPath);
         string GetProjectsPrefix(string solutionPath);

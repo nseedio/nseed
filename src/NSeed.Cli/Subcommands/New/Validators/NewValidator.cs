@@ -7,7 +7,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
 {
 
     [AttributeUsage(AttributeTargets.Class)]
-    public class NewValidator : ValidationAttribute
+    internal class NewValidator : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {

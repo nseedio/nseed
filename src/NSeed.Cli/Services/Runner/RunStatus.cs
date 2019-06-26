@@ -1,6 +1,6 @@
 ﻿namespace NSeed.Cli.Services
 {
-    public class RunStatus
+    internal class RunStatus
     {
         public string Output { get; }
         public string Errors { get; }

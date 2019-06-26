@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NSeed.Cli.Validation
 {
-    public interface IValidator
+    internal interface IValidator
     {
         ValidationResult Validate();
     }

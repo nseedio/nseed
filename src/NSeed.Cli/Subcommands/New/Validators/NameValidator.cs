@@ -3,7 +3,7 @@ using NSeed.Cli.Validation;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    public class NameValidator : Subcommand, IValidator
+    internal class NameValidator : Subcommand, IValidator
     {
         public NameValidator()
         {

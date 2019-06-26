@@ -11,7 +11,7 @@ namespace NSeed.Cli
 {
     [Command(Name = "nseed", Description = "Data seeding command line tool.")]
     [Subcommand(typeof(Subcommands.New.Subcommand))]
-    public class Program
+    internal class Program
     {
         public static async Task<int> Main(string[] args)
         {

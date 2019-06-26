@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace NSeed.Cli.Subcommands.New.ValueProviders
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class NameDefaultValueProvider : Attribute, IMemberConvention
+    internal class NameDefaultValueProvider : Attribute, IMemberConvention
     {
         private readonly string DefaultName;
 

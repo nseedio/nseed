@@ -2,7 +2,7 @@
 
 namespace NSeed.Cli.Resources
 {
-    public static class Resources
+    internal static class Resources
     {
         /// <summary>
         /// The directory from which the command was initiated

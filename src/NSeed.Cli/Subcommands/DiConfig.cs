@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands
 {
-    public class DiConfig
+    internal class DiConfig
     {
         public static void RegisterValidators(IServiceCollection container)
         {

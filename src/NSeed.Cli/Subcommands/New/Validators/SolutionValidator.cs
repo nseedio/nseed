@@ -4,7 +4,7 @@ using NSeed.Cli.Validation;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    public class SolutionValidator : Subcommand, IValidator
+    internal class SolutionValidator : Subcommand, IValidator
     {
         public IFileSystemService FileSystemService { get; }
         public IDependencyGraphService DependencyGraphService { get; }

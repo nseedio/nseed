@@ -2,7 +2,7 @@
 
 namespace NSeed.Cli.Services
 {
-    public class DiConfig
+    internal class DiConfig
     {
         public static void RegisterServices(IServiceCollection container)
         {

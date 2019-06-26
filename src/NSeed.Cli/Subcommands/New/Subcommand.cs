@@ -10,7 +10,7 @@ namespace NSeed.Cli.Subcommands.New
 
     [Command("new", Description = New.CommandDescription)]
     [NewValidator]
-    public class Subcommand
+    internal class Subcommand
     {
         [Option("-s|--solution", Description = New.SolutionDescription)]
         [SolutionDefaultValueProvider]

@@ -4,7 +4,7 @@ using System;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    public class FrameworkValidator : Subcommand, IValidator
+    internal class FrameworkValidator : Subcommand, IValidator
     {
         public FrameworkValidator()
         {

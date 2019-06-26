@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NSeed.Cli.Validation
 {
-    public class ValidationResult
+    internal class ValidationResult
     {
         public static ValidationResult Success => new ValidationResult { IsValid = true };
         public static ValidationResult Error(string message)
