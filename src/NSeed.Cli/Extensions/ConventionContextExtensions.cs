@@ -1,7 +1,9 @@
-﻿using McMaster.Extensions.CommandLineUtils.Conventions;
+﻿using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Validation;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NSeed.Cli.Extensions
@@ -10,25 +12,20 @@ namespace NSeed.Cli.Extensions
     {
         public static T GetValue<T>(this ConventionContext context, string parameterName) where T : class
         {
-            var newSubcommandOptions = context.Application.GetOptions();
-            var solution = newSubcommandOptions
-                .FirstOrDefault(b => b.LongName.Equals(parameterName, StringComparison.InvariantCultureIgnoreCase))
-                .Values
+            var optionValue = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName)
                 .FirstOrDefault();
-            return solution as T;
+            return optionValue as T;
         }
 
         public static void SetValue(this ConventionContext context, string parameterName, string value)
         {
-            var newSubcommandOptions = context.Application.GetOptions();
-            var solutionValues = newSubcommandOptions
-                .FirstOrDefault(b => b.LongName.Equals(parameterName, StringComparison.InvariantCultureIgnoreCase))
-                .Values;
-            if (solutionValues != null && solutionValues.Count == 1)
+            var solutionValues = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName).ToList();
+
+            if(solutionValues.Any() && solutionValues.Count == 1)
             {
                 solutionValues[0] = value;
             }
-            if (!solutionValues.Any())
+            else
             {
                 solutionValues.Add(value);
             }
@@ -40,6 +37,14 @@ namespace NSeed.Cli.Extensions
             return context.Application
                     .GetServices<IValidator>()
                     .FirstOrDefault(s => s.GetType() == typeof(T));
+        }
+
+        private static IEnumerable<string> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
+        {
+            options.AreEmptyIfNull();
+            return options.FirstOrDefault(b => b.LongName.Equals(longName, 
+                StringComparison.InvariantCultureIgnoreCase))
+                ?.Values ?? Enumerable.Empty<string>();
         }
     }
 }
