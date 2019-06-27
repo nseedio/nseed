@@ -5,13 +5,19 @@ VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed", "NSeed\NSeed.csproj", "{DDCE86C6-1580-4A4F-BE26-337089BABC86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli", "NSeed.Cli\NSeed.Cli.csproj", "{66C8DA2A-0836-40CF-A6AF-0558A84EE568}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed.Cli", "NSeed.Cli\NSeed.Cli.csproj", "{66C8DA2A-0836-40CF-A6AF-0558A84EE568}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli.Tests.Unit", "NSeed.Cli.Tests.Unit\NSeed.Cli.Tests.Unit.csproj", "{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed.Cli.Tests.Unit", "NSeed.Cli.Tests.Unit\NSeed.Cli.Tests.Unit.csproj", "{20A61D7D-FC09-4FA7-9D2B-B589F17D7DB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Cli.Tests.Integration", "NSeed.Cli.Tests.Integration\NSeed.Cli.Tests.Integration.csproj", "{14683494-B43F-44CD-AB16-C160BF22AE31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed.Cli.Tests.Integration", "NSeed.Cli.Tests.Integration\NSeed.Cli.Tests.Integration.csproj", "{14683494-B43F-44CD-AB16-C160BF22AE31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSeed.Tests.Unit", "NSeed.Tests.Unit\NSeed.Tests.Unit.csproj", "{3B908412-1059-404F-9925-BFD032D246AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed.Tests.Unit", "NSeed.Tests.Unit\NSeed.Tests.Unit.csproj", "{3B908412-1059-404F-9925-BFD032D246AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProperties", "BuildProperties", "{9DDC0610-54E0-4125-B750-0A3268F81B84}"
+	ProjectSection(SolutionItems) = preProject
+		BuildProperties.Common.props = BuildProperties.Common.props
+		BuildProperties.Tests.Common.props = BuildProperties.Tests.Common.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

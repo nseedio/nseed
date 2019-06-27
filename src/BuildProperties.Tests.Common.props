@@ -1,0 +1,16 @@
+﻿<Project>
+  <PropertyGroup>
+    <!--
+      It looks like that the <TargetFramework> property cannot be defined in imported props.
+      In that case Visual Studio is not able to load projects.
+      -->
+    
+    <IsPackable>false</IsPackable>
+
+    <LangVersion>7.3</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>    
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+</Project>
