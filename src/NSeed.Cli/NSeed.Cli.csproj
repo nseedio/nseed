@@ -1,23 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\BuildProperties.Common.props" />
+
   <PropertyGroup>
-    <PackAsTool>True</PackAsTool>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <LangVersion>7.3</LangVersion>
-    <ToolCommandName>nseed</ToolCommandName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
 
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0-prealpha</Version>
-    <Authors>NSeed, ironcev</Authors>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/nseedio/nseed</PackageProjectUrl>
-    <RepositoryUrl></RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/nseedio/nseed/master/images/dandelion128x128.png</PackageIconUrl>    
+    <PackAsTool>True</PackAsTool>
+    <ToolCommandName>nseed</ToolCommandName>
   </PropertyGroup>
 
   <ItemGroup>
