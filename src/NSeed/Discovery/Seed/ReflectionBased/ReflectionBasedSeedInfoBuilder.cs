@@ -7,7 +7,8 @@ namespace NSeed.Discovery.Seed.ReflectionBased
         internal ReflectionBasedSeedInfoBuilder()
             : base(new ReflectionBasedSeedTypeExtractor(),
                    new ReflectionBasedSeedFullNameExtractor(),
-                   new ReflectionBasedSeedFriendlyNameExtractor())
+                   new ReflectionBasedSeedFriendlyNameExtractor(),
+                   new ReflectionBasedSeedDescriptionExtractor())
         {
         }
     }

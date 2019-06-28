@@ -24,22 +24,35 @@ namespace NSeed
         /// <summary>
         /// The friendly name of the seed.
         /// </summary>
-        /// <remarks>
+        /// <returns>
         /// If the seed implementation has the <see cref="FriendlyNameAttribute"/> applied
         /// the <see cref="FriendlyNameAttribute.FriendlyName"/> is returned.
         /// <br/>
         /// Otherwise, the humanized version of the implementation type name is returned.
-        /// </remarks>
+        /// </returns>
         public string FriendlyName { get; }
 
-        internal SeedInfo(Type type, string fullName, string friendlyName)
+        /// <summary>
+        /// The description of the seed.
+        /// </summary>
+        /// <returns>
+        /// If the seed implementation has the <see cref="DescriptionAttribute"/> applied
+        /// the <see cref="DescriptionAttribute.Description"/> is returned.
+        /// <br/>
+        /// Otherwise, the <see cref="string.Empty"/> is returned.
+        /// </returns>
+        public string Description { get; }
+
+        internal SeedInfo(Type type, string fullName, string friendlyName, string description)
         {
             System.Diagnostics.Debug.Assert(!fullName.IsNullOrWhiteSpace());
             System.Diagnostics.Debug.Assert(!friendlyName.IsNullOrWhiteSpace());
+            System.Diagnostics.Debug.Assert(description != null);
 
             Type = type;
             FullName = fullName;
             FriendlyName = friendlyName;
+            Description = description;
         }
     }
 }

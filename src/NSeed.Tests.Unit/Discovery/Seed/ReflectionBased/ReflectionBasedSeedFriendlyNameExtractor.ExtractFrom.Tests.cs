@@ -10,7 +10,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
     public partial class ReflectionBasedSeedFriendlyNameExtractorﾠExtractFromﾠTests
     {
-        private ISeedFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedFriendlyNameExtractor();
+        private readonly ISeedFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedFriendlyNameExtractor();
 
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
