@@ -16,7 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProperties", "BuildProperties", "{9DDC0610-54E0-4125-B750-0A3268F81B84}"
 	ProjectSection(SolutionItems) = preProject
 		BuildProperties.Common.props = BuildProperties.Common.props
-		BuildProperties.Tests.Common.props = BuildProperties.Tests.Common.props
+		BuildProperties.Packages.props = BuildProperties.Packages.props
+		BuildProperties.Tests.props = BuildProperties.Tests.props
 	EndProjectSection
 EndProject
 Global

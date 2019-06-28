@@ -1,0 +1,15 @@
+﻿<!-- Build properties used in projects whose outputs are NuGet packages. -->
+<Project>
+
+  <Import Project="BuildProperties.Common.props" />
+
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.0-prealpha</Version>
+    <Authors>NSeed, ironcev</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/nseedio/nseed</PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/nseedio/nseed/master/images/dandelion128x128.png</PackageIconUrl>
+  </PropertyGroup>
+</Project>
