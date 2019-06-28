@@ -1,4 +1,5 @@
 ﻿<!-- Common build properties used in all projects. -->
+<!-- See: https://docs.microsoft.com/en-us/visualstudio/msbuild/customize-your-build?view=vs-2019 -->
 <Project>
   <PropertyGroup>
     <LangVersion>7.3</LangVersion>

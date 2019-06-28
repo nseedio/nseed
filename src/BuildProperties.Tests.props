@@ -1,8 +1,5 @@
 ﻿<!-- Build properties used in test projects. -->
 <Project>
-
-  <Import Project="BuildProperties.Common.props" />
-
   <PropertyGroup>
     <!--
       It looks like that the <TargetFramework> property cannot be defined in imported props.

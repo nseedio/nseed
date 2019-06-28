@@ -1,8 +1,5 @@
 ﻿<!-- Build properties used in projects whose outputs are NuGet packages. -->
 <Project>
-
-  <Import Project="BuildProperties.Common.props" />
-
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.1.0-prealpha</Version>
