@@ -6,7 +6,7 @@ namespace NSeed.Discovery.Seed.ReflectionBased
 {
     internal class ReflectionBasedSeedDescriptionExtractor : ISeedDescriptionExtractor<Type>
     {
-        string ISeedDescriptionExtractor<Type>.ExtractFrom(Type seedImplementation)
+        string IExtractor<Type, string>.ExtractFrom(Type seedImplementation)
         {
             seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());

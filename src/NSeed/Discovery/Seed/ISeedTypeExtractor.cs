@@ -2,9 +2,8 @@
 
 namespace NSeed.Discovery.Seed
 {
-    internal interface ISeedTypeExtractor<TSeedImplementation>
+    internal interface ISeedTypeExtractor<TSeedImplementation> : IExtractor<TSeedImplementation, Type>
         where TSeedImplementation : class
     {
-        Type ExtractFrom(TSeedImplementation seedImplementation);
     }
 }
