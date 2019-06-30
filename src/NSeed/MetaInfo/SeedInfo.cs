@@ -1,26 +1,13 @@
 ﻿using System;
 using NSeed.Guards;
 
-namespace NSeed
+namespace NSeed.MetaInfo
 {
     /// <summary>
-    /// Describes a single <see cref="ISeed"/>.
+    /// Describes a single concrete <see cref="ISeed"/> implementation.
     /// </summary>
-    public class SeedInfo
+    public class SeedInfo : BaseMetaInfo
     {
-        /// <summary>
-        /// The underlying implementation <see cref="System.Type"/> of the seed, if exists, otherwise null.
-        /// </summary>
-        public Type Type { get; }
-
-        /// <summary>
-        /// The full name of the seed.
-        /// </summary>
-        /// <remarks>
-        /// If the <see cref="Type"/> exists, this property is equal to its <see cref="Type.FullName"/>.
-        /// </remarks>
-        public string FullName { get; }
-
         /// <summary>
         /// The friendly name of the seed.
         /// </summary>
@@ -44,13 +31,11 @@ namespace NSeed
         public string Description { get; }
 
         internal SeedInfo(Type type, string fullName, string friendlyName, string description)
-        {
-            System.Diagnostics.Debug.Assert(!fullName.IsNullOrWhiteSpace());
+            :base(type, fullName)
+        {            
             System.Diagnostics.Debug.Assert(!friendlyName.IsNullOrWhiteSpace());
             System.Diagnostics.Debug.Assert(description != null);
 
-            Type = type;
-            FullName = fullName;
             FriendlyName = friendlyName;
             Description = description;
         }

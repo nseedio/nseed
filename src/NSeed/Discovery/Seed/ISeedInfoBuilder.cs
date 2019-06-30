@@ -1,4 +1,6 @@
-﻿namespace NSeed.Discovery.Seed
+﻿using NSeed.MetaInfo;
+
+namespace NSeed.Discovery.Seed
 {
     internal interface ISeedInfoBuilder<TSeedImplementation>
         where TSeedImplementation : class

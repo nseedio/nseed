@@ -1,5 +1,6 @@
 ﻿using System;
 using NSeed.Guards;
+using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Seed
 {
