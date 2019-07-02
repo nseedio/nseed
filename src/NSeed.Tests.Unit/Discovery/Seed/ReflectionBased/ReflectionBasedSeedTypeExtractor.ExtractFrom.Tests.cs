@@ -4,7 +4,7 @@ using FluentAssertions;
 using Moq;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
-using static NSeed.Tests.Unit.Discovery.Seed.ReflectionBased.CommonReflectionBasedSeedExtractorﾠExtractFromﾠTests;
+using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
@@ -15,7 +15,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
         {
-            Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<ReflectionBasedSeedTypeExtractor, Type>();
+            Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<ReflectionBasedSeedTypeExtractor, Type>("seed");
         }
 
         [Fact]

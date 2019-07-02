@@ -2,9 +2,8 @@
 
 namespace NSeed.Discovery.Seed
 {
-    internal interface ISeedInfoBuilder<TSeedImplementation>
+    internal interface ISeedInfoBuilder<TSeedImplementation> : IMetaInfoBuilder<TSeedImplementation, SeedInfo>
         where TSeedImplementation : class
     {
-        SeedInfo BuildSeedInfoFrom(TSeedImplementation seedImplementation);
     }
 }

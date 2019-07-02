@@ -1,4 +1,4 @@
-﻿namespace NSeed.Discovery.Seed
+﻿namespace NSeed.Discovery
 {
     internal interface IExtractor<TSource, TExtract> where TSource : class
     {

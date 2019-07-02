@@ -7,35 +7,35 @@ namespace NSeed.Discovery.Seed
     internal abstract class BaseSeedInfoBuilder<TSeedImplementation> : ISeedInfoBuilder<TSeedImplementation>
         where TSeedImplementation : class
     {
-        private readonly ISeedTypeExtractor<TSeedImplementation> seedTypeExtractor;
-        private readonly ISeedFullNameExtractor<TSeedImplementation> seedFullNameExtractor;
-        private readonly ISeedFriendlyNameExtractor<TSeedImplementation> seedFriendlyNameExtractor;
-        private readonly ISeedDescriptionExtractor<TSeedImplementation> seedDescriptionExtractor;
+        private readonly ISeedTypeExtractor<TSeedImplementation> typeExtractor;
+        private readonly ISeedFullNameExtractor<TSeedImplementation> fullNameExtractor;
+        private readonly ISeedFriendlyNameExtractor<TSeedImplementation> friendlyNameExtractor;
+        private readonly ISeedDescriptionExtractor<TSeedImplementation> descriptionExtractor;
 
-        internal BaseSeedInfoBuilder(ISeedTypeExtractor<TSeedImplementation> seedTypeExtractor,
-                                     ISeedFullNameExtractor<TSeedImplementation> seedFullNameExtractor,
-                                     ISeedFriendlyNameExtractor<TSeedImplementation> seedFriendlyNameExtractor,
-                                     ISeedDescriptionExtractor<TSeedImplementation> seedDescriptionExtractor)
+        internal BaseSeedInfoBuilder(ISeedTypeExtractor<TSeedImplementation> typeExtractor,
+                                     ISeedFullNameExtractor<TSeedImplementation> fullNameExtractor,
+                                     ISeedFriendlyNameExtractor<TSeedImplementation> friendlyNameExtractor,
+                                     ISeedDescriptionExtractor<TSeedImplementation> descriptionExtractor)
         {
-            seedTypeExtractor.MustNotBeNull(nameof(seedTypeExtractor));
-            seedFullNameExtractor.MustNotBeNull(nameof(seedFullNameExtractor));
-            seedFriendlyNameExtractor.MustNotBeNull(nameof(seedFriendlyNameExtractor));
-            seedDescriptionExtractor.MustNotBeNull(nameof(seedDescriptionExtractor));
+            typeExtractor.MustNotBeNull(nameof(typeExtractor));
+            fullNameExtractor.MustNotBeNull(nameof(fullNameExtractor));
+            friendlyNameExtractor.MustNotBeNull(nameof(friendlyNameExtractor));
+            descriptionExtractor.MustNotBeNull(nameof(descriptionExtractor));
 
-            this.seedTypeExtractor = seedTypeExtractor;
-            this.seedFullNameExtractor = seedFullNameExtractor;
-            this.seedFriendlyNameExtractor = seedFriendlyNameExtractor;
-            this.seedDescriptionExtractor = seedDescriptionExtractor;
+            this.typeExtractor = typeExtractor;
+            this.fullNameExtractor = fullNameExtractor;
+            this.friendlyNameExtractor = friendlyNameExtractor;
+            this.descriptionExtractor = descriptionExtractor;
         }
 
-        SeedInfo ISeedInfoBuilder<TSeedImplementation>.BuildSeedInfoFrom(TSeedImplementation seedImplementation)
+        SeedInfo IMetaInfoBuilder<TSeedImplementation, SeedInfo>.BuildFrom(TSeedImplementation implementation)
         {
-            seedImplementation.MustNotBeNull(nameof(seedImplementation));
+            implementation.MustNotBeNull(nameof(implementation));
 
-            Type type = seedTypeExtractor.ExtractFrom(seedImplementation);
-            string fullName = seedFullNameExtractor.ExtractFrom(seedImplementation);
-            string friendlyName = seedFriendlyNameExtractor.ExtractFrom(seedImplementation);
-            string description = seedDescriptionExtractor.ExtractFrom(seedImplementation);
+            Type type = typeExtractor.ExtractFrom(implementation);
+            string fullName = fullNameExtractor.ExtractFrom(implementation);
+            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
+            string description = descriptionExtractor.ExtractFrom(implementation);
 
             return new SeedInfo
                 (

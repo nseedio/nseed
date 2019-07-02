@@ -3,7 +3,7 @@ using Xunit;
 using FluentAssertions;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
-using static NSeed.Tests.Unit.Discovery.Seed.ReflectionBased.CommonReflectionBasedSeedExtractorﾠExtractFromﾠTests;
+using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
@@ -14,7 +14,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
         {
-            Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<ReflectionBasedSeedDescriptionExtractor, string>();
+            Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<ReflectionBasedSeedDescriptionExtractor, string>("seed");
         }
 
         [Fact]

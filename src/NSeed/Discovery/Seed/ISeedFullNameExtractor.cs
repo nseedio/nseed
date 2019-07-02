@@ -1,6 +1,6 @@
 ﻿namespace NSeed.Discovery.Seed
 {
-    internal interface ISeedFullNameExtractor<TSeedImplementation> : IExtractor<TSeedImplementation, string>
+    internal interface ISeedFullNameExtractor<TSeedImplementation> : IFullNameExtractor<TSeedImplementation>
         where TSeedImplementation : class
     {
     }

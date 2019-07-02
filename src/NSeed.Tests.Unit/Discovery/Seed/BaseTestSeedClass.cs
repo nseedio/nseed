@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace NSeed.Tests.Unit.Discovery.Seed
 {
-    internal class BaseTestSeed : ISeed
+    internal abstract class BaseTestSeed : ISeed
     {
         public Task<bool> OutputAlreadyExists()
         {
