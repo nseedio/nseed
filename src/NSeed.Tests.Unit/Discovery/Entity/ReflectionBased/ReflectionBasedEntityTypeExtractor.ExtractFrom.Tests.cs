@@ -44,22 +44,9 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         [Fact]
         public void Shouldﾠextractﾠnullﾠwhenﾠtypeﾠisﾠgenericﾠtypeﾠparameter()
         {
-            Type type = GetGenericTypeParameter();
-            type.Should().Match(it => it.IsGenericParameter);
+            Type type = TestHelper.GetGenericTypeParameter();
 
             extractor.ExtractFrom(type).Should().BeNull();
-
-            Type GetGenericTypeParameter()
-            {
-                return typeof(ClassWithGenericMethod)
-                    .GetMethod("Method")
-                    .ReturnType;
-            }
-        }
-
-        private class ClassWithGenericMethod
-        {
-            public T Method<T>(T t) => t;
         }
     }
 }

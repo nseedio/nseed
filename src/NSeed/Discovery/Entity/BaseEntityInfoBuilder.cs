@@ -28,10 +28,10 @@ namespace NSeed.Discovery.Entity
             string fullName = fullNameExtractor.ExtractFrom(implementation);
 
             return new EntityInfo
-                (
-                    type,
-                    fullName
-                );
+            (
+                type,
+                fullName
+            );
         }
     }
 }

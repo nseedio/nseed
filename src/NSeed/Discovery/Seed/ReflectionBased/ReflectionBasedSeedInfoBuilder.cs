@@ -2,9 +2,9 @@
 
 namespace NSeed.Discovery.Seed.ReflectionBased
 {
-    internal abstract class ReflectionBasedSeedInfoBuilder : BaseSeedInfoBuilder<Type>
+    internal class ReflectionBasedSeedInfoBuilder : BaseSeedInfoBuilder<Type>
     {
-        internal ReflectionBasedSeedInfoBuilder()
+        public ReflectionBasedSeedInfoBuilder()
             : base(new ReflectionBasedSeedTypeExtractor(),
                    new ReflectionBasedSeedFullNameExtractor(),
                    new ReflectionBasedSeedFriendlyNameExtractor(),

@@ -2,9 +2,9 @@
 
 namespace NSeed.Discovery.Entity.ReflectionBased
 {
-    internal abstract class ReflectionBasedEntityInfoBuilder : BaseEntityInfoBuilder<Type>
+    internal class ReflectionBasedEntityInfoBuilder : BaseEntityInfoBuilder<Type>
     {
-        internal ReflectionBasedEntityInfoBuilder()
+        public ReflectionBasedEntityInfoBuilder()
             : base(new ReflectionBasedEntityTypeExtractor(),
                    new ReflectionBasedEntityFullNameExtractor())
         {

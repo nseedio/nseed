@@ -8,9 +8,8 @@ namespace NSeed.Discovery.Entity.ReflectionBased
         string IExtractor<Type, string>.ExtractFrom(Type entityImplementation)
         {
             entityImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(entityImplementation)));
-            System.Diagnostics.Debug.Assert(entityImplementation.IsSeedType());
 
-            return entityImplementation.FullName;
+            return entityImplementation.FullName ?? string.Empty;
         }
     }
 }

@@ -38,12 +38,12 @@ namespace NSeed.Discovery.Seed
             string description = descriptionExtractor.ExtractFrom(implementation);
 
             return new SeedInfo
-                (
-                    type,
-                    fullName,
-                    friendlyName,
-                    description
-                );
+            (
+                type,
+                fullName,
+                friendlyName,
+                description
+            );
         }
     }
 }

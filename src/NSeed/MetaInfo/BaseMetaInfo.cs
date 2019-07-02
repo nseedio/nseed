@@ -1,5 +1,4 @@
-﻿using NSeed.Guards;
-using System;
+﻿using System;
 
 namespace NSeed.MetaInfo
 {
@@ -29,7 +28,7 @@ namespace NSeed.MetaInfo
         /// </summary>
         internal protected BaseMetaInfo(Type type, string fullName)
         {
-            System.Diagnostics.Debug.Assert(!fullName.IsNullOrWhiteSpace());
+            System.Diagnostics.Debug.Assert(fullName != null);
 
             Type = type;
             FullName = fullName;
