@@ -45,5 +45,14 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);
         }
+
+        [Fact]
+        public void ShouldﾠreturnﾠexactlyﾠtheﾠsameﾠEntityInfoﾠforﾠtheﾠsameﾠentityﾠtype()
+        {
+            Type type01 = typeof(string);
+            Type type02 = typeof(string);
+
+            builder.BuildFrom(type01).Should().BeSameAs(builder.BuildFrom(type02));
+        }
     }
 }

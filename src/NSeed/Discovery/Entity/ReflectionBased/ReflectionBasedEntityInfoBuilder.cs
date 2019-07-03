@@ -6,7 +6,8 @@ namespace NSeed.Discovery.Entity.ReflectionBased
     {
         public ReflectionBasedEntityInfoBuilder()
             : base(new ReflectionBasedEntityTypeExtractor(),
-                   new ReflectionBasedEntityFullNameExtractor())
+                   new ReflectionBasedEntityFullNameExtractor(),
+                   new ReflectionBasedEntityInfoPool())
         {
         }
     }

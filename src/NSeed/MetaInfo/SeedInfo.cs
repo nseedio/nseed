@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSeed.Guards;
 
 namespace NSeed.MetaInfo
@@ -30,14 +31,26 @@ namespace NSeed.MetaInfo
         /// </returns>
         public string Description { get; }
 
-        internal SeedInfo(Type type, string fullName, string friendlyName, string description)
+        /// <summary>
+        /// Entities created by this seed.
+        /// </summary>
+        public IReadOnlyCollection<EntityInfo> Entities { get; }
+
+        internal SeedInfo(
+            Type type,
+            string fullName,
+            string friendlyName,
+            string description,
+            IReadOnlyCollection<EntityInfo> entities)
             :base(type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!friendlyName.IsNullOrWhiteSpace());
             System.Diagnostics.Debug.Assert(description != null);
+            System.Diagnostics.Debug.Assert(entities != null);
 
             FriendlyName = friendlyName;
             Description = description;
+            Entities = entities;
         }
     }
 }

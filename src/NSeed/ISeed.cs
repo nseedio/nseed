@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NSeed
 {
@@ -47,5 +49,22 @@ namespace NSeed
         /// For example, deletes database entries created within the <see cref="Seed"/> method.
         /// </summary>
         Task WeedOut();
+    }
+
+    internal static class SeedInterfaceTypeExtensions
+    {
+        private static readonly HashSet<Type> SeedInterfacesWithEntities = new HashSet<Type>
+        {
+            typeof(ISeed<>),
+            typeof(ISeed<,>),
+            typeof(ISeed<,,>)
+        };
+
+        internal static bool IsSeedInterfaceWithEntities(this Type type)
+        {
+            System.Diagnostics.Debug.Assert(type != null);
+
+            return SeedInterfacesWithEntities.Contains(type);
+        }
     }
 }

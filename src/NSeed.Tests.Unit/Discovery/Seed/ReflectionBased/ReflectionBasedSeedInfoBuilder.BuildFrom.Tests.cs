@@ -29,7 +29,13 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
                 type,
                 type.FullName,
                 SomeFriendlyName,
-                SomeDescription
+                SomeDescription,
+                new []
+                {
+                    new EntityInfo(typeof(object), typeof(object).FullName),
+                    new EntityInfo(typeof(string), typeof(string).FullName),
+                    new EntityInfo(typeof(int), typeof(int).FullName)
+                }
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);
@@ -39,7 +45,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private const string SomeDescription = "Some description";
         [FriendlyName(SomeFriendlyName)]
         [Description(SomeDescription)]
-        private class FullyPopulatedSeed : BaseTestSeed { }
+        private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int> { }
 
         [Fact]
         public void ShouldﾠreturnﾠexpectedﾠminimalﾠSeedInfo()
@@ -51,7 +57,8 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
                 type,
                 type.FullName,
                 type.Name.Humanize(),
-                string.Empty
+                string.Empty,
+                Array.Empty<EntityInfo>()
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);
