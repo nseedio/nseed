@@ -1,8 +1,6 @@
 ﻿using System;
 using NSeed.Guards;
 using NSeed.MetaInfo;
-using NSeed.Discovery.Entity;
-using System.Linq;
 
 namespace NSeed.Discovery.Seed
 {
@@ -18,29 +16,25 @@ namespace NSeed.Discovery.Seed
         private readonly ISeedFullNameExtractor<TSeedImplementation> fullNameExtractor;
         private readonly ISeedFriendlyNameExtractor<TSeedImplementation> friendlyNameExtractor;
         private readonly ISeedDescriptionExtractor<TSeedImplementation> descriptionExtractor;
-        private readonly IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer;
-        private readonly IEntityInfoBuilder<TEntityImplementation> entityBuilder;
+        private readonly ISeedEntitiesExtractor<TSeedImplementation> entitiesExtractor;
 
         internal BaseSeedInfoBuilder(ISeedTypeExtractor<TSeedImplementation> typeExtractor,
                                      ISeedFullNameExtractor<TSeedImplementation> fullNameExtractor,
                                      ISeedFriendlyNameExtractor<TSeedImplementation> friendlyNameExtractor,
                                      ISeedDescriptionExtractor<TSeedImplementation> descriptionExtractor,
-                                     IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
-                                     IEntityInfoBuilder<TEntityImplementation> entityBuilder)
+                                     ISeedEntitiesExtractor<TSeedImplementation> entitiesExtractor)
         {
             typeExtractor.MustNotBeNull(nameof(typeExtractor));
             fullNameExtractor.MustNotBeNull(nameof(fullNameExtractor));
             friendlyNameExtractor.MustNotBeNull(nameof(friendlyNameExtractor));
             descriptionExtractor.MustNotBeNull(nameof(descriptionExtractor));
-            entityDiscoverer.MustNotBeNull(nameof(entityDiscoverer));
-            entityBuilder.MustNotBeNull(nameof(entityBuilder));
+            entitiesExtractor.MustNotBeNull(nameof(entitiesExtractor));
 
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
             this.friendlyNameExtractor = friendlyNameExtractor;
             this.descriptionExtractor = descriptionExtractor;
-            this.entityDiscoverer = entityDiscoverer;
-            this.entityBuilder = entityBuilder;
+            this.entitiesExtractor = entitiesExtractor;
         }
 
         SeedInfo IMetaInfoBuilder<TSeedImplementation, SeedInfo>.BuildFrom(TSeedImplementation implementation)
@@ -51,10 +45,7 @@ namespace NSeed.Discovery.Seed
             string fullName = fullNameExtractor.ExtractFrom(implementation);
             string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
             string description = descriptionExtractor.ExtractFrom(implementation);
-            var entities = entityDiscoverer.DiscoverIn(implementation)
-                                .DiscoveredItems
-                                .Select(entityType => entityBuilder.BuildFrom(entityType))
-                                .ToArray();
+            var entities = entitiesExtractor.ExtractFrom(implementation);
 
             return new SeedInfo
             (

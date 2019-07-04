@@ -1,5 +1,4 @@
-﻿using NSeed.Discovery.Entity.ReflectionBased;
-using System;
+﻿using System;
 
 namespace NSeed.Discovery.Seed.ReflectionBased
 {
@@ -10,8 +9,7 @@ namespace NSeed.Discovery.Seed.ReflectionBased
                    new ReflectionBasedSeedFullNameExtractor(),
                    new ReflectionBasedSeedFriendlyNameExtractor(),
                    new ReflectionBasedSeedDescriptionExtractor(),
-                   new ReflectionBasedEntityInSeedDiscoverer(),
-                   new ReflectionBasedEntityInfoBuilder())
+                   new ReflectionBasedSeedEntitiesExtractor())
         {
         }
     }
