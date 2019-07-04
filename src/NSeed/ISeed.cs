@@ -43,12 +43,6 @@ namespace NSeed
         /// This means that the seed was already successfuly executed.
         /// </summary>
         Task<bool> OutputAlreadyExists();
-
-        /// <summary>
-        /// Weeds out the output of this seed.
-        /// For example, deletes database entries created within the <see cref="Seed"/> method.
-        /// </summary>
-        Task WeedOut();
     }
 
     internal static class SeedInterfaceTypeExtensions
