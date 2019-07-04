@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 
 namespace NSeed
 {
@@ -18,10 +17,10 @@ namespace NSeed
         /// <summary>
         /// Creates new <see cref="FriendlyNameAttribute"/> with the specified friendly name.
         /// </summary>
-        /// <param name="friendlyName">The friendly name. It must not be null, empty, or white space.</param>
+        /// <param name="friendlyName">The friendly name. It must not be null, empty, or whitespace.</param>
         public FriendlyNameAttribute(string friendlyName)
         {
-            FriendlyName = friendlyName.MustNotBeNullOrWhiteSpace(nameof(friendlyName));
+            FriendlyName = friendlyName;
         }
     }
 }

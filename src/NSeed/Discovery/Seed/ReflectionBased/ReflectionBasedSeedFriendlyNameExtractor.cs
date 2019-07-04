@@ -13,15 +13,29 @@ namespace NSeed.Discovery.Seed.ReflectionBased
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
             System.Diagnostics.Debug.Assert(errorCollector != null);
 
-            var friendlyName = seedImplementation
+            var friendlyNameAttribute = seedImplementation
                 .GetCustomAttributes(typeof(FriendlyNameAttribute), false)
                 .Cast<FriendlyNameAttribute>()
-                .FirstOrDefault()?
-                .FriendlyName;
+                .FirstOrDefault();
 
-            return friendlyName ?? seedImplementation.Name.Humanize();
+            if (friendlyNameAttribute == null)
+                return seedImplementation.Name.Humanize();
 
-            // TODO-IG: Collect errors.
+            var friendlyName = friendlyNameAttribute.FriendlyName;
+
+            bool hasErrors = errorCollector.Collect(collector =>
+            {
+                if (friendlyName == null)
+                    collector.Collect(Errors.Seed.FriendlyName.MustNotBeNull);
+                else if (string.IsNullOrEmpty(friendlyName))
+                    collector.Collect(Errors.Seed.FriendlyName.MustNotBeEmptyString);
+                else if (string.IsNullOrWhiteSpace(friendlyName))
+                    collector.Collect(Errors.Seed.FriendlyName.MustNotBeWhitespace);
+            });
+
+            return hasErrors
+                ? seedImplementation.Name.Humanize()
+                : friendlyName;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NSeed.MetaInfo
@@ -7,7 +8,7 @@ namespace NSeed.MetaInfo
     {
         private readonly List<Error> errors = new List<Error>();
 
-        void IErrorCollector.Add(Error error)
+        void IErrorCollector.Collect(Error error)
         {
             System.Diagnostics.Debug.Assert(error != null);
 
@@ -16,7 +17,16 @@ namespace NSeed.MetaInfo
             errors.Add(error);
         }
 
-        IReadOnlyCollection<Error> IErrorProvider.GetErrors()
+        bool IErrorCollector.Collect(Action<IErrorCollector> collecting)
+        {
+            int errorsBefore = errors.Count;
+
+            collecting(this);
+
+            return errorsBefore != errors.Count;
+        }
+
+        public IReadOnlyCollection<Error> GetErrors()
         {
             return errors;
         }
