@@ -1,7 +1,9 @@
-﻿namespace NSeed.Discovery
+﻿using NSeed.MetaInfo;
+
+namespace NSeed.Discovery
 {
     internal interface IExtractor<TSource, TExtract> where TSource : class
     {
-        TExtract ExtractFrom(TSource source);
+        TExtract ExtractFrom(TSource source, IErrorCollector errorCollector);
     }
 }

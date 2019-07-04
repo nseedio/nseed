@@ -4,12 +4,14 @@ using FluentAssertions;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
 using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
+using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
     public partial class ReflectionBasedSeedDescriptionExtractorﾠExtractFromﾠTests
     {
         private readonly ISeedDescriptionExtractor<Type> extractor = new ReflectionBasedSeedDescriptionExtractor();
+        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
@@ -22,7 +24,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = typeof(SeedWithoutDescriptionAttribute);
 
-            extractor.ExtractFrom(type).Should().BeEmpty();
+            extractor.ExtractFrom(type, collector).Should().BeEmpty();
         }
 
         private const string SomeDescription = "Some description";
@@ -31,7 +33,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = typeof(SeedWithDescriptionAttribute);
 
-            extractor.ExtractFrom(type).Should().Be(SomeDescription);
+            extractor.ExtractFrom(type, collector).Should().Be(SomeDescription);
         }
 
         private class SeedWithoutDescriptionAttribute : BaseTestSeed { }

@@ -23,7 +23,7 @@ namespace NSeed.Discovery.Seed
             this.entityBuilder = entityBuilder;
         }
 
-        IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation)
+        IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
         {
             seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
 
@@ -31,6 +31,8 @@ namespace NSeed.Discovery.Seed
                                 .DiscoveredItems
                                 .Select(entityType => entityBuilder.BuildFrom(entityType))
                                 .ToArray();
+
+            // TODO-IG: Collect errors.
         }
     }
 }

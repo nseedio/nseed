@@ -5,12 +5,14 @@ using Moq;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
 using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
+using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
     public class ReflectionBasedSeedTypeExtractorﾠExtractFromﾠTests
     {
         private readonly ISeedTypeExtractor<Type> extractor = new ReflectionBasedSeedTypeExtractor();
+        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
@@ -23,7 +25,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = new Mock<ISeed>().Object.GetType();
 
-            extractor.ExtractFrom(type).Should().Be(type);
+            extractor.ExtractFrom(type, collector).Should().Be(type);
         }
 
         [Fact]
@@ -31,7 +33,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = new Mock<ISeed<object>>().Object.GetType();
 
-            extractor.ExtractFrom(type).Should().Be(type);
+            extractor.ExtractFrom(type, collector).Should().Be(type);
         }
 
         [Fact]
@@ -39,7 +41,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = new Mock<ISeed<object, object>>().Object.GetType();
 
-            extractor.ExtractFrom(type).Should().Be(type);
+            extractor.ExtractFrom(type, collector).Should().Be(type);
         }
 
         [Fact]
@@ -47,7 +49,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = new Mock<ISeed<object, object, object>>().Object.GetType();
 
-            extractor.ExtractFrom(type).Should().Be(type);
+            extractor.ExtractFrom(type, collector).Should().Be(type);
         }
     }
 }

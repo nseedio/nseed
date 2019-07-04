@@ -33,13 +33,16 @@ namespace NSeed.Discovery.Entity
 
         private EntityInfo CreateEntityInfo(TEntityImplementation implementation)
         {
-            Type type = typeExtractor.ExtractFrom(implementation);
-            string fullName = fullNameExtractor.ExtractFrom(implementation);
+            var errorCollector = new DistinctErrorCollectorAndProvider();
+
+            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
 
             return new EntityInfo
             (
                 type,
                 fullName
+                // TODO-IG: Errors.
             );
         }
     }

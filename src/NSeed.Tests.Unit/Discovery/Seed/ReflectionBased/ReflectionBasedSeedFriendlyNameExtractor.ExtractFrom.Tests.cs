@@ -5,12 +5,14 @@ using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
 using NSeed.Extensions;
 using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
+using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
     public partial class ReflectionBasedSeedFriendlyNameExtractorﾠExtractFromﾠTests
     {
         private readonly ISeedFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedFriendlyNameExtractor();
+        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
@@ -23,7 +25,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = typeof(SeedWithoutFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
+            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
         }
 
         private const string SomeFriendlyName = "Some friendly name";
@@ -32,7 +34,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         {
             Type type = typeof(SeedWithFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type).Should().Be(SomeFriendlyName);
+            extractor.ExtractFrom(type, collector).Should().Be(SomeFriendlyName);
         }
 
         private class SeedWithoutFriendlyNameAttribute : BaseTestSeed { }

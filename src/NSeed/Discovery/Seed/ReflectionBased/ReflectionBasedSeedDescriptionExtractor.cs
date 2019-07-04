@@ -1,12 +1,13 @@
 ﻿using System;
 using NSeed.Guards;
 using System.Linq;
+using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Seed.ReflectionBased
 {
     internal class ReflectionBasedSeedDescriptionExtractor : ISeedDescriptionExtractor<Type>
     {
-        string IExtractor<Type, string>.ExtractFrom(Type seedImplementation)
+        string IExtractor<Type, string>.ExtractFrom(Type seedImplementation, IErrorCollector errorCollector)
         {
             seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
@@ -18,6 +19,8 @@ namespace NSeed.Discovery.Seed.ReflectionBased
                 .Description;
 
             return description ?? string.Empty;
+
+            // TODO-IG: Collect errors.
         }
     }
 }

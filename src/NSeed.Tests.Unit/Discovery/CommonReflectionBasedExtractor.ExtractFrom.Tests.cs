@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using NSeed.Discovery;
 using NSeed.Guards;
+using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery
 {
@@ -18,7 +19,7 @@ namespace NSeed.Tests.Unit.Discovery
         internal static void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<TExtractor, TExtract>(string implementationParameterNamePrefix)
             where TExtractor : class, IExtractor<Type, TExtract>, new()
         {
-            new TExtractor().Invoking(x => x.ExtractFrom(null))
+            new TExtractor().Invoking(x => x.ExtractFrom(null, new DistinctErrorCollectorAndProvider()))
                 .Should()
                 .Throw<NSeedInternalErrorArgumentNullException>()
                 .And.ParamName.Should().Be($"{implementationParameterNamePrefix}Implementation");

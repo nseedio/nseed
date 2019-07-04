@@ -2,12 +2,13 @@
 using NSeed.Guards;
 using System.Linq;
 using NSeed.Extensions;
+using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Seed.ReflectionBased
 {
     internal class ReflectionBasedSeedFriendlyNameExtractor : ISeedFriendlyNameExtractor<Type>
     {
-        string IExtractor<Type, string>.ExtractFrom(Type seedImplementation)
+        string IExtractor<Type, string>.ExtractFrom(Type seedImplementation, IErrorCollector errorCollector)
         {
             seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
@@ -19,6 +20,8 @@ namespace NSeed.Discovery.Seed.ReflectionBased
                 .FriendlyName;
 
             return friendlyName ?? seedImplementation.Name.Humanize();
+
+            // TODO-IG: Collect errors.
         }
     }
 }

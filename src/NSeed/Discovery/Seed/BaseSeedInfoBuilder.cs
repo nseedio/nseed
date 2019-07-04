@@ -41,11 +41,13 @@ namespace NSeed.Discovery.Seed
         {
             implementation.MustNotBeNull(nameof(implementation));
 
-            Type type = typeExtractor.ExtractFrom(implementation);
-            string fullName = fullNameExtractor.ExtractFrom(implementation);
-            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
-            string description = descriptionExtractor.ExtractFrom(implementation);
-            var entities = entitiesExtractor.ExtractFrom(implementation);
+            var errorCollector = new DistinctErrorCollectorAndProvider();
+
+            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
+            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation, errorCollector);
+            string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
+            var entities = entitiesExtractor.ExtractFrom(implementation, errorCollector);
 
             return new SeedInfo
             (
@@ -54,6 +56,7 @@ namespace NSeed.Discovery.Seed
                 friendlyName,
                 description,
                 entities
+                // TODO-IG: Errors.
             );
         }
     }
