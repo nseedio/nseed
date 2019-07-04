@@ -52,11 +52,10 @@ We have "Warnings as errors" on all projects across all code repositories.
 
 ## Exception Handling
 
-Exceptions are propagated and handled in general by the top level caller. If applicable some of the middle callers in the chain can catch them, but only if they know how to handle them.
+Exceptions are propagated and handled in general by the top level caller. If applicable some of the middle level callers in the chain can catch them, but only if they know how to handle them.
 
 We throw appropriate Argument Exceptions on all public APIs.
-We throw appropriate NSeed Internal Error Exceptions on all internal APIs.
-We use `System.Diagnostics.Debug.Assert()` on private members.
+We use `System.Diagnostics.Debug.Assert()` on private and internal members.
 
 We use [Light.GuardClauses](https://github.com/feO2x/Light.GuardClauses).
 In the *Engine* we use it not as a NuGet package but as a [single source file embedded in our projects](https://github.com/feO2x/Light.GuardClauses/wiki/Including-Light.GuardClauses-as-source-code).

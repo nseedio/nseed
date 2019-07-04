@@ -4,7 +4,6 @@ using FluentAssertions;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Discovery.Seed;
 using NSeed.Extensions;
-using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedExtractorﾠExtractFromﾠTests;
 using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
@@ -13,12 +12,6 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
     {
         private readonly ISeedFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedFriendlyNameExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
-
-        [Fact]
-        public void Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull()
-        {
-            Shouldﾠthrowﾠinternalﾠerrorﾠwhenﾠtypeﾠisﾠnull<ReflectionBasedSeedFriendlyNameExtractor, string>("seed");
-        }
 
         [Fact]
         public void ShouldﾠextractﾠhumanizedﾠtypeﾠnameﾠwhenﾠtypeﾠdoesﾠnotﾠhaveﾠFriendlyNameﾠattribute()

@@ -8,8 +8,8 @@ namespace NSeed.Discovery.Seed.ReflectionBased
     {
         Type IExtractor<Type, Type>.ExtractFrom(Type seedImplementation, IErrorCollector errorCollector)
         {
-            seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
+            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return seedImplementation;
 

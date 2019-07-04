@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 
 namespace NSeed.Extensions
 {
@@ -7,8 +6,8 @@ namespace NSeed.Extensions
     {
         internal static bool Contains(this string source, string value, StringComparison comparisonType)
         {
-            source.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(source)));
-            value.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(value)));
+            System.Diagnostics.Debug.Assert(source != null);
+            System.Diagnostics.Debug.Assert(value != null);
 
             return source.IndexOf(value, comparisonType) >= 0;
         }

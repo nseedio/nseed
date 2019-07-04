@@ -25,7 +25,8 @@ namespace NSeed.Discovery.Seed
 
         IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
         {
-            seedImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(seedImplementation)));
+            System.Diagnostics.Debug.Assert(seedImplementation != null);
+            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return entityDiscoverer.DiscoverIn(seedImplementation)
                                 .DiscoveredItems

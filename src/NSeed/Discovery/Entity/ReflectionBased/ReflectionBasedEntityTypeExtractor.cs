@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Entity.ReflectionBased
@@ -8,7 +7,8 @@ namespace NSeed.Discovery.Entity.ReflectionBased
     {
         Type IExtractor<Type, Type>.ExtractFrom(Type entityImplementation, IErrorCollector errorCollector)
         {
-            entityImplementation.MustNotBeNull(() => new NSeedInternalErrorArgumentNullException(nameof(entityImplementation)));
+            System.Diagnostics.Debug.Assert(entityImplementation != null);
+            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return entityImplementation.IsGenericParameter
                 ? null
