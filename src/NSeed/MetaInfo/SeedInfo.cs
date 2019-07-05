@@ -7,7 +7,7 @@ namespace NSeed.MetaInfo
     /// <summary>
     /// Describes a single concrete <see cref="ISeed"/> implementation.
     /// </summary>
-    public class SeedInfo : BaseMetaInfo
+    public sealed class SeedInfo : BaseMetaInfo
     {
         /// <summary>
         /// The friendly name of the seed.

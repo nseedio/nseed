@@ -6,7 +6,7 @@ namespace NSeed.MetaInfo
     /// <summary>
     /// Represents a single error in the definition of any of the NSeed abstractions.
     /// </summary>
-    public class Error
+    public sealed class Error
     {
         /// <summary>
         /// The unique error code of this error.
