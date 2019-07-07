@@ -5,7 +5,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed
 {
     internal abstract class BaseTestSeed : ISeed
     {
-        public Task<bool> OutputAlreadyExists()
+        public Task<bool> HasAlreadyYielded()
         {
             throw new NotImplementedException();
         }

@@ -9,10 +9,12 @@ namespace NSeed
     /// A <see cref="ISeed"/> that seeds three types of entities.
     /// </summary>
     public interface ISeed<TEntity1, TEntity2, TEntity3> : ISeed { }
+
     /// <summary>
     /// A <see cref="ISeed"/> that seeds two types of entities.
     /// </summary>
     public interface ISeed<TEntity1, TEntity2> : ISeed { }
+
     /// <summary>
     /// A <see cref="ISeed"/> that seeds entities of type <typeparamref name="TEntity"/>.
     /// </summary>
@@ -23,7 +25,7 @@ namespace NSeed
     /// A single seed.
     /// </summary>
     /// <remarks>
-    /// To enable better categorization of seeds, it is advisable to use
+    /// To enable better categorization of seeds, the best practice is to use
     /// one of the generic versions of the <see cref="ISeed"/> interface
     /// that denote the type of entities that the seed seeds.
     /// <br/>
@@ -39,10 +41,10 @@ namespace NSeed
         Task Seed();
 
         /// <summary>
-        /// Returns true if the output of this seed already exists.
-        /// This means that the seed was already successfuly executed.
+        /// Returns true if the yield of this seed exists.
+        /// This means that the <see cref="Seed"/> method was already successfuly executed.
         /// </summary>
-        Task<bool> OutputAlreadyExists();
+        Task<bool> HasAlreadyYielded();
     }
 
     internal static class SeedInterfaceTypeExtensions
