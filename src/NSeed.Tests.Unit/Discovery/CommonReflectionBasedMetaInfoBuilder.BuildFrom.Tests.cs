@@ -10,7 +10,7 @@ namespace NSeed.Tests.Unit.Discovery
         // See comment in CommonReflectionBasedExtractorﾠExtractFromﾠTests.
         internal static void Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull<TMetaInfoBuilder, TMetaInfo>()
             where TMetaInfoBuilder : class, IMetaInfoBuilder<Type, TMetaInfo>, new()
-            where TMetaInfo: BaseMetaInfo
+            where TMetaInfo: MetaInfo.MetaInfo
         {
             new TMetaInfoBuilder().Invoking(x => x.BuildFrom(null))
                 .Should()

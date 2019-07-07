@@ -13,7 +13,7 @@ namespace NSeed
     /// This attribute should only be applied on seedable classes
     /// (classes that implement <see cref="ISeed"/> or <see cref="IScenario"/>).
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public sealed class RequiresAttribute : Attribute
     {
         /// <summary>

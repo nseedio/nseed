@@ -1,8 +1,6 @@
 ﻿using JetBrains.Annotations;
-using NSeed.Extensions;
 using NSeed.Guards.Exceptions;
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace NSeed.Guards
@@ -20,12 +18,6 @@ namespace NSeed.Guards
                 Throw.Argument(parameterName);
 
             return parameter;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsSeedType(this Type parameter)
-        {
-            return parameter?.GetInterfaces().Contains(typeof(ISeed)) == true;
         }
     }
 }

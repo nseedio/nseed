@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace NSeed
@@ -56,11 +58,28 @@ namespace NSeed
             typeof(ISeed<,,>)
         };
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool IsSeedInterfaceWithEntities(this Type type)
         {
             System.Diagnostics.Debug.Assert(type != null);
 
             return SeedInterfacesWithEntities.Contains(type);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsSeedType(this Type type)
+        {
+            System.Diagnostics.Debug.Assert(type != null);
+
+            return type.GetInterfaces().Contains(typeof(ISeed));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsSeedableType(this Type type)
+        {
+            System.Diagnostics.Debug.Assert(type != null);
+
+            return type.GetInterfaces().Any(@interface => @interface == typeof(ISeed) || @interface == typeof(IScenario));
         }
     }
 }

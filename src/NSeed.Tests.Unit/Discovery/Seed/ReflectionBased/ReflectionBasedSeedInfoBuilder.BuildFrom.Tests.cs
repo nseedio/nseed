@@ -32,6 +32,12 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
                 SomeDescription,
                 new []
                 {
+                    CreateSeedInfoForMinimalSeedType(typeof(MinimalSeed)),
+                    CreateSeedInfoForMinimalSeedType(typeof(AdditionalMinimalSeed))
+                },
+                Array.Empty<SeedableInfo>(), // TODO-IG: Add Scenarios.
+                new []
+                {
                     new EntityInfo(typeof(object), typeof(object).FullName),
                     new EntityInfo(typeof(string), typeof(string).FullName),
                     new EntityInfo(typeof(int), typeof(int).FullName)
@@ -43,27 +49,47 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 
         private const string SomeFriendlyName = "Some friendly name";
         private const string SomeDescription = "Some description";
+        [Requires(typeof(AdditionalMinimalSeed))]
+        [Requires(typeof(MinimalSeed))]
+        // TODO-IG: Add Scenarios.
         [FriendlyName(SomeFriendlyName)]
         [Description(SomeDescription)]
         private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int> { }
+        private class AdditionalMinimalSeed : BaseTestSeed { }
 
         [Fact]
         public void ShouldﾠreturnﾠexpectedﾠminimalﾠSeedInfo()
         {
             Type type = typeof(MinimalSeed);
 
-            var expected = new SeedInfo
-            (
-                type,
-                type.FullName,
-                type.Name.Humanize(),
-                string.Empty,
-                Array.Empty<EntityInfo>()
-            );
+            var expected = CreateSeedInfoForMinimalSeedType(type);
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);
         }
 
         private class MinimalSeed : BaseTestSeed { }
+
+        [Fact]
+        public void ShouldﾠreturnﾠexactlyﾠtheﾠsameﾠSeedInfoﾠforﾠtheﾠsameﾠseedﾠtype()
+        {
+            Type type01 = typeof(MinimalSeed);
+            Type type02 = typeof(MinimalSeed);
+
+            builder.BuildFrom(type01).Should().BeSameAs(builder.BuildFrom(type02));
+        }
+
+        private static SeedInfo CreateSeedInfoForMinimalSeedType(Type minimalSeedType)
+        {
+            return new SeedInfo
+            (
+                minimalSeedType,
+                minimalSeedType.FullName,
+                minimalSeedType.Name.Humanize(),
+                string.Empty,
+                Array.Empty<SeedableInfo>(),
+                Array.Empty<SeedableInfo>(),
+                Array.Empty<EntityInfo>()
+            );
+        }
     }
 }

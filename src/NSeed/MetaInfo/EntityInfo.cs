@@ -8,7 +8,7 @@ namespace NSeed.MetaInfo
     /// <remarks>
     /// In NSeed terminology seeds seed entity instances.
     /// </remarks>
-    public sealed class EntityInfo : BaseMetaInfo
+    public sealed class EntityInfo : MetaInfo
     {
         internal EntityInfo(Type type, string fullName)
             :base(type, fullName)
