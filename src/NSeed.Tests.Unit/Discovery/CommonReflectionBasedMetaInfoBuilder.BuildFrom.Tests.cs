@@ -5,7 +5,7 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery
 {
-    internal static class CommonReflectionBasedMetaInfoBuilderﾠBuildFromﾠTests
+    internal static class CommonReflectionBasedMetaInfoBuilderﾠBuildFrom
     {
         // See comment in CommonReflectionBasedExtractorﾠExtractFromﾠTests.
         internal static void Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull<TMetaInfoBuilder, TMetaInfo>()

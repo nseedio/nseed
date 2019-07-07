@@ -9,12 +9,12 @@ using NSeed.Discovery.Seedable;
 namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 {
     // TODO-IG: Extend with the tests for Scenarios.
-    public class ReflectionBasedExplicitlyRequiredSeedableDiscovererﾠDiscoverInﾠTests
+    public class ReflectionBasedExplicitlyRequiredSeedableDiscovererﾠDiscoverIn
     {
         private readonly IExplicitlyRequiredSeedableDiscoverer<Type, Type> discoverer = new ReflectionBasedExplicitlyRequiredSeedableDiscoverer();
 
         [Fact]
-        public void ShouldﾠreturnﾠemptyﾠcollectionﾠwhenﾠseedﾠdoesﾠnotﾠhaveﾠRequiresﾠattribute()
+        public void ReturnsﾠemptyﾠcollectionﾠwhenﾠseedﾠdoesﾠnotﾠhaveﾠRequiresﾠattribute()
         {
             Type type = new Mock<ISeed>().Object.GetType();
 
@@ -25,7 +25,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         }
 
         [Fact]
-        public void ShouldﾠreturnﾠemptyﾠcollectionﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠnullﾠtype()
+        public void ReturnsﾠemptyﾠcollectionﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠnullﾠtype()
         {
             Type type = typeof(SeedThatRequiresNull);
 
@@ -38,7 +38,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedThatRequiresNull : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠemptyﾠcollectionﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠnonﾠseedableﾠtype()
+        public void ReturnsﾠemptyﾠcollectionﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠnonﾠseedableﾠtype()
         {
             Type type = typeof(SeedThatRequiresNonSeedableType);
 
@@ -51,7 +51,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedThatRequiresNonSeedableType : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠseedableﾠtype()
+        public void ReturnsﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠRequiresﾠattributeﾠwithﾠseedableﾠtype()
         {
             Type type = typeof(SeedThatRequiresSeedableType);
 
@@ -63,7 +63,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedThatRequiresSeedableType : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠmultipleﾠtypesﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠseedableﾠtypes()
+        public void ReturnsﾠmultipleﾠtypesﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠseedableﾠtypes()
         {
             Type type = typeof(SeedThatRequiresMultipleSeedableTypes);
 
@@ -77,7 +77,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedThatRequiresMultipleSeedableTypes : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠsameﾠseedableﾠtypes()
+        public void ReturnsﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠsameﾠseedableﾠtypes()
         {
             Type type = typeof(SeedThatRequiresSameSeedableTypes);
 
@@ -91,7 +91,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedThatRequiresSameSeedableTypes : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠdistinctﾠtypesﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠoverlappingﾠseedableﾠtypes()
+        public void ReturnsﾠdistinctﾠtypesﾠwhenﾠseedﾠhasﾠmultipleﾠRequiresﾠattributesﾠwithﾠoverlappingﾠseedableﾠtypes()
         {
             Type type = typeof(SeedThatRequiresOverlappingSeedableTypes);
 

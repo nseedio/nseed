@@ -4,22 +4,22 @@ using FluentAssertions;
 using NSeed.Discovery;
 using NSeed.MetaInfo;
 using NSeed.Discovery.Entity.ReflectionBased;
-using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedMetaInfoBuilderﾠBuildFromﾠTests;
+using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedMetaInfoBuilderﾠBuildFrom;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {
-    public class ReflectionBasedEntityInfoBuilderﾠBuildFromﾠTests
+    public class ReflectionBasedEntityInfoBuilderﾠBuildFrom
     {
         private readonly IMetaInfoBuilder<Type, EntityInfo> builder = new ReflectionBasedEntityInfoBuilder();
 
         [Fact]
-        public void Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull()
+        public void Throwsﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull()
         {
             Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull<ReflectionBasedEntityInfoBuilder, EntityInfo>();
         }
 
         [Fact]
-        public void ShouldﾠreturnﾠexpectedﾠfullyﾠpopulatedﾠEntityInfo()
+        public void ReturnsﾠexpectedﾠfullyﾠpopulatedﾠEntityInfo()
         {
             Type type = typeof(string);
 
@@ -33,7 +33,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void ShouldﾠreturnﾠexpectedﾠminimalﾠEntityInfo()
+        public void ReturnsﾠexpectedﾠminimalﾠEntityInfo()
         {
             Type type = TestHelper.GetGenericTypeParameter();
 
@@ -47,7 +47,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void ShouldﾠreturnﾠexactlyﾠtheﾠsameﾠEntityInfoﾠforﾠtheﾠsameﾠentityﾠtype()
+        public void ReturnsﾠexactlyﾠtheﾠsameﾠEntityInfoﾠforﾠtheﾠsameﾠentityﾠtype()
         {
             Type type01 = typeof(string);
             Type type02 = typeof(string);

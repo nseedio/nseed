@@ -8,13 +8,13 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
-    public class ReflectionBasedSeedFullNameExtractorﾠExtractFromﾠTests
+    public class ReflectionBasedSeedFullNameExtractorﾠExtractFrom
     {
         private readonly ISeedFullNameExtractor<Type> extractor = new ReflectionBasedSeedFullNameExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithoutﾠentities()
+        public void Extractsﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithoutﾠentities()
         {
             Type type = new Mock<ISeed>().Object.GetType();
 
@@ -22,7 +22,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠoneﾠentity()
+        public void Extractsﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠoneﾠentity()
         {
             Type type = new Mock<ISeed<object>>().Object.GetType();
 
@@ -30,7 +30,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠtwoﾠentities()
+        public void Extractsﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠtwoﾠentities()
         {
             Type type = new Mock<ISeed<object, object>>().Object.GetType();
 
@@ -38,7 +38,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠthreeﾠentities()
+        public void Extractsﾠtypeﾠfullﾠnameﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠthreeﾠentities()
         {
             Type type = new Mock<ISeed<object, object, object>>().Object.GetType();
 

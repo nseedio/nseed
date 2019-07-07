@@ -7,13 +7,13 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
-    public partial class ReflectionBasedSeedDescriptionExtractorﾠExtractFromﾠTests
+    public partial class ReflectionBasedSeedDescriptionExtractorﾠExtractFrom
     {
         private readonly ISeedDescriptionExtractor<Type> extractor = new ReflectionBasedSeedDescriptionExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
-        public void ShouldﾠextractﾠemptyﾠstringﾠwhenﾠtypeﾠdoesﾠnotﾠhaveﾠDescriptionﾠattribute()
+        public void ExtractsﾠemptyﾠstringﾠwhenﾠtypeﾠdoesﾠnotﾠhaveﾠDescriptionﾠattribute()
         {
             Type type = typeof(SeedWithoutDescriptionAttribute);
 
@@ -22,7 +22,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 
         private const string SomeDescription = "Some description";
         [Fact]
-        public void ShouldﾠextractﾠdefinedﾠdescriptionﾠwhenﾠtypeﾠhasﾠDescriptionﾠattribute()
+        public void ExtractsﾠdefinedﾠdescriptionﾠwhenﾠtypeﾠhasﾠDescriptionﾠattribute()
         {
             Type type = typeof(SeedWithDescriptionAttribute);
 

@@ -7,13 +7,13 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {
-    public class ReflectionBasedEntityTypeExtractorﾠExtractFromﾠTests
+    public class ReflectionBasedEntityTypeExtractorﾠExtractFrom
     {
         private readonly IEntityTypeExtractor<Type> extractor = new ReflectionBasedEntityTypeExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠwhenﾠtypeﾠisﾠconcreteﾠreferenceﾠtype()
+        public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠconcreteﾠreferenceﾠtype()
         {
             Type type = typeof(string);
 
@@ -21,7 +21,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠwhenﾠtypeﾠisﾠconcreteﾠvalueﾠtype()
+        public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠconcreteﾠvalueﾠtype()
         {
             Type type = typeof(int);
 
@@ -29,7 +29,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠtypeﾠwhenﾠtypeﾠisﾠinterface()
+        public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠinterface()
         {
             Type type = typeof(ICloneable);
 
@@ -37,7 +37,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠextractﾠnullﾠwhenﾠtypeﾠisﾠgenericﾠtypeﾠparameter()
+        public void Extractsﾠnullﾠwhenﾠtypeﾠisﾠgenericﾠtypeﾠparameter()
         {
             Type type = TestHelper.GetGenericTypeParameter();
 

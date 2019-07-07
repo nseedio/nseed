@@ -8,12 +8,12 @@ using NSeed.Discovery.Entity;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {
-    public class ReflectionBasedEntityInSeedDiscovererﾠDiscoverInﾠTests
+    public class ReflectionBasedEntityInSeedDiscovererﾠDiscoverIn
     {
         private readonly IEntityInSeedDiscoverer<Type, Type> discoverer = new ReflectionBasedEntityInSeedDiscoverer();
 
         [Fact]
-        public void Shouldﾠreturnﾠemptyﾠcollectionﾠwhenﾠseedﾠdoesﾠnotﾠhaveﾠentities()
+        public void Returnsﾠemptyﾠcollectionﾠwhenﾠseedﾠdoesﾠnotﾠhaveﾠentities()
         {
             Type type = new Mock<ISeed>().Object.GetType();
 
@@ -24,7 +24,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠsingleﾠreferenceﾠentityﾠtype()
+        public void Returnsﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠsingleﾠreferenceﾠentityﾠtype()
         {
             Type type = new Mock<ISeed<string>>().Object.GetType();
 
@@ -34,7 +34,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠsingleﾠvalueﾠentityﾠtype()
+        public void Returnsﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠsingleﾠvalueﾠentityﾠtype()
         {
             Type type = new Mock<ISeed<int>>().Object.GetType();
 
@@ -44,7 +44,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠtwoﾠtypesﾠwhenﾠseedﾠhasﾠtwoﾠentityﾠtypes()
+        public void Returnsﾠtwoﾠtypesﾠwhenﾠseedﾠhasﾠtwoﾠentityﾠtypes()
         {
             Type type = new Mock<ISeed<string, int>>().Object.GetType();
 
@@ -54,7 +54,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠthreeﾠtypesﾠwhenﾠseedﾠhasﾠthreeﾠentityﾠtypes()
+        public void Returnsﾠthreeﾠtypesﾠwhenﾠseedﾠhasﾠthreeﾠentityﾠtypes()
         {
             Type type = new Mock<ISeed<string, int, object>>().Object.GetType();
 
@@ -64,7 +64,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠtwoﾠsameﾠentityﾠtypes()
+        public void Returnsﾠsingleﾠtypeﾠwhenﾠseedﾠhasﾠtwoﾠsameﾠentityﾠtypes()
         {
             Type type = new Mock<ISeed<string, string>>().Object.GetType();
 
@@ -74,7 +74,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         }
 
         [Fact]
-        public void Shouldﾠreturnﾠdistinctﾠtypesﾠwhenﾠseedﾠhasﾠoverlappingﾠentityﾠtypes()
+        public void Returnsﾠdistinctﾠtypesﾠwhenﾠseedﾠhasﾠoverlappingﾠentityﾠtypes()
         {
             Type type = new Mock<ISeed<string, string, int>>().Object.GetType();
 
@@ -83,9 +83,8 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
                 .Should().BeEquivalentTo(typeof(string), typeof(int));
         }
 
-        // This will generate errors, but we will provide the entity types.
         [Fact]
-        public void ShouldﾠreturnﾠallﾠtypesﾠwhenﾠseedﾠimplementsﾠseveralﾠISeedﾠinterfacesﾠwithﾠdistinctﾠentityﾠtypes()
+        public void ReturnsﾠallﾠtypesﾠwhenﾠseedﾠimplementsﾠseveralﾠISeedﾠinterfacesﾠwithﾠdistinctﾠentityﾠtypes()
         {
             Type type = typeof(SeedThatImplementsSeveralISeedInterfacesWithDistinctEntityTypes);
 
@@ -98,9 +97,8 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
             : BaseTestSeed, ISeed<object>, ISeed<string, int>, ISeed<double, float, decimal>
         { }
 
-        // This will generate errors, but we will provide the entity types.
         [Fact]
-        public void ShouldﾠreturnﾠdistinctﾠtypesﾠwhenﾠseedﾠimplementsﾠseveralﾠISeedﾠinterfacesﾠwithﾠoverlappingﾠentityﾠtypes()
+        public void ReturnsﾠdistinctﾠtypesﾠwhenﾠseedﾠimplementsﾠseveralﾠISeedﾠinterfacesﾠwithﾠoverlappingﾠentityﾠtypes()
         {
             Type type = typeof(SeedThatImplementsSeveralISeedInterfacesWithOverlappingEntityTypes);
 

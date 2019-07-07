@@ -33,11 +33,11 @@ Test project names follow the convention `<ProjectName>.Tests.<TestType>`:
 
 Test projects have the same internal folder and namespace structrue as the projects that they test.
 Test class file names have the same name as the class file names they test with the suffix ".<MemberUnderTest>.Tests".
-Test classes have the same name as the classes they test with the suffix "ﾠ<MemberUnderTest>ﾠTests".
+Test classes have the same name as the classes they test with the suffix "ﾠ<MemberUnderTest>".
 
-Test methods (facts) follow the convention `Shouldﾠ<Expectedﾠresultﾠdescription>ﾠwhenﾠ<preconditionﾠdescription>`:
+Test methods (facts) follow the convention `<Verb>ﾠ<Expectedﾠresultﾠdescription>ﾠwhenﾠ<preconditionﾠdescription>`:
 
-    Shouldﾠextractﾠtypeﾠwhenﾠtypeﾠisﾠnotﾠnull()
+    Extractsﾠtypeﾠwhenﾠtypeﾠisﾠnotﾠnull()
 
 We use [Hangul the Filler](http://thehumbleprogrammer.com/his-majesty-hangul-the-filler/) as "space": (ﾠ).
 

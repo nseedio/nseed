@@ -5,22 +5,22 @@ using NSeed.Discovery;
 using NSeed.MetaInfo;
 using NSeed.Discovery.Seed.ReflectionBased;
 using NSeed.Extensions;
-using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedMetaInfoBuilderﾠBuildFromﾠTests;
+using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedMetaInfoBuilderﾠBuildFrom;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
-    public class ReflectionBasedSeedInfoBuilderﾠBuildFromﾠTests
+    public class ReflectionBasedSeedInfoBuilderﾠBuildFrom
     {
         private readonly IMetaInfoBuilder<Type, SeedInfo> builder = new ReflectionBasedSeedInfoBuilder();
 
         [Fact]
-        public void Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull()
+        public void Throwsﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull()
         {
             Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull<ReflectionBasedSeedInfoBuilder, SeedInfo>();
         }
 
         [Fact]
-        public void ShouldﾠreturnﾠexpectedﾠfullyﾠpopulatedﾠSeedInfo()
+        public void ReturnsﾠexpectedﾠfullyﾠpopulatedﾠSeedInfo()
         {
             Type type = typeof(FullyPopulatedSeed);
 
@@ -58,7 +58,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private class AdditionalMinimalSeed : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠexpectedﾠminimalﾠSeedInfo()
+        public void ReturnsﾠexpectedﾠminimalﾠSeedInfo()
         {
             Type type = typeof(MinimalSeed);
 
@@ -70,7 +70,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private class MinimalSeed : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠreturnﾠexactlyﾠtheﾠsameﾠSeedInfoﾠforﾠtheﾠsameﾠseedﾠtype()
+        public void ReturnsﾠexactlyﾠtheﾠsameﾠSeedInfoﾠforﾠtheﾠsameﾠseedﾠtype()
         {
             Type type01 = typeof(MinimalSeed);
             Type type02 = typeof(MinimalSeed);

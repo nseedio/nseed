@@ -8,13 +8,13 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 {
-    public partial class ReflectionBasedSeedFriendlyNameExtractorﾠExtractFromﾠTests
+    public partial class ReflectionBasedSeedFriendlyNameExtractorﾠExtractFrom
     {
         private readonly ISeedFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedFriendlyNameExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
-        public void ShouldﾠextractﾠhumanizedﾠtypeﾠnameﾠwithoutﾠerrorsﾠwhenﾠtypeﾠdoesﾠnotﾠhaveﾠFriendlyNameﾠattribute()
+        public void ExtractsﾠhumanizedﾠtypeﾠnameﾠwithoutﾠerrorsﾠwhenﾠtypeﾠdoesﾠnotﾠhaveﾠFriendlyNameﾠattribute()
         {
             Type type = typeof(SeedWithoutFriendlyNameAttribute);
 
@@ -26,7 +26,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
 
         private const string SomeFriendlyName = "Some friendly name";
         [Fact]
-        public void ShouldﾠextractﾠdefinedﾠfriendlyﾠnameﾠwithoutﾠerrorsﾠwhenﾠtypeﾠhasﾠFriendlyNameﾠattribute()
+        public void ExtractsﾠdefinedﾠfriendlyﾠnameﾠwithoutﾠerrorsﾠwhenﾠtypeﾠhasﾠFriendlyNameﾠattribute()
         {
             Type type = typeof(SeedWithFriendlyNameAttribute);
 
@@ -38,7 +38,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private class SeedWithFriendlyNameAttribute : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠextractﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠnull()
+        public void ExtractsﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠnull()
         {
             Type type = typeof(SeedWithNullFriendlyNameAttribute);
 
@@ -50,7 +50,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private class SeedWithNullFriendlyNameAttribute : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠextractﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠemptyﾠstring()
+        public void ExtractsﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠemptyﾠstring()
         {
             Type type = typeof(SeedWithEmptyStringFriendlyNameAttribute);
 
@@ -62,7 +62,7 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         private class SeedWithEmptyStringFriendlyNameAttribute : BaseTestSeed { }
 
         [Fact]
-        public void ShouldﾠextractﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠwhiteﾠspace()
+        public void ExtractsﾠhumanizedﾠtypeﾠnameﾠendﾠcollectﾠsingleﾠerrorﾠwhenﾠFriendlyNameﾠisﾠwhiteﾠspace()
         {
             Type type = typeof(SeedWithWhitespaceFriendlyNameAttribute);
 
