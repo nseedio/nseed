@@ -47,7 +47,7 @@ namespace NSeed.MetaInfo
         /// <summary>
         /// TODO-IG: Add Yields and implicit requirements. 
         /// </summary>
-        public IReadOnlyCollection<SeedableInfo> ImplicitlyRequires { get; }
+        public IReadOnlyCollection<SeedInfo> ImplicitlyRequires { get; }
 
         /// <summary>
         /// All seedables required by this seedable, either explicitly or implicitly.
@@ -62,7 +62,7 @@ namespace NSeed.MetaInfo
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequires,
-            IReadOnlyCollection<SeedableInfo> implicitlyRequires)
+            IReadOnlyCollection<SeedInfo> implicitlyRequires)
             :base(type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!friendlyName.IsNullOrWhiteSpace());

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace NSeed.Tests.Unit.Discovery.Seed
+namespace NSeed.Tests.Unit.Discovery.Seedable
 {
     internal abstract class BaseTestSeed : ISeed
     {

@@ -1,10 +1,10 @@
 ﻿using NSeed.MetaInfo;
 
-namespace NSeed.Discovery.Seed
+namespace NSeed.Discovery.Seedable
 {
     internal static partial class Errors
     {
-        internal static partial class Seed
+        internal static partial class Seedable
         {
             // TODO-IG: Refactor this later on when we introduce IWeedOut. It should be a common thing.
             internal static class FriendlyName
@@ -30,8 +30,8 @@ namespace NSeed.Discovery.Seed
         }
     }
 
-    internal interface ISeedFriendlyNameExtractor<TSeedImplementation> : IExtractor<TSeedImplementation, string>
-        where TSeedImplementation : class
+    internal interface ISeedableFriendlyNameExtractor<TSeedableImplementation> : IExtractor<TSeedableImplementation, string>
+        where TSeedableImplementation : class
     {
     }
 }

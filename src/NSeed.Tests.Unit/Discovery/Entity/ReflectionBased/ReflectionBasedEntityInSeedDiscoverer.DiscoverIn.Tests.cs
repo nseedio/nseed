@@ -3,8 +3,8 @@ using Xunit;
 using FluentAssertions;
 using Moq;
 using NSeed.Discovery.Entity.ReflectionBased;
-using NSeed.Tests.Unit.Discovery.Seed;
 using NSeed.Discovery.Entity;
+using NSeed.Tests.Unit.Discovery.Seedable;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {

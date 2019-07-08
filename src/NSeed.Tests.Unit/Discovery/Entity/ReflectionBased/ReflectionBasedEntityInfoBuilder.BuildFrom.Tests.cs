@@ -4,19 +4,12 @@ using FluentAssertions;
 using NSeed.Discovery;
 using NSeed.MetaInfo;
 using NSeed.Discovery.Entity.ReflectionBased;
-using static NSeed.Tests.Unit.Discovery.CommonReflectionBasedMetaInfoBuilderﾠBuildFrom;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {
     public class ReflectionBasedEntityInfoBuilderﾠBuildFrom
     {
         private readonly IMetaInfoBuilder<Type, EntityInfo> builder = new ReflectionBasedEntityInfoBuilder();
-
-        [Fact]
-        public void Throwsﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull()
-        {
-            Shouldﾠthrowﾠexceptionﾠwhenﾠimplementationﾠtypeﾠisﾠnull<ReflectionBasedEntityInfoBuilder, EntityInfo>();
-        }
 
         [Fact]
         public void ReturnsﾠexpectedﾠfullyﾠpopulatedﾠEntityInfo()

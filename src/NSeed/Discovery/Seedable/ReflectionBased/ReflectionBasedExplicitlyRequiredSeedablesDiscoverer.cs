@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace NSeed.Discovery.Seedable.ReflectionBased
 {
-    internal class ReflectionBasedExplicitlyRequiredSeedableDiscoverer : IExplicitlyRequiredSeedableDiscoverer<Type, Type>
+    internal class ReflectionBasedExplicitlyRequiredSeedablesDiscoverer : IExplicitlyRequiredSeedablesDiscoverer<Type, Type>
     {
         Discovery<Type> IDiscoverer<Type, Type>.DiscoverIn(Type source)
         {

@@ -20,7 +20,7 @@ namespace NSeed.MetaInfo
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequires,
-            IReadOnlyCollection<SeedableInfo> implicitlyRequires,
+            IReadOnlyCollection<SeedInfo> implicitlyRequires,
             IReadOnlyCollection<EntityInfo> entities)
             :base(type, fullName, friendlyName, description, explicitlyRequires, implicitlyRequires)
         {            

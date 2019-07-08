@@ -4,7 +4,7 @@ using NSeed.MetaInfo;
 using System.Collections.Generic;
 using NSeed.Discovery.Entity;
 
-namespace NSeed.Discovery.Seed
+namespace NSeed.Discovery.Seedable
 {
     internal abstract class BaseSeedEntitiesExtractor<TSeedImplementation, TEntityImplementation> : ISeedEntitiesExtractor<TSeedImplementation>
         where TSeedImplementation : class

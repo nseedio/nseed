@@ -2,15 +2,15 @@ using System;
 using Xunit;
 using FluentAssertions;
 using Moq;
-using NSeed.Discovery.Seed.ReflectionBased;
-using NSeed.Discovery.Seed;
 using NSeed.MetaInfo;
+using NSeed.Discovery.Seedable.ReflectionBased;
+using NSeed.Discovery.Seedable;
 
-namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
+namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 {
-    public class ReflectionBasedSeedTypeExtractorﾠExtractFrom
+    public class ReflectionBasedSeedableTypeExtractorﾠExtractFrom
     {
-        private readonly ISeedTypeExtractor<Type> extractor = new ReflectionBasedSeedTypeExtractor();
+        private readonly ISeedableTypeExtractor<Type> extractor = new ReflectionBasedSeedableTypeExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
@@ -41,6 +41,14 @@ namespace NSeed.Tests.Unit.Discovery.Seed.ReflectionBased
         public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠseedﾠtypeﾠwithﾠthreeﾠentities()
         {
             Type type = new Mock<ISeed<object, object, object>>().Object.GetType();
+
+            extractor.ExtractFrom(type, collector).Should().Be(type);
+        }
+
+        [Fact]
+        public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠscenarioﾠtype()
+        {
+            Type type = new Mock<IScenario>().Object.GetType();
 
             extractor.ExtractFrom(type, collector).Should().Be(type);
         }
