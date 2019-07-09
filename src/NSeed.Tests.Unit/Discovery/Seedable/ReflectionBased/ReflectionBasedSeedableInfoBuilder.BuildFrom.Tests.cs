@@ -184,6 +184,122 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Requires(typeof(OtherScenario))]
         private class ScenarioThatRequiresOtherScenario : BaseTestScenario { }
 
+        [Fact]
+        public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseeds()
+        {
+            Type type = typeof(SeedThatRequiresItself);
+
+            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+
+            seedInfo.ExplicitlyRequires.Should().BeEmpty();
+        }
+        [Requires(typeof(SeedThatRequiresItself))]
+        private class SeedThatRequiresItself : BaseTestSeed { }
+
+        // TODO-IG: Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseedsﾠviaﾠseedsﾠownﾠyield()
+
+        [Fact]
+        public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠscenarios()
+        {
+            Type type = typeof(ScenarioThatRequiresItself);
+
+            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
+
+            scenarioInfo.ExplicitlyRequires.Should().BeEmpty();
+        }
+        [Requires(typeof(ScenarioThatRequiresItself))]
+        private class ScenarioThatRequiresItself : BaseTestScenario { }
+
+        [Fact]
+        public void Ignoresﾠindirectﾠcircularﾠdependencyﾠofﾠseedsﾠoverﾠseeds()
+        {
+            Type type = typeof(SeedThatIndirectlyRequiresItself);
+
+            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+
+            seedInfo.ExplicitlyRequires.Should().Contain(builder.BuildFrom(typeof(SeedA)));
+            seedInfo.ExplicitlyRequires.Should().NotContain(seedInfo);
+        }
+        [Requires(typeof(SeedA))]
+        private class SeedThatIndirectlyRequiresItself : BaseTestSeed { }
+        [Requires(typeof(SeedThatIndirectlyRequiresItself))]
+        private class SeedA : BaseTestSeed { }
+
+        [Fact]
+        public void Ignoresﾠindirectﾠcircularﾠdependencyﾠofﾠscenariosﾠoverﾠscenarios()
+        {
+            Type type = typeof(ScenarioThatIndirectlyRequiresItself);
+
+            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
+
+            scenarioInfo.ExplicitlyRequires.Should().Contain(builder.BuildFrom(typeof(ScenarioA)));
+            scenarioInfo.ExplicitlyRequires.Should().NotContain(scenarioInfo);
+        }
+        [Requires(typeof(ScenarioA))]
+        private class ScenarioThatIndirectlyRequiresItself : BaseTestScenario { }
+        [Requires(typeof(ScenarioThatIndirectlyRequiresItself))]
+        private class ScenarioA : BaseTestScenario { }
+
+        [Fact]
+        public void Ignoresﾠindirectﾠcircularﾠdependencyﾠofﾠseedsﾠandﾠscenariosﾠoverﾠotherﾠseedsﾠandﾠscenarios()
+        {
+            var seedZero = (SeedInfo)builder.BuildFrom(typeof(SeedZero));
+
+            var seedOne = seedZero.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedOne).FullName);
+            var scenarioTwo = seedOne.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioTwo).FullName);
+            var seedThree = scenarioTwo.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedThree).FullName);
+            var scenarioFour = seedThree.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioFour).FullName);
+            var seedFive = scenarioFour.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedFive).FullName);
+            var scenarioSix = seedFive.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioSix).FullName);
+            var seedSeven = scenarioSix.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedSeven).FullName);
+            var scenarioEight = seedSeven.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioEight).FullName);
+
+            seedZero.ExplicitlyRequires.Should().Contain(seedOne);
+
+            seedOne.ExplicitlyRequires.Should().Contain(scenarioTwo);
+
+            scenarioTwo.ExplicitlyRequires.Should().Contain(seedThree);
+
+            seedThree.ExplicitlyRequires.Should().Contain(scenarioFour);
+            seedThree.ExplicitlyRequires.Should().NotContain(seedOne);
+
+            scenarioFour.ExplicitlyRequires.Should().Contain(seedFive);
+
+            seedFive.ExplicitlyRequires.Should().Contain(scenarioSix);
+
+            scenarioSix.ExplicitlyRequires.Should().Contain(seedSeven);
+            scenarioSix.ExplicitlyRequires.Should().NotContain(seedThree);
+            scenarioSix.ExplicitlyRequires.Should().NotContain(scenarioFour);
+
+            seedSeven.ExplicitlyRequires.Should().Contain(scenarioEight);
+
+            scenarioEight.ExplicitlyRequires.Should().BeEmpty();
+        }
+        // SeedZero -> SeedOne~ -> ScenarioTwo -> SeedThree~ -> ScenarioFour~ -> SeedFive -> ScenarioSix -> SeedThree*
+        //                                                   -> SeedOne*                                 -> SeedSeven -> ScenarioEight~ -> ScenarioEight*
+        //                                                                                               -> ScenarioFour*
+        [Requires(typeof(SeedOne))]
+        private class SeedZero : BaseTestSeed { }
+        [Requires(typeof(ScenarioTwo))]
+        private class SeedOne : BaseTestSeed { }
+        [Requires(typeof(SeedThree))]
+        private class ScenarioTwo : BaseTestScenario { }
+        [Requires(typeof(ScenarioFour))]
+        [Requires(typeof(SeedOne))]
+        private class SeedThree : BaseTestSeed { }
+        [Requires(typeof(SeedFive))]
+        private class ScenarioFour : BaseTestScenario { }
+        [Requires(typeof(ScenarioSix))]
+        private class SeedFive : BaseTestSeed { }
+        [Requires(typeof(SeedThree))]
+        [Requires(typeof(SeedSeven))]
+        private class ScenarioSix : BaseTestScenario { }
+        [Requires(typeof(ScenarioEight))]
+        private class SeedSeven : BaseTestSeed { }
+        [Requires(typeof(ScenarioEight))]
+        private class ScenarioEight : BaseTestScenario { }
+
+
         private static SeedInfo CreateSeedInfoForMinimalSeedType(Type minimalSeedType)
         {
             return new SeedInfo

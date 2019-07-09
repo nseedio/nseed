@@ -31,6 +31,7 @@ namespace NSeed.Discovery.Seedable
             return explicitlyRequiredSeedableDiscoverer.DiscoverIn(seedableImplementation)
                                 .DiscoveredItems
                                 .Select(seedable => seedableBuilder.BuildFrom(seedable))
+                                .Where(seedable => seedable != null) // Ignore circular dependencies.
                                 .ToArray();
         }
     }

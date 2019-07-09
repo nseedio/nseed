@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NSeed.Guards;
 using NSeed.MetaInfo;
 
@@ -19,6 +20,9 @@ namespace NSeed.Discovery.Seedable
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
         private readonly IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation> explicitlyRequiredSeedablesExtractor;
         private readonly IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool;
+
+        // Keeps track of the current build chain in order to ignore circular dependencies.
+        private readonly Stack<TSeedableImplementation> buildChain = new Stack<TSeedableImplementation>();
 
         internal BaseSeedableInfoBuilder(ISeedableTypeExtractor<TSeedableImplementation> typeExtractor,
                                      ISeedableFullNameExtractor<TSeedableImplementation> fullNameExtractor,
@@ -49,7 +53,13 @@ namespace NSeed.Discovery.Seedable
         {
             System.Diagnostics.Debug.Assert(implementation != null);
 
-            return seedableInfoPool.GetOrAdd(implementation, CreateSeedableInfo);
+            if (buildChain.Contains(implementation)) return null;
+
+            buildChain.Push(implementation);
+            var result = seedableInfoPool.GetOrAdd(implementation, CreateSeedableInfo);
+            buildChain.Pop();
+
+            return result;
         }
 
         private SeedableInfo CreateSeedableInfo(TSeedableImplementation implementation)
