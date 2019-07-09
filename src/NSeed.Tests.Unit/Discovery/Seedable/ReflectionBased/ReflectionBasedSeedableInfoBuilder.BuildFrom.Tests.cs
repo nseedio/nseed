@@ -136,6 +136,54 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             builder.BuildFrom(type01).Should().BeSameAs(builder.BuildFrom(type02));
         }
 
+        [Fact]
+        public void ReturnsﾠexactlyﾠtheﾠsameﾠSeedInfoﾠforﾠtheﾠseedﾠtypeﾠthatﾠoccursﾠseveralﾠtimesﾠinﾠtheﾠseedableﾠgraph()
+        {
+            var seedThatRequiresOtherSeed = (SeedInfo)builder.BuildFrom(typeof(SeedThatRequiresOtherSeedSeveralTimes));
+            var otherSeed = (SeedInfo)builder.BuildFrom(typeof(OtherSeed));
+
+            var explicitlyRequired = seedThatRequiresOtherSeed.ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
+            var requiredThroughScenario = seedThatRequiresOtherSeed
+                .ExplicitlyRequires
+                .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherSeed).FullName)
+                .ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
+
+            // TODO-IG: Add that it depends on its own yield (implicit dependency).
+
+            explicitlyRequired.Should().BeSameAs(otherSeed);
+            requiredThroughScenario.Should().BeSameAs(otherSeed);
+        }
+        [Requires(typeof(ScenarioThatRequiresOtherSeed))]
+        [Requires(typeof(OtherSeed))]
+        private class SeedThatRequiresOtherSeedSeveralTimes : BaseTestSeed { } // TODO-IG: Add that it depends on its own yield (implicit dependency).
+        private class OtherSeed : BaseTestSeed { }
+        [Requires(typeof(OtherSeed))]
+        private class ScenarioThatRequiresOtherSeed : BaseTestScenario { }
+
+        [Fact]
+        public void ReturnsﾠexactlyﾠtheﾠsameﾠScenarioInfoﾠforﾠtheﾠscenarioﾠtypeﾠthatﾠoccursﾠseveralﾠtimesﾠinﾠtheﾠseedableﾠgraph()
+        {
+            var scenarioThatRequiresOtherScenario = (ScenarioInfo)builder.BuildFrom(typeof(ScenarioThatRequiresOtherScenarioSeveralTimes));
+            var otherScenario = (ScenarioInfo)builder.BuildFrom(typeof(OtherScenario));
+
+            var explicitlyRequired = scenarioThatRequiresOtherScenario.ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
+            var requiredThroughScenario = scenarioThatRequiresOtherScenario
+                .ExplicitlyRequires
+                .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherScenario).FullName)
+                .ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
+
+            // TODO-IG: Add that it depends on its own yield (implicit dependency).
+
+            explicitlyRequired.Should().BeSameAs(otherScenario);
+            requiredThroughScenario.Should().BeSameAs(otherScenario);
+        }
+        [Requires(typeof(ScenarioThatRequiresOtherScenario))]
+        [Requires(typeof(OtherScenario))]
+        private class ScenarioThatRequiresOtherScenarioSeveralTimes : BaseTestScenario { }
+        private class OtherScenario : BaseTestScenario { }
+        [Requires(typeof(OtherScenario))]
+        private class ScenarioThatRequiresOtherScenario : BaseTestScenario { }
+
         private static SeedInfo CreateSeedInfoForMinimalSeedType(Type minimalSeedType)
         {
             return new SeedInfo
