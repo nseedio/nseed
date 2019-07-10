@@ -49,10 +49,11 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                     new EntityInfo(typeof(object), typeof(object).FullName),
                     new EntityInfo(typeof(string), typeof(string).FullName),
                     new EntityInfo(typeof(int), typeof(int).FullName)
-                }
+                },
+                new YieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName)
             );
 
-            builder.BuildFrom(type).Should().BeEquivalentTo(expected);
+            builder.BuildFrom(type).Should().BeEquivalentTo(expected, option => option.IgnoringCyclicReferences());
         }
 
         private const string SomeFriendlyName = "Some friendly name";
@@ -63,7 +64,10 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Requires(typeof(AdditionalMinimalScenario))]
         [FriendlyName(SomeFriendlyName)]
         [Description(SomeDescription)]
-        private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int> { }
+        private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int>
+        {
+            public class Yield : YieldOf<FullyPopulatedSeed> { }
+        }
         private class AdditionalMinimalSeed : BaseTestSeed { }
 
         [Fact]
@@ -310,7 +314,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 string.Empty,
                 Array.Empty<SeedableInfo>(),
                 Array.Empty<SeedInfo>(),
-                Array.Empty<EntityInfo>()
+                Array.Empty<EntityInfo>(),
+                null
             );
         }
 

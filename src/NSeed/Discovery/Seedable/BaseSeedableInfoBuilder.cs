@@ -18,6 +18,7 @@ namespace NSeed.Discovery.Seedable
         private readonly ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
+        private readonly ISeedYieldExtractor<TSeedableImplementation> yieldExtractor;
         private readonly IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation> explicitlyRequiredSeedablesExtractor;
         private readonly IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool;
 
@@ -29,7 +30,8 @@ namespace NSeed.Discovery.Seedable
                                      ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
                                      ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
-                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,
+                                     ISeedYieldExtractor<TSeedableImplementation> yieldExtractor,
+                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,                                     
                                      IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
             typeExtractor.MustNotBeNull(nameof(typeExtractor));
@@ -37,6 +39,7 @@ namespace NSeed.Discovery.Seedable
             friendlyNameExtractor.MustNotBeNull(nameof(friendlyNameExtractor));
             descriptionExtractor.MustNotBeNull(nameof(descriptionExtractor));
             entitiesExtractor.MustNotBeNull(nameof(entitiesExtractor));
+            yieldExtractor.MustNotBeNull(nameof(yieldExtractor));
             explicitlyRequiredSeedablesExtractorFactory.MustNotBeNull(nameof(explicitlyRequiredSeedablesExtractorFactory));
             seedableInfoPool.MustNotBeNull(nameof(seedableInfoPool));
 
@@ -45,6 +48,7 @@ namespace NSeed.Discovery.Seedable
             this.friendlyNameExtractor = friendlyNameExtractor;
             this.descriptionExtractor = descriptionExtractor;
             this.entitiesExtractor = entitiesExtractor;
+            this.yieldExtractor = yieldExtractor;
             explicitlyRequiredSeedablesExtractor = explicitlyRequiredSeedablesExtractorFactory(this);
             this.seedableInfoPool = seedableInfoPool;
         }
@@ -87,7 +91,8 @@ namespace NSeed.Discovery.Seedable
                       description,
                       explicitelyRequires,
                       Array.Empty<SeedInfo>(), // TODO-IG: Add implicitly requires.
-                      entitiesExtractor.ExtractFrom(implementation, errorCollector)
+                      entitiesExtractor.ExtractFrom(implementation, errorCollector),
+                      yieldExtractor.ExtractFrom(implementation, errorCollector)
                   )
                 : new ScenarioInfo
                  (

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSeed.Extensions;
+using System;
 using System.Linq;
 
 namespace NSeed.Discovery.Seedable.ReflectionBased

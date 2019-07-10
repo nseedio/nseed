@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace NSeed
 {
@@ -47,39 +43,5 @@ namespace NSeed
         /// This means that the <see cref="Seed"/> method was already successfuly executed.
         /// </summary>
         Task<bool> HasAlreadyYielded();
-    }
-
-    internal static class SeedInterfaceTypeExtensions
-    {
-        private static readonly HashSet<Type> SeedInterfacesWithEntities = new HashSet<Type>
-        {
-            typeof(ISeed<>),
-            typeof(ISeed<,>),
-            typeof(ISeed<,,>)
-        };
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSeedInterfaceWithEntities(this Type type)
-        {
-            System.Diagnostics.Debug.Assert(type != null);
-
-            return SeedInterfacesWithEntities.Contains(type);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsSeedType(this Type type)
-        {
-            System.Diagnostics.Debug.Assert(type != null);
-
-            return type.GetInterfaces().Contains(typeof(ISeed));
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsSeedableType(this Type type)
-        {
-            System.Diagnostics.Debug.Assert(type != null);
-
-            return type.GetInterfaces().Any(@interface => @interface == typeof(ISeed) || @interface == typeof(IScenario));
-        }
     }
 }

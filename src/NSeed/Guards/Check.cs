@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using NSeed.Extensions;
 using NSeed.Guards.Exceptions;
 using System;
 using System.Runtime.CompilerServices;

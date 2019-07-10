@@ -1,5 +1,4 @@
-﻿using NSeed.MetaInfo;
-using System;
+﻿using System;
 
 namespace NSeed.Discovery
 {

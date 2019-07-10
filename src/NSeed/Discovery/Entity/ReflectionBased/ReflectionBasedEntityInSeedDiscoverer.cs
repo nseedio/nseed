@@ -1,4 +1,5 @@
-﻿using NSeed.Guards;
+﻿using NSeed.Extensions;
+using NSeed.Guards;
 using System;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace NSeed.Discovery.Entity.ReflectionBased
             var entityTypes = source.GetInterfaces()
                 .Where(@interface =>
                     @interface.IsConstructedGenericType &&
-                    @interface.GetGenericTypeDefinition().IsSeedInterfaceWithEntities())
+                    @interface.GetGenericTypeDefinition().IsSeedInterfaceTypeWithEntities())
                 .SelectMany(seedInterfaceWithEntities => seedInterfaceWithEntities.GetGenericArguments())
                 .Distinct()
                 .ToArray();

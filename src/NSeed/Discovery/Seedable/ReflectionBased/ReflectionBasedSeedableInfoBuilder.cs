@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NSeed.Extensions;
+using System;
 
 namespace NSeed.Discovery.Seedable.ReflectionBased
 {
@@ -10,6 +11,7 @@ namespace NSeed.Discovery.Seedable.ReflectionBased
                    new ReflectionBasedSeedableFriendlyNameExtractor(),
                    new ReflectionBasedSeedableDescriptionExtractor(),
                    new ReflectionBasedSeedEntitiesExtractor(),
+                   new ReflectionBasedSeedYieldExtractor(),
                    builder => new ReflectionBasedExplicitlyRequiredSeedablesExtractor(builder),
                    new ReflectionBasedSeedableInfoPool())
         {

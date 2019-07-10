@@ -1,4 +1,5 @@
 ﻿using System;
+using NSeed.Extensions;
 using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Seedable.ReflectionBased
