@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Entity
@@ -15,9 +14,9 @@ namespace NSeed.Discovery.Entity
                                        IEntityFullNameExtractor<TEntityImplementation> fullNameExtractor,
                                        IMetaInfoPool<TEntityImplementation, EntityInfo> entityInfoPool)
         {
-            typeExtractor.MustNotBeNull(nameof(typeExtractor));
-            fullNameExtractor.MustNotBeNull(nameof(fullNameExtractor));
-            entityInfoPool.MustNotBeNull(nameof(entityInfoPool));
+            System.Diagnostics.Debug.Assert(typeExtractor != null);
+            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
+            System.Diagnostics.Debug.Assert(entityInfoPool != null);
 
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
@@ -26,7 +25,7 @@ namespace NSeed.Discovery.Entity
 
         EntityInfo IMetaInfoBuilder<TEntityImplementation, EntityInfo>.BuildFrom(TEntityImplementation implementation)
         {
-            implementation.MustNotBeNull(nameof(implementation));
+            System.Diagnostics.Debug.Assert(implementation != null);
 
             return entityInfoPool.GetOrAdd(implementation, CreateEntityInfo);
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NSeed.Guards;
 using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Seedable
@@ -34,14 +33,14 @@ namespace NSeed.Discovery.Seedable
                                      Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,                                     
                                      IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
-            typeExtractor.MustNotBeNull(nameof(typeExtractor));
-            fullNameExtractor.MustNotBeNull(nameof(fullNameExtractor));
-            friendlyNameExtractor.MustNotBeNull(nameof(friendlyNameExtractor));
-            descriptionExtractor.MustNotBeNull(nameof(descriptionExtractor));
-            entitiesExtractor.MustNotBeNull(nameof(entitiesExtractor));
-            yieldExtractor.MustNotBeNull(nameof(yieldExtractor));
-            explicitlyRequiredSeedablesExtractorFactory.MustNotBeNull(nameof(explicitlyRequiredSeedablesExtractorFactory));
-            seedableInfoPool.MustNotBeNull(nameof(seedableInfoPool));
+            System.Diagnostics.Debug.Assert(typeExtractor != null);
+            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
+            System.Diagnostics.Debug.Assert(friendlyNameExtractor != null);
+            System.Diagnostics.Debug.Assert(descriptionExtractor != null);
+            System.Diagnostics.Debug.Assert(entitiesExtractor != null);
+            System.Diagnostics.Debug.Assert(yieldExtractor != null);
+            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedablesExtractorFactory != null);
+            System.Diagnostics.Debug.Assert(seedableInfoPool != null);
 
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;

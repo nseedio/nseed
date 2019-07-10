@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NSeed.Guards;
 
 namespace NSeed.MetaInfo
 {
@@ -65,7 +64,7 @@ namespace NSeed.MetaInfo
             IReadOnlyCollection<SeedInfo> implicitlyRequires)
             :base(type, fullName)
         {            
-            System.Diagnostics.Debug.Assert(!friendlyName.IsNullOrWhiteSpace());
+            System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
             System.Diagnostics.Debug.Assert(explicitlyRequires != null);
             System.Diagnostics.Debug.Assert(explicitlyRequires.All(required => required != null));

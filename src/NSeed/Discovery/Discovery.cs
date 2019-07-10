@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.Discovery
 {
@@ -9,10 +10,11 @@ namespace NSeed.Discovery
         public Discovery(IReadOnlyCollection<TDiscovery> discoveredItems)
         {
             System.Diagnostics.Debug.Assert(discoveredItems != null);
+            System.Diagnostics.Debug.Assert(discoveredItems.All(item => item != null));
 
             DiscoveredItems = discoveredItems;
         }
 
-        // TODO: Soon we will have Errors here as well.
+        // TODO: Are we going to have Errors here as planned? Hm? If not, there is no need for the Discovery<TDiscovery> class.
     }
 }

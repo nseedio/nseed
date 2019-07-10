@@ -1,5 +1,4 @@
-﻿using NSeed.Guards;
-using System.Linq;
+﻿using System.Linq;
 using NSeed.MetaInfo;
 using System.Collections.Generic;
 
@@ -16,8 +15,8 @@ namespace NSeed.Discovery.Seedable
             IExplicitlyRequiredSeedablesDiscoverer<TSourceSeedableImplementation, TSeedableImplementation> explicitlyRequiredSeedableDiscoverer,
             ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {
-            explicitlyRequiredSeedableDiscoverer.MustNotBeNull(nameof(explicitlyRequiredSeedableDiscoverer));
-            seedableBuilder.MustNotBeNull(nameof(seedableBuilder));
+            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedableDiscoverer != null);
+            System.Diagnostics.Debug.Assert(seedableBuilder != null);
 
             this.explicitlyRequiredSeedableDiscoverer = explicitlyRequiredSeedableDiscoverer;
             this.seedableBuilder = seedableBuilder;

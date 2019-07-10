@@ -1,5 +1,4 @@
-﻿using NSeed.MetaInfo;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 
 namespace NSeed.Discovery
@@ -11,6 +10,9 @@ namespace NSeed.Discovery
         private readonly ConcurrentDictionary<TImplementation, TMetaInfo> pool = new ConcurrentDictionary<TImplementation, TMetaInfo>();
         TMetaInfo IMetaInfoPool<TImplementation, TMetaInfo>.GetOrAdd(TImplementation implementation, Func<TImplementation, TMetaInfo> metaInfoFactory)
         {
+            System.Diagnostics.Debug.Assert(implementation != null);
+            System.Diagnostics.Debug.Assert(metaInfoFactory != null);
+
             return pool.GetOrAdd(implementation, metaInfoFactory);
         }
     }

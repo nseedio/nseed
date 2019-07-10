@@ -1,5 +1,4 @@
-﻿using NSeed.Guards;
-using System.Linq;
+﻿using System.Linq;
 using NSeed.MetaInfo;
 using System.Collections.Generic;
 using NSeed.Discovery.Entity;
@@ -16,8 +15,8 @@ namespace NSeed.Discovery.Seedable
         internal protected BaseSeedEntitiesExtractor(IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
                                                      IEntityInfoBuilder<TEntityImplementation> entityBuilder)
         {
-            entityDiscoverer.MustNotBeNull(nameof(entityDiscoverer));
-            entityBuilder.MustNotBeNull(nameof(entityBuilder));
+            System.Diagnostics.Debug.Assert(entityDiscoverer != null);
+            System.Diagnostics.Debug.Assert(entityBuilder != null);
 
             this.entityDiscoverer = entityDiscoverer;
             this.entityBuilder = entityBuilder;

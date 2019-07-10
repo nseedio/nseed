@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 
 namespace NSeed
 {
@@ -19,9 +18,6 @@ namespace NSeed
         /// Creates new <see cref="DescriptionAttribute"/> with the specified description.
         /// </summary>
         /// <param name="description">The description. It must not be null, empty, or white space.</param>
-        public DescriptionAttribute(string description)
-        {
-            Description = description.MustNotBeNullOrWhiteSpace(nameof(description));
-        }
+        public DescriptionAttribute(string description) => Description = description;
     }
 }

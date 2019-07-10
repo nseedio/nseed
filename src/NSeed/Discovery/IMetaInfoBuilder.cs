@@ -1,6 +1,4 @@
-﻿using NSeed.MetaInfo;
-
-namespace NSeed.Discovery
+﻿namespace NSeed.Discovery
 {
     internal interface IMetaInfoBuilder<TImplementation, TMetaInfo>
         where TImplementation : class

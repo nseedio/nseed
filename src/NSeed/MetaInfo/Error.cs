@@ -1,5 +1,4 @@
-﻿using NSeed.Guards;
-using System.Linq;
+﻿using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -20,9 +19,9 @@ namespace NSeed.MetaInfo
 
         internal Error(string code, string message)
         {
-            System.Diagnostics.Debug.Assert(!code.IsNullOrWhiteSpace());
+            System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(code));
             System.Diagnostics.Debug.Assert(code.All(char.IsDigit));
-            System.Diagnostics.Debug.Assert(!message.IsNullOrWhiteSpace());
+            System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(message));
 
             Code = code;
             Message = message;

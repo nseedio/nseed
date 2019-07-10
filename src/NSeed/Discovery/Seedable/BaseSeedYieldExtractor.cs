@@ -1,5 +1,4 @@
-﻿using NSeed.Guards;
-using System.Linq;
+﻿using System.Linq;
 using NSeed.MetaInfo;
 using NSeed.Discovery.Yield;
 
@@ -15,8 +14,8 @@ namespace NSeed.Discovery.Seedable
         internal protected BaseSeedYieldExtractor(IYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
                                                   IYieldInfoBuilder<TYieldImplementation> yieldBuilder)
         {
-            yieldDiscoverer.MustNotBeNull(nameof(yieldDiscoverer));
-            yieldBuilder.MustNotBeNull(nameof(yieldBuilder));
+            System.Diagnostics.Debug.Assert(yieldDiscoverer != null);
+            System.Diagnostics.Debug.Assert(yieldBuilder != null);
 
             this.yieldDiscoverer = yieldDiscoverer;
             this.yieldBuilder = yieldBuilder;

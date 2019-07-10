@@ -1,5 +1,4 @@
 ﻿using System;
-using NSeed.Guards;
 using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Yield
@@ -13,8 +12,8 @@ namespace NSeed.Discovery.Yield
         internal BaseYieldInfoBuilder(IYieldTypeExtractor<TYieldImplementation> typeExtractor,
                                        IYieldFullNameExtractor<TYieldImplementation> fullNameExtractor)
         {
-            typeExtractor.MustNotBeNull(nameof(typeExtractor));
-            fullNameExtractor.MustNotBeNull(nameof(fullNameExtractor));
+            System.Diagnostics.Debug.Assert(typeExtractor != null);
+            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
 
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
@@ -22,7 +21,7 @@ namespace NSeed.Discovery.Yield
 
         YieldInfo IMetaInfoBuilder<TYieldImplementation, YieldInfo>.BuildFrom(TYieldImplementation implementation)
         {
-            implementation.MustNotBeNull(nameof(implementation));
+            System.Diagnostics.Debug.Assert(implementation != null);            
 
             var errorCollector = new DistinctErrorCollectorAndProvider();
 

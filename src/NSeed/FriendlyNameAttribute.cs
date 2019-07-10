@@ -18,9 +18,6 @@ namespace NSeed
         /// Creates new <see cref="FriendlyNameAttribute"/> with the specified friendly name.
         /// </summary>
         /// <param name="friendlyName">The friendly name. It must not be null, empty, or whitespace.</param>
-        public FriendlyNameAttribute(string friendlyName)
-        {
-            FriendlyName = friendlyName;
-        }
+        public FriendlyNameAttribute(string friendlyName) => FriendlyName = friendlyName;
     }
 }
