@@ -89,7 +89,6 @@ namespace NSeed.Discovery.Seedable
                       friendlyName,
                       description,
                       explicitelyRequires,
-                      Array.Empty<SeedInfo>(), // TODO-IG: Add implicitly requires.
                       entitiesExtractor.ExtractFrom(implementation, errorCollector),
                       yieldExtractor.ExtractFrom(implementation, errorCollector)
                   )

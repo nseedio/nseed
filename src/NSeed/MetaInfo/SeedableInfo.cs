@@ -44,37 +44,31 @@ namespace NSeed.MetaInfo
         public IReadOnlyCollection<SeedableInfo> ExplicitlyRequires { get; }
 
         /// <summary>
-        /// TODO-IG: Add Yields and implicit requirements. 
-        /// </summary>
-        public IReadOnlyCollection<SeedInfo> ImplicitlyRequires { get; }
-
-        /// <summary>
-        /// All seedables required by this seedable, either explicitly or implicitly.
+        /// All seedables required by this seedable.
         /// <br/>
-        /// Returns the union of <see cref="ExplicitlyRequires"/> and <see cref="ImplicitlyRequires"/>.
+        /// Returns union of all <see cref="ExplicitlyRequires"/> seedables and
+        /// other seedables that this seedable requires.
+        /// For example, seeds require other seeds
+        /// by using they yields (see: <see cref="SeedInfo.UsesYields"/>).
         /// </summary>
-        public IEnumerable<SeedableInfo> Requires => ExplicitlyRequires.Union(ImplicitlyRequires);
+        public abstract IEnumerable<SeedableInfo> Requires { get; }
 
         internal SeedableInfo(
             Type type,
             string fullName,
             string friendlyName,
             string description,
-            IReadOnlyCollection<SeedableInfo> explicitlyRequires,
-            IReadOnlyCollection<SeedInfo> implicitlyRequires)
+            IReadOnlyCollection<SeedableInfo> explicitlyRequires)
             :base(type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
             System.Diagnostics.Debug.Assert(explicitlyRequires != null);
             System.Diagnostics.Debug.Assert(explicitlyRequires.All(required => required != null));
-            System.Diagnostics.Debug.Assert(implicitlyRequires != null);
-            System.Diagnostics.Debug.Assert(implicitlyRequires.All(required => required != null));
 
             FriendlyName = friendlyName;
             Description = description;
             ExplicitlyRequires = explicitlyRequires;
-            ImplicitlyRequires = implicitlyRequires;
         }
     }
 }

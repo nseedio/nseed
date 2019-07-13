@@ -3,10 +3,10 @@
 namespace NSeed.MetaInfo
 {
     /// <summary>
-    /// Describes a single entity seeded by one or more concrete <see cref="ISeed"/>s.
+    /// Describes the type of a single entity seeded by one or more concrete <see cref="ISeed"/>s.
     /// </summary>
     /// <remarks>
-    /// In NSeed terminology seeds seed entity instances.
+    /// In NSeed terminology seeds yield entities.
     /// </remarks>
     public sealed class EntityInfo : MetaInfo
     {

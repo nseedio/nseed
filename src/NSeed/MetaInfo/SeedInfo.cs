@@ -11,7 +11,7 @@ namespace NSeed.MetaInfo
     public sealed class SeedInfo : SeedableInfo
     {
         /// <summary>
-        /// Entities yielded by this seed.
+        /// Types of entities yielded by this seed.
         /// </summary>
         public IReadOnlyCollection<EntityInfo> Entities { get; }
 
@@ -21,16 +21,28 @@ namespace NSeed.MetaInfo
         /// </summary>
         public YieldInfo Yield { get; }
 
+        /// <summary>
+        /// Yields of other seeds used by this seed.
+        /// </summary>
+        public object UsesYields { get; }
+
+        /// <summary>
+        /// All seedables required by this seed.
+        /// <br/>
+        /// Returns union of all <see cref="SeedableInfo.ExplicitlyRequires"/> seedables and
+        /// seeds whose yields are used in <see cref="UsesYields"/>.
+        /// </summary>
+        public override IEnumerable<SeedableInfo> Requires => ExplicitlyRequires; // TODO: Add UsesYields.
+
         internal SeedInfo(
             Type type,
             string fullName,
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequires,
-            IReadOnlyCollection<SeedInfo> implicitlyRequires,
             IReadOnlyCollection<EntityInfo> entities,
             YieldInfo yield)
-            :base(type, fullName, friendlyName, description, explicitlyRequires, implicitlyRequires)
+            :base(type, fullName, friendlyName, description, explicitlyRequires)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(entities != null);

@@ -43,7 +43,6 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                         }
                     )
                 },
-                Array.Empty<SeedInfo>(), // TODO-IG: Add implicitely required.
                 new[]
                 {
                     new EntityInfo(typeof(object), typeof(object).FullName),
@@ -313,7 +312,6 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 minimalSeedType.Name.Humanize(),
                 string.Empty,
                 Array.Empty<SeedableInfo>(),
-                Array.Empty<SeedInfo>(),
                 Array.Empty<EntityInfo>(),
                 null
             );
