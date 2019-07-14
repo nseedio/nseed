@@ -49,7 +49,12 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                     new EntityInfo(typeof(string), typeof(string).FullName),
                     new EntityInfo(typeof(int), typeof(int).FullName)
                 },
-                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName)
+                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName),
+                new[]
+                {
+                    CreateRequiredYieldInfoFromYieldAccessProperty(typeof(FullyPopulatedSeed), "RequiredYieldA"),
+                    CreateRequiredYieldInfoFromYieldAccessProperty(typeof(FullyPopulatedSeed), "RequiredYieldB")
+                }
             );
 
             builder.BuildFrom(type)
@@ -68,9 +73,13 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Description(SomeDescription)]
         private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int>
         {
+            public SeedWithProvidedPublicYield.Yield RequiredYieldA { get; }
+            public SeedWithProvidedInternalYield.Yield RequiredYieldB { get; }
             public class Yield : YieldOf<FullyPopulatedSeed> { }
         }
         private class AdditionalMinimalSeed : BaseTestSeed { }
+        private class SeedWithProvidedPublicYield : BaseTestSeed { public class Yield : YieldOf<SeedWithProvidedPublicYield> { } }
+        private class SeedWithProvidedInternalYield : BaseTestSeed { public class Yield : YieldOf<SeedWithProvidedInternalYield> { } }
 
         [Fact]
         public void ReturnsﾠexpectedﾠfullyﾠpopulatedﾠScenarioInfo()
@@ -149,22 +158,30 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             var otherSeed = (SeedInfo)builder.BuildFrom(typeof(OtherSeed));
 
             var explicitlyRequired = seedThatRequiresOtherSeed.ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
-            var requiredThroughScenario = seedThatRequiresOtherSeed
+            var requiredThroughYield = seedThatRequiresOtherSeed.RequiredYields.Select(yield => yield.YieldingSeed).First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
+            var explicitlyRequiredThroughScenario = seedThatRequiresOtherSeed
                 .ExplicitlyRequiredSeedables
                 .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherSeed).FullName)
                 .ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
-
-            // TODO-IG: Add that it depends on its own yield (implicit dependency).
+            var explicitlyRequiredThroughSeedThroughYield = seedThatRequiresOtherSeed
+                .ExplicitlyRequiredSeedables
+                .OfType<SeedInfo>()
+                .First(seedableInfo => seedableInfo.FullName == typeof(SeedThatRequiresYieldOfOtherSeed).FullName)
+                .RequiredYields.Select(yield => yield.YieldingSeed).First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
 
             explicitlyRequired.Should().BeSameAs(otherSeed);
-            requiredThroughScenario.Should().BeSameAs(otherSeed);
+            requiredThroughYield.Should().BeSameAs(otherSeed);
+            explicitlyRequiredThroughScenario.Should().BeSameAs(otherSeed);
+            explicitlyRequiredThroughSeedThroughYield.Should().BeSameAs(otherSeed);
         }
+        [Requires(typeof(SeedThatRequiresYieldOfOtherSeed))]
         [Requires(typeof(ScenarioThatRequiresOtherSeed))]
         [Requires(typeof(OtherSeed))]
-        private class SeedThatRequiresOtherSeedSeveralTimes : BaseTestSeed { } // TODO-IG: Add that it depends on its own yield (implicit dependency).
-        private class OtherSeed : BaseTestSeed { }
+        private class SeedThatRequiresOtherSeedSeveralTimes : BaseTestSeed { public OtherSeed.Yield Yield { get; } }
+        private class OtherSeed : BaseTestSeed { public class Yield : YieldOf<OtherSeed> { } }
         [Requires(typeof(OtherSeed))]
         private class ScenarioThatRequiresOtherSeed : BaseTestScenario { }
+        private class SeedThatRequiresYieldOfOtherSeed : BaseTestSeed { public OtherSeed.Yield Yield { get; } }
 
         [Fact]
         public void ReturnsﾠexactlyﾠtheﾠsameﾠScenarioInfoﾠforﾠtheﾠscenarioﾠtypeﾠthatﾠoccursﾠseveralﾠtimesﾠinﾠtheﾠseedableﾠgraph()
@@ -178,8 +195,6 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherScenario).FullName)
                 .ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
 
-            // TODO-IG: Add that it depends on its own yield (implicit dependency).
-
             explicitlyRequired.Should().BeSameAs(otherScenario);
             requiredThroughScenario.Should().BeSameAs(otherScenario);
         }
@@ -189,6 +204,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class OtherScenario : BaseTestScenario { }
         [Requires(typeof(OtherScenario))]
         private class ScenarioThatRequiresOtherScenario : BaseTestScenario { }
+
 
         [Fact]
         public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseeds()
@@ -202,7 +218,20 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Requires(typeof(SeedThatRequiresItself))]
         private class SeedThatRequiresItself : BaseTestSeed { }
 
-        // TODO-IG: Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseedsﾠviaﾠseedsﾠownﾠyield()
+        [Fact]
+        public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseedsﾠviaﾠrequiredﾠyields()
+        {
+            Type type = typeof(SeedThatRequiresItsOwnYield);
+
+            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+
+            seedInfo.RequiredYields.Should().BeEmpty();
+        }
+        private class SeedThatRequiresItsOwnYield : BaseTestSeed
+        {
+            public Yield MyOwnYield { get; }
+            public class Yield : YieldOf<SeedThatRequiresItsOwnYield> { }
+        }
 
         [Fact]
         public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠscenarios()
@@ -316,7 +345,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 string.Empty,
                 Array.Empty<SeedableInfo>(),
                 Array.Empty<EntityInfo>(),
-                null
+                null,
+                Array.Empty<RequiredYieldInfo>()
             );
         }
 
@@ -329,6 +359,18 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 minimalScenarioType.Name.Humanize(),
                 string.Empty,
                 Array.Empty<SeedableInfo>()
+            );
+        }
+
+        private RequiredYieldInfo CreateRequiredYieldInfoFromYieldAccessProperty(Type type, string propertyName)
+        {
+            var propertyInfo = type.GetPropertyWithName(propertyName);
+
+            return new RequiredYieldInfo
+            (
+                (SeedInfo)builder.BuildFrom(propertyInfo.PropertyType.DeclaringType),
+                propertyInfo,
+                propertyInfo.Name
             );
         }
     }

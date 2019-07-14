@@ -38,6 +38,7 @@ namespace NSeed.MetaInfo
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(yieldAccessPropertyName));
 
+            YieldingSeed = yieldingSeed;
             YieldAccessProperty = yieldAccessProperty;
             YieldAccessPropertyName = yieldAccessPropertyName;
         }

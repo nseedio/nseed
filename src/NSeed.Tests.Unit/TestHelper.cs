@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Reflection;
 
 namespace NSeed.Tests.Unit
 {
@@ -19,6 +20,11 @@ namespace NSeed.Tests.Unit
         private class ClassWithGenericMethod
         {
             public T Method<T>(T t) => t;
+        }
+
+        public static PropertyInfo GetPropertyWithName(this Type type, string propertyName)
+        {
+            return type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
         }
     }
 }

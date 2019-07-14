@@ -13,6 +13,7 @@ namespace NSeed.Discovery.Seedable.ReflectionBased
                    new ReflectionBasedSeedEntitiesExtractor(),
                    new ReflectionBasedSeedProvidedYieldExtractor(),
                    builder => new ReflectionBasedExplicitlyRequiredSeedablesExtractor(builder),
+                   builder => new ReflectionBasedSeedRequiredYieldsExtractor(builder),
                    new ReflectionBasedSeedableInfoPool())
         {
         }

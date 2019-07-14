@@ -19,6 +19,7 @@ namespace NSeed.Discovery.Seedable
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
         private readonly ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor;
         private readonly IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation> explicitlyRequiredSeedablesExtractor;
+        private readonly ISeedRequiredYieldsExtractor<TSeedableImplementation> requiredYieldsExtractor;
         private readonly IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool;
 
         // Keeps track of the current build chain in order to ignore circular dependencies.
@@ -30,7 +31,8 @@ namespace NSeed.Discovery.Seedable
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
                                      ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
                                      ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
-                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,                                     
+                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,
+                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, ISeedRequiredYieldsExtractor<TSeedableImplementation>> requiredYieldsExtractorFactory,
                                      IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
@@ -40,6 +42,7 @@ namespace NSeed.Discovery.Seedable
             System.Diagnostics.Debug.Assert(entitiesExtractor != null);
             System.Diagnostics.Debug.Assert(providedYieldExtractor != null);
             System.Diagnostics.Debug.Assert(explicitlyRequiredSeedablesExtractorFactory != null);
+            System.Diagnostics.Debug.Assert(requiredYieldsExtractorFactory != null);
             System.Diagnostics.Debug.Assert(seedableInfoPool != null);
 
             this.typeExtractor = typeExtractor;
@@ -49,6 +52,7 @@ namespace NSeed.Discovery.Seedable
             this.entitiesExtractor = entitiesExtractor;
             this.providedYieldExtractor = providedYieldExtractor;
             explicitlyRequiredSeedablesExtractor = explicitlyRequiredSeedablesExtractorFactory(this);
+            requiredYieldsExtractor = requiredYieldsExtractorFactory(this);
             this.seedableInfoPool = seedableInfoPool;
         }
 
@@ -90,7 +94,8 @@ namespace NSeed.Discovery.Seedable
                       description,
                       explicitelyRequires,
                       entitiesExtractor.ExtractFrom(implementation, errorCollector),
-                      providedYieldExtractor.ExtractFrom(implementation, errorCollector)
+                      providedYieldExtractor.ExtractFrom(implementation, errorCollector),
+                      requiredYieldsExtractor.ExtractFrom(implementation, errorCollector)
                   )
                 : new ScenarioInfo
                  (

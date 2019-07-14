@@ -24,7 +24,7 @@ namespace NSeed.MetaInfo
         /// <summary>
         /// Yields of other seeds required by this seed.
         /// </summary>
-        public IReadOnlyCollection<RequiredYieldInfo> RequiredYields { get; } = Array.Empty<RequiredYieldInfo>();
+        public IReadOnlyCollection<RequiredYieldInfo> RequiredYields { get; }
 
         /// <summary>
         /// All seedables required by this seed.
@@ -43,18 +43,24 @@ namespace NSeed.MetaInfo
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
             IReadOnlyCollection<EntityInfo> yieldedEntities,
-            ProvidedYieldInfo yield)
+            ProvidedYieldInfo yield,
+            IReadOnlyCollection<RequiredYieldInfo> requiredYields)
             :base(type, fullName, friendlyName, description, explicitlyRequiredSeedables)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(yieldedEntities != null);
             System.Diagnostics.Debug.Assert(yieldedEntities.All(entity => entity != null));
             System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || yield.Type.IsYieldTypeOfSeed(type));
+            System.Diagnostics.Debug.Assert(requiredYields != null);
+            System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield => requiredYield != null && requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type)));
 
             YieldedEntities = yieldedEntities;
 
             if (yield != null && yield.Type != null) yield.YieldingSeed = this;
             Yield = yield;
+
+            RequiredYields = requiredYields;
+            foreach (var requiredYield in requiredYields) requiredYield.RequiringSeed = this;
         }
     }
 }
