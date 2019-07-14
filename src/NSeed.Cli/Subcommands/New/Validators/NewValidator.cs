@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Validation;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
@@ -13,21 +15,20 @@ namespace NSeed.Cli.Subcommands.New.Validators
         {
             if (value is Subcommand model)
             {
-                var validators = context.GetServices(typeof(Validation.IValidator))
-                    .Where(s=>s.GetType().IsSubclassOf(typeof(Subcommand)));
+                Console.WriteLine("Solution:" + model.Solution);
+                Console.WriteLine("Name:" + model.Name);
+                Console.WriteLine("Framework:" + model.Framework);
 
-                foreach (Validation.IValidator validator in validators)
+                var validators = context.GetServices(typeof(IValidator<New.Subcommand>));
+
+                foreach (IValidator<Subcommand> validator in validators)
                 {
-                    var response = validator.Validate();
+                    var response = validator.Validate(model);
                     if (!response.IsValid)
                     {
                         return new ValidationResult(response.Message);
                     }
                 }
-                //You need to validate model
-                Console.WriteLine($"Solution: {model.Solution}");
-                Console.WriteLine($"Framework: {model.Framework}");
-                Console.WriteLine($"Name: {model.Name}");
             }
             return ValidationResult.Success;
         }

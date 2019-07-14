@@ -10,5 +10,7 @@ namespace NSeed.Cli.Extensions
     {
         public static IEnumerable<T> AreEmptyIfNull<T>(this IEnumerable<T> source) =>
         source ?? Enumerable.Empty<T>();
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source) => source == null || !source.Any();
     }
 }

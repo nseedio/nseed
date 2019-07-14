@@ -56,60 +56,16 @@ namespace NSeed.Cli.Services
             return DependencyGraphSpec;
         }
 
-        public string GetProjectsPrefix(string solutionPath)
+        /// <summary>
+        /// Fetching all project names from generated dependency graph of provided solution
+        /// </summary>
+        /// <param name="solutionPath"></param>
+        /// <returns>List of project names</returns>
+        public IEnumerable<string> GetSolutionProjectsNames(string solutionPath)
         {
             var dependencyGraph = GenerateDependencyGraph(solutionPath);
-            if (dependencyGraph == null)
-            {
-                return string.Empty;
-            }
             var projectNames = dependencyGraph.Projects.Select(p => p.Name).ToList();
-            var projectsCommonNamePart = GetCommonValue(projectNames);
-            return projectsCommonNamePart.Trim('.');
-        }
-
-        public string GetProjectsFramework(string solutionPath)
-        {
-            var dependencyGraph = GenerateDependencyGraph(solutionPath);
-            if (dependencyGraph == null)
-            {
-                return string.Empty;
-            }
-
-            var frameworks = dependencyGraph.Projects
-                .SelectMany(p => p.TargetFrameworks, (t, v) =>
-                {
-                    return v;
-                })
-                .ToList();
-
-
-            var frameworkss = dependencyGraph.Projects
-                .SelectMany(p => p.TargetFrameworks, (t, v) =>
-                {
-                    return $"{v.FrameworkName.Framework.ToLower().TrimStart('.')}{v.FrameworkName.Version.Major}.{v.FrameworkName.Version.Minor}";
-                })
-                .ToList();
-
-            return GetCommonValue(frameworkss);
-        }
-
-        private string GetCommonValue(List<string> values)
-        {
-            if (values == null || !values.Any())
-            {
-                return string.Empty;
-            }
-
-            if (values.Count == 1)
-            {
-                var value = values.First();
-                var valueParts = value.Split(new char[] { '.', '-', '_' });
-                return valueParts.FirstOrDefault();
-            }
-
-            var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray()).ToList().FirstOrDefault(d => d.IsMatch);
-            return values[0].Substring(0, diffSection.LengthInCollection1);
+            return projectNames ?? new List<string>();
         }
     }
 }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NSeed.Cli.Validation
+namespace NSeed.Cli.Tests.Unit.Services
 {
-    internal interface IValidator<TCommand>
+    public class DependencyGraphServiceTest
     {
-        ValidationResult Validate(TCommand command);
+        
     }
 }

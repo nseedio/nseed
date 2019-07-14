@@ -2,7 +2,11 @@
   "profiles": {
     "NSeed.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "new"
+      //"commandLineArgs": "new"
+      "commandLineArgs": "new -s C:\\Repositories\\Osobno"
+      //"commandLineArgs": "new -s C:\\Repositories\\Osobno\\Fit"
+      //"commandLineArgs": "new -s"
+      //"commandLineArgs": "new -s C:\\Repositories\\LeadApi"
     }
   }
 }

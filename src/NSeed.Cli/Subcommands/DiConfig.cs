@@ -14,9 +14,9 @@ namespace NSeed.Cli.Subcommands
         public static void RegisterValidators(IServiceCollection container)
         {
             container
-                .AddSingleton<IValidator, SolutionValidator>()
-                .AddSingleton<IValidator, NameValidator>()
-                .AddSingleton<IValidator, FrameworkValidator>();
+                .AddSingleton<IValidator<New.Subcommand>, SolutionValidator>()
+                .AddSingleton<IValidator<New.Subcommand>, NameValidator>()
+                .AddSingleton<IValidator<New.Subcommand>, FrameworkValidator >();
         }
     }
 }

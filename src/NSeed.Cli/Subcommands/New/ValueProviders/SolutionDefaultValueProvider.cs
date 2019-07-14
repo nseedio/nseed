@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
+using NSeed.Cli.Subcommands.New.Validators;
 using System;
 using System.Reflection;
 using static NSeed.Cli.Resources.Resources;
@@ -13,19 +14,22 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
     {
         public void Apply(ConventionContext context, MemberInfo member)
         {
-            //Adds an action to be invoked when all command line arguments have been parsed and validated.
             context.Application.OnParsingComplete(_ =>
             {
                 var solution = context.GetValue<string>(nameof(Subcommand.Solution));
+                var fileSystemService = context.Application.GetService<IFileSystemService>();
                 if (solution.IsNotProvidedByUser())
                 {
-                    var fileSystemService = context.Application.GetService<IFileSystemService>();
-                    solution = fileSystemService.GetSolution(InitDirectory);
-                    if (solution.Exists())
-                    {
-                        context.SetValue(nameof(Subcommand.Solution), solution);
-                    }
+                    fileSystemService.TryGetSolutionPath(InitDirectory, out solution);
                 }
+                else
+                {
+                    fileSystemService.TryGetSolutionPath(solution, out solution);
+                }
+                var model = context.ModelAccessor.GetModel() as New.Subcommand;
+                model.SetResolvedSolution(solution);
+                var solutionValidator = context.GetValidator<SolutionValidator>();
+                solutionValidator.Validate(model);
             });
         }
     }

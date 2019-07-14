@@ -1,6 +1,7 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Validation;
 using System;
 using System.Collections.Generic;
@@ -20,22 +21,22 @@ namespace NSeed.Cli.Extensions
         public static void SetValue(this ConventionContext context, string parameterName, string value)
         {
             var solutionValues = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName).ToList();
-
-            if(solutionValues.Any() && solutionValues.Count == 1)
-            {
-                solutionValues[0] = value;
-            }
-            else
-            {
-                solutionValues.Add(value);
-            }
+            solutionValues.Clear();
+            //if(solutionValues.Any() && solutionValues.Count == 1)
+            //{
+            //    solutionValues[0] = value;
+            //}
+            //else
+            //{
+            //    solutionValues.Add(value);
+            //}
         }
 
-        public static IValidator GetValidator<T>(this ConventionContext context) 
-            where T : IValidator
+        public static IValidator<Subcommand> GetValidator<T>(this ConventionContext context) 
+            where T : IValidator<Subcommand>
         {
             return context.Application
-                    .GetServices<IValidator>()
+                    .GetServices<IValidator<Subcommand>>()
                     .FirstOrDefault(s => s.GetType() == typeof(T));
         }
 

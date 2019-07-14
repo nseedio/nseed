@@ -3,13 +3,11 @@ using System.IO.Abstractions;
 
 namespace NSeed.Cli.Services
 {
-    internal interface IFileSystemService
+    public interface IFileSystemService
     {
         IFile File { get; }
         IPath Path { get; }
 
-        IEnumerable<string> GetSolutions(string path);
-        string GetSolution(string path);
-
+        (bool IsSuccesful, string Message) TryGetSolutionPath(string solution, out string path);
     }
 }

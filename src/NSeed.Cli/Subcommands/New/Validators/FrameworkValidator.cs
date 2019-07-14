@@ -1,22 +1,20 @@
 ﻿using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
-using System;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    internal class FrameworkValidator : Subcommand, IValidator
+    internal class FrameworkValidator : IValidator<New.Subcommand>
     {
         public FrameworkValidator()
         {
-
         }
-        public ValidationResult Validate()
-        {
-            if (Framework.IsNotProvidedByUser())
-            {
-                return ValidationResult.Error("Framework is empty");
-            }
 
+        public ValidationResult Validate(Subcommand command)
+        {
+            if (command.ResolvedFramework.IsNotProvidedByUser())
+            {
+                return ValidationResult.Error("Project framework is empty");
+            }
             return ValidationResult.Success;
         }
     }

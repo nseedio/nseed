@@ -1,11 +1,11 @@
 ﻿using NuGet.ProjectModel;
+using System.Collections.Generic;
 
 namespace NSeed.Cli.Services
 {
-    internal interface IDependencyGraphService
+    public interface IDependencyGraphService
     {
         DependencyGraphSpec GenerateDependencyGraph(string projectPath);
-        string GetProjectsPrefix(string solutionPath);
-        string GetProjectsFramework(string solutionPath);
+        IEnumerable<string> GetSolutionProjectsNames(string solutionPath);
     }
 }

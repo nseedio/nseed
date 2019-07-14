@@ -1,48 +1,104 @@
-﻿using System;
+﻿using NSeed.Cli.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Services
 {
-
-    internal class FileSystemService : FileSystem, IFileSystemService  
+    internal class FileSystemService : FileSystem, IFileSystemService
     {
         public const string SolutionPrefix = "sln";
 
-        public IEnumerable<string> GetSolutions(string path)
+        public (bool IsSuccesful, string Message) TryGetSolutionPath(string solution, out string path)
         {
-            var solutions = new List<string>();
+            var fileInfo = FileInfo.FromFileName(solution);
 
-            if (string.IsNullOrEmpty(path))
+            if (fileInfo.Extension == $".{SolutionPrefix}" && fileInfo.Exists)
             {
-                return solutions;
+                path = fileInfo.FullName;
+                return SuccesResponse;
             }
-
-            return Directory?.GetFiles(path, $"*.{SolutionPrefix}", SearchOption.AllDirectories);
+            else
+            {
+                var attr = fileInfo.Attributes;
+                if ((int)attr != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory))
+                {
+                    return TryGetSolution(fileInfo.FullName, out path);
+                }
+                else
+                {
+                    return TryGetSolution($"{fileInfo.FullName}.{SolutionPrefix}", out path);
+                }
+            }
         }
 
-        public string GetSolution(string path)
+        private (bool IsSuccesful, string Message) TryGetSolution(string path, out string solution)
         {
+            solution = string.Empty;
+
             if (string.IsNullOrEmpty(path))
             {
-                return string.Empty;
+                return ErrorResponse(Error.SolutionPathIsNotProvided);
             }
 
+            var directoryInfo = DirectoryInfo.FromDirectoryName(path);
+            if (!directoryInfo.Exists)
+            {
+                return ErrorResponse(Error.SolutionPathDirectoryNotExist);
+            }
+
+            var response = GetSolution(path, SearchOption.TopDirectoryOnly);
+
+            if (response.foundMultiple)
+            {
+                return ErrorResponse(Error.MultipleSolutionsFound);
+            }
+            if (response.notFound)
+            {
+                response = GetSolution(path, SearchOption.AllDirectories);
+
+                if (response.foundMultiple)
+                {
+                    return ErrorResponse(Error.MultipleSolutionsFound);
+                }
+                if (response.notFound)
+                {
+                    return ErrorResponse(Error.SolutionNotFound);
+                }
+            }
+            solution = response.solution;
+            return SuccesResponse;
+        }
+
+        private (string solution, bool foundMultiple, bool notFound) GetSolution(string path, SearchOption searchOption)
+        {
             var solutions = Directory
-                .EnumerateFiles(path, $"*.{SolutionPrefix}", SearchOption.AllDirectories)
-                .Take(2)
-                .ToList();
+                ?.EnumerateFiles(path, $"*.{SolutionPrefix}", searchOption)
+                ?.Take(2)
+                ?.ToList() ?? new List<string>();
 
-            if (solutions.Count == 1)
+            if (solutions.IsNullOrEmpty())
             {
-                return solutions.FirstOrDefault();
+                return SlnNotFound;
             }
 
-            return string.Empty;
+            if (solutions.Any() && solutions.Count > 1)
+            {
+                return FoundMultipleSln;
+            }
+
+            return Sln(solutions.FirstOrDefault());
         }
+
+        private (string solution, bool foundMultiple, bool notFound) SlnNotFound = (string.Empty, false, true);
+        private (string solution, bool foundMultiple, bool notFound) FoundMultipleSln = (string.Empty, true, false);
+
+        private (string solution, bool foundMultiple, bool notFound) Sln(string sln) => (sln, false, false);
+
+        private (bool IsSuccesful, string Message) SuccesResponse = (true, string.Empty);
+
+        private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }
 }
