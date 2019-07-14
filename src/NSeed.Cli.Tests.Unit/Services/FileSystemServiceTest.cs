@@ -27,7 +27,8 @@ namespace NSeed.Cli.Tests.Unit.Services
                 sln.Should().NotBeNullOrEmpty();
             }
 
-            [Theory]
+            
+            [Theory(Skip ="Not finished yet")]
             [InlineData("Fit.Web", "")]
             [InlineData(@"C:\Repositories\Fit.Web.sln", "")]
             [InlineData(@"C:\Repositories\Osobno\Fit\Fit.Web\Program.cs", "")]
