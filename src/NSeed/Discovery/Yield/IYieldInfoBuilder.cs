@@ -2,7 +2,7 @@
 
 namespace NSeed.Discovery.Yield
 {
-    internal interface IYieldInfoBuilder<TYieldImplementation> : IMetaInfoBuilder<TYieldImplementation, YieldInfo>
+    internal interface IYieldInfoBuilder<TYieldImplementation> : IMetaInfoBuilder<TYieldImplementation, ProvidedYieldInfo>
         where TYieldImplementation : class
     {
     }

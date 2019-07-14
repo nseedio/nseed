@@ -21,7 +21,7 @@ namespace NSeed.Discovery.Seedable
             this.yieldBuilder = yieldBuilder;
         }
 
-        YieldInfo IExtractor<TSeedImplementation, YieldInfo>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
+        ProvidedYieldInfo IExtractor<TSeedImplementation, ProvidedYieldInfo>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
         {
             System.Diagnostics.Debug.Assert(seedImplementation != null);
             System.Diagnostics.Debug.Assert(errorCollector != null);

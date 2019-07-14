@@ -12,7 +12,7 @@ namespace NSeed.MetaInfo
     {
         /// <summary>
         /// The underlying implementation <see cref="System.Type"/> of the NSeed abstraction
-        /// described with this meta info, if such type exists; otherwise null.
+        /// described with this meta info, if such <see cref="System.Type"/> exists; otherwise null.
         /// </summary>
         public Type Type { get; }
 

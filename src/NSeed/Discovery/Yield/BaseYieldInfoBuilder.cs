@@ -19,7 +19,7 @@ namespace NSeed.Discovery.Yield
             this.fullNameExtractor = fullNameExtractor;
         }
 
-        YieldInfo IMetaInfoBuilder<TYieldImplementation, YieldInfo>.BuildFrom(TYieldImplementation implementation)
+        ProvidedYieldInfo IMetaInfoBuilder<TYieldImplementation, ProvidedYieldInfo>.BuildFrom(TYieldImplementation implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);            
 
@@ -28,7 +28,7 @@ namespace NSeed.Discovery.Yield
             Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
             string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
 
-            return new YieldInfo
+            return new ProvidedYieldInfo
             (
                 type,
                 fullName

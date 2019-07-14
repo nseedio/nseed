@@ -49,7 +49,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                     new EntityInfo(typeof(string), typeof(string).FullName),
                     new EntityInfo(typeof(int), typeof(int).FullName)
                 },
-                new YieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName)
+                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName)
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected, option => option.IgnoringCyclicReferences());

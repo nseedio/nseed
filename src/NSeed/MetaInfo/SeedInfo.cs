@@ -19,7 +19,7 @@ namespace NSeed.MetaInfo
         /// The yield seeded by this seed or null if this seed does not
         /// provide access to its yield.
         /// </summary>
-        public YieldInfo Yield { get; }
+        public ProvidedYieldInfo Yield { get; }
 
         /// <summary>
         /// Yields of other seeds used by this seed.
@@ -41,7 +41,7 @@ namespace NSeed.MetaInfo
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequires,
             IReadOnlyCollection<EntityInfo> entities,
-            YieldInfo yield)
+            ProvidedYieldInfo yield)
             :base(type, fullName, friendlyName, description, explicitlyRequires)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
@@ -51,7 +51,7 @@ namespace NSeed.MetaInfo
 
             Entities = entities;
 
-            if (yield != null && yield.Type != null) yield.Seed = this;
+            if (yield != null && yield.Type != null) yield.YieldingSeed = this;
             Yield = yield;
         }
     }
