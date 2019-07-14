@@ -3,13 +3,13 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.Yield
 {
-    internal abstract class BaseYieldInfoBuilder<TYieldImplementation> : IYieldInfoBuilder<TYieldImplementation>
+    internal abstract class BaseProvidedYieldInfoBuilder<TYieldImplementation> : IProvidedYieldInfoBuilder<TYieldImplementation>
         where TYieldImplementation : class
     {
         private readonly IYieldTypeExtractor<TYieldImplementation> typeExtractor;
         private readonly IYieldFullNameExtractor<TYieldImplementation> fullNameExtractor;
 
-        internal BaseYieldInfoBuilder(IYieldTypeExtractor<TYieldImplementation> typeExtractor,
+        internal BaseProvidedYieldInfoBuilder(IYieldTypeExtractor<TYieldImplementation> typeExtractor,
                                        IYieldFullNameExtractor<TYieldImplementation> fullNameExtractor)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);

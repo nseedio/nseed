@@ -2,9 +2,9 @@
 
 namespace NSeed.Discovery.Yield.ReflectionBased
 {
-    internal class ReflectionBasedYieldInfoBuilder : BaseYieldInfoBuilder<Type>
+    internal class ReflectionBasedProvidedYieldInfoBuilder : BaseProvidedYieldInfoBuilder<Type>
     {
-        public ReflectionBasedYieldInfoBuilder()
+        public ReflectionBasedProvidedYieldInfoBuilder()
             : base(new ReflectionBasedYieldTypeExtractor(),
                    new ReflectionBasedYieldFullNameExtractor())
         {

@@ -52,7 +52,10 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName)
             );
 
-            builder.BuildFrom(type).Should().BeEquivalentTo(expected, option => option.IgnoringCyclicReferences());
+            builder.BuildFrom(type)
+                .Should()
+                .BeEquivalentTo(expected, option =>
+                    option.IgnoringCyclicReferences().WithoutStrictOrdering());
         }
 
         private const string SomeFriendlyName = "Some friendly name";
@@ -88,7 +91,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 }
             );
 
-            builder.BuildFrom(type).Should().BeEquivalentTo(expected);
+            builder.BuildFrom(type).Should().BeEquivalentTo(expected, options => options.WithoutStrictOrdering());
         }
 
         [Requires(typeof(AdditionalMinimalSeed))]
@@ -145,11 +148,11 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             var seedThatRequiresOtherSeed = (SeedInfo)builder.BuildFrom(typeof(SeedThatRequiresOtherSeedSeveralTimes));
             var otherSeed = (SeedInfo)builder.BuildFrom(typeof(OtherSeed));
 
-            var explicitlyRequired = seedThatRequiresOtherSeed.ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
+            var explicitlyRequired = seedThatRequiresOtherSeed.ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
             var requiredThroughScenario = seedThatRequiresOtherSeed
-                .ExplicitlyRequires
+                .ExplicitlyRequiredSeedables
                 .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherSeed).FullName)
-                .ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
+                .ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
 
             // TODO-IG: Add that it depends on its own yield (implicit dependency).
 
@@ -169,11 +172,11 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             var scenarioThatRequiresOtherScenario = (ScenarioInfo)builder.BuildFrom(typeof(ScenarioThatRequiresOtherScenarioSeveralTimes));
             var otherScenario = (ScenarioInfo)builder.BuildFrom(typeof(OtherScenario));
 
-            var explicitlyRequired = scenarioThatRequiresOtherScenario.ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
+            var explicitlyRequired = scenarioThatRequiresOtherScenario.ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
             var requiredThroughScenario = scenarioThatRequiresOtherScenario
-                .ExplicitlyRequires
+                .ExplicitlyRequiredSeedables
                 .First(seedableInfo => seedableInfo.FullName == typeof(ScenarioThatRequiresOtherScenario).FullName)
-                .ExplicitlyRequires.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
+                .ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
 
             // TODO-IG: Add that it depends on its own yield (implicit dependency).
 
@@ -194,7 +197,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             var seedInfo = (SeedInfo)builder.BuildFrom(type);
 
-            seedInfo.ExplicitlyRequires.Should().BeEmpty();
+            seedInfo.ExplicitlyRequiredSeedables.Should().BeEmpty();
         }
         [Requires(typeof(SeedThatRequiresItself))]
         private class SeedThatRequiresItself : BaseTestSeed { }
@@ -208,7 +211,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
 
-            scenarioInfo.ExplicitlyRequires.Should().BeEmpty();
+            scenarioInfo.ExplicitlyRequiredSeedables.Should().BeEmpty();
         }
         [Requires(typeof(ScenarioThatRequiresItself))]
         private class ScenarioThatRequiresItself : BaseTestScenario { }
@@ -220,8 +223,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             var seedInfo = (SeedInfo)builder.BuildFrom(type);
 
-            seedInfo.ExplicitlyRequires.Should().Contain(builder.BuildFrom(typeof(SeedA)));
-            seedInfo.ExplicitlyRequires.Should().NotContain(seedInfo);
+            seedInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(SeedA)));
+            seedInfo.ExplicitlyRequiredSeedables.Should().NotContain(seedInfo);
         }
         [Requires(typeof(SeedA))]
         private class SeedThatIndirectlyRequiresItself : BaseTestSeed { }
@@ -235,8 +238,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
 
-            scenarioInfo.ExplicitlyRequires.Should().Contain(builder.BuildFrom(typeof(ScenarioA)));
-            scenarioInfo.ExplicitlyRequires.Should().NotContain(scenarioInfo);
+            scenarioInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(ScenarioA)));
+            scenarioInfo.ExplicitlyRequiredSeedables.Should().NotContain(scenarioInfo);
         }
         [Requires(typeof(ScenarioA))]
         private class ScenarioThatIndirectlyRequiresItself : BaseTestScenario { }
@@ -248,35 +251,35 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             var seedZero = (SeedInfo)builder.BuildFrom(typeof(SeedZero));
 
-            var seedOne = seedZero.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedOne).FullName);
-            var scenarioTwo = seedOne.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioTwo).FullName);
-            var seedThree = scenarioTwo.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedThree).FullName);
-            var scenarioFour = seedThree.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioFour).FullName);
-            var seedFive = scenarioFour.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedFive).FullName);
-            var scenarioSix = seedFive.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioSix).FullName);
-            var seedSeven = scenarioSix.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(SeedSeven).FullName);
-            var scenarioEight = seedSeven.ExplicitlyRequires.First(seedable => seedable.FullName == typeof(ScenarioEight).FullName);
+            var seedOne = seedZero.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(SeedOne).FullName);
+            var scenarioTwo = seedOne.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(ScenarioTwo).FullName);
+            var seedThree = scenarioTwo.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(SeedThree).FullName);
+            var scenarioFour = seedThree.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(ScenarioFour).FullName);
+            var seedFive = scenarioFour.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(SeedFive).FullName);
+            var scenarioSix = seedFive.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(ScenarioSix).FullName);
+            var seedSeven = scenarioSix.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(SeedSeven).FullName);
+            var scenarioEight = seedSeven.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(ScenarioEight).FullName);
 
-            seedZero.ExplicitlyRequires.Should().Contain(seedOne);
+            seedZero.ExplicitlyRequiredSeedables.Should().Contain(seedOne);
 
-            seedOne.ExplicitlyRequires.Should().Contain(scenarioTwo);
+            seedOne.ExplicitlyRequiredSeedables.Should().Contain(scenarioTwo);
 
-            scenarioTwo.ExplicitlyRequires.Should().Contain(seedThree);
+            scenarioTwo.ExplicitlyRequiredSeedables.Should().Contain(seedThree);
 
-            seedThree.ExplicitlyRequires.Should().Contain(scenarioFour);
-            seedThree.ExplicitlyRequires.Should().NotContain(seedOne);
+            seedThree.ExplicitlyRequiredSeedables.Should().Contain(scenarioFour);
+            seedThree.ExplicitlyRequiredSeedables.Should().NotContain(seedOne);
 
-            scenarioFour.ExplicitlyRequires.Should().Contain(seedFive);
+            scenarioFour.ExplicitlyRequiredSeedables.Should().Contain(seedFive);
 
-            seedFive.ExplicitlyRequires.Should().Contain(scenarioSix);
+            seedFive.ExplicitlyRequiredSeedables.Should().Contain(scenarioSix);
 
-            scenarioSix.ExplicitlyRequires.Should().Contain(seedSeven);
-            scenarioSix.ExplicitlyRequires.Should().NotContain(seedThree);
-            scenarioSix.ExplicitlyRequires.Should().NotContain(scenarioFour);
+            scenarioSix.ExplicitlyRequiredSeedables.Should().Contain(seedSeven);
+            scenarioSix.ExplicitlyRequiredSeedables.Should().NotContain(seedThree);
+            scenarioSix.ExplicitlyRequiredSeedables.Should().NotContain(scenarioFour);
 
-            seedSeven.ExplicitlyRequires.Should().Contain(scenarioEight);
+            seedSeven.ExplicitlyRequiredSeedables.Should().Contain(scenarioEight);
 
-            scenarioEight.ExplicitlyRequires.Should().BeEmpty();
+            scenarioEight.ExplicitlyRequiredSeedables.Should().BeEmpty();
         }
         // SeedZero -> SeedOne~ -> ScenarioTwo -> SeedThree~ -> ScenarioFour~ -> SeedFive -> ScenarioSix -> SeedThree*
         //                                                   -> SeedOne*                                 -> SeedSeven -> ScenarioEight~ -> ScenarioEight*

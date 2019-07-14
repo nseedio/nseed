@@ -4,15 +4,15 @@ using NSeed.Discovery.Yield;
 
 namespace NSeed.Discovery.Seedable
 {
-    internal abstract class BaseSeedYieldExtractor<TSeedImplementation, TYieldImplementation> : ISeedYieldExtractor<TSeedImplementation>
+    internal abstract class BaseSeedProvidedYieldExtractor<TSeedImplementation, TYieldImplementation> : ISeedProvidedYieldExtractor<TSeedImplementation>
         where TSeedImplementation : class
         where TYieldImplementation : class
     {
-        private readonly IYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer;
-        private readonly IYieldInfoBuilder<TYieldImplementation> yieldBuilder;
+        private readonly IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer;
+        private readonly IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder;
 
-        internal protected BaseSeedYieldExtractor(IYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
-                                                  IYieldInfoBuilder<TYieldImplementation> yieldBuilder)
+        internal protected BaseSeedProvidedYieldExtractor(IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
+                                                  IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder)
         {
             System.Diagnostics.Debug.Assert(yieldDiscoverer != null);
             System.Diagnostics.Debug.Assert(yieldBuilder != null);

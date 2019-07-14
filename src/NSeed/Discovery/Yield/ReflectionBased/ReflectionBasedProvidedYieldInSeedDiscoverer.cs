@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace NSeed.Discovery.Yield.ReflectionBased
 {
-    internal class ReflectionBasedYieldInSeedDiscoverer : IYieldInSeedDiscoverer<Type, Type>
+    internal class ReflectionBasedProvidedYieldInSeedDiscoverer : IProvidedYieldInSeedDiscoverer<Type, Type>
     {
         Discovery<Type> IDiscoverer<Type, Type>.DiscoverIn(Type source)
         {

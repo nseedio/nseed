@@ -41,34 +41,34 @@ namespace NSeed.MetaInfo
         /// whose <see cref="RequiresAttribute.SeedableType"/>
         /// is the implementation of the required seedable.
         /// </summary>
-        public IReadOnlyCollection<SeedableInfo> ExplicitlyRequires { get; }
+        public IReadOnlyCollection<SeedableInfo> ExplicitlyRequiredSeedables { get; }
 
         /// <summary>
         /// All seedables required by this seedable.
         /// <br/>
-        /// Returns union of all <see cref="ExplicitlyRequires"/> seedables and
+        /// Returns union of <see cref="ExplicitlyRequiredSeedables"/> and
         /// other seedables that this seedable requires.
-        /// For example, seeds require other seeds
-        /// by using they yields (see: <see cref="SeedInfo.UsesYields"/>).
+        /// For example, seeds can implicitly require other seeds
+        /// by requiring their yields (see: <see cref="SeedInfo.RequiredYields"/>).
         /// </summary>
-        public abstract IEnumerable<SeedableInfo> Requires { get; }
+        public abstract IEnumerable<SeedableInfo> RequiredSeedables { get; }
 
         internal SeedableInfo(
             Type type,
             string fullName,
             string friendlyName,
             string description,
-            IReadOnlyCollection<SeedableInfo> explicitlyRequires)
+            IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
             :base(type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
-            System.Diagnostics.Debug.Assert(explicitlyRequires != null);
-            System.Diagnostics.Debug.Assert(explicitlyRequires.All(required => required != null));
+            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedables != null);
+            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedables.All(required => required != null));
 
             FriendlyName = friendlyName;
             Description = description;
-            ExplicitlyRequires = explicitlyRequires;
+            ExplicitlyRequiredSeedables = explicitlyRequiredSeedables;
         }
     }
 }

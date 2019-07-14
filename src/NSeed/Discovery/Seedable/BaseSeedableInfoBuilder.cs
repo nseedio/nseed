@@ -17,7 +17,7 @@ namespace NSeed.Discovery.Seedable
         private readonly ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
-        private readonly ISeedYieldExtractor<TSeedableImplementation> yieldExtractor;
+        private readonly ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor;
         private readonly IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation> explicitlyRequiredSeedablesExtractor;
         private readonly IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool;
 
@@ -29,7 +29,7 @@ namespace NSeed.Discovery.Seedable
                                      ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
                                      ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
-                                     ISeedYieldExtractor<TSeedableImplementation> yieldExtractor,
+                                     ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
                                      Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,                                     
                                      IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
@@ -38,7 +38,7 @@ namespace NSeed.Discovery.Seedable
             System.Diagnostics.Debug.Assert(friendlyNameExtractor != null);
             System.Diagnostics.Debug.Assert(descriptionExtractor != null);
             System.Diagnostics.Debug.Assert(entitiesExtractor != null);
-            System.Diagnostics.Debug.Assert(yieldExtractor != null);
+            System.Diagnostics.Debug.Assert(providedYieldExtractor != null);
             System.Diagnostics.Debug.Assert(explicitlyRequiredSeedablesExtractorFactory != null);
             System.Diagnostics.Debug.Assert(seedableInfoPool != null);
 
@@ -47,7 +47,7 @@ namespace NSeed.Discovery.Seedable
             this.friendlyNameExtractor = friendlyNameExtractor;
             this.descriptionExtractor = descriptionExtractor;
             this.entitiesExtractor = entitiesExtractor;
-            this.yieldExtractor = yieldExtractor;
+            this.providedYieldExtractor = providedYieldExtractor;
             explicitlyRequiredSeedablesExtractor = explicitlyRequiredSeedablesExtractorFactory(this);
             this.seedableInfoPool = seedableInfoPool;
         }
@@ -90,7 +90,7 @@ namespace NSeed.Discovery.Seedable
                       description,
                       explicitelyRequires,
                       entitiesExtractor.ExtractFrom(implementation, errorCollector),
-                      yieldExtractor.ExtractFrom(implementation, errorCollector)
+                      providedYieldExtractor.ExtractFrom(implementation, errorCollector)
                   )
                 : new ScenarioInfo
                  (
