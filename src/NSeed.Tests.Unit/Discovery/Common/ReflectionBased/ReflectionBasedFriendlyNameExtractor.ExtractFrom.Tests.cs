@@ -3,14 +3,15 @@ using Xunit;
 using FluentAssertions;
 using NSeed.Extensions;
 using NSeed.MetaInfo;
-using NSeed.Discovery.Seedable.ReflectionBased;
-using NSeed.Discovery.Seedable;
+using NSeed.Discovery;
+using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.Tests.Unit.Discovery.Seedable;
 
-namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
+namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
 {
-    public partial class ReflectionBasedSeedableFriendlyNameExtractorﾠExtractFrom
+    public partial class ReflectionBasedFriendlyNameExtractorﾠExtractFrom
     {
-        private readonly ISeedableFriendlyNameExtractor<Type> extractor = new ReflectionBasedSeedableFriendlyNameExtractor();
+        private readonly IFriendlyNameExtractor<Type> extractor = new ReflectionBasedFriendlyNameExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
@@ -62,7 +63,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(SeedWithNullFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeNull);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
         }
         [FriendlyName(null)]
         private class SeedWithNullFriendlyNameAttribute : BaseTestSeed { }
@@ -73,7 +74,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(ScenarioWithNullFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeNull);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
         }
         [FriendlyName(null)]
         private class ScenarioWithNullFriendlyNameAttribute : BaseTestScenario { }
@@ -84,7 +85,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(SeedWithEmptyStringFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeEmptyString);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeEmptyString);
         }
         [FriendlyName("")]
         private class SeedWithEmptyStringFriendlyNameAttribute : BaseTestSeed { }
@@ -95,7 +96,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(ScenarioWithEmptyStringFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeEmptyString);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeEmptyString);
         }
         [FriendlyName("")]
         private class ScenarioWithEmptyStringFriendlyNameAttribute : BaseTestScenario { }
@@ -106,7 +107,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(SeedWithWhitespaceFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeWhitespace);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeWhitespace);
         }
         [FriendlyName("    ")]
         private class SeedWithWhitespaceFriendlyNameAttribute : BaseTestSeed { }
@@ -117,7 +118,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(ScenarioWithWhitespaceFriendlyNameAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.Seedable.FriendlyName.MustNotBeWhitespace);
+            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeWhitespace);
         }
         [FriendlyName("    ")]
         private class ScenarioWithWhitespaceFriendlyNameAttribute : BaseTestScenario { }

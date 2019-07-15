@@ -14,7 +14,7 @@ namespace NSeed.Discovery.Seedable
     {
         private readonly ITypeExtractor<TSeedableImplementation> typeExtractor;
         private readonly IFullNameExtractor<TSeedableImplementation> fullNameExtractor;
-        private readonly ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
+        private readonly IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
         private readonly ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor;
@@ -27,7 +27,7 @@ namespace NSeed.Discovery.Seedable
 
         internal BaseSeedableInfoBuilder(ITypeExtractor<TSeedableImplementation> typeExtractor,
                                      IFullNameExtractor<TSeedableImplementation> fullNameExtractor,
-                                     ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
+                                     IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
                                      ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
                                      ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
