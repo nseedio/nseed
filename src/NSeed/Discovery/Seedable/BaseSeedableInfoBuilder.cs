@@ -12,7 +12,7 @@ namespace NSeed.Discovery.Seedable
         where TSeedableImplementation : class
         where TEntityImplementation : class
     {
-        private readonly ISeedableTypeExtractor<TSeedableImplementation> typeExtractor;
+        private readonly ITypeExtractor<TSeedableImplementation> typeExtractor;
         private readonly ISeedableFullNameExtractor<TSeedableImplementation> fullNameExtractor;
         private readonly ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
@@ -25,7 +25,7 @@ namespace NSeed.Discovery.Seedable
         // Keeps track of the current build chain in order to ignore circular dependencies.
         private readonly Stack<TSeedableImplementation> buildChain = new Stack<TSeedableImplementation>();
 
-        internal BaseSeedableInfoBuilder(ISeedableTypeExtractor<TSeedableImplementation> typeExtractor,
+        internal BaseSeedableInfoBuilder(ITypeExtractor<TSeedableImplementation> typeExtractor,
                                      ISeedableFullNameExtractor<TSeedableImplementation> fullNameExtractor,
                                      ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,

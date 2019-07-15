@@ -3,14 +3,14 @@ using Xunit;
 using FluentAssertions;
 using Moq;
 using NSeed.MetaInfo;
-using NSeed.Discovery.Seedable.ReflectionBased;
-using NSeed.Discovery.Seedable;
+using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.Discovery;
 
-namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
+namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
 {
-    public class ReflectionBasedSeedableTypeExtractorﾠExtractFrom
+    public class ReflectionBasedTypeExtractorﾠExtractFrom
     {
-        private readonly ISeedableTypeExtractor<Type> extractor = new ReflectionBasedSeedableTypeExtractor();
+        private readonly ITypeExtractor<Type> extractor = new ReflectionBasedTypeExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]

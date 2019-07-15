@@ -1,4 +1,5 @@
-﻿using NSeed.Extensions;
+﻿using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.Extensions;
 using System;
 
 namespace NSeed.Discovery.Seedable.ReflectionBased
@@ -6,7 +7,7 @@ namespace NSeed.Discovery.Seedable.ReflectionBased
     internal class ReflectionBasedSeedableInfoBuilder : BaseSeedableInfoBuilder<Type, Type>
     {
         public ReflectionBasedSeedableInfoBuilder()
-            : base(new ReflectionBasedSeedableTypeExtractor(),
+            : base(new ReflectionBasedTypeExtractor(),
                    new ReflectionBasedSeedableFullNameExtractor(),
                    new ReflectionBasedSeedableFriendlyNameExtractor(),
                    new ReflectionBasedSeedableDescriptionExtractor(),

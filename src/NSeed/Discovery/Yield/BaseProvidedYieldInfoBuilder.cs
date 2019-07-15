@@ -6,10 +6,10 @@ namespace NSeed.Discovery.Yield
     internal abstract class BaseProvidedYieldInfoBuilder<TYieldImplementation> : IProvidedYieldInfoBuilder<TYieldImplementation>
         where TYieldImplementation : class
     {
-        private readonly IYieldTypeExtractor<TYieldImplementation> typeExtractor;
+        private readonly ITypeExtractor<TYieldImplementation> typeExtractor;
         private readonly IYieldFullNameExtractor<TYieldImplementation> fullNameExtractor;
 
-        internal BaseProvidedYieldInfoBuilder(IYieldTypeExtractor<TYieldImplementation> typeExtractor,
+        internal BaseProvidedYieldInfoBuilder(ITypeExtractor<TYieldImplementation> typeExtractor,
                                        IYieldFullNameExtractor<TYieldImplementation> fullNameExtractor)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
