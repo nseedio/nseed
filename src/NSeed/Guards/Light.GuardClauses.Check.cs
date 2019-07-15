@@ -3079,7 +3079,7 @@ namespace NSeed.Guards.Exceptions
         public AbsoluteUriException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected AbsoluteUriException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3097,7 +3097,7 @@ namespace NSeed.Guards.Exceptions
         public ArgumentDefaultException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ArgumentDefaultException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3115,7 +3115,7 @@ namespace NSeed.Guards.Exceptions
         public CollectionException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected CollectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3133,7 +3133,7 @@ namespace NSeed.Guards.Exceptions
         public EmptyCollectionException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected EmptyCollectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3151,7 +3151,7 @@ namespace NSeed.Guards.Exceptions
         public EmptyGuidException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected EmptyGuidException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3169,7 +3169,7 @@ namespace NSeed.Guards.Exceptions
         public EmptyStringException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected EmptyStringException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3187,7 +3187,7 @@ namespace NSeed.Guards.Exceptions
         public EnumValueNotDefinedException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected EnumValueNotDefinedException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3205,7 +3205,7 @@ namespace NSeed.Guards.Exceptions
         public ExistingItemException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ExistingItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3223,7 +3223,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidCollectionCountException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidCollectionCountException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3241,7 +3241,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidConfigurationException(string message = null, Exception innerException = null): base(message, innerException)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3259,7 +3259,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidDateTimeException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidDateTimeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3277,7 +3277,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidEmailAddressException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidEmailAddressException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3295,7 +3295,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidStateException(string message = null, Exception innerException = null): base(message, innerException)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidStateException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3313,7 +3313,7 @@ namespace NSeed.Guards.Exceptions
         public InvalidUriSchemeException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected InvalidUriSchemeException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3331,7 +3331,7 @@ namespace NSeed.Guards.Exceptions
         public MissingItemException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected MissingItemException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3349,7 +3349,7 @@ namespace NSeed.Guards.Exceptions
         public NullableHasNoValueException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected NullableHasNoValueException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3367,7 +3367,7 @@ namespace NSeed.Guards.Exceptions
         public RelativeUriException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected RelativeUriException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3385,7 +3385,7 @@ namespace NSeed.Guards.Exceptions
         public SameObjectReferenceException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected SameObjectReferenceException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3403,7 +3403,7 @@ namespace NSeed.Guards.Exceptions
         public StringDoesNotMatchException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected StringDoesNotMatchException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3421,7 +3421,7 @@ namespace NSeed.Guards.Exceptions
         public StringException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected StringException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3439,7 +3439,7 @@ namespace NSeed.Guards.Exceptions
         public SubstringException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected SubstringException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3735,7 +3735,7 @@ namespace NSeed.Guards.Exceptions
         public TypeCastException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected TypeCastException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3753,7 +3753,7 @@ namespace NSeed.Guards.Exceptions
         public UriException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected UriException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3771,7 +3771,7 @@ namespace NSeed.Guards.Exceptions
         public ValueIsNotOneOfException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ValueIsNotOneOfException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3789,7 +3789,7 @@ namespace NSeed.Guards.Exceptions
         public ValueIsOneOfException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ValueIsOneOfException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3807,7 +3807,7 @@ namespace NSeed.Guards.Exceptions
         public ValuesEqualException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ValuesEqualException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3825,7 +3825,7 @@ namespace NSeed.Guards.Exceptions
         public ValuesNotEqualException(string parameterName = null, string message = null): base(message, parameterName)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected ValuesNotEqualException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 
@@ -3843,7 +3843,7 @@ namespace NSeed.Guards.Exceptions
         public WhiteSpaceStringException(string parameterName = null, string message = null): base(parameterName, message)
         {
         }
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected WhiteSpaceStringException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

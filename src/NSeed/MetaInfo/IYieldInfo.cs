@@ -1,7 +1,7 @@
 ﻿namespace NSeed.MetaInfo
 {
     /// <summary>
-    /// Contains properties common for all yield meta info classes.
+    /// Contains properties common for all yield meta infos.
     /// </summary>
     public interface IYieldInfo
     {

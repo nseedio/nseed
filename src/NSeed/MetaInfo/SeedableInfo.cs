@@ -9,28 +9,12 @@ namespace NSeed.MetaInfo
     /// A seedable class is a class that implements either <see cref="ISeed"/>
     /// or <see cref="IScenario"/>.
     /// </summary>
-    public abstract class SeedableInfo : MetaInfo
+    public abstract class SeedableInfo : MetaInfo, IDescribedMetaInfo
     {
-        /// <summary>
-        /// The friendly name of the seedable.
-        /// </summary>
-        /// <returns>
-        /// If the seedable implementation is annotated with the <see cref="FriendlyNameAttribute"/>
-        /// the <see cref="FriendlyNameAttribute.FriendlyName"/> is returned.
-        /// <br/>
-        /// Otherwise, the humanized version of the implementation type name is returned.
-        /// </returns>
+        /// <inheritdoc/>
         public string FriendlyName { get; }
 
-        /// <summary>
-        /// The description of the seedable.
-        /// </summary>
-        /// <returns>
-        /// If the seedable implementation is annotated with the <see cref="DescriptionAttribute"/>
-        /// the <see cref="DescriptionAttribute.Description"/> is returned.
-        /// <br/>
-        /// Otherwise, the <see cref="string.Empty"/> is returned.
-        /// </returns>
+        /// <inheritdoc/>
         public string Description { get; }
 
         /// <summary>

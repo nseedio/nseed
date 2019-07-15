@@ -58,6 +58,7 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         {
             public SeedA.Yield YieldOfA { get; }
             internal SeedB.Yield YieldOfB { get; }
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             private SeedC.Yield YieldOfC { get; }
             protected SeedD.Yield YieldOfD { get; }
         }
@@ -84,6 +85,7 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         {
             static public SeedA.Yield YieldOfA { get; }
             static internal SeedB.Yield YieldOfB { get; }
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             static private SeedC.Yield YieldOfC { get; }
             static protected SeedD.Yield YieldOfD { get; }
         }
