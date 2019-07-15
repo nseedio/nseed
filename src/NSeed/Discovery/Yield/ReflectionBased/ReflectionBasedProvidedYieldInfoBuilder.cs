@@ -7,7 +7,7 @@ namespace NSeed.Discovery.Yield.ReflectionBased
     {
         public ReflectionBasedProvidedYieldInfoBuilder()
             : base(new ReflectionBasedTypeExtractor(),
-                   new ReflectionBasedYieldFullNameExtractor())
+                   new ReflectionBasedFullNameExtractor())
         {
         }
     }

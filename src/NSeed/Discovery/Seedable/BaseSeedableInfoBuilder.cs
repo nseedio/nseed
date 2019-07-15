@@ -13,7 +13,7 @@ namespace NSeed.Discovery.Seedable
         where TEntityImplementation : class
     {
         private readonly ITypeExtractor<TSeedableImplementation> typeExtractor;
-        private readonly ISeedableFullNameExtractor<TSeedableImplementation> fullNameExtractor;
+        private readonly IFullNameExtractor<TSeedableImplementation> fullNameExtractor;
         private readonly ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
@@ -26,7 +26,7 @@ namespace NSeed.Discovery.Seedable
         private readonly Stack<TSeedableImplementation> buildChain = new Stack<TSeedableImplementation>();
 
         internal BaseSeedableInfoBuilder(ITypeExtractor<TSeedableImplementation> typeExtractor,
-                                     ISeedableFullNameExtractor<TSeedableImplementation> fullNameExtractor,
+                                     IFullNameExtractor<TSeedableImplementation> fullNameExtractor,
                                      ISeedableFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
                                      ISeedableDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
                                      ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
