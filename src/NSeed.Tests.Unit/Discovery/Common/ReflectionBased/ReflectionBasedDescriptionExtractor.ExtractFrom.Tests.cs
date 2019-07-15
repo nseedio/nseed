@@ -2,14 +2,15 @@ using System;
 using Xunit;
 using FluentAssertions;
 using NSeed.MetaInfo;
-using NSeed.Discovery.Seedable.ReflectionBased;
-using NSeed.Discovery.Seedable;
+using NSeed.Discovery;
+using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.Tests.Unit.Discovery.Seedable;
 
-namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
+namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
 {
-    public partial class ReflectionBasedSeedableDescriptionExtractorﾠExtractFrom
+    public partial class ReflectionBasedDescriptionExtractorﾠExtractFrom
     {
-        private readonly ISeedableDescriptionExtractor<Type> extractor = new ReflectionBasedSeedableDescriptionExtractor();
+        private readonly IDescriptionExtractor<Type> extractor = new ReflectionBasedDescriptionExtractor();
         private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
@@ -37,7 +38,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             Type type = typeof(SeedWithDescriptionAttribute);
 
             extractor.ExtractFrom(type, collector).Should().Be(SomeDescription);
-        }        
+        }
         [Description(SomeDescription)]
         private class SeedWithDescriptionAttribute : BaseTestSeed { }
 
