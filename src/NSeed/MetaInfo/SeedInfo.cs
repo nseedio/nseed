@@ -50,9 +50,9 @@ namespace NSeed.MetaInfo
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(yieldedEntities != null);
             System.Diagnostics.Debug.Assert(yieldedEntities.All(entity => entity != null));
-            System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || yield.Type.IsYieldTypeOfSeed(type));
+            System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || yield.Type.IsYieldTypeOfSeed(type) && yield.YieldingSeed == null);
             System.Diagnostics.Debug.Assert(requiredYields != null);
-            System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield => requiredYield != null && requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type)));
+            System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield => requiredYield != null && requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type) && requiredYield.RequiringSeed == null));
 
             YieldedEntities = yieldedEntities;
 

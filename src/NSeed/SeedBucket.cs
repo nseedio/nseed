@@ -10,7 +10,7 @@ namespace NSeed
     /// </summary>
     public abstract class SeedBucket
     {
-        private ISeedBucketInfoBuilder<Type> seedBucketInfoBuilder = new ReflectionBasedSeedBucketInfoBuilder();
+        private readonly ISeedBucketInfoBuilder<Type> seedBucketInfoBuilder = new ReflectionBasedSeedBucketInfoBuilder();
 
         /// <summary>
         /// Returns <see cref="SeedBucketInfo"/> for this seed bucket.

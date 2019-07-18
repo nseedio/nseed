@@ -59,5 +59,13 @@ namespace NSeed.Extensions
 
             return type.IsYieldType() && type.DeclaringType == seedType;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsSeedBucketType(this Type type)
+        {
+            System.Diagnostics.Debug.Assert(type != null);
+
+            return typeof(SeedBucket).IsAssignableFrom(type);
+        }
     }
 }

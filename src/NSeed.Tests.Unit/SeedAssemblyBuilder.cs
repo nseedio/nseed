@@ -7,19 +7,33 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using NSeed.Extensions;
+using Xunit.Abstractions;
 
 namespace NSeed.Tests.Unit
 {
     internal class SeedAssemblyBuilder
     {
-        private class SeedBucketDescription
+        private abstract class BaseDescription
         {
             public string Name { get; set; }
             public string FriendlyName { get; set; }
             public string Description { get; set; }
+
+        }
+
+        private class SeedBucketDescription : BaseDescription
+        {
+        }
+
+        private class SeedDescription : BaseDescription
+        {
+            public bool HasYield { get; set; }
+            public IEnumerable<string> Requires { get; set; }
         }
 
         private static readonly List<MetadataReference> metadataReferences = new List<MetadataReference>();
+        private readonly ITestOutputHelper output;
 
         static SeedAssemblyBuilder()
         {
@@ -48,17 +62,23 @@ namespace NSeed.Tests.Unit
                         .Where(assemblyName => neededReferencedAssemblyNames.Contains(assemblyName.Name) && !result.ContainsKey(assemblyName))
                         .Select(assemblyName => (assemblyName, assembly: Assembly.Load(assemblyName)));
 
-                    foreach (var assemblyNameAndAssembly in referencedAssemblyNamesAndAssemblies)
+                    foreach (var (assemblyName, assembly) in referencedAssemblyNamesAndAssemblies)
                     {
-                        result.Add(assemblyNameAndAssembly.assemblyName, assemblyNameAndAssembly.assembly);
+                        result.Add(assemblyName, assembly);
 
-                        FindAdditionalAssembliesRecursively(assemblyNameAndAssembly.assembly);
+                        FindAdditionalAssembliesRecursively(assembly);
                     }
                 }
             }
         }
 
-        private Dictionary<string, SeedBucketDescription> seedBuckets = new Dictionary<string, SeedBucketDescription>();
+        public SeedAssemblyBuilder(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+
+        private readonly Dictionary<string, SeedBucketDescription> seedBuckets = new Dictionary<string, SeedBucketDescription>();
+        private readonly Dictionary<string, SeedDescription> seeds = new Dictionary<string, SeedDescription>();
 
         private const string DefaultTestSeedBucketTypeName = "DefaultTestSeedBucket";
         public SeedAssemblyBuilder AddSeedBucket(string seedBucketTypeName = null, string seedBucketFriendlyName = null, string seedBucketDescription = null)
@@ -78,6 +98,28 @@ namespace NSeed.Tests.Unit
             return this;
         }
 
+        private const string DefaultTestSeedTypeName = "DefaultTestSeed";
+        public SeedAssemblyBuilder AddSeed(string seedTypeName = null, string seedFriendlyName = null, string seedDescription = null, bool hasYield = false, params string[] requires)
+        {
+            seedTypeName = seedTypeName ?? DefaultTestSeedTypeName;
+            requires = requires ?? Array.Empty<string>();
+
+            seedTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("seed type name must not contain white spaces");
+            seeds.ContainsKey(seedTypeName).Should().BeFalse($"seed type can be added only once. Seed with the name '{seedTypeName}' has already been added to the seed assembly");
+            requires.Should().NotContainNulls();
+
+            seeds.Add(seedTypeName, new SeedDescription
+            {
+                Name = seedTypeName,
+                FriendlyName = seedFriendlyName,
+                Description = seedDescription,
+                HasYield = hasYield,
+                Requires = requires
+            });
+
+            return this;
+        }
+
         public SeedBucket BuildAndGetSeedBucket(string seedBucketTypeName = null)
         {
             return (SeedBucket)Activator.CreateInstance(BuildAndGetSeedBucketType(seedBucketTypeName));
@@ -89,7 +131,7 @@ namespace NSeed.Tests.Unit
 
             var assembly = Build();
             var seedBucketClasses = assembly.GetTypes()
-                .Where(type => typeof(SeedBucket).IsAssignableFrom(type) && type.Name == seedBucketTypeName)
+                .Where(type => type.IsSeedBucketType() && type.Name == seedBucketTypeName)
                 .ToArray();
 
             seedBucketClasses.Should().NotBeEmpty($"seed bucket with the name {seedBucketTypeName} must exist in the assembly");
@@ -101,6 +143,8 @@ namespace NSeed.Tests.Unit
         public Assembly Build()
         {
             var sourceCode = CreateSourceCode();
+            output.WriteLine(sourceCode);
+
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(sourceCode);
 
             CSharpCompilation compilation = CSharpCompilation.Create(
@@ -130,24 +174,67 @@ namespace NSeed.Tests.Unit
                     .Select(CreateSeedBucketSoruceCode)
                     .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
 
+                var seedsSourceCode = seeds
+                    .Values
+                    .Select(CreateSeedSoruceCode)
+                    .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
+
                 return 
                     $"using System;{Environment.NewLine}" +
+                    $"using System.Threading.Tasks;{Environment.NewLine}" +
                     $"using NSeed;{Environment.NewLine}" +
                     Environment.NewLine +
                     $"public class Program {{ public static void Main() {{ }} }}{Environment.NewLine}" +
-                    seedBucketsSourceCode + 
+                    Environment.NewLine +
+                    seedBucketsSourceCode +
+                    Environment.NewLine +
+                    seedsSourceCode +
                     Environment.NewLine;
                 
                 string CreateSeedBucketSoruceCode(SeedBucketDescription seedBucketDescription)
                 {
-                    var friendlyNameAttribute = seedBucketDescription.FriendlyName == null
-                        ? string.Empty
-                        : $@"[FriendlyName(""{seedBucketDescription.FriendlyName}"")]";
-                    var descriptionAttribute = seedBucketDescription.Description == null
-                        ? string.Empty
-                        : $@"[Description(""{seedBucketDescription.Description}"")]";
+                    var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedBucketDescription);
 
                     return $"{friendlyNameAttribute}{descriptionAttribute}public class {seedBucketDescription.Name} : SeedBucket {{ }}";
+                }
+
+                string CreateSeedSoruceCode(SeedDescription seedDescription)
+                {
+                    seedDescription.Requires.Should().BeSubsetOf(seeds.Keys);
+
+                    var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedDescription);
+
+                    var yield = seedDescription.HasYield
+                        ? $"    public class Yield : YieldOf<{seedDescription.Name}> {{ }}{Environment.NewLine}"
+                        : string.Empty;
+                   
+                    var requiresAttributes = seedDescription
+                        .Requires
+                        .Select(requiredSeedableName => $"[Requires(typeof({requiredSeedableName}))]")
+                        .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
+
+                    return
+                        $"{requiresAttributes}" +
+                        $"{friendlyNameAttribute}" +
+                        $"{descriptionAttribute}" +
+                        $"public class {seedDescription.Name} : ISeed{Environment.NewLine}" + 
+                        $"{{{Environment.NewLine}" +
+                        $"    public Task<bool> HasAlreadyYielded() => throw new NotImplementedException();{Environment.NewLine}" +
+                        $"    public Task Seed() => throw new NotImplementedException();{Environment.NewLine}" +
+                        yield +
+                        $"}}{Environment.NewLine}";
+                }
+
+                (string friendlyNameAttribute, string descriptionAttribute) CreateFriendlyNameAndDescriptionAttributes(BaseDescription description)
+                {
+                    var friendlyNameAttribute = description.FriendlyName == null
+                        ? string.Empty
+                        : $@"[FriendlyName(""{description.FriendlyName}"")]{Environment.NewLine}";
+                    var descriptionAttribute = description.Description == null
+                        ? string.Empty
+                        : $@"[Description(""{description.Description}"")]{Environment.NewLine}";
+
+                    return (friendlyNameAttribute, descriptionAttribute);
                 }
             }
         }

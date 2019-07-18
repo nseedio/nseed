@@ -10,6 +10,7 @@ namespace NSeed.Discovery.SeedBucket.ReflectionBased
                    new ReflectionBasedFullNameExtractor(),
                    new ReflectionBasedFriendlyNameExtractor(),
                    new ReflectionBasedDescriptionExtractor(),
+                   new ReflectionBasedContainedSeedablesExtractor(),
                    new ReflectionBasedSeedBucketInfoPool())
         {
         }

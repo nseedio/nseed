@@ -18,6 +18,11 @@ namespace NSeed.MetaInfo
         public string Description { get; }
 
         /// <summary>
+        /// The <see cref="SeedBucket"/> that contains this seedable.
+        /// </summary>
+        public SeedBucketInfo SeedBucket { get; internal set; } // Set is called by SeedBucketInfo constructor.
+
+        /// <summary>
         /// Seedables explicitly required by this seedable.
         /// <br/>
         /// A seedable is explicitely required if the implementation
