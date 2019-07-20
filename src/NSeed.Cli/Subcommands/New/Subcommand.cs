@@ -54,10 +54,6 @@ namespace NSeed.Cli.Subcommands.New
                 }
             }
         }
-       
-
-
-
         public void ResolveFramework(IDependencyGraphService dependencyGraphService)
         {
             if (ResolvedSolutionIsValid && dependencyGraphService != null)

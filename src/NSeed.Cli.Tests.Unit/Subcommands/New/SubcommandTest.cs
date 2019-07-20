@@ -9,101 +9,109 @@ using Xunit;
 
 namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
-    public class SubcommandTest
+    public abstract class BaseSubcommand
     {
-        Subcommand Subcommand = new Subcommand { ResolvedSolutionIsValid = true };
-        Mock<IDependencyGraphService> MockDependencyGraphService = new Mock<IDependencyGraphService>();
+        readonly Subcommand Subcommand = new Subcommand { ResolvedSolutionIsValid = true };
+        readonly Mock<IDependencyGraphService> MockDependencyGraphService = new Mock<IDependencyGraphService>();
+        readonly DependencyGraphSpec DependencyGraphSpec = new DependencyGraphSpec();
+        private const string SlnName = "TestSln";
 
-        public SubcommandTest()
+        private BaseSubcommand()
         {
-            Subcommand.SetResolvedSolution("TestSln");
+            Subcommand.SetResolvedSolution(SlnName);
         }
-       
-        public void WithEqualDotNetCoreProjects()
+
+        protected BaseSubcommand GenerateDependencyGraph
+        {
+            get
+            {
+                MockDependencyGraphService
+                .Setup(dgs => dgs.GenerateDependencyGraph(It.IsAny<string>()))
+                .Returns(DependencyGraphSpec);
+                return this;
+            }
+        }
+
+        protected BaseSubcommand WithEqualDotNetCoreProjects()
         {
             var packageSpec = new PackageSpec();
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
-
-            GenerateDependencyGraph(packageSpec);
+            DependencyGraphSpec.AddProject(packageSpec);
+            return this;
         }
 
-        public void WithDifferentDotNetCoreProjects()
+        protected BaseSubcommand WithDifferentDotNetCoreProjects()
         {
             var packageSpec = new PackageSpec();
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 1, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 2, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
 
-            GenerateDependencyGraph(packageSpec);
+            DependencyGraphSpec.AddProject(packageSpec);
+            return this;
         }
 
-        public void WithEqualFullDotNetProjects()
+        protected BaseSubcommand WithEqualFullDotNetProjects()
         {
             var packageSpec = new PackageSpec();
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 6, 1)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 6, 1)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 6, 1)) });
 
-            GenerateDependencyGraph(packageSpec);
+            DependencyGraphSpec.AddProject(packageSpec);
+            return this;
         }
 
-        public void WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet()
+        protected BaseSubcommand WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet()
         {
             var packageSpec = new PackageSpec();
-            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4,0)) });
-            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4,0)) });
-            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4,0)) });
+            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 0)) });
+            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 0)) });
+            packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 0)) });
 
-            GenerateDependencyGraph(packageSpec);
+            DependencyGraphSpec.AddProject(packageSpec);
+            return this;
         }
 
-        //Different dotnet core projects -- different versions
-        //Different full framework projects -- different versions
-        //Mixture full framework and core framework 
-
-        private void GenerateDependencyGraph(PackageSpec packageSpec)
+        protected void ResolveFramework()
         {
-            Mock<DependencyGraphSpec> mockDependencyGraphSpec = new Mock<DependencyGraphSpec>();
-            var dependencyGraphSpec = mockDependencyGraphSpec.Object;
-            dependencyGraphSpec.AddProject(packageSpec);
-            MockDependencyGraphService
-                .Setup(dgs => dgs.GenerateDependencyGraph(It.IsAny<string>()))
-                .Returns(dependencyGraphSpec);
+            Subcommand.ResolveFramework(MockDependencyGraphService.Object);
         }
 
-        public class ResolveﾠFramework : SubcommandTest
+
+        public class ResolveﾠFramework : BaseSubcommand
         {
             [Fact]
-            public void Setﾠv_4_6_1ﾠfullﾠdotﾠnetﾠframeworkﾠ()
+            public void Resolvedﾠ2_0ﾠdotﾠnetﾠcoreﾠframeworkﾠ()
             {
-                WithEqualFullDotNetProjects();
-                Subcommand.ResolveFramework(MockDependencyGraphService.Object);
-                Subcommand.ResolvedFramework.Should().Be("v4.6.1");
-            }
-
-            [Fact]
-            public void Setﾠv_4_0ﾠfullﾠdotﾠnetﾠframeworkﾠ()
-            {
-                WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet();
-                Subcommand.ResolveFramework(MockDependencyGraphService.Object);
-                Subcommand.ResolvedFramework.Should().Be("v4.0");
-            }
-
-            [Fact]
-            public void Setﾠ2_0ﾠdotﾠnetﾠcoreﾠframeworkﾠ()
-            {
-                WithEqualDotNetCoreProjects();
-                Subcommand.ResolveFramework(MockDependencyGraphService.Object);
+                GenerateDependencyGraph.WithEqualDotNetCoreProjects();
+                ResolveFramework();
                 Subcommand.ResolvedFramework.Should().Be("netcoreapp2.0");
             }
 
             [Fact]
-            public void Setﾠemptyﾠframeworkﾠ()
+            public void Resolvedﾠv_4_6_1ﾠfullﾠdotﾠnetﾠframeworkﾠ()
             {
-                WithDifferentDotNetCoreProjects();
-                Subcommand.ResolveFramework(MockDependencyGraphService.Object);
+                GenerateDependencyGraph.WithEqualFullDotNetProjects();
+                ResolveFramework();
+                Subcommand.ResolvedFramework.Should().Be("v4.6.1");
+            }
+
+            [Fact]
+            public void Resolvedﾠv_4_0ﾠfullﾠdotﾠnetﾠframeworkﾠ()
+            {
+                GenerateDependencyGraph.WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet();
+                ResolveFramework();
+                Subcommand.ResolvedFramework.Should().Be("v4.0");
+            }
+
+            [Fact]
+            public void Resolvedﾠemptyﾠframeworkﾠ()
+            {
+                GenerateDependencyGraph.WithDifferentDotNetCoreProjects();
+                ResolveFramework();
                 Subcommand.ResolvedFramework.Should().BeEmpty();
             }
         }
