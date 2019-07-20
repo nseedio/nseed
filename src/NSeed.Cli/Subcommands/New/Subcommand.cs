@@ -32,6 +32,7 @@ namespace NSeed.Cli.Subcommands.New
         public string ResolvedSoluiton { get; private set; } = string.Empty;
         public string ResolvedFramework { get; private set; } = string.Empty;
         public string ResolvedName { get; private set; } = string.Empty;
+        public bool ResolvedSolutionIsValid { get; set; } = false;
 
         public void SetResolvedSolution(string solution)
         {
@@ -41,16 +42,21 @@ namespace NSeed.Cli.Subcommands.New
         {
             ResolvedName = name;
         }
-        public void SetDefaultResolvedNameWithPrefix(IDependencyGraphService dependencyGraphService, string defaultName)
+        public void SetResolvedFramework(string framework)
+        {
+            ResolvedFramework = framework;
+        }
+
+        public void ResolveDefaultNameWithPrefix(IDependencyGraphService dependencyGraphService, string defaultName)
         {
             if (ResolvedSolutionIsValid && dependencyGraphService != null)
             {
-                ResolvedName = defaultName;
+                SetResolvedName(defaultName);
                 var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSoluiton).ToList();
                 var commonPrefix = GetCommonValue(projectNames);
                 if (commonPrefix.Exists())
                 {
-                    ResolvedName = $"{commonPrefix}.{defaultName}";
+                    SetResolvedName($"{commonPrefix}.{defaultName}");
                 }
             }
         }
@@ -91,8 +97,6 @@ namespace NSeed.Cli.Subcommands.New
             }
         }
 
-        public bool ResolvedSolutionIsValid { get; set; } = false;
-
         private Task OnExecute(CommandLineApplication app)
         {
             Console.WriteLine("\n");
@@ -105,6 +109,8 @@ namespace NSeed.Cli.Subcommands.New
 
         private string GetCommonValue(IList<string> values)
         {
+            var byCharacters = new char[] { '.', '-', '_' };
+
             if (values == null || !values.Any())
             {
                 return string.Empty;
@@ -113,12 +119,25 @@ namespace NSeed.Cli.Subcommands.New
             if (values.Count == 1)
             {
                 var value = values.First();
-                var valueParts = value.Split(new char[] { '.', '-', '_' });
+                var valueParts = value.Split(byCharacters);
                 return valueParts.FirstOrDefault();
             }
 
-            var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray()).ToList().FirstOrDefault(d => d.IsMatch);
-            return values[0].Substring(0, diffSection.LengthInCollection1).Trim('.');
+            var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray()).ToList();
+            if (!diffSection.IsNullOrEmpty())
+            {
+                var firstdiffSection = diffSection.FirstOrDefault();
+                if (firstdiffSection.IsMatch)
+                {
+                    var prefix = values[0].Substring(0, firstdiffSection.LengthInCollection1).Trim('.');
+                    if (!string.IsNullOrEmpty(prefix))
+                    {
+                        var valueParts = prefix.Split(byCharacters);
+                        return valueParts.FirstOrDefault();
+                    }
+                }
+            }
+            return string.Empty;
         }
     }
 }

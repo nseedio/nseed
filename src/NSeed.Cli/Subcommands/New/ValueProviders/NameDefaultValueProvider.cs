@@ -27,7 +27,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
                 if (name.IsNotProvidedByUser())
                 {
                     var dependencyGraphService = context.Application.GetService<IDependencyGraphService>();
-                    model.SetDefaultResolvedNameWithPrefix(dependencyGraphService, DefaultName);
+                    model.ResolveDefaultNameWithPrefix(dependencyGraphService, DefaultName);
                 }
             });
         }

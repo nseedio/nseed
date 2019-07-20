@@ -5,16 +5,19 @@ using NSeed.Cli.Subcommands.New;
 using NuGet.Frameworks;
 using NuGet.ProjectModel;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
     public abstract class BaseSubcommand
     {
-        readonly Subcommand Subcommand = new Subcommand { ResolvedSolutionIsValid = true };
-        readonly Mock<IDependencyGraphService> MockDependencyGraphService = new Mock<IDependencyGraphService>();
-        readonly DependencyGraphSpec DependencyGraphSpec = new DependencyGraphSpec();
+        private readonly Subcommand Subcommand = new Subcommand { ResolvedSolutionIsValid = true };
+        private readonly Mock<IDependencyGraphService> MockDependencyGraphService = new Mock<IDependencyGraphService>();
+        private readonly DependencyGraphSpec DependencyGraphSpec = new DependencyGraphSpec();
+        private readonly List<string> ProjectNames = new List<string>();
         private const string SlnName = "TestSln";
+        private const string DefaultProjectName = Resources.Resources.New.DefaultProjectName;
 
         private BaseSubcommand()
         {
@@ -30,6 +33,13 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
                 .Returns(DependencyGraphSpec);
                 return this;
             }
+        }
+
+        protected void GenerateSoluitonProjects(IEnumerable<string> projectNames)
+        {
+            MockDependencyGraphService
+            .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
+            .Returns(projectNames);
         }
 
         protected BaseSubcommand WithEqualDotNetCoreProjects()
@@ -75,11 +85,29 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             return this;
         }
 
+        public static IEnumerable<object[]> EqualPrefixes => new List<object[]>
+        {
+            new object[] { new List<string> { "NSeed.Web", "NSeed.Test", "NSeed.Data", "NSeed.Core" } },
+            new object[] { new List<string> { "NSeed.Web", "NSeed.Web.Test", "NSeed.Data", "NSeed.Core", "NSeed.Auth" } },
+           
+        };
+
+        public static IEnumerable<object[]> NotEqualPrefixes => new List<object[]>
+        {
+            new object[] { new List<string>{ "Miro.NSeed.Web", "Slavko.NSeed.Web.Test", "Sanjin.NSeed.Data", "Milivoj.NSeed.Core", "Slavica.NSeed.Auth" } },
+            new object[] { new List<string>{ "Mirko", "Slavko", "Ivan", "Mirela", "Tihomir" }, },
+            new object[] { new List<string> { "NSewed.Web", "lxSevved.Web.Test", "NpSeed.Data", "NuuzSeed.Core", "NjkSeed.Auth" } },
+        };
+
         protected void ResolveFramework()
         {
             Subcommand.ResolveFramework(MockDependencyGraphService.Object);
         }
 
+        protected void ResolveDefaultNameWithPrefix()
+        {
+            Subcommand.ResolveDefaultNameWithPrefix(MockDependencyGraphService.Object, DefaultProjectName);
+        }
 
         public class ResolveﾠFramework : BaseSubcommand
         {
@@ -113,6 +141,27 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
                 GenerateDependencyGraph.WithDifferentDotNetCoreProjects();
                 ResolveFramework();
                 Subcommand.ResolvedFramework.Should().BeEmpty();
+            }
+        }
+
+        public class ResolveﾠDefaultﾠNameﾠWithﾠPrefix : BaseSubcommand
+        {
+            [Theory]
+            [MemberData(nameof(EqualPrefixes))]
+            public void ResolvedﾠWithﾠCommonﾠPrefix(IEnumerable<string> projectNames)
+            {
+                GenerateSoluitonProjects(projectNames);
+                ResolveDefaultNameWithPrefix();
+                Subcommand.ResolvedName.Should().Be($"NSeed.{DefaultProjectName}");
+            }
+
+            [Theory]
+            [MemberData(nameof(NotEqualPrefixes))]
+            public void ResolvedﾠWithﾠNotﾠCommonﾠPrefix(IEnumerable<string> projectNames)
+            {
+                GenerateSoluitonProjects(projectNames);
+                ResolveDefaultNameWithPrefix();
+                Subcommand.ResolvedName.Should().Be(DefaultProjectName);
             }
         }
     }
