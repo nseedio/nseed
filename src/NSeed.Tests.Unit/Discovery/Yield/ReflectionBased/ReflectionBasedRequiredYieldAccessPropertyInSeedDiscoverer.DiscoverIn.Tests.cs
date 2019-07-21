@@ -83,11 +83,11 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         }
         private class SeedThatRequiresYieldsViaStaticProperties : BaseTestSeed
         {
-            static public SeedA.Yield YieldOfA { get; }
-            static internal SeedB.Yield YieldOfB { get; }
+            public static SeedA.Yield YieldOfA { get; }
+            internal static SeedB.Yield YieldOfB { get; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
-            static private SeedC.Yield YieldOfC { get; }
-            static protected SeedD.Yield YieldOfD { get; }
+            private static SeedC.Yield YieldOfC { get; }
+            protected static SeedD.Yield YieldOfD { get; }
         }
 
         [Fact]

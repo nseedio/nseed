@@ -11,7 +11,7 @@ namespace NSeed.Discovery.Seedable
         private readonly IExplicitlyRequiredSeedablesDiscoverer<TSourceSeedableImplementation, TSeedableImplementation> explicitlyRequiredSeedableDiscoverer;
         private readonly ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder;
 
-        internal protected BaseExplicitlyRequiredSeedablesExtractor(
+        protected internal BaseExplicitlyRequiredSeedablesExtractor(
             IExplicitlyRequiredSeedablesDiscoverer<TSourceSeedableImplementation, TSeedableImplementation> explicitlyRequiredSeedableDiscoverer,
             ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {

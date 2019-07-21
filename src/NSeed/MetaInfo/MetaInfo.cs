@@ -42,7 +42,7 @@ namespace NSeed.MetaInfo
         /// <summary>
         /// Creates new <see cref="MetaInfo"/> with the specified type and full name.
         /// </summary>
-        internal protected MetaInfo(object implementation, Type type, string fullName)
+        protected internal MetaInfo(object implementation, Type type, string fullName)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
             System.Diagnostics.Debug.Assert(fullName != null);

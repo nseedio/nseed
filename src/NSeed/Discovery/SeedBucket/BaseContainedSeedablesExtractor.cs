@@ -12,7 +12,7 @@ namespace NSeed.Discovery.SeedBucket
         private readonly IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer;
         private readonly ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder;
 
-        internal protected BaseContainedSeedablesExtractor(IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer,
+        protected internal BaseContainedSeedablesExtractor(IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer,
                                                            ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {
             System.Diagnostics.Debug.Assert(seedablesDiscoverer != null);

@@ -15,6 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NSeed.Tests.Unit", "NSeed.T
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildProperties", "BuildProperties", "{9DDC0610-54E0-4125-B750-0A3268F81B84}"
 	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
 		BuildProperties.Packages.props = BuildProperties.Packages.props
 		BuildProperties.Tests.props = BuildProperties.Tests.props
 		Directory.Build.props = Directory.Build.props

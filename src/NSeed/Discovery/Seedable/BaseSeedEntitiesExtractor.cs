@@ -12,7 +12,7 @@ namespace NSeed.Discovery.Seedable
         private readonly IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer;
         private readonly IEntityInfoBuilder<TEntityImplementation> entityBuilder;
 
-        internal protected BaseSeedEntitiesExtractor(IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
+        protected internal BaseSeedEntitiesExtractor(IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
                                                      IEntityInfoBuilder<TEntityImplementation> entityBuilder)
         {
             System.Diagnostics.Debug.Assert(entityDiscoverer != null);

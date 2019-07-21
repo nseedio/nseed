@@ -11,7 +11,7 @@ namespace NSeed.Discovery.Seedable
         private readonly IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer;
         private readonly IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder;
 
-        internal protected BaseSeedProvidedYieldExtractor(IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
+        protected internal BaseSeedProvidedYieldExtractor(IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
                                                           IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder)
         {
             System.Diagnostics.Debug.Assert(yieldDiscoverer != null);
