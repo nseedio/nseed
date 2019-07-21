@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed.MetaInfo
 {
@@ -11,8 +11,8 @@ namespace NSeed.MetaInfo
     public sealed class EntityInfo : MetaInfo
     {
         internal EntityInfo(object implementation, Type type, string fullName)
-            :base(implementation, type, fullName)
-        {            
+            : base(implementation, type, fullName)
+        {
         }
     }
 }

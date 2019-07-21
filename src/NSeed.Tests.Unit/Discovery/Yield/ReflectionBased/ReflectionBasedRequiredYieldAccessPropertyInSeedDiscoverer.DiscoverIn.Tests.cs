@@ -1,11 +1,11 @@
-using System;
-using Xunit;
 using FluentAssertions;
 using Moq;
-using NSeed.Discovery.Yield.ReflectionBased;
 using NSeed.Discovery.Yield;
-using System.Reflection;
+using NSeed.Discovery.Yield.ReflectionBased;
 using NSeed.Tests.Unit.Discovery.Seedable;
+using System;
+using System.Reflection;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
 {
@@ -58,9 +58,9 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         {
             public SeedA.Yield YieldOfA { get; }
             internal SeedB.Yield YieldOfB { get; }
+            protected SeedD.Yield YieldOfD { get; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             private SeedC.Yield YieldOfC { get; }
-            protected SeedD.Yield YieldOfD { get; }
         }
         private class SeedA : BaseTestSeed { public class Yield : YieldOf<SeedA> { } }
         private class SeedB : BaseTestSeed { internal class Yield : YieldOf<SeedB> { } }
@@ -85,9 +85,9 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         {
             public static SeedA.Yield YieldOfA { get; }
             internal static SeedB.Yield YieldOfB { get; }
+            protected static SeedD.Yield YieldOfD { get; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             private static SeedC.Yield YieldOfC { get; }
-            protected static SeedD.Yield YieldOfD { get; }
         }
 
         [Fact]

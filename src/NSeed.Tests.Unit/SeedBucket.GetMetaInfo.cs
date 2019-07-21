@@ -1,12 +1,12 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using NSeed.Discovery.SeedBucket;
+using NSeed.Discovery.SeedBucket.ReflectionBased;
 using NSeed.Extensions;
-using FluentAssertions;
 using NSeed.MetaInfo;
 using System;
-using NSeed.Discovery.SeedBucket.ReflectionBased;
-using NSeed.Discovery.SeedBucket;
-using Xunit.Abstractions;
 using System.Linq;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace NSeed.Tests.Unit
 {
@@ -14,7 +14,7 @@ namespace NSeed.Tests.Unit
     {
         private readonly Func<SeedAssemblyBuilder> createAssemblyBuilder;
         private readonly SeedAssemblyBuilder assemblyBuilder;
-        private readonly IContainedSeedablesExtractor<Type> containedSeedablesExtractor = new ReflectionBasedContainedSeedablesExtractor();        
+        private readonly IContainedSeedablesExtractor<Type> containedSeedablesExtractor = new ReflectionBasedContainedSeedablesExtractor();
 
         public SeedBucketﾠGetMetaInfo(ITestOutputHelper output)
         {

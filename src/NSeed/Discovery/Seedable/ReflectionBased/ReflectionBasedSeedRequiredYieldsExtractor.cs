@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using NSeed.MetaInfo;
-using System.Collections.Generic;
 using NSeed.Discovery.Yield;
-using System.Reflection;
 using NSeed.Discovery.Yield.ReflectionBased;
 using NSeed.Extensions;
+using NSeed.MetaInfo;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace NSeed.Discovery.Seedable
 {
@@ -31,6 +31,7 @@ namespace NSeed.Discovery.Seedable
                                 .DiscoveredItems
                                 .Select(property => (property, yieldingSeed: (SeedInfo)seedableBuilder.BuildFrom(property.PropertyType.DeclaringType)))
                                 .Where(propertyAndYieldingSeed => propertyAndYieldingSeed.yieldingSeed != null)
+
                                 // TODO-IG: This extractor is at the same time an extractor and a builder.
                                 //          I obviously got a bit tired of all this strict single responsibility principle stuff.
                                 //          Get back to track and refactor ASAP.

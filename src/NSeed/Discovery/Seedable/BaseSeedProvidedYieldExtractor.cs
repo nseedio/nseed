@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using NSeed.MetaInfo;
 using NSeed.Discovery.Yield;
+using NSeed.MetaInfo;
+using System.Linq;
 
 namespace NSeed.Discovery.Seedable
 {
@@ -11,8 +11,9 @@ namespace NSeed.Discovery.Seedable
         private readonly IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer;
         private readonly IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder;
 
-        protected internal BaseSeedProvidedYieldExtractor(IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
-                                                          IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder)
+        protected internal BaseSeedProvidedYieldExtractor(
+            IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
+            IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder)
         {
             System.Diagnostics.Debug.Assert(yieldDiscoverer != null);
             System.Diagnostics.Debug.Assert(yieldBuilder != null);

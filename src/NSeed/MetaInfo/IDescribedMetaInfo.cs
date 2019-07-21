@@ -1,4 +1,4 @@
-﻿namespace NSeed.MetaInfo
+namespace NSeed.MetaInfo
 {
     /// <summary>
     /// A <see cref="MetaInfo"/> that provides a <see cref="FriendlyName"/>
@@ -7,7 +7,7 @@
     public interface IDescribedMetaInfo
     {
         /// <summary>
-        /// The friendly name of the NSeed abstraction.
+        /// Gets the friendly name of the NSeed abstraction.
         /// </summary>
         /// <returns>
         /// If the NSeed abstraction's implementation is annotated with the <see cref="FriendlyNameAttribute"/>
@@ -18,7 +18,7 @@
         string FriendlyName { get; }
 
         /// <summary>
-        /// The description of the NSeed abstraction.
+        /// Gets the description of the NSeed abstraction.
         /// </summary>
         /// <returns>
         /// If the NSeed abstraction's implementation is annotated with the <see cref="DescriptionAttribute"/>

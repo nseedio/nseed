@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.CodeAnalysis;
+using NSeed.Extensions;
 using System;
 using System.Linq;
 using System.Reflection;
-using NSeed.Extensions;
-using Microsoft.CodeAnalysis;
 
 namespace NSeed.Tests.Unit
 {

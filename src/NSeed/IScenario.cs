@@ -1,4 +1,4 @@
-﻿namespace NSeed
+namespace NSeed
 {
     /// <summary>
     /// A single scenario. Scenarios are grouping of <see cref="ISeed"/>s and other <see cref="IScenario"/>s.

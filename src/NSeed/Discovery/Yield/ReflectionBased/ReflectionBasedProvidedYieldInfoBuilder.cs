@@ -1,4 +1,4 @@
-﻿using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.Discovery.Common.ReflectionBased;
 using System;
 
 namespace NSeed.Discovery.Yield.ReflectionBased
@@ -6,8 +6,9 @@ namespace NSeed.Discovery.Yield.ReflectionBased
     internal class ReflectionBasedProvidedYieldInfoBuilder : BaseProvidedYieldInfoBuilder<Type>
     {
         public ReflectionBasedProvidedYieldInfoBuilder()
-            : base(new ReflectionBasedTypeExtractor(),
-                   new ReflectionBasedFullNameExtractor())
+            : base(
+                  new ReflectionBasedTypeExtractor(),
+                  new ReflectionBasedFullNameExtractor())
         {
         }
     }

@@ -1,7 +1,8 @@
-﻿using System;
-using System.Linq;
+using NSeed.Discovery.Common.ErrorMessages;
 using NSeed.Extensions;
 using NSeed.MetaInfo;
+using System;
+using System.Linq;
 
 namespace NSeed.Discovery.Common.ReflectionBased
 {

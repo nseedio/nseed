@@ -1,8 +1,8 @@
-﻿using System;
-using Xunit;
+﻿using FluentAssertions;
 using NSeed.Extensions;
-using FluentAssertions;
 using NSeed.Tests.Unit.Discovery.Seedable;
+using System;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Extensions
 {

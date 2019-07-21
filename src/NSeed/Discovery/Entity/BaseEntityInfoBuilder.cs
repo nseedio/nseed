@@ -1,5 +1,5 @@
-﻿using System;
 using NSeed.MetaInfo;
+using System;
 
 namespace NSeed.Discovery.Entity
 {
@@ -10,9 +10,10 @@ namespace NSeed.Discovery.Entity
         private readonly IEntityFullNameExtractor<TEntityImplementation> fullNameExtractor;
         private readonly IMetaInfoPool<TEntityImplementation, EntityInfo> entityInfoPool;
 
-        internal BaseEntityInfoBuilder(IEntityTypeExtractor<TEntityImplementation> typeExtractor,
-                                       IEntityFullNameExtractor<TEntityImplementation> fullNameExtractor,
-                                       IMetaInfoPool<TEntityImplementation, EntityInfo> entityInfoPool)
+        internal BaseEntityInfoBuilder(
+            IEntityTypeExtractor<TEntityImplementation> typeExtractor,
+            IEntityFullNameExtractor<TEntityImplementation> fullNameExtractor,
+            IMetaInfoPool<TEntityImplementation, EntityInfo> entityInfoPool)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
             System.Diagnostics.Debug.Assert(fullNameExtractor != null);

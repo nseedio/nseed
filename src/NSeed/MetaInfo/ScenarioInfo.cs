@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NSeed.MetaInfo
@@ -15,12 +15,12 @@ namespace NSeed.MetaInfo
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
-            :base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
-        {            
+            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+        {
         }
 
         /// <summary>
-        /// All seedables required by this scenario.
+        /// Gets all seedables required by this scenario.
         /// <br/>
         /// Returns the <see cref="SeedableInfo.ExplicitlyRequiredSeedables"/> since
         /// scenarios can only explicitly require other seedables (through the

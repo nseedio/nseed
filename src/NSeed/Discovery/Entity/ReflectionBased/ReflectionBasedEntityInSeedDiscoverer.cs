@@ -1,4 +1,4 @@
-﻿using NSeed.Extensions;
+using NSeed.Extensions;
 using System;
 using System.Linq;
 
@@ -13,7 +13,6 @@ namespace NSeed.Discovery.Entity.ReflectionBased
             // TODO-ERROR: Entity defined more then once.
             // TODO-ERROR: Seed implements different ISeeds.
             // TODO-ERROR: Entity type is generic parameter.
-
             var entityTypes = source.GetInterfaces()
                 .Where(@interface =>
                     @interface.IsConstructedGenericType &&

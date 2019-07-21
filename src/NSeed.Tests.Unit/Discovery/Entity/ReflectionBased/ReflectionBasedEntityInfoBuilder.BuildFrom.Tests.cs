@@ -1,9 +1,9 @@
-using System;
-using Xunit;
 using FluentAssertions;
 using NSeed.Discovery;
-using NSeed.MetaInfo;
 using NSeed.Discovery.Entity.ReflectionBased;
+using NSeed.MetaInfo;
+using System;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 {

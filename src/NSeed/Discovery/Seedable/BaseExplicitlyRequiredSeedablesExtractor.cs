@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using NSeed.MetaInfo;
+﻿using NSeed.MetaInfo;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.Discovery.Seedable
 {

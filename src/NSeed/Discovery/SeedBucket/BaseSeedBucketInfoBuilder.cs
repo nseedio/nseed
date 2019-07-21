@@ -1,5 +1,5 @@
-﻿using System;
 using NSeed.MetaInfo;
+using System;
 
 namespace NSeed.Discovery.SeedBucket
 {
@@ -15,13 +15,14 @@ namespace NSeed.Discovery.SeedBucket
         private readonly ISeedBucketOfSeedableExtractor<TSeedableImplementation> seedBucketOfSeedableExtractor;
         private readonly IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool;
 
-        internal BaseSeedBucketInfoBuilder(ITypeExtractor<TSeedBucketImplementation> typeExtractor,
-                                           IFullNameExtractor<TSeedBucketImplementation> fullNameExtractor,
-                                           IFriendlyNameExtractor<TSeedBucketImplementation> friendlyNameExtractor,
-                                           IDescriptionExtractor<TSeedBucketImplementation> descriptionExtractor,
-                                           IContainedSeedablesExtractor<TSeedBucketImplementation> seedablesExtractor,
-                                           Func<ISeedBucketInfoBuilder<TSeedBucketImplementation>, ISeedBucketOfSeedableExtractor<TSeedableImplementation>> seedBucketOfSeedableExtractorFactory,
-                                           IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool)
+        internal BaseSeedBucketInfoBuilder(
+            ITypeExtractor<TSeedBucketImplementation> typeExtractor,
+            IFullNameExtractor<TSeedBucketImplementation> fullNameExtractor,
+            IFriendlyNameExtractor<TSeedBucketImplementation> friendlyNameExtractor,
+            IDescriptionExtractor<TSeedBucketImplementation> descriptionExtractor,
+            IContainedSeedablesExtractor<TSeedBucketImplementation> seedablesExtractor,
+            Func<ISeedBucketInfoBuilder<TSeedBucketImplementation>, ISeedBucketOfSeedableExtractor<TSeedableImplementation>> seedBucketOfSeedableExtractorFactory,
+            IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
             System.Diagnostics.Debug.Assert(fullNameExtractor != null);

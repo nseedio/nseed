@@ -1,6 +1,6 @@
-﻿using System;
-using System.Linq;
 using NSeed.MetaInfo;
+using System;
+using System.Linq;
 
 namespace NSeed.Discovery.Common.ReflectionBased
 {

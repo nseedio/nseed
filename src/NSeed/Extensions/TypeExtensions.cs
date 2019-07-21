@@ -1,4 +1,4 @@
-﻿using NSeed.Extensions;
+using NSeed.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +16,7 @@ namespace NSeed.Extensions
         };
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal static bool IsSeedInterfaceTypeWithEntities(this Type type)
+        public static bool IsSeedInterfaceTypeWithEntities(this Type type)
         {
             System.Diagnostics.Debug.Assert(type != null);
 

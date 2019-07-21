@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2019 NSeed")]
 
 [assembly: AssemblyVersion("0.1.0")]
+
 // AssemblyFileVersion is not set explicitly. This automatically makes it same as the AssemblyVersion.
 [assembly: AssemblyInformationalVersion("0.1.0-prealpha")]
 

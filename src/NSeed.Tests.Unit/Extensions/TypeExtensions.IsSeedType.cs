@@ -1,9 +1,9 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
+using NSeed.Extensions;
+using NSeed.Tests.Unit.Discovery.Seedable;
 using System;
 using Xunit;
-using NSeed.Extensions;
-using FluentAssertions;
-using NSeed.Tests.Unit.Discovery.Seedable;
 
 namespace NSeed.Tests.Unit.Extensions
 {

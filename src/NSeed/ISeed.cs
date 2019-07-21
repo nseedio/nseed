@@ -1,8 +1,13 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace NSeed
 {
-    // ReSharper disable UnusedTypeParameter
+    // All these three interfaces are actually the "same" interface.
+    // That's why we want to have them in the same file.
+    // The purpose of the generic parameters is explained in the interface description.
+    // There is no need to additionally document the parameters.
+#pragma warning disable SA1402 // File may only contain a single type
+#pragma warning disable SA1618 // Generic type parameters should be documented
     /// <summary>
     /// A <see cref="ISeed"/> that seeds three types of entities.
     /// </summary>
@@ -17,7 +22,8 @@ namespace NSeed
     /// A <see cref="ISeed"/> that seeds entities of type <typeparamref name="TEntity"/>.
     /// </summary>
     public interface ISeed<TEntity> : ISeed { }
-    // ReSharper restore UnusedTypeParameter
+#pragma warning restore SA1618 // Generic type parameters should be documented
+#pragma warning restore SA1402 // File may only contain a single type
 
     /// <summary>
     /// A single seed.

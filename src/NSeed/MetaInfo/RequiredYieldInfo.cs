@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 
 namespace NSeed.MetaInfo
 {
@@ -15,18 +15,18 @@ namespace NSeed.MetaInfo
         public SeedInfo YieldingSeed { get; }
 
         /// <summary>
-        /// The <see cref="ISeed"/> that requires this yield.
+        /// Gets the <see cref="ISeed"/> that requires this yield.
         /// </summary>
         public SeedInfo RequiringSeed { get; internal set; } // Set is called by the SeedInfo of the requiring seed.
 
         /// <summary>
-        /// The yield access property that provides access to the
+        /// Gets the yield access property that provides access to the
         /// yield if such <see cref="PropertyInfo"/> exists; otherwise null.
         /// </summary>
         public PropertyInfo YieldAccessProperty { get; }
 
         /// <summary>
-        /// The name of the yield access property.
+        /// Gets the name of the yield access property.
         /// </summary>
         /// <remarks>
         /// If the <see cref="YieldAccessProperty"/> exists, this property is equal to its <see cref="MemberInfo.Name"/>.
@@ -34,7 +34,7 @@ namespace NSeed.MetaInfo
         public string YieldAccessPropertyName { get; }
 
         internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo yieldAccessProperty, string yieldAccessPropertyName)
-            :base(yieldingSeed.Yield.Implementation, yieldingSeed.Yield.Type, yieldingSeed.Yield.FullName)
+            : base(yieldingSeed.Yield.Implementation, yieldingSeed.Yield.Type, yieldingSeed.Yield.FullName)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(yieldAccessPropertyName));
 

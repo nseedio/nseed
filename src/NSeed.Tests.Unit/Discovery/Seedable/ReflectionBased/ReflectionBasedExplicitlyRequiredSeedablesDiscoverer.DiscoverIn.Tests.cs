@@ -1,9 +1,9 @@
-using System;
-using Xunit;
 using FluentAssertions;
 using Moq;
-using NSeed.Discovery.Seedable.ReflectionBased;
 using NSeed.Discovery.Seedable;
+using NSeed.Discovery.Seedable.ReflectionBased;
+using System;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 {

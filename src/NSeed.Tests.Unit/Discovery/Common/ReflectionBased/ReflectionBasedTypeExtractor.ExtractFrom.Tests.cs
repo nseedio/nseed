@@ -1,10 +1,10 @@
-using System;
-using Xunit;
 using FluentAssertions;
 using Moq;
-using NSeed.MetaInfo;
-using NSeed.Discovery.Common.ReflectionBased;
 using NSeed.Discovery;
+using NSeed.Discovery.Common.ReflectionBased;
+using NSeed.MetaInfo;
+using System;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
 {

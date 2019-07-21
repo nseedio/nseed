@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using NSeed.Extensions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using Xunit.Abstractions;
 
 namespace NSeed.Tests.Unit
@@ -19,7 +19,6 @@ namespace NSeed.Tests.Unit
             public string Name { get; set; }
             public string FriendlyName { get; set; }
             public string Description { get; set; }
-
         }
 
         private class SeedBucketDescription : BaseDescription { }
@@ -31,22 +30,21 @@ namespace NSeed.Tests.Unit
 
         private class SeedDescription : SeedableDescription
         {
-            public bool HasYield { get; set; }            
+            public bool HasYield { get; set; }
         }
 
         private class ScenarioDescription : SeedableDescription { }
 
-
-        private static readonly List<MetadataReference> commonMetadataReferences = new List<MetadataReference>();
+        private static readonly List<MetadataReference> CommonMetadataReferences = new List<MetadataReference>();
         private readonly ITestOutputHelper output;
 
         static SeedAssemblyBuilder()
         {
-            commonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            commonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(SeedBucket).Assembly.Location));
+            CommonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            CommonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(SeedBucket).Assembly.Location));
             foreach (var assembly in GetAdditionalAssemblies())
             {
-                commonMetadataReferences.Add(MetadataReference.CreateFromFile(assembly.Location));
+                CommonMetadataReferences.Add(MetadataReference.CreateFromFile(assembly.Location));
             }
 
             IEnumerable<Assembly> GetAdditionalAssemblies()
@@ -94,7 +92,7 @@ namespace NSeed.Tests.Unit
 
             seedBucketTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("seed bucket type name must not contain white spaces");
             seedBuckets.ContainsKey(seedBucketTypeName).Should().BeFalse($"seed bucket type can be added only once. Seed bucket with the name '{seedBucketTypeName}' has already been added to the seed assembly");
-            
+
             seedBuckets.Add(seedBucketTypeName, new SeedBucketDescription
             {
                 Name = seedBucketTypeName,
@@ -192,8 +190,8 @@ namespace NSeed.Tests.Unit
 
             CSharpCompilation compilation = CSharpCompilation.Create(
                 Path.GetRandomFileName(),
-                syntaxTrees: new [] { syntaxTree },
-                references: commonMetadataReferences.Union(metadataReferences),
+                syntaxTrees: new[] { syntaxTree },
+                references: CommonMetadataReferences.Union(metadataReferences),
                 options: new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
             var memoryStream = new MemoryStream();
@@ -225,7 +223,7 @@ namespace NSeed.Tests.Unit
                     .Select(CreateScenarioSourceCode)
                     .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
 
-                return 
+                return
                     $"using System;{Environment.NewLine}" +
                     $"using System.Threading.Tasks;{Environment.NewLine}" +
                     $"using NSeed;{Environment.NewLine}" +
@@ -253,14 +251,14 @@ namespace NSeed.Tests.Unit
                     var yield = seedDescription.HasYield
                         ? $"    public class Yield : YieldOf<{seedDescription.Name}> {{ }}{Environment.NewLine}"
                         : string.Empty;
-                   
+
                     var requiresAttributes = CreateRequiresAttributes(seedDescription);
 
                     return
                         $"{requiresAttributes}" +
                         $"{friendlyNameAttribute}" +
                         $"{descriptionAttribute}" +
-                        $"public class {seedDescription.Name} : ISeed{Environment.NewLine}" + 
+                        $"public class {seedDescription.Name} : ISeed{Environment.NewLine}" +
                         $"{{{Environment.NewLine}" +
                         $"    public Task<bool> HasAlreadyYielded() => throw new NotImplementedException();{Environment.NewLine}" +
                         $"    public Task Seed() => throw new NotImplementedException();{Environment.NewLine}" +

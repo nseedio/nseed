@@ -1,4 +1,4 @@
-﻿namespace NSeed.MetaInfo
+namespace NSeed.MetaInfo
 {
     /// <summary>
     /// Contains properties common for all yield meta infos.
@@ -6,7 +6,7 @@
     public interface IYieldInfo
     {
         /// <summary>
-        /// The <see cref="ISeed"/> that yields this yield.
+        /// Gets the <see cref="ISeed"/> that yields this yield.
         /// </summary>
         SeedInfo YieldingSeed { get;  }
     }

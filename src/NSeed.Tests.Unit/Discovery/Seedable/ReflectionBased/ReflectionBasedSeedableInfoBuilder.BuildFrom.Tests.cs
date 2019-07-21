@@ -1,11 +1,11 @@
-using System;
-using Xunit;
 using FluentAssertions;
 using NSeed.Discovery;
-using NSeed.MetaInfo;
-using NSeed.Extensions;
 using NSeed.Discovery.Seedable.ReflectionBased;
+using NSeed.Extensions;
+using NSeed.MetaInfo;
+using System;
 using System.Linq;
+using Xunit;
 
 namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 {
@@ -208,7 +208,6 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Requires(typeof(OtherScenario))]
         private class ScenarioThatRequiresOtherScenario : BaseTestScenario { }
 
-
         [Fact]
         public void Ignoresﾠdirectﾠcircularﾠdependencyﾠofﾠseeds()
         {
@@ -336,7 +335,6 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         private class SeedSeven : BaseTestSeed { }
         [Requires(typeof(ScenarioEight))]
         private class ScenarioEight : BaseTestScenario { }
-
 
         private static SeedInfo CreateSeedInfoForMinimalSeedType(Type minimalSeedType)
         {

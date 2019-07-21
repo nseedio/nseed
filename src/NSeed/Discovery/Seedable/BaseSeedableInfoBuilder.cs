@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
 using NSeed.MetaInfo;
+using System;
+using System.Collections.Generic;
 
 namespace NSeed.Discovery.Seedable
 {
@@ -25,15 +25,16 @@ namespace NSeed.Discovery.Seedable
         // Keeps track of the current build chain in order to ignore circular dependencies.
         private readonly Stack<TSeedableImplementation> buildChain = new Stack<TSeedableImplementation>();
 
-        internal BaseSeedableInfoBuilder(ITypeExtractor<TSeedableImplementation> typeExtractor,
-                                     IFullNameExtractor<TSeedableImplementation> fullNameExtractor,
-                                     IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
-                                     IDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
-                                     ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
-                                     ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
-                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,
-                                     Func<ISeedableInfoBuilder<TSeedableImplementation>, ISeedRequiredYieldsExtractor<TSeedableImplementation>> requiredYieldsExtractorFactory,
-                                     IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
+        internal BaseSeedableInfoBuilder(
+            ITypeExtractor<TSeedableImplementation> typeExtractor,
+            IFullNameExtractor<TSeedableImplementation> fullNameExtractor,
+            IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
+            IDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
+            ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
+            ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
+            Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,
+            Func<ISeedableInfoBuilder<TSeedableImplementation>, ISeedRequiredYieldsExtractor<TSeedableImplementation>> requiredYieldsExtractorFactory,
+            IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
             System.Diagnostics.Debug.Assert(fullNameExtractor != null);
@@ -68,6 +69,8 @@ namespace NSeed.Discovery.Seedable
 
             return result;
         }
+
+        protected internal abstract bool IsSeedImplemenation(TSeedableImplementation implementation);
 
         private SeedableInfo CreateSeedableInfo(TSeedableImplementation implementation)
         {
@@ -108,7 +111,5 @@ namespace NSeed.Discovery.Seedable
                       explicitelyRequires
                   );
         }
-
-        protected internal abstract bool IsSeedImplemenation(TSeedableImplementation implementation);
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Linq;
+using NSeed.Discovery.Seedable;
 using NSeed.MetaInfo;
 using System.Collections.Generic;
-using NSeed.Discovery.Seedable;
+using System.Linq;
 
 namespace NSeed.Discovery.SeedBucket
 {
@@ -12,8 +12,9 @@ namespace NSeed.Discovery.SeedBucket
         private readonly IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer;
         private readonly ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder;
 
-        protected internal BaseContainedSeedablesExtractor(IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer,
-                                                           ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
+        protected internal BaseContainedSeedablesExtractor(
+            IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer,
+            ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {
             System.Diagnostics.Debug.Assert(seedablesDiscoverer != null);
             System.Diagnostics.Debug.Assert(seedableBuilder != null);

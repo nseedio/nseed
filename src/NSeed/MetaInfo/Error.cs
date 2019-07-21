@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -8,12 +8,12 @@ namespace NSeed.MetaInfo
     public sealed class Error
     {
         /// <summary>
-        /// The unique error code of this error.
+        /// Gets the unique error code of this error.
         /// </summary>
         public string Code { get; }
 
         /// <summary>
-        /// The error message.
+        /// Gets the error message.
         /// </summary>
         public string Message { get; }
 

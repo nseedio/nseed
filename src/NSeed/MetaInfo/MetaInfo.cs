@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed.MetaInfo
 {
@@ -16,7 +16,7 @@ namespace NSeed.MetaInfo
         public static readonly object UnknownImplementation = new object();
 
         /// <summary>
-        /// The underlying implementation object of the NSeed abstraction
+        /// Gets the underlying implementation object of the NSeed abstraction
         /// described with this meta info.
         /// <br/>
         /// If the implementation object is <see cref="System.Type"/> it will be same as <see cref="Type"/>.
@@ -26,13 +26,13 @@ namespace NSeed.MetaInfo
         public object Implementation { get; }
 
         /// <summary>
-        /// The underlying implementation <see cref="System.Type"/> of the NSeed abstraction
+        /// Gets the underlying implementation <see cref="System.Type"/> of the NSeed abstraction
         /// described with this meta info, if such <see cref="System.Type"/> exists; otherwise null.
         /// </summary>
         public Type Type { get; }
 
         /// <summary>
-        /// The full name of the of the NSeed abstraction described with this meta info.
+        /// Gets the full name of the of the NSeed abstraction described with this meta info.
         /// </summary>
         /// <remarks>
         /// If the <see cref="Type"/> exists, this property is equal to its <see cref="Type.FullName"/>.
@@ -40,9 +40,9 @@ namespace NSeed.MetaInfo
         public string FullName { get; }
 
         /// <summary>
-        /// Creates new <see cref="MetaInfo"/> with the specified type and full name.
+        /// Initializes a new instance of the <see cref="MetaInfo"/> class.
         /// </summary>
-        protected internal MetaInfo(object implementation, Type type, string fullName)
+        internal MetaInfo(object implementation, Type type, string fullName)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
             System.Diagnostics.Debug.Assert(fullName != null);

@@ -1,4 +1,4 @@
-﻿using NSeed.Discovery.SeedBucket;
+using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;
 using NSeed.MetaInfo;
 using System;
@@ -13,9 +13,9 @@ namespace NSeed
         private readonly ISeedBucketInfoBuilder<Type> seedBucketInfoBuilder = new ReflectionBasedSeedBucketInfoBuilder();
 
         /// <summary>
-        /// Returns <see cref="SeedBucketInfo"/> for this seed bucket.
+        /// Gets <see cref="SeedBucketInfo"/> for this seed bucket.
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="SeedBucketInfo"/> that describes this seed bucket.</returns>
         public SeedBucketInfo GetMetaInfo()
         {
             return seedBucketInfoBuilder.BuildFrom(GetType());

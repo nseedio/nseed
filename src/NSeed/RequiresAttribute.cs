@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed
 {
@@ -17,15 +17,16 @@ namespace NSeed
     public sealed class RequiresAttribute : Attribute
     {
         /// <summary>
-        /// The <see cref="Type"/> of a single <see cref="ISeed"/> or <see cref="IScenario"/>
+        /// Gets the <see cref="Type"/> of a single <see cref="ISeed"/> or <see cref="IScenario"/>
         /// whose yield is required by the seedable class annotated with this attribute.
         /// </summary>
         public Type SeedableType { get; }
 
         /// <summary>
-        /// Creates new <see cref="RequiresAttribute"/> that specifies that a seedable class
+        /// Initializes a new instance of the <see cref="RequiresAttribute"/> class that specifies that a seedable class
         /// requires yield of an <see cref="ISeed"/> or <see cref="IScenario"/> of the type <paramref name="seedableType"/>.
         /// </summary>
+        /// <param name="seedableType">The type of the required <see cref="ISeed"/> or <see cref="IScenario"/>.</param>
         public RequiresAttribute(Type seedableType) => SeedableType = seedableType;
     }
 }

@@ -1,7 +1,7 @@
-﻿using System.Linq;
+using NSeed.Discovery.Entity;
 using NSeed.MetaInfo;
 using System.Collections.Generic;
-using NSeed.Discovery.Entity;
+using System.Linq;
 
 namespace NSeed.Discovery.Seedable
 {
@@ -12,8 +12,9 @@ namespace NSeed.Discovery.Seedable
         private readonly IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer;
         private readonly IEntityInfoBuilder<TEntityImplementation> entityBuilder;
 
-        protected internal BaseSeedEntitiesExtractor(IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
-                                                     IEntityInfoBuilder<TEntityImplementation> entityBuilder)
+        protected internal BaseSeedEntitiesExtractor(
+            IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
+            IEntityInfoBuilder<TEntityImplementation> entityBuilder)
         {
             System.Diagnostics.Debug.Assert(entityDiscoverer != null);
             System.Diagnostics.Debug.Assert(entityBuilder != null);

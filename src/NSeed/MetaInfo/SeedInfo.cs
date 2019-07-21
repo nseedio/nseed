@@ -11,23 +11,23 @@ namespace NSeed.MetaInfo
     public sealed class SeedInfo : SeedableInfo
     {
         /// <summary>
-        /// Types of entities yielded by this seed.
+        /// Gets types of entities yielded by this seed.
         /// </summary>
         public IReadOnlyCollection<EntityInfo> YieldedEntities { get; }
 
         /// <summary>
-        /// The yield seeded by this seed or null if this seed does not
+        /// Gets the yield seeded by this seed or null if this seed does not
         /// provide access to its yield.
         /// </summary>
         public ProvidedYieldInfo Yield { get; }
 
         /// <summary>
-        /// Yields of other seeds required by this seed.
+        /// Gets yields of other seeds required by this seed.
         /// </summary>
         public IReadOnlyCollection<RequiredYieldInfo> RequiredYields { get; }
 
         /// <summary>
-        /// All seedables required by this seed.
+        /// Gets all seedables required by this seed.
         /// <br/>
         /// Returns union of <see cref="SeedableInfo.ExplicitlyRequiredSeedables"/> and
         /// seeds whose yields are used in <see cref="RequiredYields"/>.
@@ -46,12 +46,12 @@ namespace NSeed.MetaInfo
             IReadOnlyCollection<EntityInfo> yieldedEntities,
             ProvidedYieldInfo yield,
             IReadOnlyCollection<RequiredYieldInfo> requiredYields)
-            :base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(yieldedEntities != null);
             System.Diagnostics.Debug.Assert(yieldedEntities.All(entity => entity != null));
-            System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || yield.Type.IsYieldTypeOfSeed(type) && yield.YieldingSeed == null);
+            System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || (yield.Type.IsYieldTypeOfSeed(type) && yield.YieldingSeed == null));
             System.Diagnostics.Debug.Assert(requiredYields != null);
             System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield => requiredYield != null && requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type) && requiredYield.RequiringSeed == null));
 

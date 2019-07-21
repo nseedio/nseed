@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,7 +16,7 @@ namespace NSeed.MetaInfo
         public string Description { get; }
 
         /// <summary>
-        /// Seedables (<see cref="ISeed"/>s and <see cref="IScenario"/>s) contained in this <see cref="SeedBucket"/>.
+        /// Gets seedables (<see cref="ISeed"/>s and <see cref="IScenario"/>s) contained in this <see cref="SeedBucket"/>.
         /// <br/>
         /// To get only <see cref="ISeed"/>s or <see cref="IScenario"/>s call
         /// <see cref="ContainedSeedables"/>.OfType&lt;<see cref="SeedInfo"/>&gt; or
@@ -35,8 +35,8 @@ namespace NSeed.MetaInfo
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> containedSeedables)
-            :base(implementation, type, fullName)
-        {            
+            : base(implementation, type, fullName)
+        {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
             System.Diagnostics.Debug.Assert(containedSeedables != null);

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed
 {
@@ -10,12 +10,12 @@ namespace NSeed
     public sealed class DescriptionAttribute : Attribute
     {
         /// <summary>
-        /// The description.
+        /// Gets the description.
         /// </summary>
         public string Description { get; }
 
         /// <summary>
-        /// Creates new <see cref="DescriptionAttribute"/> with the specified description.
+        /// Initializes a new instance of the <see cref="DescriptionAttribute"/> class with the specified <paramref name="description"/>.
         /// </summary>
         /// <param name="description">The description. It must not be null, empty, or white space.</param>
         public DescriptionAttribute(string description) => Description = description;

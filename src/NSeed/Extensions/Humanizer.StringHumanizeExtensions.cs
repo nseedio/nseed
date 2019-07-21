@@ -1,6 +1,11 @@
-﻿// Taken and adapted from:
+// Taken and adapted from:
 // https://github.com/Humanizr/Humanizer/blob/10e1be770c00ce59c08d5efbe551800400f02c53/src/Humanizer/StringHumanizeExtensions.cs
 // https://github.com/Humanizr/Humanizer/blob/10e1be770c00ce59c08d5efbe551800400f02c53/src/Humanizer/RegexOptionsUtil.cs
+
+// We ignore some errors in order to not to have to change the orignal code too much.
+#pragma warning disable SA1649 // File name should match first type name
+#pragma warning disable SA1202 // Elements should be ordered by access
+#pragma warning disable SA1402 // File may only contain a single type
 
 using System;
 using System.Linq;
@@ -18,7 +23,8 @@ namespace NSeed.Extensions
 
         static StringHumanizeExtensions()
         {
-            PascalCaseWordPartsRegex = new Regex(@"[\p{Lu}]?[\p{Ll}]+|[0-9]+[\p{Ll}]*|[\p{Lu}]+(?=[\p{Lu}][\p{Ll}]|[0-9]|\b)|[\p{Lo}]+",
+            PascalCaseWordPartsRegex = new Regex(
+                @"[\p{Lu}]?[\p{Ll}]+|[0-9]+[\p{Ll}]*|[\p{Lu}]+(?=[\p{Lu}][\p{Ll}]|[0-9]|\b)|[\p{Lo}]+",
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptionsUtil.Compiled);
             FreestandingSpacingCharRegex = new Regex(@"\s[-_]|[-_]\s", RegexOptionsUtil.Compiled);
         }
@@ -42,10 +48,9 @@ namespace NSeed.Extensions
         }
 
         /// <summary>
-        /// Humanizes the input string; e.g. Underscored_input_String_is_turned_INTO_sentence -> 'Underscored input String is turned INTO sentence'
+        /// Humanizes the input string; e.g. Underscored_input_String_is_turned_INTO_sentence -> 'Underscored input String is turned INTO sentence'.
         /// </summary>
-        /// <param name="input">The string to be humanized</param>
-        /// <returns></returns>
+        /// <param name="input">The string to be humanized.</param>
         public static string Humanize(this string input)
         {
             System.Diagnostics.Debug.Assert(input != null);

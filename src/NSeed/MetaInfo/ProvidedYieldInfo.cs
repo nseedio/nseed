@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed.MetaInfo
 {
@@ -15,8 +15,8 @@ namespace NSeed.MetaInfo
         public SeedInfo YieldingSeed { get; internal set; } // Set is called by the SeedInfo of the yielding seed.
 
         internal ProvidedYieldInfo(object implementation, Type type, string fullName)
-            :base(implementation, type, fullName)
-        {            
+            : base(implementation, type, fullName)
+        {
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
 using NSeed.MetaInfo;
+using System;
 
 namespace NSeed.Discovery.Common.ReflectionBased
 {
