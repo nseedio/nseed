@@ -110,33 +110,34 @@ namespace NSeed.Cli.Subcommands.New
         private string GetCommonValue(IList<string> values)
         {
             var byCharacters = new char[] { '.', '-', '_' };
-
-            if (values == null || !values.Any())
+            
+            if (values.IsNullOrEmpty())
             {
                 return string.Empty;
             }
 
             if (values.Count == 1)
             {
-                var value = values.First();
-                var valueParts = value.Split(byCharacters);
-                return valueParts.FirstOrDefault();
+                return values.First().SplitAndTakeFirst(byCharacters);
             }
 
             var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray()).ToList();
-            if (!diffSection.IsNullOrEmpty())
+
+            if (diffSection.IsNullOrEmpty())
             {
-                var firstdiffSection = diffSection.FirstOrDefault();
-                if (firstdiffSection.IsMatch)
+                return string.Empty;
+            }
+
+            var firstdiffSection = diffSection.FirstOrDefault();
+            if (firstdiffSection.IsMatch)
+            {
+                var prefix = values[0].Substring(0, firstdiffSection.LengthInCollection1).Trim('.');
+                if (!string.IsNullOrEmpty(prefix))
                 {
-                    var prefix = values[0].Substring(0, firstdiffSection.LengthInCollection1).Trim('.');
-                    if (!string.IsNullOrEmpty(prefix))
-                    {
-                        var valueParts = prefix.Split(byCharacters);
-                        return valueParts.FirstOrDefault();
-                    }
+                    return prefix.SplitAndTakeFirst(byCharacters);
                 }
             }
+
             return string.Empty;
         }
     }

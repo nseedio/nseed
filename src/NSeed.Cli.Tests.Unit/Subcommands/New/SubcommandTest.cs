@@ -89,7 +89,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
         {
             new object[] { new List<string> { "NSeed.Web", "NSeed.Test", "NSeed.Data", "NSeed.Core" } },
             new object[] { new List<string> { "NSeed.Web", "NSeed.Web.Test", "NSeed.Data", "NSeed.Core", "NSeed.Auth" } },
-           
+            new object[] { new List<string> { "NSeed.Web" } },
         };
 
         public static IEnumerable<object[]> NotEqualPrefixes => new List<object[]>
@@ -97,6 +97,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             new object[] { new List<string>{ "Miro.NSeed.Web", "Slavko.NSeed.Web.Test", "Sanjin.NSeed.Data", "Milivoj.NSeed.Core", "Slavica.NSeed.Auth" } },
             new object[] { new List<string>{ "Mirko", "Slavko", "Ivan", "Mirela", "Tihomir" }, },
             new object[] { new List<string> { "NSewed.Web", "lxSevved.Web.Test", "NpSeed.Data", "NuuzSeed.Core", "NjkSeed.Auth" } },
+            new object[] { new List<string>() },
         };
 
         protected void ResolveFramework()
