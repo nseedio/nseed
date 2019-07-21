@@ -1,4 +1,4 @@
-﻿using DiffLib;
+using DiffLib;
 using McMaster.Extensions.CommandLineUtils;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
@@ -11,37 +11,40 @@ using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands.New
 {
-    using static NSeed.Cli.Resources.Resources;
-
-    [Command("new", Description = New.CommandDescription)]
+    [Command("new", Description = Resources.Resources.New.CommandDescription)]
     [NewValidator]
     internal class Subcommand
     {
-        [Option("-s|--solution", Description = New.SolutionDescription)]
+        [Option("-s|--solution", Description = Resources.Resources.New.SolutionDescription)]
         [SolutionDefaultValueProvider]
         public string Solution { get; private set; }
 
-        [Option("-f|--framework", Description = New.FrameworkDescription)]
+        [Option("-f|--framework", Description = Resources.Resources.New.FrameworkDescription)]
         [FrameworkDefaultValueProvider]
         public string Framework { get; private set; }
 
-        [Option("-n|--name", Description = New.ProjectNameDescription)]
-        [NameDefaultValueProvider(New.DefaultProjectName)]
+        [Option("-n|--name", Description = Resources.Resources.New.ProjectNameDescription)]
+        [NameDefaultValueProvider(Resources.Resources.New.DefaultProjectName)]
         public string Name { get; private set; }
 
         public string ResolvedSoluiton { get; private set; } = string.Empty;
+
         public string ResolvedFramework { get; private set; } = string.Empty;
+
         public string ResolvedName { get; private set; } = string.Empty;
+
         public bool ResolvedSolutionIsValid { get; set; } = false;
 
         public void SetResolvedSolution(string solution)
         {
             ResolvedSoluiton = solution;
         }
+
         public void SetResolvedName(string name)
         {
             ResolvedName = name;
         }
+
         public void SetResolvedFramework(string framework)
         {
             ResolvedFramework = framework;
@@ -60,6 +63,7 @@ namespace NSeed.Cli.Subcommands.New
                 }
             }
         }
+
         public void ResolveFramework(IDependencyGraphService dependencyGraphService)
         {
             if (ResolvedSolutionIsValid && dependencyGraphService != null)
@@ -78,18 +82,17 @@ namespace NSeed.Cli.Subcommands.New
                         if (frameworkNames.Any() && frameworkNames.All(fn => fn == frameworkNames.First()))
                         {
                             var framework = frameworks.FirstOrDefault();
-                            if (framework.FrameworkName.Framework.Equals(CoreDotNetFramework))
+                            if (framework.FrameworkName.Framework.Equals(Resources.Resources.CoreDotNetFramework))
                             {
                                 ResolvedFramework = $"{framework.FrameworkName.Framework.ToLower().TrimStart('.')}{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                             }
-                            else if (framework.FrameworkName.Framework.Equals(FullDotNetFramework))
+                            else if (framework.FrameworkName.Framework.Equals(Resources.Resources.FullDotNetFramework))
                             {
                                 ResolvedFramework = $"v{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                                 if (framework.FrameworkName.Version.Build != 0)
                                 {
                                     ResolvedFramework = $"{ResolvedFramework}.{framework.FrameworkName.Version.Build}";
                                 }
-
                             }
                         }
                     }
@@ -110,7 +113,6 @@ namespace NSeed.Cli.Subcommands.New
         private string GetCommonValue(IList<string> values)
         {
             var byCharacters = new char[] { '.', '-', '_' };
-            
             if (values.IsNullOrEmpty())
             {
                 return string.Empty;

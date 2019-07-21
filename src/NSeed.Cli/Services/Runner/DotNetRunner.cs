@@ -1,4 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace NSeed.Cli.Services
 {
-    //TODO:am Replace DotNetRunner u common project so that evryone can use that
+    // TODO:am Replace DotNetRunner u common project so that evryone can use that
 
     internal class DotNetRunner : IDotNetRunner
     {

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace NSeed.Cli.Extensions
 {
@@ -21,6 +21,7 @@ namespace NSeed.Cli.Extensions
             {
                 return string.Empty;
             }
+
             return splitItems.FirstOrDefault();
         }
     }

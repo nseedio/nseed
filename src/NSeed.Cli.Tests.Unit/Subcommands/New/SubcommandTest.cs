@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Moq;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
@@ -12,32 +12,32 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
     public abstract class BaseSubcommand
     {
-        private readonly Subcommand Subcommand = new Subcommand { ResolvedSolutionIsValid = true };
-        private readonly Mock<IDependencyGraphService> MockDependencyGraphService = new Mock<IDependencyGraphService>();
-        private readonly DependencyGraphSpec DependencyGraphSpec = new DependencyGraphSpec();
-        private readonly List<string> ProjectNames = new List<string>();
+        private readonly Subcommand subcommand = new Subcommand { ResolvedSolutionIsValid = true };
+        private readonly Mock<IDependencyGraphService> mockDependencyGraphService = new Mock<IDependencyGraphService>();
+        private readonly DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
+        private readonly List<string> projectNames = new List<string>();
         private const string SlnName = "TestSln";
         private const string DefaultProjectName = Resources.Resources.New.DefaultProjectName;
 
         private BaseSubcommand()
         {
-            Subcommand.SetResolvedSolution(SlnName);
+            subcommand.SetResolvedSolution(SlnName);
         }
 
         protected BaseSubcommand GenerateDependencyGraph
         {
             get
             {
-                MockDependencyGraphService
+                mockDependencyGraphService
                 .Setup(dgs => dgs.GenerateDependencyGraph(It.IsAny<string>()))
-                .Returns(DependencyGraphSpec);
+                .Returns(dependencyGraphSpec);
                 return this;
             }
         }
 
         protected void GenerateSoluitonProjects(IEnumerable<string> projectNames)
         {
-            MockDependencyGraphService
+            mockDependencyGraphService
             .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
             .Returns(projectNames);
         }
@@ -48,7 +48,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
-            DependencyGraphSpec.AddProject(packageSpec);
+            dependencyGraphSpec.AddProject(packageSpec);
             return this;
         }
 
@@ -59,7 +59,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 2, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETCoreApp", new Version(2, 0, 0)) });
 
-            DependencyGraphSpec.AddProject(packageSpec);
+            dependencyGraphSpec.AddProject(packageSpec);
             return this;
         }
 
@@ -70,7 +70,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 6, 1)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 6, 1)) });
 
-            DependencyGraphSpec.AddProject(packageSpec);
+            dependencyGraphSpec.AddProject(packageSpec);
             return this;
         }
 
@@ -81,7 +81,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 0)) });
             packageSpec.TargetFrameworks.Add(new TargetFrameworkInformation { FrameworkName = new NuGetFramework(".NETFramework", new Version(4, 0)) });
 
-            DependencyGraphSpec.AddProject(packageSpec);
+            dependencyGraphSpec.AddProject(packageSpec);
             return this;
         }
 
@@ -94,20 +94,20 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 
         public static IEnumerable<object[]> NotEqualPrefixes => new List<object[]>
         {
-            new object[] { new List<string>{ "Miro.NSeed.Web", "Slavko.NSeed.Web.Test", "Sanjin.NSeed.Data", "Milivoj.NSeed.Core", "Slavica.NSeed.Auth" } },
-            new object[] { new List<string>{ "Mirko", "Slavko", "Ivan", "Mirela", "Tihomir" }, },
+            new object[] { new List<string> { "Miro.NSeed.Web", "Slavko.NSeed.Web.Test", "Sanjin.NSeed.Data", "Milivoj.NSeed.Core", "Slavica.NSeed.Auth" } },
+            new object[] { new List<string> { "Mirko", "Slavko", "Ivan", "Mirela", "Tihomir" }, },
             new object[] { new List<string> { "NSewed.Web", "lxSevved.Web.Test", "NpSeed.Data", "NuuzSeed.Core", "NjkSeed.Auth" } },
             new object[] { new List<string>() },
         };
 
         protected void ResolveFramework()
         {
-            Subcommand.ResolveFramework(MockDependencyGraphService.Object);
+            subcommand.ResolveFramework(mockDependencyGraphService.Object);
         }
 
         protected void ResolveDefaultNameWithPrefix()
         {
-            Subcommand.ResolveDefaultNameWithPrefix(MockDependencyGraphService.Object, DefaultProjectName);
+            subcommand.ResolveDefaultNameWithPrefix(mockDependencyGraphService.Object, DefaultProjectName);
         }
 
         public class ResolveﾠFramework : BaseSubcommand
@@ -117,7 +117,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualDotNetCoreProjects();
                 ResolveFramework();
-                Subcommand.ResolvedFramework.Should().Be("netcoreapp2.0");
+                subcommand.ResolvedFramework.Should().Be("netcoreapp2.0");
             }
 
             [Fact]
@@ -125,7 +125,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualFullDotNetProjects();
                 ResolveFramework();
-                Subcommand.ResolvedFramework.Should().Be("v4.6.1");
+                subcommand.ResolvedFramework.Should().Be("v4.6.1");
             }
 
             [Fact]
@@ -133,7 +133,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet();
                 ResolveFramework();
-                Subcommand.ResolvedFramework.Should().Be("v4.0");
+                subcommand.ResolvedFramework.Should().Be("v4.0");
             }
 
             [Fact]
@@ -141,7 +141,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithDifferentDotNetCoreProjects();
                 ResolveFramework();
-                Subcommand.ResolvedFramework.Should().BeEmpty();
+                subcommand.ResolvedFramework.Should().BeEmpty();
             }
         }
 
@@ -153,7 +153,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateSoluitonProjects(projectNames);
                 ResolveDefaultNameWithPrefix();
-                Subcommand.ResolvedName.Should().Be($"NSeed.{DefaultProjectName}");
+                subcommand.ResolvedName.Should().Be($"NSeed.{DefaultProjectName}");
             }
 
             [Theory]
@@ -162,7 +162,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateSoluitonProjects(projectNames);
                 ResolveDefaultNameWithPrefix();
-                Subcommand.ResolvedName.Should().Be(DefaultProjectName);
+                subcommand.ResolvedName.Should().Be(DefaultProjectName);
             }
         }
     }

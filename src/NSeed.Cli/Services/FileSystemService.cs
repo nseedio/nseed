@@ -1,4 +1,4 @@
-﻿using NSeed.Cli.Extensions;
+using NSeed.Cli.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -18,7 +18,7 @@ namespace NSeed.Cli.Services
             if (fileInfo.Extension == $".{SolutionPrefix}" && fileInfo.Exists)
             {
                 path = fileInfo.FullName;
-                return SuccesResponse;
+                return succesResponse;
             }
             else
             {
@@ -55,6 +55,7 @@ namespace NSeed.Cli.Services
             {
                 return ErrorResponse(Error.MultipleSolutionsFound);
             }
+
             if (response.notFound)
             {
                 response = GetSolution(path, SearchOption.AllDirectories);
@@ -63,13 +64,15 @@ namespace NSeed.Cli.Services
                 {
                     return ErrorResponse(Error.MultipleSolutionsFound);
                 }
+
                 if (response.notFound)
                 {
                     return ErrorResponse(Error.SolutionNotFound);
                 }
             }
+
             solution = response.solution;
-            return SuccesResponse;
+            return succesResponse;
         }
 
         private (string solution, bool foundMultiple, bool notFound) GetSolution(string path, SearchOption searchOption)
@@ -81,23 +84,23 @@ namespace NSeed.Cli.Services
 
             if (solutions.IsNullOrEmpty())
             {
-                return SlnNotFound;
+                return slnNotFound;
             }
 
             if (solutions.Any() && solutions.Count > 1)
             {
-                return FoundMultipleSln;
+                return foundMultipleSln;
             }
 
             return Sln(solutions.FirstOrDefault());
         }
 
-        private (string solution, bool foundMultiple, bool notFound) SlnNotFound = (string.Empty, false, true);
-        private (string solution, bool foundMultiple, bool notFound) FoundMultipleSln = (string.Empty, true, false);
+        private (string solution, bool foundMultiple, bool notFound) slnNotFound = (string.Empty, false, true);
+        private (string solution, bool foundMultiple, bool notFound) foundMultipleSln = (string.Empty, true, false);
 
         private (string solution, bool foundMultiple, bool notFound) Sln(string sln) => (sln, false, false);
 
-        private (bool IsSuccesful, string Message) SuccesResponse = (true, string.Empty);
+        private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
 
         private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }

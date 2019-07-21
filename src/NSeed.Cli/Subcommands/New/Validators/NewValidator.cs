@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Validation;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-
     [AttributeUsage(AttributeTargets.Class)]
     internal class NewValidator : ValidationAttribute
     {
@@ -30,6 +29,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
                     }
                 }
             }
+
             return ValidationResult.Success;
         }
     }

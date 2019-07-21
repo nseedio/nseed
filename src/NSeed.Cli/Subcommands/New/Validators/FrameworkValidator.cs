@@ -1,4 +1,4 @@
-﻿using NSeed.Cli.Extensions;
+using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
 
 namespace NSeed.Cli.Subcommands.New.Validators
@@ -15,6 +15,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
             {
                 return ValidationResult.Error("Project framework is empty");
             }
+
             return ValidationResult.Success;
         }
     }

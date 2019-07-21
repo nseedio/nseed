@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Moq;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
@@ -13,9 +13,9 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private SolutionValidator SolutionValidator { get; set; }
 
-        private readonly Subcommand Subcommand = new Subcommand();
-        private Mock<IFileSystemService> MockFileSystemService = new Mock<IFileSystemService>();
-        private Mock<IDependencyGraphService> DependencyGraphService = new Mock<IDependencyGraphService>();
+        private readonly Subcommand subcommand = new Subcommand();
+        private readonly Mock<IFileSystemService> mockFileSystemService = new Mock<IFileSystemService>();
+        private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 
         [Theory]
         [InlineData("", Resources.Resources.Error.SolutionPathIsNotProvided)]
@@ -23,12 +23,12 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string solution, string errorMessage)
         {
             var resultSlnPath = string.Empty;
-            MockFileSystemService.Setup(t => t.TryGetSolutionPath(It.IsAny<string>(), out resultSlnPath)).Returns((true, string.Empty));
-            DependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>())).Returns(new DependencyGraphSpec());
+            mockFileSystemService.Setup(t => t.TryGetSolutionPath(It.IsAny<string>(), out resultSlnPath)).Returns((true, string.Empty));
+            dependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>())).Returns(new DependencyGraphSpec());
 
-            SolutionValidator = new SolutionValidator(MockFileSystemService.Object, DependencyGraphService.Object);
-            Subcommand.SetResolvedSolution(solution);
-            var result = SolutionValidator.Validate(Subcommand);
+            SolutionValidator = new SolutionValidator(mockFileSystemService.Object, dependencyGraphService.Object);
+            subcommand.SetResolvedSolution(solution);
+            var result = SolutionValidator.Validate(subcommand);
 
             result.Should().NotBeNull().And.BeOfType<ValidationResult>();
             result.IsValid.Should().BeFalse();

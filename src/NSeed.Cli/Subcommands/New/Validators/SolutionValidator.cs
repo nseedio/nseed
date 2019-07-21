@@ -1,18 +1,18 @@
-﻿using NSeed.Cli.Extensions;
+using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Validation;
-using System;
 using static NSeed.Cli.Resources.Resources;
-
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
     internal class SolutionValidator : IValidator<New.Subcommand>
     {
         public IFileSystemService FileSystemService { get; }
+
         public IDependencyGraphService DependencyGraphService { get; }
 
-        public SolutionValidator(IFileSystemService fileSystemService,
+        public SolutionValidator(
+            IFileSystemService fileSystemService,
             IDependencyGraphService dependencyGraphService)
         {
             FileSystemService = fileSystemService;
@@ -31,10 +31,10 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 return ValidationResult.Error(Error.SolutionPathIsNotProvided);
             }
 
-            var (IsSuccesful, Message) = FileSystemService.TryGetSolutionPath(command.ResolvedSoluiton, out var path);
-            if (!IsSuccesful)
+            var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSoluiton, out var path);
+            if (!isSuccesful)
             {
-                return ValidationResult.Error(Message);
+                return ValidationResult.Error(message);
             }
 
             var dependencyGraph = DependencyGraphService.GenerateDependencyGraph(path);
@@ -42,6 +42,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
             {
                 return ValidationResult.Error("Provided solution is invalid Solution can't be processed dependencyGraph");
             }
+
             command.ResolvedSolutionIsValid = true;
             return ValidationResult.Success;
         }

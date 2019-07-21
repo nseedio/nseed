@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands
 {
@@ -16,7 +11,7 @@ namespace NSeed.Cli.Subcommands
             container
                 .AddSingleton<IValidator<New.Subcommand>, SolutionValidator>()
                 .AddSingleton<IValidator<New.Subcommand>, NameValidator>()
-                .AddSingleton<IValidator<New.Subcommand>, FrameworkValidator >();
+                .AddSingleton<IValidator<New.Subcommand>, FrameworkValidator>();
         }
     }
 }

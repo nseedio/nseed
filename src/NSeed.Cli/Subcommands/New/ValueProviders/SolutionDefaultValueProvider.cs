@@ -1,4 +1,4 @@
-﻿using McMaster.Extensions.CommandLineUtils.Conventions;
+using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
@@ -26,6 +26,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
                 {
                     fileSystemService.TryGetSolutionPath(solution, out solution);
                 }
+
                 var model = context.ModelAccessor.GetModel() as New.Subcommand;
                 model.SetResolvedSolution(solution);
                 var solutionValidator = context.GetValidator<SolutionValidator>();

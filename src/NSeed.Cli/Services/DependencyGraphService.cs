@@ -1,4 +1,4 @@
-﻿using DiffLib;
+using DiffLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.ProjectModel;
@@ -10,17 +10,18 @@ namespace NSeed.Cli.Services
 {
     internal class DependencyGraphService : IDependencyGraphService
     {
-        private readonly IDotNetRunner DotNetRunner;
-        private readonly IFileSystemService FileSystemService;
+        private readonly IDotNetRunner dotNetRunner;
+        private readonly IFileSystemService fileSystemService;
 
-        private DependencyGraphSpec DependencyGraphSpec = null;
-        private string ProjectPath = string.Empty;
+        private DependencyGraphSpec dependencyGraphSpec = null;
+        private string projectPath = string.Empty;
 
-        public DependencyGraphService(IDotNetRunner dotNetRunner,
+        public DependencyGraphService(
+            IDotNetRunner dotNetRunner,
             IFileSystemService fileSystemService)
         {
-            DotNetRunner = dotNetRunner;
-            FileSystemService = fileSystemService;
+            this.dotNetRunner = dotNetRunner;
+            this.fileSystemService = fileSystemService;
         }
 
         public DependencyGraphSpec GenerateDependencyGraph(string solutionPath)
@@ -30,37 +31,37 @@ namespace NSeed.Cli.Services
                 return null;
             }
 
-            if (DependencyGraphSpec != null
-                && ProjectPath.Equals(solutionPath, StringComparison.CurrentCultureIgnoreCase))
+            if (dependencyGraphSpec != null
+                && projectPath.Equals(solutionPath, StringComparison.CurrentCultureIgnoreCase))
             {
-                return DependencyGraphSpec;
+                return dependencyGraphSpec;
             }
 
-            var dgOutput = FileSystemService.Path.Combine(FileSystemService.Path.GetTempPath(), FileSystemService.Path.GetTempFileName());
+            var dgOutput = fileSystemService.Path.Combine(fileSystemService.Path.GetTempPath(), fileSystemService.Path.GetTempFileName());
 
-            //Use solution path because with that you get dependency graph for all projects from that solutions
+            // Use solution path because with that you get dependency graph for all projects from that solutions
             string[] arguments = { "msbuild", $"\"{solutionPath}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath=\"{dgOutput}\"" };
 
-            var runStatus = DotNetRunner.Run(FileSystemService.Path.GetDirectoryName(solutionPath), arguments);
+            var runStatus = dotNetRunner.Run(fileSystemService.Path.GetDirectoryName(solutionPath), arguments);
 
             if (!runStatus.IsSuccess)
             {
-                DependencyGraphSpec = null;
-                ProjectPath = string.Empty;
+                dependencyGraphSpec = null;
+                projectPath = string.Empty;
                 return null;
             }
 
-            var dependencyGraphText = FileSystemService.File.ReadAllText(dgOutput);
-            DependencyGraphSpec = new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
-            ProjectPath = solutionPath;
-            return DependencyGraphSpec;
+            var dependencyGraphText = fileSystemService.File.ReadAllText(dgOutput);
+            dependencyGraphSpec = new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
+            projectPath = solutionPath;
+            return dependencyGraphSpec;
         }
 
         /// <summary>
-        /// Fetching all project names from generated dependency graph of provided solution
+        /// Fetching all project names from generated dependency graph of provided solution.
         /// </summary>
-        /// <param name="solutionPath"></param>
-        /// <returns>List of project names</returns>
+        /// <param name="solutionPath">Path to solution (.sln file).</param>
+        /// <returns>List of project names.</returns>
         public IEnumerable<string> GetSolutionProjectsNames(string solutionPath)
         {
             var dependencyGraph = GenerateDependencyGraph(solutionPath);

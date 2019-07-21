@@ -11,7 +11,8 @@ namespace NSeed.Cli.Extensions
 {
     internal static class ConventionContextExtensions
     {
-        public static T GetValue<T>(this ConventionContext context, string parameterName) where T : class
+        public static T GetValue<T>(this ConventionContext context, string parameterName)
+            where T : class
         {
             var optionValue = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName)
                 .FirstOrDefault();
@@ -22,17 +23,9 @@ namespace NSeed.Cli.Extensions
         {
             var solutionValues = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName).ToList();
             solutionValues.Clear();
-            //if(solutionValues.Any() && solutionValues.Count == 1)
-            //{
-            //    solutionValues[0] = value;
-            //}
-            //else
-            //{
-            //    solutionValues.Add(value);
-            //}
         }
 
-        public static IValidator<Subcommand> GetValidator<T>(this ConventionContext context) 
+        public static IValidator<Subcommand> GetValidator<T>(this ConventionContext context)
             where T : IValidator<Subcommand>
         {
             return context.Application
@@ -43,7 +36,8 @@ namespace NSeed.Cli.Extensions
         private static IEnumerable<string> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
         {
             options.AreEmptyIfNull();
-            return options.FirstOrDefault(b => b.LongName.Equals(longName, 
+            return options.FirstOrDefault(b => b.LongName.Equals(
+                longName,
                 StringComparison.InvariantCultureIgnoreCase))
                 ?.Values ?? Enumerable.Empty<string>();
         }

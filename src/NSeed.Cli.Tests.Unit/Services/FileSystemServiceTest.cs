@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NSeed.Cli.Services;
 using System;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ namespace NSeed.Cli.Tests.Unit.Services
     {
         public const string RootDirectory = @"../../../TestData\";
 
-        private readonly List<(string Directory, string File)> TestSlnPaths = new List<(string Directory, string File)>
+        private readonly List<(string Directory, string File)> testSlnPaths = new List<(string Directory, string File)>
         {
             ($@"{RootDirectory}Fit\", "Fit.Web.sln"),
             ($@"{RootDirectory}Main\Sub\", "Fit.Web.sln"),
@@ -22,13 +22,14 @@ namespace NSeed.Cli.Tests.Unit.Services
 
         public FileFixture()
         {
-            foreach (var testPath in TestSlnPaths)
+            foreach (var testPath in testSlnPaths)
             {
                 var path = $@"{testPath.Directory}{testPath.File}";
                 Directory.CreateDirectory(testPath.Directory);
                 if (!string.IsNullOrEmpty(testPath.File))
                 {
-                    using (File.Create(path)){}
+                    using (File.Create(path))
+                    { }
                 }
             }
         }
@@ -48,10 +49,10 @@ namespace NSeed.Cli.Tests.Unit.Services
             }
             catch (IOException)
             {
-                //the file is unavailable because it is:
-                //still being written to
-                //or being processed by another thread
-                //or does not exist (has already been processed)
+                // the file is unavailable because it is:
+                // still being written to
+                // or being processed by another thread
+                // or does not exist (has already been processed)
                 return true;
             }
             finally
@@ -60,7 +61,7 @@ namespace NSeed.Cli.Tests.Unit.Services
                     stream.Close();
             }
 
-            //file is not locked
+            // file is not locked
             return false;
         }
     }
@@ -79,7 +80,7 @@ namespace NSeed.Cli.Tests.Unit.Services
 
             public static IEnumerable<object[]> InvalidPaths => new List<object[]>
             {
-                new object[] { $@"{FileFixture.RootDirectory}Test",Error.MultipleSolutionsFound },
+                new object[] { $@"{FileFixture.RootDirectory}Test", Error.MultipleSolutionsFound },
             };
 
             [Theory]
