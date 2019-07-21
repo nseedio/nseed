@@ -34,7 +34,7 @@ namespace NSeed.MetaInfo
         public string YieldAccessPropertyName { get; }
 
         internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo yieldAccessProperty, string yieldAccessPropertyName)
-            :base(yieldingSeed.Yield.Type, yieldingSeed.Yield.FullName)
+            :base(yieldingSeed.Yield.Implementation, yieldingSeed.Yield.Type, yieldingSeed.Yield.FullName)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(yieldAccessPropertyName));
 

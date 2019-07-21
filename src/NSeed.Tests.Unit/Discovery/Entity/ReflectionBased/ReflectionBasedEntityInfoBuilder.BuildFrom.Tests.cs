@@ -19,6 +19,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
             var expected = new EntityInfo
             (
                 type,
+                type,
                 type.FullName
             );
 
@@ -32,6 +33,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
 
             var expected = new EntityInfo
             (
+                MetaInfo.MetaInfo.UnknownImplementation,
                 null,
                 string.Empty
             );

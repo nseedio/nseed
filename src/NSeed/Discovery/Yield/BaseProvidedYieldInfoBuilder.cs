@@ -31,6 +31,7 @@ namespace NSeed.Discovery.Yield
             return new ProvidedYieldInfo
             (
                 type,
+                type,
                 fullName
             // TODO-IG: Errors.
             );

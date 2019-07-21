@@ -29,12 +29,13 @@ namespace NSeed.MetaInfo
         public IReadOnlyCollection<SeedableInfo> ContainedSeedables { get; }
 
         internal SeedBucketInfo(
+            object implementation,
             Type type,
             string fullName,
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> containedSeedables)
-            :base(type, fullName)
+            :base(implementation, type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);

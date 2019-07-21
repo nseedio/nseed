@@ -18,9 +18,13 @@ namespace NSeed.MetaInfo
         public string Description { get; }
 
         /// <summary>
-        /// The <see cref="SeedBucket"/> that contains this seedable.
+        /// The <see cref="SeedBucket"/> that contains this seedable or null
+        /// if the seedable is not contained in any seed bucket or if the
+        /// seed bucket cannot be uniquely identified.
         /// </summary>
-        public SeedBucketInfo SeedBucket { get; internal set; } // Set is called by SeedBucketInfo constructor.
+        // Set is called either by SeedBucketInfo constructor in case of contained seedables
+        // or by the concrete ISeedBucketInfoBuilder in the case of non-contained seedables.
+        public SeedBucketInfo SeedBucket { get; internal set; }
 
         /// <summary>
         /// Seedables explicitly required by this seedable.
@@ -43,12 +47,13 @@ namespace NSeed.MetaInfo
         public abstract IEnumerable<SeedableInfo> RequiredSeedables { get; }
 
         internal SeedableInfo(
+            object implementation,
             Type type,
             string fullName,
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
-            :base(type, fullName)
+            :base(implementation, type, fullName)
         {            
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
@@ -58,6 +63,29 @@ namespace NSeed.MetaInfo
             FriendlyName = friendlyName;
             Description = description;
             ExplicitlyRequiredSeedables = explicitlyRequiredSeedables;
+        }
+
+        /// <summary>
+        /// Returns <see cref="SeedableInfo"/>s required by <paramref name="seedableInfos"/> that are
+        /// not already contained in <paramref name="seedableInfos"/>.
+        /// </summary>
+        internal static IReadOnlyCollection<SeedableInfo> GetRequiredSeedableInfosNotContainedIn(IEnumerable<SeedableInfo> seedableInfos)
+        {
+            var originalSeedableInfos = new HashSet<SeedableInfo>(seedableInfos);
+            var result = new HashSet<SeedableInfo>();
+
+            RecursivelyFindAllNonContainedSeedableInfos(seedableInfos);
+
+            return result;
+
+            void RecursivelyFindAllNonContainedSeedableInfos(IEnumerable<SeedableInfo> currentSeedableInfos)
+            {
+                foreach (var seedableInfo in currentSeedableInfos)
+                {
+                    if (!originalSeedableInfos.Contains(seedableInfo)) result.Add(seedableInfo);
+                    RecursivelyFindAllNonContainedSeedableInfos(seedableInfo.RequiredSeedables);
+                }
+            }
         }
     }
 }

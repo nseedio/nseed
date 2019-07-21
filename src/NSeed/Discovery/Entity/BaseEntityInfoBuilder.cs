@@ -39,9 +39,9 @@ namespace NSeed.Discovery.Entity
 
             return new EntityInfo
             (
+                type ?? MetaInfo.MetaInfo.UnknownImplementation,
                 type,
                 fullName
-                // TODO-IG: Errors.
             );
         }
     }

@@ -9,12 +9,13 @@ namespace NSeed.MetaInfo
     public sealed class ScenarioInfo : SeedableInfo
     {
         internal ScenarioInfo(
+            object implementation,
             Type type,
             string fullName,
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
-            :base(type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+            :base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
         {            
         }
 

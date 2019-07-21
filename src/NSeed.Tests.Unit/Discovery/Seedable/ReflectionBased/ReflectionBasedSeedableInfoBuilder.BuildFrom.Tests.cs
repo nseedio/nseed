@@ -21,6 +21,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             var expected = new SeedInfo
             (
                 type,
+                type,
                 type.FullName,
                 SomeFriendlyName,
                 SomeDescription,
@@ -31,6 +32,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                     CreateSeedInfoForMinimalScenarioType(typeof(AdditionalMinimalScenario)),
                     new ScenarioInfo
                     (
+                        typeof(FullyPopulatedScenario),
                         typeof(FullyPopulatedScenario),
                         typeof(FullyPopulatedScenario).FullName,
                         SomeFriendlyName,
@@ -45,11 +47,11 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 },
                 new[]
                 {
-                    new EntityInfo(typeof(object), typeof(object).FullName),
-                    new EntityInfo(typeof(string), typeof(string).FullName),
-                    new EntityInfo(typeof(int), typeof(int).FullName)
+                    new EntityInfo(typeof(object), typeof(object), typeof(object).FullName),
+                    new EntityInfo(typeof(string), typeof(string), typeof(string).FullName),
+                    new EntityInfo(typeof(int), typeof(int), typeof(int).FullName)
                 },
-                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName),
+                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName),
                 new[]
                 {
                     CreateRequiredYieldInfoFromYieldAccessProperty(typeof(FullyPopulatedSeed), "RequiredYieldA"),
@@ -88,6 +90,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             var expected = new ScenarioInfo
             (
+                type,
                 type,
                 type.FullName,
                 SomeFriendlyName,
@@ -340,6 +343,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             return new SeedInfo
             (
                 minimalSeedType,
+                minimalSeedType,
                 minimalSeedType.FullName,
                 minimalSeedType.Name.Humanize(),
                 string.Empty,
@@ -354,6 +358,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             return new ScenarioInfo
             (
+                minimalScenarioType,
                 minimalScenarioType,
                 minimalScenarioType.FullName,
                 minimalScenarioType.Name.Humanize(),

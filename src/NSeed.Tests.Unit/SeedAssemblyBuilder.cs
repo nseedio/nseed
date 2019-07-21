@@ -22,26 +22,31 @@ namespace NSeed.Tests.Unit
 
         }
 
-        private class SeedBucketDescription : BaseDescription
-        {
-        }
+        private class SeedBucketDescription : BaseDescription { }
 
-        private class SeedDescription : BaseDescription
+        private abstract class SeedableDescription : BaseDescription
         {
-            public bool HasYield { get; set; }
             public IEnumerable<string> Requires { get; set; }
         }
 
-        private static readonly List<MetadataReference> metadataReferences = new List<MetadataReference>();
+        private class SeedDescription : SeedableDescription
+        {
+            public bool HasYield { get; set; }            
+        }
+
+        private class ScenarioDescription : SeedableDescription { }
+
+
+        private static readonly List<MetadataReference> commonMetadataReferences = new List<MetadataReference>();
         private readonly ITestOutputHelper output;
 
         static SeedAssemblyBuilder()
         {
-            metadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
-            metadataReferences.Add(MetadataReference.CreateFromFile(typeof(SeedBucket).Assembly.Location));
+            commonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(object).Assembly.Location));
+            commonMetadataReferences.Add(MetadataReference.CreateFromFile(typeof(SeedBucket).Assembly.Location));
             foreach (var assembly in GetAdditionalAssemblies())
             {
-                metadataReferences.Add(MetadataReference.CreateFromFile(assembly.Location));
+                commonMetadataReferences.Add(MetadataReference.CreateFromFile(assembly.Location));
             }
 
             IEnumerable<Assembly> GetAdditionalAssemblies()
@@ -79,6 +84,8 @@ namespace NSeed.Tests.Unit
 
         private readonly Dictionary<string, SeedBucketDescription> seedBuckets = new Dictionary<string, SeedBucketDescription>();
         private readonly Dictionary<string, SeedDescription> seeds = new Dictionary<string, SeedDescription>();
+        private readonly Dictionary<string, ScenarioDescription> scenarios = new Dictionary<string, ScenarioDescription>();
+        private readonly List<MetadataReference> metadataReferences = new List<MetadataReference>();
 
         private const string DefaultTestSeedBucketTypeName = "DefaultTestSeedBucket";
         public SeedAssemblyBuilder AddSeedBucket(string seedBucketTypeName = null, string seedBucketFriendlyName = null, string seedBucketDescription = null)
@@ -120,27 +127,63 @@ namespace NSeed.Tests.Unit
             return this;
         }
 
-        public SeedBucket BuildAndGetSeedBucket(string seedBucketTypeName = null)
+        private const string DefaultTestScenarioTypeName = "DefaultTestScenario";
+        public SeedAssemblyBuilder AddScenario(string scenarioTypeName = null, string scenarioFriendlyName = null, string scenarioDescription = null, params string[] requires)
         {
-            return (SeedBucket)Activator.CreateInstance(BuildAndGetSeedBucketType(seedBucketTypeName));
+            scenarioTypeName = scenarioTypeName ?? DefaultTestScenarioTypeName;
+            requires = requires ?? Array.Empty<string>();
+
+            scenarioTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("scenario type name must not contain white spaces");
+            seeds.ContainsKey(scenarioTypeName).Should().BeFalse($"scenario type can be added only once. Scenario with the name '{scenarioTypeName}' has already been added to the seed assembly");
+            requires.Should().NotContainNulls();
+
+            scenarios.Add(scenarioTypeName, new ScenarioDescription
+            {
+                Name = scenarioTypeName,
+                FriendlyName = scenarioFriendlyName,
+                Description = scenarioDescription,
+                Requires = requires
+            });
+
+            return this;
         }
 
-        public Type BuildAndGetSeedBucketType(string seedBucketTypeName = null)
+        public SeedAssemblyBuilder AddReference(MetadataReference metadataReference)
         {
-            seedBucketTypeName = seedBucketTypeName ?? DefaultTestSeedBucketTypeName;
-
-            var assembly = Build();
-            var seedBucketClasses = assembly.GetTypes()
-                .Where(type => type.IsSeedBucketType() && type.Name == seedBucketTypeName)
-                .ToArray();
-
-            seedBucketClasses.Should().NotBeEmpty($"seed bucket with the name {seedBucketTypeName} must exist in the assembly");
-            seedBucketClasses.Should().HaveCount(1, $"exactly one seed bucket with the name {seedBucketTypeName} must exist in the assembly");
-
-            return seedBucketClasses[0];
+            return AddReferences(metadataReference);
         }
 
-        public Assembly Build()
+        public SeedAssemblyBuilder AddReferences(params MetadataReference[] metadataReferences)
+        {
+            metadataReferences.Should().NotBeNull();
+            metadataReferences.Should().NotContainNulls();
+
+            foreach (var reference in metadataReferences) this.metadataReferences.Add(reference);
+
+            return this;
+        }
+
+        public Assembly BuildAssembly()
+        {
+            using (MemoryStream ms = BuildAssemblyStream())
+            {
+                return Assembly.Load(ms.ToArray());
+            }
+        }
+
+        public Assembly BuildPersistedAssembly()
+        {
+            using (MemoryStream ms = BuildAssemblyStream())
+            {
+                var assemblyFileName = Path.GetTempFileName();
+                using (FileStream fs = File.OpenWrite(assemblyFileName))
+                    ms.CopyTo(fs);
+
+                return Assembly.LoadFrom(assemblyFileName);
+            }
+        }
+
+        private MemoryStream BuildAssemblyStream()
         {
             var sourceCode = CreateSourceCode();
             output.WriteLine(sourceCode);
@@ -150,22 +193,20 @@ namespace NSeed.Tests.Unit
             CSharpCompilation compilation = CSharpCompilation.Create(
                 Path.GetRandomFileName(),
                 syntaxTrees: new [] { syntaxTree },
-                references: metadataReferences,
+                references: commonMetadataReferences.Union(metadataReferences),
                 options: new CSharpCompilationOptions(OutputKind.ConsoleApplication));
 
-            using (var ms = new MemoryStream())
-            {
-                EmitResult emitResult = compilation.Emit(ms);
+            var memoryStream = new MemoryStream();
+            EmitResult emitResult = compilation.Emit(memoryStream);
 
-                emitResult.Success.Should().BeTrue(
-                    $"compilation must not have errors. Compilation had the following errors:{Environment.NewLine}" +
-                    $"{emitResult.Diagnostics.Select(diagnostics => diagnostics.GetMessage()).Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}")}" +
-                    $"The generated source code was:{Environment.NewLine}{Environment.NewLine}" +
-                    sourceCode);
+            emitResult.Success.Should().BeTrue(
+                $"compilation must not have errors. Compilation had the following errors:{Environment.NewLine}" +
+                $"{emitResult.Diagnostics.Select(diagnostics => diagnostics.GetMessage()).Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}")}" +
+                $"The generated source code was:{Environment.NewLine}{Environment.NewLine}" +
+                sourceCode);
 
-                ms.Seek(0, SeekOrigin.Begin);
-                return Assembly.Load(ms.ToArray());
-            }
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            return memoryStream;
 
             string CreateSourceCode()
             {
@@ -176,7 +217,12 @@ namespace NSeed.Tests.Unit
 
                 var seedsSourceCode = seeds
                     .Values
-                    .Select(CreateSeedSoruceCode)
+                    .Select(CreateSeedSourceCode)
+                    .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
+
+                var scenariosSourceCode = scenarios
+                    .Values
+                    .Select(CreateScenarioSourceCode)
                     .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
 
                 return 
@@ -189,8 +235,10 @@ namespace NSeed.Tests.Unit
                     seedBucketsSourceCode +
                     Environment.NewLine +
                     seedsSourceCode +
+                    Environment.NewLine +
+                    scenariosSourceCode +
                     Environment.NewLine;
-                
+
                 string CreateSeedBucketSoruceCode(SeedBucketDescription seedBucketDescription)
                 {
                     var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedBucketDescription);
@@ -198,20 +246,15 @@ namespace NSeed.Tests.Unit
                     return $"{friendlyNameAttribute}{descriptionAttribute}public class {seedBucketDescription.Name} : SeedBucket {{ }}";
                 }
 
-                string CreateSeedSoruceCode(SeedDescription seedDescription)
+                string CreateSeedSourceCode(SeedDescription seedDescription)
                 {
-                    seedDescription.Requires.Should().BeSubsetOf(seeds.Keys);
-
                     var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedDescription);
 
                     var yield = seedDescription.HasYield
                         ? $"    public class Yield : YieldOf<{seedDescription.Name}> {{ }}{Environment.NewLine}"
                         : string.Empty;
                    
-                    var requiresAttributes = seedDescription
-                        .Requires
-                        .Select(requiredSeedableName => $"[Requires(typeof({requiredSeedableName}))]")
-                        .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
+                    var requiresAttributes = CreateRequiresAttributes(seedDescription);
 
                     return
                         $"{requiresAttributes}" +
@@ -223,6 +266,27 @@ namespace NSeed.Tests.Unit
                         $"    public Task Seed() => throw new NotImplementedException();{Environment.NewLine}" +
                         yield +
                         $"}}{Environment.NewLine}";
+                }
+
+                string CreateScenarioSourceCode(ScenarioDescription scenarioDescription)
+                {
+                    var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(scenarioDescription);
+
+                    var requiresAttributes = CreateRequiresAttributes(scenarioDescription);
+
+                    return
+                        $"{requiresAttributes}" +
+                        $"{friendlyNameAttribute}" +
+                        $"{descriptionAttribute}" +
+                        $"public class {scenarioDescription.Name} : IScenario {{}}{Environment.NewLine}";
+                }
+
+                string CreateRequiresAttributes(SeedableDescription seedableDescription)
+                {
+                    return seedableDescription
+                        .Requires
+                        .Select(requiredSeedableName => $"[Requires(typeof({requiredSeedableName}))]")
+                        .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
                 }
 
                 (string friendlyNameAttribute, string descriptionAttribute) CreateFriendlyNameAndDescriptionAttributes(BaseDescription description)

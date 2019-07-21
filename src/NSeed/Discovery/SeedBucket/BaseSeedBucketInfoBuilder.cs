@@ -3,28 +3,32 @@ using NSeed.MetaInfo;
 
 namespace NSeed.Discovery.SeedBucket
 {
-    internal abstract class BaseSeedBucketInfoBuilder<TSeedBucketImplementation> : ISeedBucketInfoBuilder<TSeedBucketImplementation>
+    internal abstract class BaseSeedBucketInfoBuilder<TSeedBucketImplementation, TSeedableImplementation> : ISeedBucketInfoBuilder<TSeedBucketImplementation>
         where TSeedBucketImplementation : class
+        where TSeedableImplementation : class
     {
         private readonly ITypeExtractor<TSeedBucketImplementation> typeExtractor;
         private readonly IFullNameExtractor<TSeedBucketImplementation> fullNameExtractor;
         private readonly IFriendlyNameExtractor<TSeedBucketImplementation> friendlyNameExtractor;
         private readonly IDescriptionExtractor<TSeedBucketImplementation> descriptionExtractor;
         private readonly IContainedSeedablesExtractor<TSeedBucketImplementation> seedablesExtractor;
+        private readonly ISeedBucketOfSeedableExtractor<TSeedableImplementation> seedBucketOfSeedableExtractor;
         private readonly IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool;
 
         internal BaseSeedBucketInfoBuilder(ITypeExtractor<TSeedBucketImplementation> typeExtractor,
-                                     IFullNameExtractor<TSeedBucketImplementation> fullNameExtractor,
-                                     IFriendlyNameExtractor<TSeedBucketImplementation> friendlyNameExtractor,
-                                     IDescriptionExtractor<TSeedBucketImplementation> descriptionExtractor,
-                                     IContainedSeedablesExtractor<TSeedBucketImplementation> seedablesExtractor,
-                                     IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool)
+                                           IFullNameExtractor<TSeedBucketImplementation> fullNameExtractor,
+                                           IFriendlyNameExtractor<TSeedBucketImplementation> friendlyNameExtractor,
+                                           IDescriptionExtractor<TSeedBucketImplementation> descriptionExtractor,
+                                           IContainedSeedablesExtractor<TSeedBucketImplementation> seedablesExtractor,
+                                           Func<ISeedBucketInfoBuilder<TSeedBucketImplementation>, ISeedBucketOfSeedableExtractor<TSeedableImplementation>> seedBucketOfSeedableExtractorFactory,
+                                           IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool)
         {
             System.Diagnostics.Debug.Assert(typeExtractor != null);
             System.Diagnostics.Debug.Assert(fullNameExtractor != null);
             System.Diagnostics.Debug.Assert(friendlyNameExtractor != null);
             System.Diagnostics.Debug.Assert(descriptionExtractor != null);
             System.Diagnostics.Debug.Assert(seedablesExtractor != null);
+            System.Diagnostics.Debug.Assert(seedBucketOfSeedableExtractorFactory != null);
             System.Diagnostics.Debug.Assert(seedBucketInfoPool != null);
 
             this.typeExtractor = typeExtractor;
@@ -32,6 +36,7 @@ namespace NSeed.Discovery.SeedBucket
             this.friendlyNameExtractor = friendlyNameExtractor;
             this.descriptionExtractor = descriptionExtractor;
             this.seedablesExtractor = seedablesExtractor;
+            seedBucketOfSeedableExtractor = seedBucketOfSeedableExtractorFactory(this);
             this.seedBucketInfoPool = seedBucketInfoPool;
         }
 
@@ -52,14 +57,23 @@ namespace NSeed.Discovery.SeedBucket
             string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
             var containedSeedables = seedablesExtractor.ExtractFrom(implementation, errorCollector);
 
+            SetSeedBucketInfosForNonContainedSeedables();
+
             return new SeedBucketInfo
             (
+                type,
                 type,
                 fullName,
                 friendlyName,
                 description,
                 containedSeedables
             );
+
+            void SetSeedBucketInfosForNonContainedSeedables()
+            {
+                foreach (var nonContainedSeedable in SeedableInfo.GetRequiredSeedableInfosNotContainedIn(containedSeedables))
+                    nonContainedSeedable.SeedBucket = seedBucketOfSeedableExtractor.ExtractFrom((TSeedableImplementation)nonContainedSeedable.Implementation, errorCollector);
+            }
         }
     }
 }

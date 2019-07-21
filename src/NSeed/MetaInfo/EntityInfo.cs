@@ -10,8 +10,8 @@ namespace NSeed.MetaInfo
     /// </remarks>
     public sealed class EntityInfo : MetaInfo
     {
-        internal EntityInfo(Type type, string fullName)
-            :base(type, fullName)
+        internal EntityInfo(object implementation, Type type, string fullName)
+            :base(implementation, type, fullName)
         {            
         }
     }

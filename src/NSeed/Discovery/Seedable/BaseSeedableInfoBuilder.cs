@@ -89,6 +89,7 @@ namespace NSeed.Discovery.Seedable
                 ? (SeedableInfo)new SeedInfo
                   (
                       type,
+                      type,
                       fullName,
                       friendlyName,
                       description,
@@ -99,6 +100,7 @@ namespace NSeed.Discovery.Seedable
                   )
                 : new ScenarioInfo
                  (
+                      type,
                       type,
                       fullName,
                       friendlyName,

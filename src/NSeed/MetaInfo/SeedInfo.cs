@@ -37,6 +37,7 @@ namespace NSeed.MetaInfo
             .Union(RequiredYields.Select(requiredYield => requiredYield.YieldingSeed));
 
         internal SeedInfo(
+            object implementation,
             Type type,
             string fullName,
             string friendlyName,
@@ -45,7 +46,7 @@ namespace NSeed.MetaInfo
             IReadOnlyCollection<EntityInfo> yieldedEntities,
             ProvidedYieldInfo yield,
             IReadOnlyCollection<RequiredYieldInfo> requiredYields)
-            :base(type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+            :base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(yieldedEntities != null);
