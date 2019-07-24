@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CsConsoleFormat\**" />
+    <EmbeddedResource Remove="CsConsoleFormat\**" />
+    <None Remove="CsConsoleFormat\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Alba.CsConsoleFormat\Generation\Fluent\Colors.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Colors.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Alba.CsConsoleFormat\Generation\Fluent\Colors.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Colors.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>
