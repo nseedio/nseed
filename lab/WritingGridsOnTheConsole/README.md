@@ -15,6 +15,8 @@ The mandatory requirements on the framework:
 - Must support automatic wrapping of long texts.
 - Must support automatic truncating of long texts, ideally by adding ellipses (...).
 - Must support adding of table headers.
+- Must render well in the Visual Studio Package Manager Console.
+- Must work on both Linux and Windows.
 
 Optionally, it would be nice to have:
 

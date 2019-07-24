@@ -10,7 +10,23 @@ namespace Example
     {
         private static void Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            bool isConsoleAvailable = IsConsoleAvailable();
+
+            Console.WriteLine($"Is console available: {isConsoleAvailable}");
+
+            // Standard behavior if the console is available.
+            Action initializeConsole = () => Console.OutputEncoding = Encoding.UTF8;
+            Func<Rect?> getRenderRect = () => null;
+            Action parkCursor = () => ConsoleRenderer.ConsoleCursorPosition = new Point(0, ConsoleRenderer.ConsoleCursorPosition.Y);
+
+            if (!isConsoleAvailable)
+            {
+                initializeConsole = () => { };
+                getRenderRect = () => new Rect(0, 0, 72, 100);
+                parkCursor = () => { };
+            }
+
+            initializeConsole();
 
             var seeds = new[]
             {
@@ -51,26 +67,45 @@ namespace Example
                 },
             };
 
-
-            ConsoleRenderer.RenderDocument(GenerateDocument("Seeds"));
-
-            Console.WriteLine();
-
-            ConsoleRenderer.RenderDocument(GenerateDocument("Scenarios"));
+            ConsoleRenderer.RenderDocument(GenerateDocument("Seeds"), null, getRenderRect());
 
             Console.WriteLine();
 
-            ConsoleRenderer.RenderDocument(GenerateDocument("Something"));
+            ConsoleRenderer.RenderDocument(GenerateDocument("Scenarios"), null, getRenderRect());
 
             Console.WriteLine();
 
-            ConsoleRenderer.ConsoleCursorPosition = new Point(0, ConsoleRenderer.ConsoleCursorPosition.Y);
+            ConsoleRenderer.RenderDocument(GenerateDocument("Something"), null, getRenderRect());
 
-            Console.ReadKey(true);
+            Console.WriteLine();
+
+            parkCursor();
+
+            bool IsConsoleAvailable()
+            {
+                // Check for a better way to figure out if the direct access
+                // to the console is available. Below are the two possibilities
+                // that came to my mind.
+
+                bool isAvailableFirstPossibility = !(Console.IsErrorRedirected || Console.IsInputRedirected || Console.IsOutputRedirected);
+
+                bool isAvailableSecondPossibility = true;
+                try
+                {
+                    // We just have to touch any of the properties like e.g. Console.BufferWidth or any other.                    
+                    Console.CursorLeft = Console.CursorLeft;
+                }
+                catch
+                {
+                    isAvailableSecondPossibility = false;
+                }
+
+                return isAvailableSecondPossibility;
+            }
 
             Document GenerateDocument(string title)
             {
-                var headerThickness = new LineThickness(LineWidth.Double, LineWidth.Single);
+                var lst = new LineThickness(LineWidth.None);
 
                 var headerDocument = new Document(
                     new Span(title)
@@ -94,6 +129,7 @@ namespace Example
                         new Column { Width = GridLength.Star(4) },
                         new Column { Width = GridLength.Star(6) }
                         },
+
                         Children = {
                         new Cell("Name") { TextWrap = TextWrap.WordWrap },
                         new Cell("Description") { TextWrap = TextWrap.WordWrap },
