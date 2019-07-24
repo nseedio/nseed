@@ -14,7 +14,7 @@ The mandatory requirements on the framework:
 - Must support automatic table and column widths.
 - Must support automatic wrapping of long texts.
 - Must support automatic truncating of long texts, ideally by adding ellipses (...).
-- Must support adding of table headers.
+- Must support adding of table column headers.
 - Must render well in the Visual Studio Package Manager Console.
 - Must work on both Linux and Windows.
 
@@ -46,3 +46,11 @@ Absolutely awesome, but not what we need. Done for rich interaction and creating
 ### Colorful.Console
 
 Beautiful and colorful, but not what we need. Perfect choice for rich coloring, but has nothing to do with writing grids to the console.
+
+### ConsoleTables
+
+Simple and lightweight, would be a perfect candidate for embedding. It renders nice tables, but unfortunately does not support the needed formating options like word wrap.
+
+### CsConsoleFormat
+
+Incredible project and the absolute winner. The embedding cannot actually be called "lightweight", but it is straightforward.

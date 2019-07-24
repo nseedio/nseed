@@ -4,11 +4,12 @@ using System.Text;
 using Alba.CsConsoleFormat;
 using static System.ConsoleColor;
 
-namespace EmbeddedCode
+namespace NSeed
 {
     public class SeedBucket
     {
-        public static void Info()
+        public static void Handle<TSeedBucket>(string[] commandLineArguments)
+            where TSeedBucket : SeedBucket
         {
             bool isConsoleAvailable = IsConsoleAvailable();
 

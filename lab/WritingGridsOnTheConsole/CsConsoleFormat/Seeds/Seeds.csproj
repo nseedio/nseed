@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedCode\EmbeddedCode.csproj" />
+    <ProjectReference Include="..\NSeed\NSeed.csproj" />
   </ItemGroup>
 
 </Project>
