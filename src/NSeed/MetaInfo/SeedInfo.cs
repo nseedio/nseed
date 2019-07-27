@@ -19,7 +19,7 @@ namespace NSeed.MetaInfo
         /// Gets the yield seeded by this seed or null if this seed does not
         /// provide access to its yield.
         /// </summary>
-        public ProvidedYieldInfo Yield { get; }
+        public ProvidedYieldInfo? Yield { get; }
 
         /// <summary>
         /// Gets yields of other seeds required by this seed.
@@ -38,13 +38,13 @@ namespace NSeed.MetaInfo
 
         internal SeedInfo(
             object implementation,
-            Type type,
+            Type? type,
             string fullName,
             string friendlyName,
             string description,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
             IReadOnlyCollection<EntityInfo> yieldedEntities,
-            ProvidedYieldInfo yield,
+            ProvidedYieldInfo? yield,
             IReadOnlyCollection<RequiredYieldInfo> requiredYields)
             : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
         {
@@ -53,7 +53,12 @@ namespace NSeed.MetaInfo
             System.Diagnostics.Debug.Assert(yieldedEntities.All(entity => entity != null));
             System.Diagnostics.Debug.Assert(yield == null || yield.Type == null || type == null || (yield.Type.IsYieldTypeOfSeed(type) && yield.YieldingSeed == null));
             System.Diagnostics.Debug.Assert(requiredYields != null);
-            System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield => requiredYield != null && requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type) && requiredYield.RequiringSeed == null));
+            System.Diagnostics.Debug.Assert(requiredYields.All(requiredYield =>
+                requiredYield != null &&
+                requiredYield.Type != null &&
+                requiredYield.YieldingSeed.Type != null &&
+                requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type) &&
+                requiredYield.RequiringSeed == null));
 
             YieldedEntities = yieldedEntities;
 

@@ -23,7 +23,7 @@ namespace NSeed.MetaInfo
         /// Gets the yield access property that provides access to the
         /// yield if such <see cref="PropertyInfo"/> exists; otherwise null.
         /// </summary>
-        public PropertyInfo YieldAccessProperty { get; }
+        public PropertyInfo? YieldAccessProperty { get; }
 
         /// <summary>
         /// Gets the name of the yield access property.
@@ -33,8 +33,15 @@ namespace NSeed.MetaInfo
         /// </remarks>
         public string YieldAccessPropertyName { get; }
 
-        internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo yieldAccessProperty, string yieldAccessPropertyName)
-            : base(yieldingSeed.Yield.Implementation, yieldingSeed.Yield.Type, yieldingSeed.Yield.FullName)
+        // CS8618:
+        // The RequiringSeed property will be set later by the SeedInfo of the requiring seed.
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+        internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo? yieldAccessProperty, string yieldAccessPropertyName)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
+            : base(
+                  yieldingSeed.Yield!.Implementation, // The yielding seed, by definition, must have yield, therefore, safe "!".
+                  yieldingSeed.Yield.Type,
+                  yieldingSeed.Yield.FullName)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(yieldAccessPropertyName));
 

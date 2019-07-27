@@ -24,7 +24,7 @@ namespace NSeed.MetaInfo
         /// </summary>
         // Set is called either by SeedBucketInfo constructor in case of contained seedables
         // or by the concrete ISeedBucketInfoBuilder in the case of non-contained seedables.
-        public SeedBucketInfo SeedBucket { get; internal set; }
+        public SeedBucketInfo? SeedBucket { get; internal set; }
 
         /// <summary>
         /// Gets seedables explicitly required by this seedable.
@@ -48,7 +48,7 @@ namespace NSeed.MetaInfo
 
         internal SeedableInfo(
             object implementation,
-            Type type,
+            Type? type,
             string fullName,
             string friendlyName,
             string description,

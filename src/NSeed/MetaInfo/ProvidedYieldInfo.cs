@@ -14,7 +14,11 @@ namespace NSeed.MetaInfo
         /// <inheritdoc/>
         public SeedInfo YieldingSeed { get; internal set; } // Set is called by the SeedInfo of the yielding seed.
 
-        internal ProvidedYieldInfo(object implementation, Type type, string fullName)
+        // CS8618:
+        // The YieldingSeed property will be set later by the SeedInfo of the yielding seed.
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+        internal ProvidedYieldInfo(object implementation, Type? type, string fullName)
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
             : base(implementation, type, fullName)
         {
         }

@@ -13,6 +13,10 @@ namespace NSeed
         /// <summary>
         /// Gets the original <see cref="ISeed"/> that has yielded the yield represented by this yield class.
         /// </summary>
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+        // CS8618:
+        // This property will always be set via reflection during the seeding by the seeding engine.
         protected TSeed Seed { get; private set; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
     }
 }

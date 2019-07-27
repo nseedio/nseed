@@ -32,8 +32,6 @@ namespace NSeed.Discovery.Seedable
                                 .DiscoveredItems
                                 .Select(entityType => entityBuilder.BuildFrom(entityType))
                                 .ToArray();
-
-            // TODO-IG: Collect errors.
         }
     }
 }

@@ -28,10 +28,16 @@ namespace NSeed.Discovery.SeedBucket
             System.Diagnostics.Debug.Assert(seedBucketImplementation != null);
             System.Diagnostics.Debug.Assert(errorCollector != null);
 
+            // CS8619:
+            // We filter out nulls in "Where(seedable => seedable != null)", but
+            // the compiler is not able to figure that out.
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return seedablesDiscoverer.DiscoverIn(seedBucketImplementation)
                                 .DiscoveredItems
                                 .Select(seedableType => seedableBuilder.BuildFrom(seedableType))
+                                .Where(seedable => seedable != null)
                                 .ToArray();
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
     }
 }

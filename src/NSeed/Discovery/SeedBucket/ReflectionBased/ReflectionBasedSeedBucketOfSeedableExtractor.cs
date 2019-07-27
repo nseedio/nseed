@@ -1,4 +1,4 @@
-﻿using NSeed.Extensions;
+using NSeed.Extensions;
 using NSeed.MetaInfo;
 using System;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace NSeed.Discovery.SeedBucket.ReflectionBased
             this.seedBucketInfoBuilder = seedBucketInfoBuilder;
         }
 
-        SeedBucketInfo IExtractor<Type, SeedBucketInfo>.ExtractFrom(Type seedableImplementation, IErrorCollector errorCollector)
+        SeedBucketInfo? IExtractor<Type, SeedBucketInfo?>.ExtractFrom(Type seedableImplementation, IErrorCollector errorCollector)
         {
             System.Diagnostics.Debug.Assert(seedableImplementation.IsSeedableType());
             System.Diagnostics.Debug.Assert(errorCollector != null);

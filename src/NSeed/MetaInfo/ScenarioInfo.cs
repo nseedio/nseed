@@ -10,7 +10,7 @@ namespace NSeed.MetaInfo
     {
         internal ScenarioInfo(
             object implementation,
-            Type type,
+            Type? type,
             string fullName,
             string friendlyName,
             string description,

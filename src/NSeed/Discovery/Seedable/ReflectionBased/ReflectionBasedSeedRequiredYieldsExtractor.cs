@@ -27,9 +27,16 @@ namespace NSeed.Discovery.Seedable
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
             System.Diagnostics.Debug.Assert(errorCollector != null);
 
+            // CS8600:
+            // CS8604:
+            // Everything is fine here.
+            // The BuildFrom can return null that will be filtered out in the "Where(...)".
+            // Compiler is not able to figure this out.
             return requiredYieldAccessPropertyInSeedDiscoverer.DiscoverIn(seedImplementation)
                                 .DiscoveredItems
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
                                 .Select(property => (property, yieldingSeed: (SeedInfo)seedableBuilder.BuildFrom(property.PropertyType.DeclaringType)))
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
                                 .Where(propertyAndYieldingSeed => propertyAndYieldingSeed.yieldingSeed != null)
 
                                 // TODO-IG: This extractor is at the same time an extractor and a builder.
@@ -37,7 +44,9 @@ namespace NSeed.Discovery.Seedable
                                 //          Get back to track and refactor ASAP.
                                 .Select(propertyAndYieldingSeed => new RequiredYieldInfo
                                 (
+#pragma warning disable CS8604 // Possible null reference argument.
                                     propertyAndYieldingSeed.yieldingSeed,
+#pragma warning restore CS8604 // Possible null reference argument.
                                     propertyAndYieldingSeed.property,
                                     propertyAndYieldingSeed.property.Name
                                 ))

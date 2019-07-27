@@ -29,7 +29,7 @@ namespace NSeed.MetaInfo
         /// Gets the underlying implementation <see cref="System.Type"/> of the NSeed abstraction
         /// described with this meta info, if such <see cref="System.Type"/> exists; otherwise null.
         /// </summary>
-        public Type Type { get; }
+        public Type? Type { get; }
 
         /// <summary>
         /// Gets the full name of the of the NSeed abstraction described with this meta info.
@@ -42,7 +42,7 @@ namespace NSeed.MetaInfo
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaInfo"/> class.
         /// </summary>
-        internal MetaInfo(object implementation, Type type, string fullName)
+        internal MetaInfo(object implementation, Type? type, string fullName)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
             System.Diagnostics.Debug.Assert(fullName != null);

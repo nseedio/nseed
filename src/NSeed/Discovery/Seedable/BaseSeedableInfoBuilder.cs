@@ -57,7 +57,7 @@ namespace NSeed.Discovery.Seedable
             this.seedableInfoPool = seedableInfoPool;
         }
 
-        SeedableInfo IMetaInfoBuilder<TSeedableImplementation, SeedableInfo>.BuildFrom(TSeedableImplementation implementation)
+        SeedableInfo? IMetaInfoBuilder<TSeedableImplementation, SeedableInfo?>.BuildFrom(TSeedableImplementation implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
 
@@ -82,7 +82,7 @@ namespace NSeed.Discovery.Seedable
 
             bool isSeedImplementation = IsSeedImplemenation(implementation);
 
-            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
             string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
             string friendlyName = friendlyNameExtractor.ExtractFrom(implementation, errorCollector);
             string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
@@ -91,7 +91,7 @@ namespace NSeed.Discovery.Seedable
             return isSeedImplementation
                 ? (SeedableInfo)new SeedInfo
                   (
-                      type,
+                      implementation,
                       type,
                       fullName,
                       friendlyName,
@@ -103,7 +103,7 @@ namespace NSeed.Discovery.Seedable
                   )
                 : new ScenarioInfo
                  (
-                      type,
+                      implementation,
                       type,
                       fullName,
                       friendlyName,

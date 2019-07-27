@@ -52,7 +52,7 @@ namespace NSeed.Discovery.SeedBucket
         {
             var errorCollector = new DistinctErrorCollectorAndProvider();
 
-            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
             string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
             string friendlyName = friendlyNameExtractor.ExtractFrom(implementation, errorCollector);
             string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
@@ -62,7 +62,7 @@ namespace NSeed.Discovery.SeedBucket
 
             return new SeedBucketInfo
             (
-                type,
+                implementation,
                 type,
                 fullName,
                 friendlyName,

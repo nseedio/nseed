@@ -1,4 +1,4 @@
-﻿using NSeed.MetaInfo;
+using NSeed.MetaInfo;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,11 +27,16 @@ namespace NSeed.Discovery.Seedable
             System.Diagnostics.Debug.Assert(seedableImplementation != null);
             System.Diagnostics.Debug.Assert(errorCollector != null);
 
+            // CS8619:
+            // The compiler is not able to figure out that we filter out nulls
+            // with the "Where(seedable => seedable != null)".
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
             return explicitlyRequiredSeedableDiscoverer.DiscoverIn(seedableImplementation)
                                 .DiscoveredItems
                                 .Select(seedable => seedableBuilder.BuildFrom(seedable))
                                 .Where(seedable => seedable != null) // Ignore circular dependencies.
                                 .ToArray();
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
         }
     }
 }

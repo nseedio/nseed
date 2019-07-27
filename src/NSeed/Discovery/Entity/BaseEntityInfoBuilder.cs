@@ -35,7 +35,7 @@ namespace NSeed.Discovery.Entity
         {
             var errorCollector = new DistinctErrorCollectorAndProvider();
 
-            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
             string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
 
             return new EntityInfo

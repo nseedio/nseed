@@ -88,7 +88,7 @@ namespace NSeed.Tests.Unit
         private const string DefaultTestSeedBucketTypeName = "DefaultTestSeedBucket";
         public SeedAssemblyBuilder AddSeedBucket(string seedBucketTypeName = null, string seedBucketFriendlyName = null, string seedBucketDescription = null)
         {
-            seedBucketTypeName = seedBucketTypeName ?? DefaultTestSeedBucketTypeName;
+            seedBucketTypeName ??= DefaultTestSeedBucketTypeName;
 
             seedBucketTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("seed bucket type name must not contain white spaces");
             seedBuckets.ContainsKey(seedBucketTypeName).Should().BeFalse($"seed bucket type can be added only once. Seed bucket with the name '{seedBucketTypeName}' has already been added to the seed assembly");
@@ -106,8 +106,8 @@ namespace NSeed.Tests.Unit
         private const string DefaultTestSeedTypeName = "DefaultTestSeed";
         public SeedAssemblyBuilder AddSeed(string seedTypeName = null, string seedFriendlyName = null, string seedDescription = null, bool hasYield = false, params string[] requires)
         {
-            seedTypeName = seedTypeName ?? DefaultTestSeedTypeName;
-            requires = requires ?? Array.Empty<string>();
+            seedTypeName ??= DefaultTestSeedTypeName;
+            requires ??= Array.Empty<string>();
 
             seedTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("seed type name must not contain white spaces");
             seeds.ContainsKey(seedTypeName).Should().BeFalse($"seed type can be added only once. Seed with the name '{seedTypeName}' has already been added to the seed assembly");
@@ -128,8 +128,8 @@ namespace NSeed.Tests.Unit
         private const string DefaultTestScenarioTypeName = "DefaultTestScenario";
         public SeedAssemblyBuilder AddScenario(string scenarioTypeName = null, string scenarioFriendlyName = null, string scenarioDescription = null, params string[] requires)
         {
-            scenarioTypeName = scenarioTypeName ?? DefaultTestScenarioTypeName;
-            requires = requires ?? Array.Empty<string>();
+            scenarioTypeName ??= DefaultTestScenarioTypeName;
+            requires ??= Array.Empty<string>();
 
             scenarioTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("scenario type name must not contain white spaces");
             seeds.ContainsKey(scenarioTypeName).Should().BeFalse($"scenario type can be added only once. Scenario with the name '{scenarioTypeName}' has already been added to the seed assembly");
@@ -163,22 +163,18 @@ namespace NSeed.Tests.Unit
 
         public Assembly BuildAssembly()
         {
-            using (MemoryStream ms = BuildAssemblyStream())
-            {
-                return Assembly.Load(ms.ToArray());
-            }
+            using MemoryStream ms = BuildAssemblyStream();
+            return Assembly.Load(ms.ToArray());
         }
 
         public Assembly BuildPersistedAssembly()
         {
-            using (MemoryStream ms = BuildAssemblyStream())
-            {
-                var assemblyFileName = Path.GetTempFileName();
-                using (FileStream fs = File.OpenWrite(assemblyFileName))
-                    ms.CopyTo(fs);
+            using MemoryStream ms = BuildAssemblyStream();
+            var assemblyFileName = Path.GetTempFileName();
+            using (FileStream fs = File.OpenWrite(assemblyFileName))
+                ms.CopyTo(fs);
 
-                return Assembly.LoadFrom(assemblyFileName);
-            }
+            return Assembly.LoadFrom(assemblyFileName);
         }
 
         private MemoryStream BuildAssemblyStream()
@@ -237,14 +233,14 @@ namespace NSeed.Tests.Unit
                     scenariosSourceCode +
                     Environment.NewLine;
 
-                string CreateSeedBucketSoruceCode(SeedBucketDescription seedBucketDescription)
+                static string CreateSeedBucketSoruceCode(SeedBucketDescription seedBucketDescription)
                 {
                     var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedBucketDescription);
 
                     return $"{friendlyNameAttribute}{descriptionAttribute}public class {seedBucketDescription.Name} : SeedBucket {{ }}";
                 }
 
-                string CreateSeedSourceCode(SeedDescription seedDescription)
+                static string CreateSeedSourceCode(SeedDescription seedDescription)
                 {
                     var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(seedDescription);
 
@@ -266,7 +262,7 @@ namespace NSeed.Tests.Unit
                         $"}}{Environment.NewLine}";
                 }
 
-                string CreateScenarioSourceCode(ScenarioDescription scenarioDescription)
+                static string CreateScenarioSourceCode(ScenarioDescription scenarioDescription)
                 {
                     var (friendlyNameAttribute, descriptionAttribute) = CreateFriendlyNameAndDescriptionAttributes(scenarioDescription);
 
@@ -279,7 +275,7 @@ namespace NSeed.Tests.Unit
                         $"public class {scenarioDescription.Name} : IScenario {{}}{Environment.NewLine}";
                 }
 
-                string CreateRequiresAttributes(SeedableDescription seedableDescription)
+                static string CreateRequiresAttributes(SeedableDescription seedableDescription)
                 {
                     return seedableDescription
                         .Requires
@@ -287,7 +283,7 @@ namespace NSeed.Tests.Unit
                         .Aggregate(string.Empty, (result, current) => $"{current}{Environment.NewLine}{result}");
                 }
 
-                (string friendlyNameAttribute, string descriptionAttribute) CreateFriendlyNameAndDescriptionAttributes(BaseDescription description)
+                static (string friendlyNameAttribute, string descriptionAttribute) CreateFriendlyNameAndDescriptionAttributes(BaseDescription description)
                 {
                     var friendlyNameAttribute = description.FriendlyName == null
                         ? string.Empty

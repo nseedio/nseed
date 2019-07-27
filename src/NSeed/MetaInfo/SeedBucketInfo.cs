@@ -30,7 +30,7 @@ namespace NSeed.MetaInfo
 
         internal SeedBucketInfo(
             object implementation,
-            Type type,
+            Type? type,
             string fullName,
             string friendlyName,
             string description,

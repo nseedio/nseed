@@ -26,12 +26,12 @@ namespace NSeed.Discovery.Yield
 
             var errorCollector = new DistinctErrorCollectorAndProvider();
 
-            Type type = typeExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
             string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
 
             return new ProvidedYieldInfo
             (
-                type,
+                implementation,
                 type,
                 fullName
 

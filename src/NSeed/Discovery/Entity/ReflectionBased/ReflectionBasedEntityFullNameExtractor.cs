@@ -1,4 +1,4 @@
-﻿using NSeed.MetaInfo;
+using NSeed.MetaInfo;
 using System;
 
 namespace NSeed.Discovery.Entity.ReflectionBased
@@ -11,8 +11,6 @@ namespace NSeed.Discovery.Entity.ReflectionBased
             System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return entityImplementation.FullName ?? string.Empty;
-
-            // TODO-IG: Collect errors.
         }
     }
 }
