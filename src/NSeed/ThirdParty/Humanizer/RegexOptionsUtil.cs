@@ -1,7 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 
-namespace Humanizer
+namespace NSeed.Extensions
 {
     internal static class RegexOptionsUtil
     {

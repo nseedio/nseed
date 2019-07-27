@@ -72,11 +72,11 @@ E.g.
 
     ThirdParty/CommandLineUtils
 
-Commit that code in a commit with the message "Take over <Library name>".
+Commit that code in a commit with the message "feat: Take over <Library name>".
 
 Adjust the embedded code. Adjustment should be as little as possible, mostly to make the code compileable. Make all the types internal.
 
-Commit the changes in a commit with the message "Adjust <Library Name>". This way we can always track the changes done to the original source code.
+Commit the changes in a commit with the message "refactor: Adjust <Library Name>". This way we can always track the changes done to the original source code.
 
 Add the appropriate entry to the [third-party licenses file](../licenses/README.md).
 

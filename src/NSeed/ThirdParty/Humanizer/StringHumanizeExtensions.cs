@@ -1,19 +1,23 @@
-﻿using System.Linq;
+// We ignore some errors in order to not to have to change the orignal code too much.
+#pragma warning disable SA1202 // Elements should be ordered by access
+
+using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Humanizer
+namespace NSeed.Extensions
 {
     /// <summary>
     /// Contains extension methods for humanizing string values.
     /// </summary>
-    public static class StringHumanizeExtensions
+    internal static class StringHumanizeExtensions
     {
         private static readonly Regex PascalCaseWordPartsRegex;
         private static readonly Regex FreestandingSpacingCharRegex;
 
         static StringHumanizeExtensions()
         {
-            PascalCaseWordPartsRegex = new Regex(@"[\p{Lu}]?[\p{Ll}]+|[0-9]+[\p{Ll}]*|[\p{Lu}]+(?=[\p{Lu}][\p{Ll}]|[0-9]|\b)|[\p{Lo}]+",
+            PascalCaseWordPartsRegex = new Regex(
+                @"[\p{Lu}]?[\p{Ll}]+|[0-9]+[\p{Ll}]*|[\p{Lu}]+(?=[\p{Lu}][\p{Ll}]|[0-9]|\b)|[\p{Lo}]+",
                 RegexOptions.IgnorePatternWhitespace | RegexOptions.ExplicitCapture | RegexOptionsUtil.Compiled);
             FreestandingSpacingCharRegex = new Regex(@"\s[-_]|[-_]\s", RegexOptionsUtil.Compiled);
         }
@@ -37,12 +41,13 @@ namespace Humanizer
         }
 
         /// <summary>
-        /// Humanizes the input string; e.g. Underscored_input_String_is_turned_INTO_sentence -> 'Underscored input String is turned INTO sentence'
+        /// Humanizes the input string; e.g. Underscored_input_String_is_turned_INTO_sentence -> 'Underscored input String is turned INTO sentence'.
         /// </summary>
-        /// <param name="input">The string to be humanized</param>
-        /// <returns></returns>
+        /// <param name="input">The string to be humanized.</param>
         public static string Humanize(this string input)
         {
+            System.Diagnostics.Debug.Assert(input != null);
+
             // if input is all capitals (e.g. an acronym) then return it without change
             if (input.ToCharArray().All(char.IsUpper))
             {
@@ -62,17 +67,6 @@ namespace Humanizer
             }
 
             return FromPascalCase(input);
-        }
-
-        /// <summary>
-        /// Humanized the input string based on the provided casing
-        /// </summary>
-        /// <param name="input">The string to be humanized</param>
-        /// <param name="casing">The desired casing for the output</param>
-        /// <returns></returns>
-        public static string Humanize(this string input, LetterCasing casing)
-        {
-            return input.Humanize().ApplyCase(casing);
         }
     }
 }
