@@ -62,17 +62,34 @@ In the *Engine* we use it not as a NuGet package but as a [single source file em
 
 ## Embedding Third-Party Source Code
 
-In case of embedding a single source file, we "nseedify" it, means we change the namespace etc.
-To distinguish such code on the file level, the file names will contain the original namespace as prefix.
+### Embedding Whole Libraries or Part of Them
+
+We want to avoid dependecies to third-party libraries in the *Engine*. That's why we embedd thier code into the NSeed assembly and make it internal.
+To embedd a whole library or a part of it do the following.
+
+Place the code in a subfolder of the *ThirdParty* folder. The subfolder must have the name of the embedded library.
 E.g.
 
-    Light.GuardClauses.Check.cs
-    Humanizer.StringHumanizeExtensions.cs
+    ThirdParty/CommandLineUtils
 
-At the top of the file, we put links to the original source code in the following form:
+Commit that code in a commit with the message "Take over <Library name>".
+
+Adjust the embedded code. Adjustment should be as little as possible, mostly to make the code compileable. Make all the types internal.
+
+Commit the changes in a commit with the message "Adjust <Library Name>". This way we can always track the changes done to the original source code.
+
+Add the appropriate entry to the [third-party licenses file](../licenses/README.md).
+
+
+### Embedding Code Snippets
+In case of embedding a code snippet, "nseedify" it, means change the namespace, style etc.
+
+Put links to the original source code in the following form, together with the name of the original license:
 
     // Taken and adapted from:
     // <link>
+
+Add the appropriate entry to the [third-party licenses file](../licenses/README.md).
 
 ## Extension Classes
 
