@@ -1,8 +1,8 @@
-﻿<!-- Build properties used in projects whose outputs are NuGet packages. -->
+<!-- Build properties used in projects whose outputs are NuGet packages. -->
 <Project>
   <PropertyGroup>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.1.0-prealpha</Version>
+    <Version>0.1.0</Version>
     <Authors>NSeed, ironcev</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nseedio/nseed</PackageProjectUrl>

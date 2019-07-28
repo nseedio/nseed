@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;
@@ -37,16 +38,23 @@ namespace NSeed
         /// <param name="commandLineArguments">The command line arguments to handle.</param>
         /// <returns>The <see cref="Task"/> representing the asynchronous handling operation.</returns>
         protected static async Task<int> Handle<TSeedBucket>(string[] commandLineArguments)
-            where TSeedBucket : SeedBucket
+            where TSeedBucket : SeedBucket, new()
         {
             commandLineArguments.MustNotBeNull(nameof(commandLineArguments));
             commandLineArguments.MustNotContain((string?)null, nameof(commandLineArguments));
+
+            // TODO: Add error checking. Should this be in try-catch?
+            var seedBucket = new TSeedBucket();
+
+            var serviceProvider = BuildServiceProvider(seedBucket);
 
             var app = new CommandLineApplication<Handle>();
 
             // TODO: Put this into some common CommandLineApplication executor
             //       so that the behaviour is the same between the Tool Cli and the Engine Cli.
-            app.Conventions.UseDefaultConventions();
+            app.Conventions
+                .UseDefaultConventions()
+                .UseConstructorInjection(serviceProvider);
             app.Name = GetSeedBucketExecutableName();
             app.MakeSuggestionsInErrorMessage = true;
             app.UsePagerForHelpText = false;
@@ -74,6 +82,14 @@ namespace NSeed
                 return string.IsNullOrWhiteSpace(executableName)
                     ? fallbackExecutableName
                     : executableName;
+            }
+
+            static IServiceProvider BuildServiceProvider(SeedBucket seedBucket)
+            {
+                return new ServiceCollection()
+                    .AddSingleton(PhysicalConsole.Singleton)
+                    .AddSingleton(seedBucket)
+                    .BuildServiceProvider();
             }
         }
     }

@@ -6,9 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="NSeed">
-      <HintPath>..\..\..\src\NSeed\bin\Debug\netstandard2.0\NSeed.dll</HintPath>
-    </Reference>
+    <PackageReference Include="NSeed" Version="0.1.0" />
   </ItemGroup>
 
 </Project>
