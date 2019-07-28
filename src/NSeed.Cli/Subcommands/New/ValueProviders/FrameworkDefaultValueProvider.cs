@@ -1,8 +1,7 @@
-﻿using McMaster.Extensions.CommandLineUtils.Conventions;
+using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
-using NSeed.Cli.Subcommands.New.Validators;
 using System;
 using System.Reflection;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace NSeed.Cli.Resources
 {
@@ -6,6 +7,16 @@ namespace NSeed.Cli.Resources
     {
         public const string CoreDotNetFramework = ".NETCoreApp";
         public const string FullDotNetFramework = ".NETFramework";
+
+        public static List<string> DotNetCoreVersions => new List<string>
+        {
+            "1.0", "1.1", "2.0", "2.1", "2.2", "3.0"
+        };
+
+        public static List<string> FullDotNetVersions => new List<string>
+        {
+            "1.0", "1.1", "2.0", "3.0", "3.5", "4", "4.5", "4.5.1", "4.5.2", "4.6", "4.6.1", "4.6.2", "4.7", "4.7.1", "4.7.2", "4.8"
+        };
 
         public static string InitDirectory { get; } = Environment.CurrentDirectory;
 

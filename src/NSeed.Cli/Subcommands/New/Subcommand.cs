@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Subcommands.New
 {
@@ -82,11 +83,11 @@ namespace NSeed.Cli.Subcommands.New
                         if (frameworkNames.Any() && frameworkNames.All(fn => fn == frameworkNames.First()))
                         {
                             var framework = frameworks.FirstOrDefault();
-                            if (framework.FrameworkName.Framework.Equals(Resources.Resources.CoreDotNetFramework))
+                            if (framework.FrameworkName.Framework.Equals(CoreDotNetFramework))
                             {
                                 ResolvedFramework = $"{framework.FrameworkName.Framework.ToLower().TrimStart('.')}{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                             }
-                            else if (framework.FrameworkName.Framework.Equals(Resources.Resources.FullDotNetFramework))
+                            else if (framework.FrameworkName.Framework.Equals(FullDotNetFramework))
                             {
                                 ResolvedFramework = $"v{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                                 if (framework.FrameworkName.Version.Build != 0)
@@ -98,6 +99,38 @@ namespace NSeed.Cli.Subcommands.New
                     }
                 }
             }
+        }
+
+        public (Resources.Framework Name, string Version) GetFrameworkWithVersion()
+        {
+            var frameworkWithVersion = GetFrameworkWithVersion(Resources.Framework.NETCoreApp);
+
+            if (frameworkWithVersion.IsSuccessful)
+            {
+                return (Resources.Framework.NETCoreApp, frameworkWithVersion.Version);
+            }
+
+            frameworkWithVersion = GetFrameworkWithVersion(Resources.Framework.NETFramework);
+            if (frameworkWithVersion.IsSuccessful)
+            {
+                return (Resources.Framework.NETFramework, frameworkWithVersion.Version);
+            }
+
+            return (Resources.Framework.None, string.Empty);
+        }
+
+        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Resources.Framework framework)
+        {
+            if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                var parts = ResolvedFramework.Split(framework.ToString().ToLower()).ToList();
+                if (!parts.IsNullOrEmpty() && parts.Count == 2)
+                {
+                    return (parts.First(), parts.Last(), true);
+                }
+            }
+
+            return (string.Empty, string.Empty, false);
         }
 
         private Task OnExecute(CommandLineApplication app)
