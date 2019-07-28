@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="NSeed">
+      <HintPath>..\..\..\src\NSeed\bin\Debug\netstandard2.0\NSeed.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
