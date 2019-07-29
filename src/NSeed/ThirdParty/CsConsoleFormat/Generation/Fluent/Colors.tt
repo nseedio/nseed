@@ -1,6 +1,6 @@
 <#@ template hostspecific="true" debug="true" #>
 <#@ output extension="g.cs" #>
-<#@ include file="$(SolutionDir)/EmbeddedCode/Alba.CsConsoleFormat/Framework/CodeGeneration/Common.ttinclude" #>
+<#@ include file="$(SolutionDir)/NSeed/ThirdParty/CsConsoleFormat/Framework/CodeGeneration/Common.ttinclude" #>
 <#
     WriteHeader();
     string[] colors = Enum.GetNames(typeof(ConsoleColor));
@@ -9,7 +9,7 @@ using System;
 
 namespace Alba.CsConsoleFormat.Fluent
 {
-    public static partial class Colors
+    internal static partial class Colors
     {
 <#    foreach (string color in colors) { #>
         public static Span <#=color#>(this string @this) => new Span(@this) { Color = ConsoleColor.<#=color#> };
