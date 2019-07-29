@@ -19,23 +19,25 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 return ValidationResult.Error("Project framework is empty");
             }
 
-            var bla = command.GetFrameworkWithVersion();
-            switch (bla.Name)
+            var framework = command.GetFrameworkWithVersion();
+            switch (framework.Name)
             {
                 case Resources.Framework.NETCoreApp:
-                    if (!DotNetCoreVersions.Any(v => bla.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
+                    if (!DotNetCoreVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
                     {
                         return ValidationResult.Error("Core project framework version is not valid");
                     }
 
                     break;
                 case Resources.Framework.NETFramework:
-                    if (!FullDotNetVersions.Any(v => bla.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
+                    if (!FullDotNetVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
                     {
                         return ValidationResult.Error("Full dotnet project version is not valid");
                     }
 
                     break;
+                case Resources.Framework.None:
+                    return ValidationResult.Error("Project framework is invalid");
             }
 
             return ValidationResult.Success;

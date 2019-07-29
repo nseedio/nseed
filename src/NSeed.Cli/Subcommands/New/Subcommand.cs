@@ -123,7 +123,7 @@ namespace NSeed.Cli.Subcommands.New
         {
             if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
             {
-                var parts = ResolvedFramework.Split(framework.ToString().ToLower()).ToList();
+                var parts = ResolvedFramework.ToLower().Split(framework.ToString().ToLower()).ToList();
                 if (!parts.IsNullOrEmpty() && parts.Count == 2)
                 {
                     return (parts.First(), parts.Last(), true);

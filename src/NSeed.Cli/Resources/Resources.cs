@@ -8,6 +8,7 @@ namespace NSeed.Cli.Resources
         public const string CoreDotNetFramework = ".NETCoreApp";
         public const string FullDotNetFramework = ".NETFramework";
 
+        // TODO:AM find better way for getting .net and .net core versions
         public static List<string> DotNetCoreVersions => new List<string>
         {
             "1.0", "1.1", "2.0", "2.1", "2.2", "3.0"
