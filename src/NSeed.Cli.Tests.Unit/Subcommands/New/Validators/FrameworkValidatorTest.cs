@@ -19,6 +19,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         [InlineData("NETCoreApp2.7", "Core project framework version is not valid")]
         [InlineData("coreapp2.7", "Project framework is invalid")]
         [InlineData("NETFramework5.3", "Full dotnet project version is not valid")]
+        [InlineData("netcoreapp_3.1", "Core project framework version is not valid")]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string framework, string errorMessage)
         {
             Validator = new FrameworkValidator();
