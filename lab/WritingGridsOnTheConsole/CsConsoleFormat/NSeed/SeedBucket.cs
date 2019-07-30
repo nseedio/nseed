@@ -11,19 +11,19 @@ namespace NSeed
         public static void Handle<TSeedBucket>(string[] commandLineArguments)
             where TSeedBucket : SeedBucket
         {
-            bool isConsoleAvailable = IsConsoleAvailable();
+            bool isConsoleAvailable = IsPhysicalConsoleAvailable();
 
             Console.WriteLine($"Is console available: {isConsoleAvailable}");
 
             // Standard behavior if the console is available.
             Action initializeConsole = () => Console.OutputEncoding = Encoding.UTF8;
-            Func<Rect?> getRenderRect = () => null;
+            Func<Rect?> getRenderRect = () => null; // Default will be used.
             Action parkCursor = () => ConsoleRenderer.ConsoleCursorPosition = new Point(0, ConsoleRenderer.ConsoleCursorPosition.Y);
 
             if (!isConsoleAvailable)
             {
                 initializeConsole = () => { };
-                getRenderRect = () => new Rect(0, 0, 72, 100);
+                getRenderRect = () => new Rect(0, 0, 72, Size.Infinity);
                 parkCursor = () => { };
             }
 
@@ -82,26 +82,26 @@ namespace NSeed
 
             parkCursor();
 
-            bool IsConsoleAvailable()
+            bool IsPhysicalConsoleAvailable()
             {
-                // Check for a better way to figure out if the direct access
-                // to the console is available. Below are the two possibilities
-                // that came to my mind.
+                bool outputIsNotRedirected = !(Console.IsErrorRedirected || Console.IsInputRedirected || Console.IsOutputRedirected);
 
-                bool isAvailableFirstPossibility = !(Console.IsErrorRedirected || Console.IsInputRedirected || Console.IsOutputRedirected);
-
-                bool isAvailableSecondPossibility = true;
+                bool physicalConsoleExists = true;
                 try
                 {
-                    // We just have to touch any of the properties like e.g. Console.BufferWidth or any other.                    
+                    // We just have to touch any of the properties like e.g. Console.BufferWidth, Console.CursorLeft
+                    // or any other that have to do something with the console buffer and the cursor.
                     Console.CursorLeft = Console.CursorLeft;
                 }
                 catch
                 {
-                    isAvailableSecondPossibility = false;
+                    physicalConsoleExists = false;
                 }
 
-                return isAvailableSecondPossibility;
+                // I guess these two checks are redundant.
+                // I guess we cannot not have a console without redirection in place.
+                // I guess. Only. Therefore, the double check :-)
+                return outputIsNotRedirected && physicalConsoleExists;
             }
 
             Document GenerateDocument(string title)
