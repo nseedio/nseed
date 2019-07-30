@@ -8,6 +8,12 @@ To obtain the changes done to the original source code `git log .` the *Taken co
 
 ==============================================================================
 
+[CommandLineUtils](https://github.com/natemcmaster/CommandLineUtils/tree/e67dd33ac8a4e1c8f49c5e47e71e2df4efa49077)<br/>
+[Apache License 2.0](https://github.com/natemcmaster/CommandLineUtils/blob/e67dd33ac8a4e1c8f49c5e47e71e2df4efa49077/LICENSE.txt)<br/>
+[Taken code](../src/NSeed/ThirdParty/CommandLineUtils)
+
+==============================================================================
+
 [CsConsoleFormat](https://github.com/Athari/CsConsoleFormat/tree/953e0770a4e33b4f0df76b628b36c72ede679aa7)<br/>
 [Apache License 2.0](https://github.com/Athari/CsConsoleFormat/blob/953e0770a4e33b4f0df76b628b36c72ede679aa7/License.md)<br/>
 Copyright (c) 2014 Alexander Prokhorov<br/>
