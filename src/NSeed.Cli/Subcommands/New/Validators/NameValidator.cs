@@ -12,6 +12,9 @@ namespace NSeed.Cli.Subcommands.New.Validators
     {
         private IDependencyGraphService DependencyGraphService { get; }
 
+        private const int MinCharactersSize = 3;
+        private const int MaxCharactersSize = 50;
+
         public NameValidator(
             IDependencyGraphService dependencyGraphService)
         {
@@ -22,19 +25,25 @@ namespace NSeed.Cli.Subcommands.New.Validators
         {
             switch (command.ResolvedName)
             {
-                case var projectName when projectName.IsNotProvidedByUser():
+                case var name when name.IsNotProvidedByUser():
                     return Error("Project name is empty");
 
-                case var projectName when ContainesUnallowedCharacters(projectName) ||
-                                          ContainesSurrogateCharacters(projectName) ||
-                                          ContainesUnicodeCharacters(projectName):
+                case var name when ContainesUnallowedCharacters(name) ||
+                                   ContainesSurrogateCharacters(name) ||
+                                   ContainesUnicodeCharacters(name):
                     return Error("Project name contain unallowed characters");
 
-                case var projectName when IsReserved(projectName):
+                case var name when IsReserved(name):
                     return Error("Project name is invalid");
 
-                case var projectName when Exist(projectName, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSoluiton)):
+                case var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSoluiton)):
                     return Error("Project name already exist");
+
+                case var name when name.Length > MaxCharactersSize:
+                    return Error($"Project name is to long Max. {MaxCharactersSize} characters");
+
+                case var name when name.Length < MinCharactersSize:
+                    return Error($"Project name is to short Min. {MinCharactersSize} characters");
 
                 default:
                     return Success;
