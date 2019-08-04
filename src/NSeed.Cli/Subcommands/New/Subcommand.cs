@@ -140,6 +140,37 @@ namespace NSeed.Cli.Subcommands.New
             Console.WriteLine("Resolved Name:" + ResolvedName);
             Console.WriteLine("Resolved Framework:" + ResolvedFramework);
 
+            // -o => output
+            // -f framework so that value will be from solution analysis
+            // --target-framework-override net461 => use this for older frameworks
+
+            // string[] arguments = new[] { "new classlib -n TestProjectXYZ", "-f netcoreapp2.1", $"-o \"{Path}\"" };
+            // string[] arguments = new[] { "new classlib -n TestProjectXYZ", "--target-framework-override net461", $"-o \"{Path}\"" };
+
+            // First you need to install template from Nuget or localy for now ->
+            // dotnet new --install <PATH> where <PATH> is the path to the folder containing .template.config
+            // path je zapravo path gdje ce nuget paket staviti iteme.
+
+            // I need something to tell me is it core or regular .net
+            // Select arguments based on core or regular.net
+            // string[] arguments = new[] { $"new nseednetclasslib -n {Name}", $"-o \"{Path}\"\\{Name}", $"-f \"{Framework}\""};
+            // string[] arguments = new[] { $"new nseedcoreclasslib -n {Name}", $"-o \"{Path}\"\\{Name}", $"-f \"{Framework}\""};
+
+            // var response = _dotNetRunner.Run(_fileSystemService.Path.GetDirectoryName(Path), arguments);
+            // if (!response.IsSuccess)
+            // {
+            //    Console.WriteLine(response.Errors);
+            // }
+
+            ////Add existing project to solution
+            // arguments = new[] { $"sln \"{SolutionPath}\" add \"{Path}\"\\{Name}\\{Name}.csproj" };
+            // response = _dotNetRunner.Run(_fileSystemService.Path.GetDirectoryName(Path), arguments);
+            // if (!response.IsSuccess)
+            // {
+            //    Console.WriteLine(response.Errors);
+            // }
+
+            Console.WriteLine("The End");
             return Task.CompletedTask;
         }
 
