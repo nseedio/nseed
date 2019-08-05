@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>EmptySeedBucket</AssemblyName>
+    <RootNamespace>EmptySeedBucket</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NSeed" Version="0.1.0" />
+  </ItemGroup>
+  
+</Project>
