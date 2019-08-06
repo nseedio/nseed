@@ -28,6 +28,7 @@ We have found the following frameworks to evaluate:
 - [Colorful.Console](https://github.com/tomakita/Colorful.Console)
 - [CsConsoleFormat](https://github.com/Athari/CsConsoleFormat)
 - [ConsoleTables](https://github.com/khalidabuhakmeh/ConsoleTables)
+- [Gui.cs](https://github.com/migueldeicaza/gui.cs)
 
 Interesting articles to read:
 
@@ -50,6 +51,10 @@ Beautiful and colorful, but not what we need. Perfect choice for rich coloring, 
 ### ConsoleTables
 
 Simple and lightweight, would be a perfect candidate for embedding. It renders nice tables, but unfortunately does not support the needed formating options like word wrap.
+
+### Gui.cs
+
+Another one awesome project, a toolkit with various controls for building rich text user interfaces, but again, not what we need.
 
 ### CsConsoleFormat
 
