@@ -7,18 +7,24 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>nseed</ToolCommandName>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <NuspecFile>NSeed.Cli.nuspec</NuspecFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Templates\**" />
-    <EmbeddedResource Remove="Templates\**" />
-    <None Remove="Templates\**" />
+    <Compile Remove="templates\**" />
+    <EmbeddedResource Remove="templates\**" />
+    <None Remove="templates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="templates.zip" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="templates.zip" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +37,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NuGet.ProjectModel" Version="5.1.0" />
     <PackageReference Include="System.IO.Abstractions" Version="6.0.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validation\" />
   </ItemGroup>
 
 </Project>
