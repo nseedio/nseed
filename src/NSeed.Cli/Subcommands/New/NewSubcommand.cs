@@ -119,21 +119,7 @@ namespace NSeed.Cli.Subcommands.New
             return (Resources.Framework.None, string.Empty);
         }
 
-        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Resources.Framework framework)
-        {
-            if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                var parts = ResolvedFramework.ToLower().Split(framework.ToString().ToLower()).ToList();
-                if (!parts.IsNullOrEmpty() && parts.Count == 2)
-                {
-                    return (parts.First(), parts.Last(), true);
-                }
-            }
-
-            return (string.Empty, string.Empty, false);
-        }
-
-        private Task OnExecute(CommandLineApplication app)
+        public Task OnExecute(CommandLineApplication app)
         {
             Console.WriteLine("\n");
             Console.WriteLine("Resolved solution: " + ResolvedSolution);
@@ -172,6 +158,20 @@ namespace NSeed.Cli.Subcommands.New
 
             Console.WriteLine("The End");
             return Task.CompletedTask;
+        }
+
+        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Resources.Framework framework)
+        {
+            if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
+            {
+                var parts = ResolvedFramework.ToLower().Split(framework.ToString().ToLower()).ToList();
+                if (!parts.IsNullOrEmpty() && parts.Count == 2)
+                {
+                    return (parts.First(), parts.Last(), true);
+                }
+            }
+
+            return (string.Empty, string.Empty, false);
         }
 
         private string GetCommonValue(IList<string> values)
