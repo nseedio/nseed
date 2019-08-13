@@ -26,12 +26,12 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 return ValidationResult.Success;
             }
 
-            if (command.ResolvedSoluiton.IsNotProvidedByUser())
+            if (command.ResolvedSolution.IsNotProvidedByUser())
             {
                 return ValidationResult.Error(Error.SolutionPathIsNotProvided);
             }
 
-            var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSoluiton, out var path);
+            var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);
             if (!isSuccesful)
             {
                 return ValidationResult.Error(message);

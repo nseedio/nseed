@@ -28,7 +28,7 @@ namespace NSeed.Cli.Subcommands.New
         [NameDefaultValueProvider(Resources.Resources.New.DefaultProjectName)]
         public string Name { get; private set; }
 
-        public string ResolvedSoluiton { get; private set; } = string.Empty;
+        public string ResolvedSolution { get; private set; } = string.Empty;
 
         public string ResolvedFramework { get; private set; } = string.Empty;
 
@@ -38,7 +38,7 @@ namespace NSeed.Cli.Subcommands.New
 
         public void SetResolvedSolution(string solution)
         {
-            ResolvedSoluiton = solution;
+            ResolvedSolution = solution;
         }
 
         public void SetResolvedName(string name)
@@ -56,7 +56,7 @@ namespace NSeed.Cli.Subcommands.New
             if (ResolvedSolutionIsValid && dependencyGraphService != null)
             {
                 SetResolvedName(defaultName);
-                var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSoluiton).ToList();
+                var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSolution).ToList();
                 var commonPrefix = GetCommonValue(projectNames);
                 if (commonPrefix.Exists())
                 {
@@ -69,7 +69,7 @@ namespace NSeed.Cli.Subcommands.New
         {
             if (ResolvedSolutionIsValid && dependencyGraphService != null)
             {
-                var dependencyGraph = dependencyGraphService.GenerateDependencyGraph(ResolvedSoluiton);
+                var dependencyGraph = dependencyGraphService.GenerateDependencyGraph(ResolvedSolution);
                 if (dependencyGraph != null)
                 {
                     var frameworks = dependencyGraph.Projects
@@ -136,7 +136,7 @@ namespace NSeed.Cli.Subcommands.New
         private Task OnExecute(CommandLineApplication app)
         {
             Console.WriteLine("\n");
-            Console.WriteLine("Resolved solution: " + ResolvedSoluiton);
+            Console.WriteLine("Resolved solution: " + ResolvedSolution);
             Console.WriteLine("Resolved Name:" + ResolvedName);
             Console.WriteLine("Resolved Framework:" + ResolvedFramework);
 

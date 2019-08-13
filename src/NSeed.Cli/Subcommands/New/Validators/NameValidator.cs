@@ -36,7 +36,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 case var name when IsReserved(name):
                     return Error("Project name is invalid");
 
-                case var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSoluiton)):
+                case var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSolution)):
                     return Error("Project name already exist");
 
                 case var name when name.Length > MaxCharactersSize:
