@@ -5,10 +5,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>nseed</ToolCommandName>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <NuspecFile>NSeed.Cli.nuspec</NuspecFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Templates\**" />
+    <EmbeddedResource Remove="Templates\**" />
+    <None Remove="Templates\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
