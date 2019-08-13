@@ -7,8 +7,8 @@
     <ProjectGuid>{19B0FCF5-271C-45B6-BFDC-31AFF1E1E428}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>nseed_net_template</RootNamespace>
-    <AssemblyName>nseed_net_template</AssemblyName>
+    <RootNamespace>nseed_classic_template</RootNamespace>
+    <AssemblyName>nseed_classic_template</AssemblyName>
     <TargetFrameworkVersion>SelectedFramework</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

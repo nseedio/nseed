@@ -3,12 +3,12 @@
   "author": "NSeed",
   "classifications": [ "Common", "Library" ],
   "name": "NSeed library",
-  "identity": "nseed_net_template.csharp",
-  "shortName": "nseednetclasslib",
+  "identity": "nseed_classic_template.csharp",
+  "shortName": "nseedclassicclasslib",
   "tags": {
     "language": "C#"
   },
-  "sourceName": "nseed_net_template",
+  "sourceName": "nseed_classic_template",
   "symbols": {
     "framework": {
       "type": "parameter",
