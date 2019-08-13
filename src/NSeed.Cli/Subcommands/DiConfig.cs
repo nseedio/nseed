@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
 
@@ -9,9 +10,9 @@ namespace NSeed.Cli.Subcommands
         public static void RegisterValidators(IServiceCollection container)
         {
             container
-                .AddSingleton<IValidator<New.Subcommand>, SolutionValidator>()
-                .AddSingleton<IValidator<New.Subcommand>, NameValidator>()
-                .AddSingleton<IValidator<New.Subcommand>, FrameworkValidator>();
+                .AddSingleton<IValidator<NewSubcommand>, SolutionValidator>()
+                .AddSingleton<IValidator<NewSubcommand>, NameValidator>()
+                .AddSingleton<IValidator<NewSubcommand>, FrameworkValidator>();
         }
     }
 }

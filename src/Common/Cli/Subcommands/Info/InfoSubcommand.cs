@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace NSeed.Cli.Subcommands.Info
 {
     [Command("info", Description = Resources.Info.CommandDescription)]
-    internal class Subcommand
+    internal class InfoSubcommand
     {
         private readonly SeedBucket seedBucket;
 
-        public Subcommand(SeedBucket seedBucket)
+        public InfoSubcommand(SeedBucket seedBucket)
         {
             System.Diagnostics.Debug.Assert(seedBucket != null);
 

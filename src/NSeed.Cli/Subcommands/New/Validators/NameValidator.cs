@@ -8,7 +8,7 @@ using static NSeed.Cli.Validation.ValidationResult;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    internal class NameValidator : IValidator<New.Subcommand>
+    internal class NameValidator : IValidator<NewSubcommand>
     {
         private IDependencyGraphService DependencyGraphService { get; }
 
@@ -21,7 +21,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
             DependencyGraphService = dependencyGraphService;
         }
 
-        public ValidationResult Validate(Subcommand command)
+        public ValidationResult Validate(NewSubcommand command)
         {
             switch (command.ResolvedName)
             {

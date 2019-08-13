@@ -25,11 +25,11 @@ namespace NSeed.Cli.Extensions
             solutionValues.Clear();
         }
 
-        public static IValidator<Subcommand> GetValidator<T>(this ConventionContext context)
-            where T : IValidator<Subcommand>
+        public static IValidator<NewSubcommand> GetValidator<T>(this ConventionContext context)
+            where T : IValidator<NewSubcommand>
         {
             return context.Application
-                    .GetServices<IValidator<Subcommand>>()
+                    .GetServices<IValidator<NewSubcommand>>()
                     .FirstOrDefault(s => s.GetType() == typeof(T));
         }
 

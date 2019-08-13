@@ -21,8 +21,8 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
-                var name = context.GetValue<string>(nameof(Subcommand.Name));
-                var model = context.ModelAccessor.GetModel() as New.Subcommand;
+                var name = context.GetValue<string>(nameof(NewSubcommand.Name));
+                var model = context.ModelAccessor.GetModel() as NewSubcommand;
                 model.SetResolvedName(name);
                 if (name.IsNotProvidedByUser())
                 {

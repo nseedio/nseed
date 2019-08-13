@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace NSeed.Cli
 {
     [Command(Name = "", Description = "Seed bucket command line tool.")]
-    [Subcommand(typeof(Subcommands.Info.Subcommand))]
+    [Subcommand(typeof(Subcommands.Info.InfoSubcommand))]
     [HelpOption]
     internal class Handle
     {

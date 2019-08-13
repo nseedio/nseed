@@ -12,15 +12,15 @@ namespace NSeed.Cli.Subcommands.New.Validators
     {
         protected override ValidationResult IsValid(object value, ValidationContext context)
         {
-            if (value is Subcommand model)
+            if (value is NewSubcommand model)
             {
                 Console.WriteLine("Solution:" + model.Solution);
                 Console.WriteLine("Name:" + model.Name);
                 Console.WriteLine("Framework:" + model.Framework);
 
-                var validators = context.GetServices(typeof(IValidator<New.Subcommand>));
+                var validators = context.GetServices(typeof(IValidator<NewSubcommand>));
 
-                foreach (IValidator<Subcommand> validator in validators)
+                foreach (IValidator<NewSubcommand> validator in validators)
                 {
                     var response = validator.Validate(model);
                     if (!response.IsValid)

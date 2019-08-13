@@ -5,7 +5,7 @@ using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    internal class SolutionValidator : IValidator<New.Subcommand>
+    internal class SolutionValidator : IValidator<NewSubcommand>
     {
         public IFileSystemService FileSystemService { get; }
 
@@ -19,7 +19,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
             DependencyGraphService = dependencyGraphService;
         }
 
-        public ValidationResult Validate(Subcommand command)
+        public ValidationResult Validate(NewSubcommand command)
         {
             if (command.ResolvedSolutionIsValid)
             {

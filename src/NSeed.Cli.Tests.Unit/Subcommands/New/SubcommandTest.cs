@@ -12,7 +12,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
     public abstract class BaseSubcommand
     {
-        private readonly Subcommand subcommand = new Subcommand { ResolvedSolutionIsValid = true };
+        private readonly NewSubcommand subcommand = new NewSubcommand { ResolvedSolutionIsValid = true };
         private readonly Mock<IDependencyGraphService> mockDependencyGraphService = new Mock<IDependencyGraphService>();
         private readonly DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private readonly List<string> projectNames = new List<string>();

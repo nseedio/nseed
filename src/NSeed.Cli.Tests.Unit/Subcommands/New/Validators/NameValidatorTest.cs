@@ -14,7 +14,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         internal NameValidator Validator { get; set; }
 
-        internal Subcommand Subcommand { get; } = new Subcommand();
+        internal NewSubcommand Subcommand { get; } = new NewSubcommand();
 
         internal ValidationResult Validate()
         {

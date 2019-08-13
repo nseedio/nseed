@@ -13,7 +13,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private SolutionValidator SolutionValidator { get; set; }
 
-        private readonly Subcommand subcommand = new Subcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand();
         private readonly Mock<IFileSystemService> mockFileSystemService = new Mock<IFileSystemService>();
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 

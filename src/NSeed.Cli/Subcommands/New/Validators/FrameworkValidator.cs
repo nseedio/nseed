@@ -6,13 +6,13 @@ using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
-    internal class FrameworkValidator : IValidator<New.Subcommand>
+    internal class FrameworkValidator : IValidator<NewSubcommand>
     {
         public FrameworkValidator()
         {
         }
 
-        public ValidationResult Validate(Subcommand command)
+        public ValidationResult Validate(NewSubcommand command)
         {
             if (command.ResolvedFramework.IsNotProvidedByUser())
             {

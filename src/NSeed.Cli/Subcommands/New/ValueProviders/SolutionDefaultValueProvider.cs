@@ -16,7 +16,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
-                var solution = context.GetValue<string>(nameof(Subcommand.Solution));
+                var solution = context.GetValue<string>(nameof(NewSubcommand.Solution));
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
                 if (solution.IsNotProvidedByUser())
                 {
@@ -27,7 +27,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
                     fileSystemService.TryGetSolutionPath(solution, out solution);
                 }
 
-                var model = context.ModelAccessor.GetModel() as New.Subcommand;
+                var model = context.ModelAccessor.GetModel() as NewSubcommand;
                 model.SetResolvedSolution(solution);
                 var solutionValidator = context.GetValidator<SolutionValidator>();
                 solutionValidator.Validate(model);

@@ -14,8 +14,8 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
-                var framework = context.GetValue<string>(nameof(Subcommand.Framework));
-                var model = context.ModelAccessor.GetModel() as New.Subcommand;
+                var framework = context.GetValue<string>(nameof(NewSubcommand.Framework));
+                var model = context.ModelAccessor.GetModel() as NewSubcommand;
                 model.SetResolvedFramework(framework);
                 if (framework.IsNotProvidedByUser())
                 {

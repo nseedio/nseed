@@ -10,7 +10,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private FrameworkValidator Validator { get; set; }
 
-        private readonly Subcommand subcommand = new Subcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand();
 
         [Theory]
         [InlineData("", "Project framework is empty")]
@@ -36,7 +36,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private FrameworkValidator Validator { get; set; }
 
-        private readonly Subcommand subcommand = new Subcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand();
 
         [Theory]
         [InlineData("netcoreapp2.2")]

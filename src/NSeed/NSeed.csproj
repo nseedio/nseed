@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
-    <Compile Include="..\Common\Cli\Subcommands\Info\Subcommand.cs" Link="Cli\Subcommands\Info\Subcommand.cs" />
+    <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Cli\Subcommands\Info\InfoSubcommand.cs" />
   </ItemGroup>
 
   <ItemGroup>
