@@ -1,7 +1,7 @@
+using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Validation;
-using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
@@ -28,7 +28,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
 
             if (command.ResolvedSolution.IsNotProvidedByUser())
             {
-                return ValidationResult.Error(Error.SolutionPathIsNotProvided);
+                return ValidationResult.Error(Resources.New.Errors.SolutionPathIsNotProvided);
             }
 
             var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);

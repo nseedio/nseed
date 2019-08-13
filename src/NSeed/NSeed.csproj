@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\BuildProperties.Packages.props" />
 
@@ -19,6 +19,9 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Cli\Assets\Resources.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Cli\Assets\Resources.Info.cs" />
+    <Compile Include="..\Common\Cli\MainCommand.cs" Link="Cli\MainCommand.cs" />
     <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Cli\Subcommands\Info\InfoSubcommand.cs" />
   </ItemGroup>
 
@@ -48,6 +51,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Colors.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cli\Assets\" />
   </ItemGroup>  
 
 </Project>

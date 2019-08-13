@@ -5,7 +5,7 @@ using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New.Validators;
 using System;
 using System.Reflection;
-using static NSeed.Cli.Resources.Resources;
+using static NSeed.Cli.Assets.Resources;
 
 namespace NSeed.Cli.Subcommands.New.ValueProviders
 {

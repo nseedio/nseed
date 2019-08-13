@@ -48,7 +48,7 @@ namespace NSeed
 
             var serviceProvider = BuildServiceProvider(seedBucket);
 
-            var app = new CommandLineApplication<Handle>();
+            var app = new CommandLineApplication<MainCommand>();
 
             // TODO: Put this into some common CommandLineApplication executor
             //       so that the behaviour is the same between the Tool Cli and the Engine Cli.

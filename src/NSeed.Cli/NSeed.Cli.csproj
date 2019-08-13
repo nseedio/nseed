@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\BuildProperties.Packages.props" />
 
@@ -21,6 +21,10 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Assets\Resources.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Assets\Resources.Info.cs" />
+    <Compile Include="..\Common\Cli\MainCommand.cs" Link="MainCommand.cs" />
+    <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Subcommands\Info\InfoSubcommand.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +41,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NuGet.ProjectModel" Version="5.1.0" />
     <PackageReference Include="System.IO.Abstractions" Version="6.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Subcommands\Info\" />
   </ItemGroup>
 
 </Project>

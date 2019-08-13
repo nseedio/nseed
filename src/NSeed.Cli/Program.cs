@@ -3,14 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSeed.Cli.Services;
-using NSeed.Cli.Subcommands.New;
 using System;
 using System.Threading.Tasks;
 
 namespace NSeed.Cli
 {
-    [Command(Name = "nseed", Description = "Data seeding command line tool.")]
-    [Subcommand(typeof(NewSubcommand))]
     internal class Program
     {
         public static async Task<int> Main(string[] args)
@@ -32,7 +29,7 @@ namespace NSeed.Cli
                            DiConfig.RegisterServices(services);
                            Subcommands.DiConfig.RegisterValidators(services);
                        })
-                       .RunCommandLineApplicationAsync<Program>(args);
+                       .RunCommandLineApplicationAsync<MainCommand>(args);
             }
             catch (Exception ex)
             {

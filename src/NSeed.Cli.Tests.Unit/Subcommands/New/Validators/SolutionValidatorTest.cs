@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
@@ -18,8 +19,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 
         [Theory]
-        [InlineData("", Resources.Resources.Error.SolutionPathIsNotProvided)]
-        [InlineData(null, Resources.Resources.Error.SolutionPathIsNotProvided)]
+        [InlineData("", Resources.New.Errors.SolutionPathIsNotProvided)]
+        [InlineData(null, Resources.New.Errors.SolutionPathIsNotProvided)]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string solution, string errorMessage)
         {
             var resultSlnPath = string.Empty;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using static NSeed.Cli.Resources.Resources;
+using static NSeed.Cli.Assets.Resources;
 
 namespace NSeed.Cli.Services
 {
@@ -40,20 +40,20 @@ namespace NSeed.Cli.Services
 
             if (string.IsNullOrEmpty(path))
             {
-                return ErrorResponse(Error.SolutionPathIsNotProvided);
+                return ErrorResponse(New.Errors.SolutionPathIsNotProvided);
             }
 
             var directoryInfo = DirectoryInfo.FromDirectoryName(path);
             if (!directoryInfo.Exists)
             {
-                return ErrorResponse(Error.SolutionPathDirectoryNotExist);
+                return ErrorResponse(New.Errors.SolutionPathDirectoryNotExist);
             }
 
             var response = GetSolution(path, SearchOption.TopDirectoryOnly);
 
             if (response.foundMultiple)
             {
-                return ErrorResponse(Error.MultipleSolutionsFound);
+                return ErrorResponse(New.Errors.MultipleSolutionsFound);
             }
 
             if (response.notFound)
@@ -62,12 +62,12 @@ namespace NSeed.Cli.Services
 
                 if (response.foundMultiple)
                 {
-                    return ErrorResponse(Error.MultipleSolutionsFound);
+                    return ErrorResponse(New.Errors.MultipleSolutionsFound);
                 }
 
                 if (response.notFound)
                 {
-                    return ErrorResponse(Error.SolutionNotFound);
+                    return ErrorResponse(New.Errors.SolutionNotFound);
                 }
             }
 

@@ -2,7 +2,7 @@ using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
 using System;
 using System.Linq;
-using static NSeed.Cli.Resources.Resources;
+using static NSeed.Cli.Assets.Resources;
 
 namespace NSeed.Cli.Subcommands.New.Validators
 {
@@ -22,21 +22,21 @@ namespace NSeed.Cli.Subcommands.New.Validators
             var framework = command.GetFrameworkWithVersion();
             switch (framework.Name)
             {
-                case Resources.Framework.NETCoreApp:
+                case Assets.Framework.NETCoreApp:
                     if (!DotNetCoreVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
                     {
                         return ValidationResult.Error("Core project framework version is not valid");
                     }
 
                     break;
-                case Resources.Framework.NETFramework:
-                    if (!FullDotNetVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
+                case Assets.Framework.NETFramework:
+                    if (!DotNetClassicVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
                     {
                         return ValidationResult.Error("Full dotnet project version is not valid");
                     }
 
                     break;
-                case Resources.Framework.None:
+                case Assets.Framework.None:
                     return ValidationResult.Error("Project framework is invalid");
             }
 

@@ -1,5 +1,6 @@
 using DiffLib;
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New.Validators;
@@ -8,24 +9,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Subcommands.New
 {
-    [Command("new", Description = Resources.Resources.New.CommandDescription)]
+    [Command("new", Description = Resources.New.CommandDescription)]
     [NewValidator]
     internal class NewSubcommand
     {
-        [Option("-s|--solution", Description = Resources.Resources.New.SolutionDescription)]
+        [Option("-s|--solution", Description = Resources.New.SolutionDescription)]
         [SolutionDefaultValueProvider]
         public string Solution { get; private set; }
 
-        [Option("-f|--framework", Description = Resources.Resources.New.FrameworkDescription)]
+        [Option("-f|--framework", Description = Resources.New.FrameworkDescription)]
         [FrameworkDefaultValueProvider]
         public string Framework { get; private set; }
 
-        [Option("-n|--name", Description = Resources.Resources.New.ProjectNameDescription)]
-        [NameDefaultValueProvider(Resources.Resources.New.DefaultProjectName)]
+        [Option("-n|--name", Description = Resources.New.ProjectNameDescription)]
+        [NameDefaultValueProvider(Resources.New.DefaultProjectName)]
         public string Name { get; private set; }
 
         public string ResolvedSolution { get; private set; } = string.Empty;
@@ -83,11 +83,11 @@ namespace NSeed.Cli.Subcommands.New
                         if (frameworkNames.Any() && frameworkNames.All(fn => fn == frameworkNames.First()))
                         {
                             var framework = frameworks.FirstOrDefault();
-                            if (framework.FrameworkName.Framework.Equals(CoreDotNetFramework))
+                            if (framework.FrameworkName.Framework.Equals(Resources.DotNetCoreFramework))
                             {
                                 ResolvedFramework = $"{framework.FrameworkName.Framework.ToLower().TrimStart('.')}{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                             }
-                            else if (framework.FrameworkName.Framework.Equals(FullDotNetFramework))
+                            else if (framework.FrameworkName.Framework.Equals(Resources.DotNetClassicFramework))
                             {
                                 ResolvedFramework = $"v{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
                                 if (framework.FrameworkName.Version.Build != 0)
@@ -101,22 +101,22 @@ namespace NSeed.Cli.Subcommands.New
             }
         }
 
-        public (Resources.Framework Name, string Version) GetFrameworkWithVersion()
+        public (Framework Name, string Version) GetFrameworkWithVersion()
         {
-            var frameworkWithVersion = GetFrameworkWithVersion(Resources.Framework.NETCoreApp);
+            var frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETCoreApp);
 
             if (frameworkWithVersion.IsSuccessful)
             {
-                return (Resources.Framework.NETCoreApp, frameworkWithVersion.Version);
+                return (Assets.Framework.NETCoreApp, frameworkWithVersion.Version);
             }
 
-            frameworkWithVersion = GetFrameworkWithVersion(Resources.Framework.NETFramework);
+            frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETFramework);
             if (frameworkWithVersion.IsSuccessful)
             {
-                return (Resources.Framework.NETFramework, frameworkWithVersion.Version);
+                return (Assets.Framework.NETFramework, frameworkWithVersion.Version);
             }
 
-            return (Resources.Framework.None, string.Empty);
+            return (Assets.Framework.None, string.Empty);
         }
 
         public Task OnExecute(CommandLineApplication app)
@@ -160,7 +160,7 @@ namespace NSeed.Cli.Subcommands.New
             return Task.CompletedTask;
         }
 
-        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Resources.Framework framework)
+        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Framework framework)
         {
             if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
             {

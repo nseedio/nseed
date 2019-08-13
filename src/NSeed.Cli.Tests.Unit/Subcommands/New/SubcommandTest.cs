@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
 using NuGet.Frameworks;
@@ -17,7 +18,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
         private readonly DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private readonly List<string> projectNames = new List<string>();
         private const string SlnName = "TestSln";
-        private const string DefaultProjectName = Resources.Resources.New.DefaultProjectName;
+        private const string DefaultProjectName = Resources.New.DefaultProjectName;
 
         private BaseSubcommand()
         {

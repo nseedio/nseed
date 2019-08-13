@@ -1,10 +1,10 @@
 using FluentAssertions;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
-using static NSeed.Cli.Resources.Resources;
 
 namespace NSeed.Cli.Tests.Unit.Services
 {
@@ -80,7 +80,7 @@ namespace NSeed.Cli.Tests.Unit.Services
 
             public static IEnumerable<object[]> InvalidPaths => new List<object[]>
             {
-                new object[] { $@"{FileFixture.RootDirectory}Test", Error.MultipleSolutionsFound },
+                new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
             };
 
             [Theory]
