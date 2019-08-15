@@ -8,10 +8,10 @@ However, assuming that these colors, typical for a Windows console, will always 
 
 - Mac has different standard console color scheme (Light) then Windows/Linux (Dark).
 - PowerShell and CMD shell have different color schemes on Windows.
-- Maybe a bit exaggerated, but I don't know two Linux users who have the same looking terminal.
+- Maybe a bit exaggerated, but I don't know two Linux users who have the same looking terminal ;-)
 - Windows users change standard console colors too. I am one of them.
 
-We want our colored output to be unobtrusive. Means, it has to fit to any color scheme that the user has.
+We want our colored output to be unobtrusive. Means, it should fit well to any color scheme that the user has.
 
 Moreover, we want to respect the users who do not want to have any coloring. We will be [NO_COLOR](https://no-color.org/) compliant.
 
@@ -22,6 +22,8 @@ Thus, we have to investigate the following:
 
 - How the console color defined by the user maps to `ConsoleColor` enum values?
 - How to get good looking unobtrusive colors for our Tool and Engine CLI?
+
+We want a simple and pragmatic solution that is easy to implement and works well in most of the cases. We ignore edge-cases.
 
 A couple of interesting frameworks to look at:
 
@@ -42,4 +44,29 @@ Interesting articles to read:
 
 ## Running the Experiment
 
+The experiment exists of three projects. Each of them is self-explainable and can be run separately.
+
 ## Results
+
+The mapping of a custom defined color to a `ConsoleColor` enum has some strange logic.
+For example (255, 255, 255) is properly interpreted as `White` using the conversion algorithm described [here](https://www.jerriepelser.com/blog/determine-consolecolor-from-hex-color/) but is reported as `Red` as the `Console.ForegroundColor` property.
+
+![Mapping of an arbitrary color to ConsoleColor enum.png](images/mapping-of-an-arbitrary-color-to-consolecolor-enum.png)
+
+It would be interesting exercise to dig further and figure out why, but for the purpose of our implementation this can be ignored.
+
+The decision:
+
+- For the background color we always take `Console.BackgroundColor`.
+- For the normal text color we always take `Console.ForegroundColor`.
+- For warning, error, and confirmation colors we use the simple algorithm sketched in [GetUnobtrusiveColorScheme](GetUnobtrusiveColorScheme/Program.cs).
+- When printig text we apply the foreground color for the printed line and call `Console.ResetColor()` afterwards.
+- For standard warning, error, and confirmation colors we define two slightly different "themes", light for Mac and dark for Windows and Linux.
+
+This simple approach gives quite good looking results in cases predefined colors are used.
+
+![Unobtrusive colors with standard colors](images/unobtrusive-colors-with-standard-colors.png)
+
+The results are also find in the edge case when custom defined colors are used.
+
+![Unobtrusive colors with custom colors](images/unobtrusive-colors-with-custom-colors.png)

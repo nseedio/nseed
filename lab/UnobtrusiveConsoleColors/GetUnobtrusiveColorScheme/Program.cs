@@ -78,7 +78,7 @@ namespace GetUnobtrusiveColorScheme
                     }
 
                     WriteInColor(foregroundColor, backgroundColor, ' ');
-                    WriteInColor(foregroundColor, backgroundColor, 'T');
+                    WriteInColor(foregroundColor, backgroundColor, 'N');
                     WriteInColor(colors.WarningColor ?? foregroundColor, backgroundColor, 'W');
                     WriteInColor(colors.ErrorColor ?? foregroundColor, backgroundColor, 'E');
                     WriteInColor(colors.ConfirmationColor ?? foregroundColor, backgroundColor, 'C');
