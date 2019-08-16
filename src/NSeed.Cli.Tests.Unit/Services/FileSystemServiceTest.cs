@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
+using NSeed.Cli.Subcommands.New.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -104,6 +105,22 @@ namespace NSeed.Cli.Tests.Unit.Services
                 response.IsSuccesful.Should().Be(false);
                 response.Message.Should().Be(errorMessage);
                 sln.Should().BeNullOrEmpty();
+            }
+        }
+
+        public class TryGetTemplatePath
+        {
+            [Fact]
+            public void IsﾠSuccesfulﾠAndﾠReturnsﾠValidﾠPath()
+            {
+                var service = new FileSystemService();
+                var response = service.TryGetTemplate(Framework.NETCoreApp, out Template template);
+
+                template.Should().NotBeNull();
+                template.Name.Should().NotBeNullOrEmpty();
+                Directory.Exists(template.Path).Should().BeTrue();
+
+                service.RemoveTempTemplates();
             }
         }
     }

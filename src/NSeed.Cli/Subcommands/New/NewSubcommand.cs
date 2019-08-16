@@ -3,10 +3,12 @@ using McMaster.Extensions.CommandLineUtils;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
+using NSeed.Cli.Subcommands.New.Models;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Subcommands.New.ValueProviders;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,7 +30,12 @@ namespace NSeed.Cli.Subcommands.New
         [NameDefaultValueProvider(Resources.New.DefaultProjectName)]
         public string Name { get; private set; }
 
+        /// <summary>
+        /// Gets .sln file path.
+        /// </summary>
         public string ResolvedSolution { get; private set; } = string.Empty;
+
+        public string ResolvedSolutionDirectory { get; private set; } = string.Empty;
 
         public string ResolvedFramework { get; private set; } = string.Empty;
 
@@ -39,6 +46,7 @@ namespace NSeed.Cli.Subcommands.New
         public void SetResolvedSolution(string solution)
         {
             ResolvedSolution = solution;
+            ResolvedSolutionDirectory = new FileInfo(solution)?.DirectoryName;
         }
 
         public void SetResolvedName(string name)
@@ -119,42 +127,51 @@ namespace NSeed.Cli.Subcommands.New
             return (Assets.Framework.None, string.Empty);
         }
 
-        public Task OnExecute(CommandLineApplication app)
+        public Task OnExecute(CommandLineApplication app, IFileSystemService fileSystemService, IDotNetRunner dotNetRunner)
         {
             Console.WriteLine("\n");
             Console.WriteLine("Resolved solution: " + ResolvedSolution);
             Console.WriteLine("Resolved Name:" + ResolvedName);
             Console.WriteLine("Resolved Framework:" + ResolvedFramework);
 
-            // -o => output
-            // -f framework so that value will be from solution analysis
-            // --target-framework-override net461 => use this for older frameworks
+            // Add template return template name also
+            if (fileSystemService.TryGetTemplate(Assets.Framework.NETCoreApp, out Template template).IsSuccesful)
+            {
+                string[] arguments1 = new[] { "new --install", template.Path };
+                var status1 = dotNetRunner.Run(ResolvedSolutionDirectory, arguments1);
+                if (!status1.IsSuccess)
+                {
+                    Console.WriteLine(status1.Errors);
+                }
+            }
 
-            // string[] arguments = new[] { "new classlib -n TestProjectXYZ", "-f netcoreapp2.1", $"-o \"{Path}\"" };
-            // string[] arguments = new[] { "new classlib -n TestProjectXYZ", "--target-framework-override net461", $"-o \"{Path}\"" };
+            // Create project
+            string[] arguments2 = new[] { $"new", template.Name, "-n ", ResolvedName, "-o ", Path.Combine(ResolvedSolutionDirectory, ResolvedName), "-f ", ResolvedFramework };
+            var response = dotNetRunner.Run(ResolvedSolutionDirectory, arguments2);
+            if (!response.IsSuccess)
+            {
+                Console.WriteLine(response.Errors);
+            }
 
-            // First you need to install template from Nuget or localy for now ->
-            // dotnet new --install <PATH> where <PATH> is the path to the folder containing .template.config
-            // path je zapravo path gdje ce nuget paket staviti iteme.
+            // Remove template
+            string[] arguments = new[] { "new --uninstall", template.Path };
+            var status = dotNetRunner.Run(Solution, arguments);
+            if (!status.IsSuccess)
+            {
+                Console.WriteLine(status.Errors);
+            }
+            else
+            {
+                fileSystemService.RemoveTempTemplates();
+            }
 
-            // I need something to tell me is it core or regular .net
-            // Select arguments based on core or regular.net
-            // string[] arguments = new[] { $"new nseednetclasslib -n {Name}", $"-o \"{Path}\"\\{Name}", $"-f \"{Framework}\""};
-            // string[] arguments = new[] { $"new nseedcoreclasslib -n {Name}", $"-o \"{Path}\"\\{Name}", $"-f \"{Framework}\""};
-
-            // var response = _dotNetRunner.Run(_fileSystemService.Path.GetDirectoryName(Path), arguments);
-            // if (!response.IsSuccess)
-            // {
-            //    Console.WriteLine(response.Errors);
-            // }
-
-            ////Add existing project to solution
-            // arguments = new[] { $"sln \"{SolutionPath}\" add \"{Path}\"\\{Name}\\{Name}.csproj" };
-            // response = _dotNetRunner.Run(_fileSystemService.Path.GetDirectoryName(Path), arguments);
-            // if (!response.IsSuccess)
-            // {
-            //    Console.WriteLine(response.Errors);
-            // }
+            // Add project to solution
+            string[] arguments3 = new[] { $"sln", ResolvedSolution, "add", Path.Combine(ResolvedSolutionDirectory, ResolvedName, $"{ResolvedName}.csproj") };
+            response = dotNetRunner.Run(ResolvedSolutionDirectory, arguments3);
+            if (!response.IsSuccess)
+            {
+                Console.WriteLine(response.Errors);
+            }
 
             Console.WriteLine("The End");
             return Task.CompletedTask;
