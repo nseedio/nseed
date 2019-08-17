@@ -23,6 +23,7 @@
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Assets\Resources.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Assets\Resources.Info.cs" />
+    <Compile Include="..\Common\Cli\CommandLineApplicationExecutor.cs" Link="CommandLineApplicationExecutor.cs" />
     <Compile Include="..\Common\Cli\MainCommand.cs" Link="MainCommand.cs" />
     <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Subcommands\Info\InfoSubcommand.cs" />
   </ItemGroup>

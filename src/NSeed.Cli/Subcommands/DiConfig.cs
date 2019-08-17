@@ -5,11 +5,11 @@ using NSeed.Cli.Validation;
 
 namespace NSeed.Cli.Subcommands
 {
-    internal class DiConfig
+    internal static class DiConfig
     {
-        public static void RegisterValidators(IServiceCollection container)
+        public static IServiceCollection AddValidators(this IServiceCollection services)
         {
-            container
+            return services
                 .AddSingleton<IValidator<NewSubcommand>, SolutionValidator>()
                 .AddSingleton<IValidator<NewSubcommand>, NameValidator>()
                 .AddSingleton<IValidator<NewSubcommand>, FrameworkValidator>();

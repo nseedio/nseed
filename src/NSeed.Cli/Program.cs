@@ -1,9 +1,5 @@
-using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NSeed.Cli.Services;
-using System;
+using NSeed.Cli.Subcommands;
 using System.Threading.Tasks;
 
 namespace NSeed.Cli
@@ -12,32 +8,15 @@ namespace NSeed.Cli
     {
         public static async Task<int> Main(string[] args)
         {
-            try
-            {
-                return await new HostBuilder()
-                       .ConfigureLogging((context, builder) =>
-                       {
-                           builder.AddConsole();
-                       })
-                       .ConfigureServices((context, services) =>
-                       {
-                           services
-                              .AddSingleton(PhysicalConsole.Singleton)
-                              .AddSingleton<CommandLineApplication>()
-                              .AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()));
-
-                           DiConfig.RegisterServices(services);
-                           Subcommands.DiConfig.RegisterValidators(services);
-                       })
-                       .RunCommandLineApplicationAsync<MainCommand>(args);
-            }
-            catch (Exception ex)
-            {
-                Console.BackgroundColor = ConsoleColor.Black;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(ex.Message);
-                return 0;
-            }
+            return await CommandLineApplicationExecutor.Execute<MainCommand>(
+                args,
+                services =>
+                {
+                    services
+                        .AddCliServices()
+                        .AddValidators();
+                },
+                "NSeed");
         }
     }
 }

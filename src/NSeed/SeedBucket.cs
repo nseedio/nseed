@@ -1,4 +1,3 @@
-using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli;
 using NSeed.Discovery.SeedBucket;
@@ -6,8 +5,6 @@ using NSeed.Discovery.SeedBucket.ReflectionBased;
 using NSeed.Guards;
 using NSeed.MetaInfo;
 using System;
-using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace NSeed
@@ -46,51 +43,10 @@ namespace NSeed
             // TODO: Add error checking. Should this be in try-catch?
             var seedBucket = new TSeedBucket();
 
-            var serviceProvider = BuildServiceProvider(seedBucket);
-
-            var app = new CommandLineApplication<MainCommand>();
-
-            // TODO: Put this into some common CommandLineApplication executor
-            //       so that the behaviour is the same between the Tool Cli and the Engine Cli.
-            app.Conventions
-                .UseDefaultConventions()
-                .UseConstructorInjection(serviceProvider);
-            app.Name = GetSeedBucketExecutableName();
-            app.MakeSuggestionsInErrorMessage = true;
-            app.UsePagerForHelpText = false;
-
-            try
+            return await CommandLineApplicationExecutor.Execute<MainCommand>(commandLineArguments, services =>
             {
-                return await app.ExecuteAsync(commandLineArguments);
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception.Message);
-                return 1;
-            }
-
-            static string GetSeedBucketExecutableName()
-            {
-                const string fallbackExecutableName = "<your seed bucket>";
-
-                // We will implement this method being highly paranoic. Highly.
-
-                string? assemblyLocation = Assembly.GetEntryAssembly()?.Location;
-                if (assemblyLocation == null) return fallbackExecutableName;
-
-                string executableName = Path.GetFileNameWithoutExtension(assemblyLocation);
-                return string.IsNullOrWhiteSpace(executableName)
-                    ? fallbackExecutableName
-                    : executableName;
-            }
-
-            static IServiceProvider BuildServiceProvider(SeedBucket seedBucket)
-            {
-                return new ServiceCollection()
-                    .AddSingleton(PhysicalConsole.Singleton)
-                    .AddSingleton(seedBucket)
-                    .BuildServiceProvider();
-            }
+                services.AddSingleton(seedBucket);
+            });
         }
     }
 }

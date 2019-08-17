@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace NSeed.Cli.Services
 {
-    internal class DiConfig
+    internal static class DiConfig
     {
-        public static void RegisterServices(IServiceCollection container)
+        public static IServiceCollection AddCliServices(this IServiceCollection services)
         {
-            container
+            return services
                 .AddSingleton<IFileSystemService, FileSystemService>()
                 .AddSingleton<IDotNetRunner, DotNetRunner>()
                 .AddSingleton<IDependencyGraphService, DependencyGraphService>();
