@@ -1,6 +1,7 @@
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Subcommands.New.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -41,6 +42,7 @@ namespace NSeed.Cli.Services
         public (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template)
         {
             template = new Template();
+
             using Stream stream = GetEmbeddedResource(Templates);
             using (var fileStream = File.Create(Path.Combine(Path.GetTempPath(), Templates)))
             {
@@ -50,10 +52,8 @@ namespace NSeed.Cli.Services
 
             System.IO.Compression.ZipFile.ExtractToDirectory(Path.Combine(Path.GetTempPath(), Templates), Path.GetTempPath());
 
-            // Change properties for short name only in json with GUID but maybe also some other properties
-
             template.Path = Path.Combine(Path.GetTempPath(), "templates", GetTemplateFolder(framework));
-            template.Name = "nseedcoreclasslib";
+            template.Name = GetTemplateName(template.Path);
 
             return succesResponse;
         }
@@ -154,6 +154,21 @@ namespace NSeed.Cli.Services
             }
 
             return string.Empty;
+        }
+
+        private string GetTemplateName(string path)
+        {
+            var name = Guid.NewGuid().ToString();
+            ReplaceAllPlaceholders(path, name);
+            return name;
+        }
+
+        private void ReplaceAllPlaceholders(string path, string name)
+        {
+            var templateConfigFilePath = Path.Combine(path, ".template.config", "template.json");
+            string content = File.ReadAllText(templateConfigFilePath);
+            content = content.Replace("guid", name);
+            File.WriteAllText(templateConfigFilePath, content);
         }
     }
 }

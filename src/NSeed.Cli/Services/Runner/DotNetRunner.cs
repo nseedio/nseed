@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Cli.Subcommands.New.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,32 @@ namespace NSeed.Cli.Services
 
     internal class DotNetRunner : IDotNetRunner
     {
+        public (bool IsSuccesful, string Message) AddTemplate(string solutionDirectory, Template template)
+        {
+            var arguments = new[] { "new --install", template.Path };
+            return Response(Run(solutionDirectory, arguments));
+        }
+
+        public (bool IsSuccesful, string Message) CreateProject(string solutionDirectory, string name, string framework, Template template)
+        {
+            var newProjectPath = Path.Combine(solutionDirectory, name);
+            string[] arguments = new[] { $"new", template.Name, "-n ", name, "-o ", newProjectPath, "-f ", framework };
+            return Response(Run(solutionDirectory, arguments));
+        }
+
+        public (bool IsSuccesful, string Message) RemoveTemplate(string solutionDirectory, Template template)
+        {
+            string[] arguments = new[] { "new --uninstall", template.Path };
+            return Response(Run(solutionDirectory, arguments));
+        }
+
+        public (bool IsSuccesful, string Message) AddProjectToSolution(string solutionDirectory, string solution, string name, Template template)
+        {
+            var newProjectCsprojFilePath = Path.Combine(solutionDirectory, name, $"{name}.csproj");
+            string[] arguments = new[] { $"sln", solution, "add", newProjectCsprojFilePath };
+            return Response(Run(solutionDirectory, arguments));
+        }
+
         public RunStatus Run(string workingDirectory, string[] arguments)
         {
             var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), string.Join(" ", arguments))
@@ -63,5 +90,19 @@ namespace NSeed.Cli.Services
                 lines.AppendLine(line);
             }
         }
+
+        private (bool IsSuccesful, string Message) Response(RunStatus status)
+        {
+            if (status.IsSuccess)
+            {
+                return succesResponse;
+            }
+
+            return ErrorResponse(status.Errors);
+        }
+
+        private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
+
+        private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }
 }

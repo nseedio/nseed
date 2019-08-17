@@ -16,5 +16,12 @@ namespace NSeed.Cli.Services
             Errors = errors;
             ExitCode = exitCode;
         }
+
+        public RunStatus()
+        {
+            Output = default;
+            Errors = default;
+            ExitCode = default;
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace NSeed.Cli.Subcommands.New
         public void SetResolvedSolution(string solution)
         {
             ResolvedSolution = solution;
-            ResolvedSolutionDirectory = new FileInfo(solution)?.DirectoryName;
+            ResolvedSolutionDirectory = new FileInfo(solution)?.DirectoryName ?? string.Empty;
         }
 
         public void SetResolvedName(string name)
@@ -129,51 +129,21 @@ namespace NSeed.Cli.Subcommands.New
 
         public Task OnExecute(CommandLineApplication app, IFileSystemService fileSystemService, IDotNetRunner dotNetRunner)
         {
-            Console.WriteLine("\n");
-            Console.WriteLine("Resolved solution: " + ResolvedSolution);
-            Console.WriteLine("Resolved Name:" + ResolvedName);
-            Console.WriteLine("Resolved Framework:" + ResolvedFramework);
+            var getTemplateResponse = fileSystemService.TryGetTemplate(Assets.Framework.NETCoreApp, out Template template);
 
-            // Add template return template name also
-            if (fileSystemService.TryGetTemplate(Assets.Framework.NETCoreApp, out Template template).IsSuccesful)
+            if (getTemplateResponse.IsSuccesful)
             {
-                string[] arguments1 = new[] { "new --install", template.Path };
-                var status1 = dotNetRunner.Run(ResolvedSolutionDirectory, arguments1);
-                if (!status1.IsSuccess)
+                var response = RunNewSubcommand(app, fileSystemService, dotNetRunner, template);
+                if (!response.IsSuccesful)
                 {
-                    Console.WriteLine(status1.Errors);
+                    app.Error.WriteLine(response.Message);
                 }
-            }
-
-            // Create project
-            string[] arguments2 = new[] { $"new", template.Name, "-n ", ResolvedName, "-o ", Path.Combine(ResolvedSolutionDirectory, ResolvedName), "-f ", ResolvedFramework };
-            var response = dotNetRunner.Run(ResolvedSolutionDirectory, arguments2);
-            if (!response.IsSuccess)
-            {
-                Console.WriteLine(response.Errors);
-            }
-
-            // Remove template
-            string[] arguments = new[] { "new --uninstall", template.Path };
-            var status = dotNetRunner.Run(Solution, arguments);
-            if (!status.IsSuccess)
-            {
-                Console.WriteLine(status.Errors);
             }
             else
             {
-                fileSystemService.RemoveTempTemplates();
+                app.Error.WriteLine(getTemplateResponse.Message);
             }
 
-            // Add project to solution
-            string[] arguments3 = new[] { $"sln", ResolvedSolution, "add", Path.Combine(ResolvedSolutionDirectory, ResolvedName, $"{ResolvedName}.csproj") };
-            response = dotNetRunner.Run(ResolvedSolutionDirectory, arguments3);
-            if (!response.IsSuccess)
-            {
-                Console.WriteLine(response.Errors);
-            }
-
-            Console.WriteLine("The End");
             return Task.CompletedTask;
         }
 
@@ -222,6 +192,39 @@ namespace NSeed.Cli.Subcommands.New
             }
 
             return string.Empty;
+        }
+
+        private (bool IsSuccesful, string Message) RunNewSubcommand(CommandLineApplication app, IFileSystemService fileSystemService, IDotNetRunner dotNetRunner, Template template)
+        {
+            var response = dotNetRunner.AddTemplate(ResolvedSolutionDirectory, template);
+            if (!response.IsSuccesful)
+            {
+                return response;
+            }
+
+            response = dotNetRunner.CreateProject(ResolvedSolutionDirectory, ResolvedName, ResolvedFramework, template);
+            if (!response.IsSuccesful)
+            {
+                return response;
+            }
+
+            response = dotNetRunner.RemoveTemplate(ResolvedSolutionDirectory, template);
+            if (response.IsSuccesful)
+            {
+                fileSystemService.RemoveTempTemplates();
+            }
+            else
+            {
+                return response;
+            }
+
+            response = dotNetRunner.AddProjectToSolution(ResolvedSolutionDirectory, ResolvedSolution, ResolvedName, template);
+            if (!response.IsSuccesful)
+            {
+                return response;
+            }
+
+            return (true, string.Empty);
         }
     }
 }
