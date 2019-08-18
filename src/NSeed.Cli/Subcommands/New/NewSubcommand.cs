@@ -45,8 +45,11 @@ namespace NSeed.Cli.Subcommands.New
 
         public void SetResolvedSolution(string solution)
         {
-            ResolvedSolution = solution;
-            ResolvedSolutionDirectory = new FileInfo(solution)?.DirectoryName ?? string.Empty;
+            ResolvedSolution = solution ?? string.Empty;
+            if (!string.IsNullOrEmpty(solution))
+            {
+                ResolvedSolutionDirectory = new FileInfo(solution ?? string.Empty)?.DirectoryName ?? string.Empty;
+            }
         }
 
         public void SetResolvedName(string name)
@@ -133,7 +136,15 @@ namespace NSeed.Cli.Subcommands.New
 
             if (getTemplateResponse.IsSuccesful)
             {
-                var response = RunNewSubcommand(app, fileSystemService, dotNetRunner, template);
+                var response = dotNetRunner.RunNewSubcommand(new NewSubcommandArgs
+                {
+                    SolutionDirectory = ResolvedSolutionDirectory,
+                    Solution = ResolvedSolution,
+                    Framework = ResolvedFramework,
+                    Name = ResolvedName,
+                    Template = template
+                });
+
                 if (!response.IsSuccesful)
                 {
                     app.Error.WriteLine(response.Message);
@@ -144,6 +155,7 @@ namespace NSeed.Cli.Subcommands.New
                 app.Error.WriteLine(getTemplateResponse.Message);
             }
 
+            fileSystemService.RemoveTempTemplates();
             return Task.CompletedTask;
         }
 
@@ -192,39 +204,6 @@ namespace NSeed.Cli.Subcommands.New
             }
 
             return string.Empty;
-        }
-
-        private (bool IsSuccesful, string Message) RunNewSubcommand(CommandLineApplication app, IFileSystemService fileSystemService, IDotNetRunner dotNetRunner, Template template)
-        {
-            var response = dotNetRunner.AddTemplate(ResolvedSolutionDirectory, template);
-            if (!response.IsSuccesful)
-            {
-                return response;
-            }
-
-            response = dotNetRunner.CreateProject(ResolvedSolutionDirectory, ResolvedName, ResolvedFramework, template);
-            if (!response.IsSuccesful)
-            {
-                return response;
-            }
-
-            response = dotNetRunner.RemoveTemplate(ResolvedSolutionDirectory, template);
-            if (response.IsSuccesful)
-            {
-                fileSystemService.RemoveTempTemplates();
-            }
-            else
-            {
-                return response;
-            }
-
-            response = dotNetRunner.AddProjectToSolution(ResolvedSolutionDirectory, ResolvedSolution, ResolvedName, template);
-            if (!response.IsSuccesful)
-            {
-                return response;
-            }
-
-            return (true, string.Empty);
         }
     }
 }

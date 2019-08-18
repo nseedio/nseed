@@ -116,11 +116,25 @@ namespace NSeed.Cli.Tests.Unit.Services
                 var service = new FileSystemService();
                 var response = service.TryGetTemplate(Framework.NETCoreApp, out Template template);
 
+                response.IsSuccesful.Should().BeTrue();
+                response.Message.Should().BeNullOrEmpty();
                 template.Should().NotBeNull();
                 template.Name.Should().NotBeNullOrEmpty();
                 Directory.Exists(template.Path).Should().BeTrue();
 
                 service.RemoveTempTemplates();
+            }
+        }
+
+        public class RemoveTempTemplates
+        {
+            [Fact]
+            public void IsﾠSuccesful()
+            {
+                var service = new FileSystemService();
+                var response = service.RemoveTempTemplates();
+                response.IsSuccesful.Should().BeTrue();
+                response.Message.Should().BeNullOrEmpty();
             }
         }
     }

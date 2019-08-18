@@ -14,30 +14,40 @@ namespace NSeed.Cli.Services
 
     internal class DotNetRunner : IDotNetRunner
     {
-        public (bool IsSuccesful, string Message) AddTemplate(string solutionDirectory, Template template)
+        public (bool IsSuccesful, string Message) RunNewSubcommand(NewSubcommandArgs args)
         {
-            var arguments = new[] { "new --install", template.Path };
-            return Response(Run(solutionDirectory, arguments));
+            return RunNewSubcommand(
+                args,
+                AddTemplate,
+                CreateProject,
+                RemoveTemplate,
+                AddProjectToSolution);
         }
 
-        public (bool IsSuccesful, string Message) CreateProject(string solutionDirectory, string name, string framework, Template template)
+        public (bool IsSuccesful, string Message) AddTemplate(NewSubcommandArgs args)
         {
-            var newProjectPath = Path.Combine(solutionDirectory, name);
-            string[] arguments = new[] { $"new", template.Name, "-n ", name, "-o ", newProjectPath, "-f ", framework };
-            return Response(Run(solutionDirectory, arguments));
+            var arguments = new[] { "new --install", args.Template.Path };
+            return Response(Run(args.SolutionDirectory, arguments));
         }
 
-        public (bool IsSuccesful, string Message) RemoveTemplate(string solutionDirectory, Template template)
+        public (bool IsSuccesful, string Message) CreateProject(NewSubcommandArgs args)
         {
-            string[] arguments = new[] { "new --uninstall", template.Path };
-            return Response(Run(solutionDirectory, arguments));
+            var newProjectPath = Path.Combine(args.SolutionDirectory, args.Name);
+            string[] arguments = new[] { $"new", args.Template.Name, "-n ", args.Name, "-o ", newProjectPath, "-f ", args.Framework };
+            return Response(Run(args.SolutionDirectory, arguments));
         }
 
-        public (bool IsSuccesful, string Message) AddProjectToSolution(string solutionDirectory, string solution, string name, Template template)
+        public (bool IsSuccesful, string Message) RemoveTemplate(NewSubcommandArgs args)
         {
-            var newProjectCsprojFilePath = Path.Combine(solutionDirectory, name, $"{name}.csproj");
-            string[] arguments = new[] { $"sln", solution, "add", newProjectCsprojFilePath };
-            return Response(Run(solutionDirectory, arguments));
+            string[] arguments = new[] { "new --uninstall", args.Template.Path };
+            return Response(Run(args.SolutionDirectory, arguments));
+        }
+
+        public (bool IsSuccesful, string Message) AddProjectToSolution(NewSubcommandArgs args)
+        {
+            var newProjectCsprojFilePath = Path.Combine(args.SolutionDirectory, args.Name, $"{args.Name}.csproj");
+            string[] arguments = new[] { $"sln", args.Solution, "add", newProjectCsprojFilePath };
+            return Response(Run(args.SolutionDirectory, arguments));
         }
 
         public RunStatus Run(string workingDirectory, string[] arguments)
@@ -104,5 +114,19 @@ namespace NSeed.Cli.Services
         private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
 
         private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
+
+        private (bool IsSuccesful, string Message) RunNewSubcommand(NewSubcommandArgs arguments, params Func<NewSubcommandArgs, (bool IsSuccesful, string Message)>[] commands)
+        {
+            foreach (var command in commands)
+            {
+                var (isSuccesful, message) = command(arguments);
+                if (!isSuccesful)
+                {
+                    return ErrorResponse(message);
+                }
+            }
+
+            return succesResponse;
+        }
     }
 }

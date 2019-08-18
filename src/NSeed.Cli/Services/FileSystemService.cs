@@ -14,7 +14,11 @@ namespace NSeed.Cli.Services
     internal class FileSystemService : FileSystem, IFileSystemService
     {
         public const string SolutionPrefix = "sln";
-        public const string Templates = "templates.zip";
+        public const string ZipTemplatesFile = "templates.zip";
+
+        public string ZipTemplatesFilePath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), ZipTemplatesFile);
+
+        public string TemplatesDirectoryPath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "templates");
 
         public (bool IsSuccesful, string Message) TryGetSolutionPath(string solution, out string path)
         {
@@ -43,16 +47,16 @@ namespace NSeed.Cli.Services
         {
             template = new Template();
 
-            using Stream stream = GetEmbeddedResource(Templates);
-            using (var fileStream = File.Create(Path.Combine(Path.GetTempPath(), Templates)))
+            using Stream stream = GetEmbeddedResource(ZipTemplatesFile);
+            using (var fileStream = File.Create(ZipTemplatesFilePath))
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 stream.CopyTo(fileStream);
             }
 
-            System.IO.Compression.ZipFile.ExtractToDirectory(Path.Combine(Path.GetTempPath(), Templates), Path.GetTempPath());
+            System.IO.Compression.ZipFile.ExtractToDirectory(ZipTemplatesFilePath, Path.GetTempPath());
 
-            template.Path = Path.Combine(Path.GetTempPath(), "templates", GetTemplateFolder(framework));
+            template.Path = Path.Combine(TemplatesDirectoryPath, GetTemplateDirectory(framework));
             template.Name = GetTemplateName(template.Path);
 
             return succesResponse;
@@ -60,8 +64,16 @@ namespace NSeed.Cli.Services
 
         public (bool IsSuccesful, string Message) RemoveTempTemplates()
         {
-            File.Delete(Path.Combine(Path.GetTempPath(), Templates));
-            Directory.Delete(Path.Combine(Path.GetTempPath(), "templates"), true);
+            if (new FileInfo(ZipTemplatesFilePath).Exists)
+            {
+                File.Delete(ZipTemplatesFilePath);
+            }
+
+            if (new DirectoryInfo(TemplatesDirectoryPath).Exists)
+            {
+                Directory.Delete(TemplatesDirectoryPath, true);
+            }
+
             return succesResponse;
         }
 
@@ -142,7 +154,7 @@ namespace NSeed.Cli.Services
             return assembly.GetManifestResourceStream(resourceName);
         }
 
-        private string GetTemplateFolder(Framework framework)
+        private string GetTemplateDirectory(Framework framework)
         {
             switch (framework)
             {
