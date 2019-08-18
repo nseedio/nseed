@@ -42,7 +42,7 @@ namespace NSeed.Cli.Tests.Unit.Services
 
         protected virtual bool IsFileLocked(FileInfo file)
         {
-            FileStream stream = null;
+            FileStream? stream = null;
 
             try
             {
@@ -50,10 +50,10 @@ namespace NSeed.Cli.Tests.Unit.Services
             }
             catch (IOException)
             {
-                // the file is unavailable because it is:
-                // still being written to
-                // or being processed by another thread
-                // or does not exist (has already been processed)
+                // The file is unavailable because it is:
+                // - still being written to
+                // - or being processed by another thread
+                // - or does not exist (has already been processed)
                 return true;
             }
             finally
@@ -62,7 +62,6 @@ namespace NSeed.Cli.Tests.Unit.Services
                     stream.Close();
             }
 
-            // file is not locked
             return false;
         }
     }
@@ -85,7 +84,13 @@ namespace NSeed.Cli.Tests.Unit.Services
             };
 
             [Theory]
+            // TODO: This looks like a bug in the xUnit analyzer. Strange.
+            // For now, just disable it, but take a look at it.
+            // It suddenly doesn't work on Igor's machine and we have to see why.
+            // Take a look, fix the issue, and remove all disabling of xUnit1019 in all files..
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
             [MemberData(nameof(ValidPaths))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
             public void IsﾠSuccesfulﾠAndﾠReturnsﾠValidﾠPath(string path)
             {
                 var service = new FileSystemService();
@@ -96,7 +101,9 @@ namespace NSeed.Cli.Tests.Unit.Services
             }
 
             [Theory]
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
             [MemberData(nameof(InvalidPaths))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
             public void IsﾠNotﾠSuccesfulﾠAndﾠReturnsﾠErrorﾠResponse(string path, string errorMessage)
             {
                 var service = new FileSystemService();

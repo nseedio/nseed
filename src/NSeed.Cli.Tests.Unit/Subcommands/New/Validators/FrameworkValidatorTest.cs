@@ -8,7 +8,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 {
     public class FrameworkValidatorﾠWithﾠInvalidﾠFramework
     {
-        private FrameworkValidator Validator { get; set; }
+        private readonly FrameworkValidator validator = new FrameworkValidator();
 
         private readonly NewSubcommand subcommand = new NewSubcommand();
 
@@ -22,9 +22,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         [InlineData("netcoreapp_3.1", "Core project framework version is not valid")]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string framework, string errorMessage)
         {
-            Validator = new FrameworkValidator();
             subcommand.SetResolvedFramework(framework);
-            var result = Validator.Validate(subcommand);
+            var result = validator.Validate(subcommand);
 
             result.Should().NotBeNull().And.BeOfType<ValidationResult>();
             result.IsValid.Should().BeFalse();
@@ -34,7 +33,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
     public class FrameworkValidatorﾠWithﾠValidﾠFramework
     {
-        private FrameworkValidator Validator { get; set; }
+        private readonly FrameworkValidator validator = new FrameworkValidator();
 
         private readonly NewSubcommand subcommand = new NewSubcommand();
 
@@ -45,9 +44,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         [InlineData("netframework4.7.2")]
         public void ReturnﾠSuccessﾠvalidationﾠresponse(string framework)
         {
-            Validator = new FrameworkValidator();
             subcommand.SetResolvedFramework(framework);
-            var result = Validator.Validate(subcommand);
+            var result = validator.Validate(subcommand);
 
             result.Should().NotBeNull().And.BeOfType<ValidationResult>();
             result.IsValid.Should().BeTrue();

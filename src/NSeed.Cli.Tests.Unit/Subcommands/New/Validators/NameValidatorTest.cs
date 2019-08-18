@@ -12,9 +12,14 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 {
     public abstract class BaseNameValidatorTest
     {
-        internal NameValidator Validator { get; set; }
+        internal NameValidator Validator { get; }
 
         internal NewSubcommand Subcommand { get; } = new NewSubcommand();
+
+        internal BaseNameValidatorTest()
+        {
+            Validator = new NameValidator(MockDependencyGraphService.Object);
+        }
 
         internal ValidationResult Validate()
         {
@@ -25,11 +30,11 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
         protected Mock<IDependencyGraphService> MockDependencyGraphService { get; } = new Mock<IDependencyGraphService>();
 
-        protected void GenerateSoluitonProjects(IEnumerable<string> projectNames)
+        protected void GenerateSolutionProjects(IEnumerable<string> projectNames)
         {
             MockDependencyGraphService
-            .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
-            .Returns(projectNames);
+                .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
+                .Returns(projectNames);
         }
     }
 
@@ -37,8 +42,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         public NameValidatorﾠWithﾠInvalidﾠName()
         {
-            GenerateSoluitonProjects(SlnProjects);
-            Validator = new NameValidator(MockDependencyGraphService.Object);
+            GenerateSolutionProjects(SlnProjects);
         }
 
         [Theory]
@@ -69,8 +73,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         public NameValidatorﾠWithﾠValidﾠName()
         {
-            GenerateSoluitonProjects(SlnProjects);
-            Validator = new NameValidator(MockDependencyGraphService.Object);
+            GenerateSolutionProjects(SlnProjects);
         }
 
         [Theory]

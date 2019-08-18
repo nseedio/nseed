@@ -12,8 +12,6 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 {
     public class SolutionValidatorﾠWithﾠInvalidﾠSolution
     {
-        private SolutionValidator SolutionValidator { get; set; }
-
         private readonly NewSubcommand subcommand = new NewSubcommand();
         private readonly Mock<IFileSystemService> mockFileSystemService = new Mock<IFileSystemService>();
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
@@ -27,9 +25,9 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
             mockFileSystemService.Setup(t => t.TryGetSolutionPath(It.IsAny<string>(), out resultSlnPath)).Returns((true, string.Empty));
             dependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>())).Returns(new DependencyGraphSpec());
 
-            SolutionValidator = new SolutionValidator(mockFileSystemService.Object, dependencyGraphService.Object);
+            var validator = new SolutionValidator(mockFileSystemService.Object, dependencyGraphService.Object);
             subcommand.SetResolvedSolution(solution);
-            var result = SolutionValidator.Validate(subcommand);
+            var result = validator.Validate(subcommand);
 
             result.Should().NotBeNull().And.BeOfType<ValidationResult>();
             result.IsValid.Should().BeFalse();

@@ -149,7 +149,13 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
         public class ResolveﾠDefaultﾠNameﾠWithﾠPrefix : BaseSubcommand
         {
             [Theory]
+            // TODO: This looks like a bug in the xUnit analyzer. Strange.
+            // For now, just disable it, but take a look at it.
+            // It suddenly doesn't work on Igor's machine and we have to see why.
+            // Take a look, fix the issue, and remove all disabling of xUnit1019 in all files..
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
             [MemberData(nameof(EqualPrefixes))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
             public void ResolvedﾠWithﾠCommonﾠPrefix(IEnumerable<string> projectNames)
             {
                 GenerateSoluitonProjects(projectNames);
@@ -158,7 +164,9 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             }
 
             [Theory]
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
             [MemberData(nameof(NotEqualPrefixes))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
             public void ResolvedﾠWithﾠNotﾠCommonﾠPrefix(IEnumerable<string> projectNames)
             {
                 GenerateSoluitonProjects(projectNames);
