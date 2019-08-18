@@ -23,15 +23,12 @@ namespace NSeed.Cli
 
             var app = new CommandLineApplication<TApp>();
 
-            var res = app.Parse(commandLineArguments);
-
             app.Conventions
                 .UseDefaultConventions()
                 .UseConstructorInjection(serviceProvider);
             app.Name = executableName ?? GetExecutableName();
             app.MakeSuggestionsInErrorMessage = true;
             app.UsePagerForHelpText = false;
-            app.VerboseOption();
 
             try
             {
