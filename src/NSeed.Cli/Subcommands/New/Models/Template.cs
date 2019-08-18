@@ -14,11 +14,11 @@ namespace NSeed.Cli.Subcommands.New.Models
         /// <summary>
         /// Gets or sets project template path.
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets Project name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 }

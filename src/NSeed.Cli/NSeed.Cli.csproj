@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\BuildProperties.Packages.props" />
 
@@ -7,6 +7,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>nseed</ToolCommandName>
+    <Nullable>enable</Nullable>
+    <!-- Some previews of .NET Core 3 don't have the rename yet. -->
+    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,14 +37,14 @@
 
   <ItemGroup>
     <PackageReference Include="difflib" Version="2017.7.26.1241" />
-    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.3.4" />
-    <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="2.3.4" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.4.0-beta.81" />
+    <PackageReference Include="McMaster.Extensions.Hosting.CommandLine" Version="2.4.0-beta.81" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NuGet.ProjectModel" Version="5.1.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="6.0.11" />
+    <PackageReference Include="NuGet.ProjectModel" Version="5.2.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="6.0.21" />
   </ItemGroup>
 
   <ItemGroup>

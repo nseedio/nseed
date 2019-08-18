@@ -19,8 +19,8 @@ namespace NSeed.Cli.Services
 
         public RunStatus()
         {
-            Output = default;
-            Errors = default;
+            Output = string.Empty;
+            Errors = string.Empty;
             ExitCode = default;
         }
     }

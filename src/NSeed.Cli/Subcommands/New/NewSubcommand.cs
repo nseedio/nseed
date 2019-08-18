@@ -20,15 +20,15 @@ namespace NSeed.Cli.Subcommands.New
     {
         [Option("-s|--solution", Description = Resources.New.SolutionDescription)]
         [SolutionDefaultValueProvider]
-        public string Solution { get; private set; }
+        public string Solution { get; private set; } = string.Empty;
 
         [Option("-f|--framework", Description = Resources.New.FrameworkDescription)]
         [FrameworkDefaultValueProvider]
-        public string Framework { get; private set; }
+        public string Framework { get; private set; } = string.Empty;
 
         [Option("-n|--name", Description = Resources.New.ProjectNameDescription)]
         [NameDefaultValueProvider(Resources.New.DefaultProjectName)]
-        public string Name { get; private set; }
+        public string Name { get; private set; } = string.Empty;
 
         /// <summary>
         /// Gets .sln file path.

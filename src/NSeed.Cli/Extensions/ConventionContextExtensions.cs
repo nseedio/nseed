@@ -11,12 +11,11 @@ namespace NSeed.Cli.Extensions
 {
     internal static class ConventionContextExtensions
     {
-        public static T GetValue<T>(this ConventionContext context, string parameterName)
-            where T : class
+        public static string GetStringValue(this ConventionContext context, string parameterName)
         {
             var optionValue = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName)
-                .FirstOrDefault();
-            return optionValue as T;
+                ?.FirstOrDefault();
+            return optionValue ?? string.Empty;
         }
 
         public static void SetValue(this ConventionContext context, string parameterName, string value)
@@ -33,13 +32,12 @@ namespace NSeed.Cli.Extensions
                     .FirstOrDefault(s => s.GetType() == typeof(T));
         }
 
-        private static IEnumerable<string> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
+        private static IEnumerable<string?> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
         {
             options.AreEmptyIfNull();
-            return options.FirstOrDefault(b => b.LongName.Equals(
-                longName,
-                StringComparison.InvariantCultureIgnoreCase))
-                ?.Values ?? Enumerable.Empty<string>();
+            return options
+                .FirstOrDefault(b => (b.LongName != null && b.LongName.Equals(longName, StringComparison.InvariantCultureIgnoreCase)))?.Values
+                ?? Enumerable.Empty<string?>();
         }
     }
 }

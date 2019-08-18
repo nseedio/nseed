@@ -13,7 +13,7 @@ namespace NSeed.Cli.Services
         private readonly IDotNetRunner dotNetRunner;
         private readonly IFileSystemService fileSystemService;
 
-        private DependencyGraphSpec dependencyGraphSpec = null;
+        private DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private string projectPath = string.Empty;
 
         public DependencyGraphService(
@@ -28,7 +28,7 @@ namespace NSeed.Cli.Services
         {
             if (string.IsNullOrEmpty(solutionPath))
             {
-                return null;
+                return new DependencyGraphSpec();
             }
 
             if (dependencyGraphSpec != null
@@ -46,9 +46,9 @@ namespace NSeed.Cli.Services
 
             if (!runStatus.IsSuccess)
             {
-                dependencyGraphSpec = null;
+                dependencyGraphSpec = new DependencyGraphSpec();
                 projectPath = string.Empty;
-                return null;
+                return dependencyGraphSpec;
             }
 
             var dependencyGraphText = fileSystemService.File.ReadAllText(dgOutput);

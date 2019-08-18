@@ -14,13 +14,13 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
-                var framework = context.GetValue<string>(nameof(NewSubcommand.Framework));
-                var model = context.ModelAccessor.GetModel() as NewSubcommand;
-                model.SetResolvedFramework(framework);
+                var framework = context.GetStringValue(nameof(NewSubcommand.Framework));
+                var model = context.ModelAccessor?.GetModel() as NewSubcommand;
+                model?.SetResolvedFramework(framework);
                 if (framework.IsNotProvidedByUser())
                 {
                     var dependencyGraphService = context.Application.GetService<IDependencyGraphService>();
-                    model.ResolveFramework(dependencyGraphService);
+                    model?.ResolveFramework(dependencyGraphService);
                 }
             });
         }
