@@ -1,5 +1,6 @@
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Abstractions;
 using System;
 using System.IO;
 using System.Reflection;
@@ -12,7 +13,9 @@ namespace NSeed.Cli
         public static async Task<int> Execute<TApp>(string[] commandLineArguments, Action<IServiceCollection>? serviceConfigurator = null, string? executableName = null)
             where TApp : class
         {
-            var serviceCollection = BuildDefaultServiceCollection();
+            var output = CreateConsoleOutputSink(false, false);
+
+            var serviceCollection = CreateDefaultServiceCollection(output);
 
             serviceConfigurator?.Invoke(serviceCollection);
 
@@ -33,8 +36,7 @@ namespace NSeed.Cli
             }
             catch (Exception exception)
             {
-                // TODO: Add output sink here.
-                Console.WriteLine(exception.Message);
+                output.WriteError(exception.Message);
                 return 1;
             }
 
@@ -53,10 +55,19 @@ namespace NSeed.Cli
                     : executableName;
             }
 
-            static IServiceCollection BuildDefaultServiceCollection()
+            static IServiceCollection CreateDefaultServiceCollection(IOutputSink outputSink)
             {
                 return new ServiceCollection()
-                    .AddSingleton(PhysicalConsole.Singleton);
+                    .AddSingleton(PhysicalConsole.Singleton)
+                    .AddSingleton(outputSink);
+            }
+
+            static IOutputSink CreateConsoleOutputSink(bool noColor, bool acceptsVerboseMessages)
+            {
+                var textColorsTheme = TextColorsTheme.GetForCurrentOS();
+                var textColors = new TextColors(textColorsTheme, Console.ForegroundColor, Console.BackgroundColor, noColor);
+
+                return new ConsoleOutputSink(textColors, acceptsVerboseMessages);
             }
         }
     }

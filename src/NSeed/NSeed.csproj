@@ -19,9 +19,11 @@
 
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+    <Compile Include="..\Common\Abstractions\IOutputSink.cs" Link="Abstractions\IOutputSink.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Cli\Assets\Resources.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Cli\Assets\Resources.Info.cs" />
     <Compile Include="..\Common\Cli\CommandLineApplicationExecutor.cs" Link="Cli\CommandLineApplicationExecutor.cs" />
+    <Compile Include="..\Common\Cli\ConsoleOutputSink.cs" Link="Cli\ConsoleOutputSink.cs" />
     <Compile Include="..\Common\Cli\MainCommand.cs" Link="Cli\MainCommand.cs" />
     <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Cli\Subcommands\Info\InfoSubcommand.cs" />
     <Compile Include="..\Common\Cli\TextColors.cs" Link="Cli\TextColors.cs" />
@@ -58,6 +60,7 @@
 
   <ItemGroup>
     <Folder Include="Cli\Assets\" />
+    <Folder Include="Abstractions\" />
   </ItemGroup>  
 
 </Project>

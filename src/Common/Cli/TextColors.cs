@@ -6,7 +6,7 @@ namespace NSeed.Cli
     {
         public ConsoleColor Background { get; }
 
-        public ConsoleColor Normal { get; }
+        public ConsoleColor Message { get; }
 
         public ConsoleColor Warning { get; }
 
@@ -14,17 +14,17 @@ namespace NSeed.Cli
 
         public ConsoleColor Confirmation { get; }
 
-        public TextColors(TextColorsTheme textColorsTheme, ConsoleColor foregroundColor, ConsoleColor backgroundColor, bool isNoColor)
+        public TextColors(TextColorsTheme textColorsTheme, ConsoleColor foregroundColor, ConsoleColor backgroundColor, bool noColor)
         {
             System.Diagnostics.Debug.Assert(textColorsTheme != null);
 
             Background = backgroundColor;
-            Normal = foregroundColor;
+            Message = foregroundColor;
             Warning = foregroundColor;
             Error = foregroundColor;
             Confirmation = foregroundColor;
 
-            if (isNoColor) return;
+            if (noColor) return;
 
             Warning = textColorsTheme.GetWarningColorFor(foregroundColor, backgroundColor);
             Error = textColorsTheme.GetErrorColorFor(foregroundColor, backgroundColor);
