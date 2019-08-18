@@ -66,7 +66,9 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
             collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
         }
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [FriendlyName(null)]
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         private class SeedWithNullFriendlyNameAttribute : BaseTestSeed { }
 
         [Fact]
@@ -77,7 +79,9 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
             extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
             collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
         }
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [FriendlyName(null)]
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         private class ScenarioWithNullFriendlyNameAttribute : BaseTestScenario { }
 
         [Fact]

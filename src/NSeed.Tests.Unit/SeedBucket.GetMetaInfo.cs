@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;
 using NSeed.Extensions;
@@ -219,7 +219,7 @@ namespace NSeed.Tests.Unit
                 .HaveCount(1);
 
             nonContainedSeedablesFromFirst
-                .Select(seedable => seedable.SeedBucket.FullName)
+                .Select(seedable => seedable.SeedBucket!.FullName)
                 .First()
                 .Should()
                 .Be("FirstSeedBucket");
@@ -232,7 +232,7 @@ namespace NSeed.Tests.Unit
                 .HaveCount(1);
 
             nonContainedSeedablesFromSecond
-                .Select(seedable => seedable.SeedBucket.FullName)
+                .Select(seedable => seedable.SeedBucket!.FullName)
                 .First()
                 .Should()
                 .Be("SecondSeedBucket");

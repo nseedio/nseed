@@ -30,7 +30,10 @@ namespace NSeed.Discovery.Seedable
 
             return entityDiscoverer.DiscoverIn(seedImplementation)
                                 .DiscoveredItems
-                                .Select(entityType => entityBuilder.BuildFrom(entityType))
+
+                                // We know that the entity info builder always returns
+                                // an entity info and never null; threfore "!".
+                                .Select(entityType => entityBuilder.BuildFrom(entityType)!)
                                 .ToArray();
         }
     }

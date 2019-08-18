@@ -22,7 +22,9 @@ namespace NSeed
         /// <returns><see cref="SeedBucketInfo"/> that describes this seed bucket.</returns>
         public SeedBucketInfo GetMetaInfo()
         {
-            return seedBucketInfoBuilder.BuildFrom(GetType());
+            // We know that the seed bucket info builder always returns
+            // a seed bucket info and never null; threfore "!".
+            return seedBucketInfoBuilder.BuildFrom(GetType())!;
         }
 
         /// <summary>

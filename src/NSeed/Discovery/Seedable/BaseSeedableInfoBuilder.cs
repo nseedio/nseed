@@ -57,7 +57,7 @@ namespace NSeed.Discovery.Seedable
             this.seedableInfoPool = seedableInfoPool;
         }
 
-        SeedableInfo? IMetaInfoBuilder<TSeedableImplementation, SeedableInfo?>.BuildFrom(TSeedableImplementation implementation)
+        SeedableInfo? IMetaInfoBuilder<TSeedableImplementation, SeedableInfo>.BuildFrom(TSeedableImplementation implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
 

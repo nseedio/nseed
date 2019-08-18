@@ -7,9 +7,6 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <PackAsTool>True</PackAsTool>
     <ToolCommandName>nseed</ToolCommandName>
-    <Nullable>enable</Nullable>
-    <!-- Some previews of .NET Core 3 don't have the rename yet. -->
-    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
   <ItemGroup>

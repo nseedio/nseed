@@ -16,16 +16,16 @@ namespace NSeed.Tests.Unit
     {
         private abstract class BaseDescription
         {
-            public string Name { get; set; }
-            public string FriendlyName { get; set; }
-            public string Description { get; set; }
+            public string? Name { get; set; }
+            public string? FriendlyName { get; set; }
+            public string? Description { get; set; }
         }
 
         private class SeedBucketDescription : BaseDescription { }
 
         private abstract class SeedableDescription : BaseDescription
         {
-            public IEnumerable<string> Requires { get; set; }
+            public IEnumerable<string> Requires { get; set; } = Array.Empty<string>();
         }
 
         private class SeedDescription : SeedableDescription
@@ -86,7 +86,7 @@ namespace NSeed.Tests.Unit
         private readonly List<MetadataReference> metadataReferences = new List<MetadataReference>();
 
         private const string DefaultTestSeedBucketTypeName = "DefaultTestSeedBucket";
-        public SeedAssemblyBuilder AddSeedBucket(string seedBucketTypeName = null, string seedBucketFriendlyName = null, string seedBucketDescription = null)
+        public SeedAssemblyBuilder AddSeedBucket(string? seedBucketTypeName = null, string? seedBucketFriendlyName = null, string? seedBucketDescription = null)
         {
             seedBucketTypeName ??= DefaultTestSeedBucketTypeName;
 
@@ -104,7 +104,7 @@ namespace NSeed.Tests.Unit
         }
 
         private const string DefaultTestSeedTypeName = "DefaultTestSeed";
-        public SeedAssemblyBuilder AddSeed(string seedTypeName = null, string seedFriendlyName = null, string seedDescription = null, bool hasYield = false, params string[] requires)
+        public SeedAssemblyBuilder AddSeed(string? seedTypeName = null, string? seedFriendlyName = null, string? seedDescription = null, bool hasYield = false, params string[] requires)
         {
             seedTypeName ??= DefaultTestSeedTypeName;
             requires ??= Array.Empty<string>();
@@ -126,7 +126,7 @@ namespace NSeed.Tests.Unit
         }
 
         private const string DefaultTestScenarioTypeName = "DefaultTestScenario";
-        public SeedAssemblyBuilder AddScenario(string scenarioTypeName = null, string scenarioFriendlyName = null, string scenarioDescription = null, params string[] requires)
+        public SeedAssemblyBuilder AddScenario(string? scenarioTypeName = null, string? scenarioFriendlyName = null, string? scenarioDescription = null, params string[] requires)
         {
             scenarioTypeName ??= DefaultTestScenarioTypeName;
             requires ??= Array.Empty<string>();

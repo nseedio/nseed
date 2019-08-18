@@ -36,7 +36,9 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         }
         private class SeedThatRequiresItsOwnYield : BaseTestSeed
         {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
             public Yield MyOwnYield { get; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
             public class Yield : YieldOf<SeedThatRequiresItsOwnYield> { }
         }
 
@@ -56,11 +58,13 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         }
         private class SeedThatRequiresYields : BaseTestSeed
         {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
             public SeedA.Yield YieldOfA { get; }
             internal SeedB.Yield YieldOfB { get; }
             protected SeedD.Yield YieldOfD { get; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             private SeedC.Yield YieldOfC { get; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
         }
         private class SeedA : BaseTestSeed { public class Yield : YieldOf<SeedA> { } }
         private class SeedB : BaseTestSeed { internal class Yield : YieldOf<SeedB> { } }

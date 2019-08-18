@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using NSeed.Extensions;
 using System;
@@ -30,7 +30,7 @@ namespace NSeed.Tests.Unit
             return type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
         }
 
-        public static Type GetSeedBucketType(this Assembly assembly, string seedBucketTypeName = null)
+        public static Type GetSeedBucketType(this Assembly assembly, string? seedBucketTypeName = null)
         {
             var seedBucketClasses = assembly.GetTypes()
                 .Where(type => type.IsSeedBucketType() && (seedBucketTypeName == null || type.Name == seedBucketTypeName))
@@ -51,7 +51,7 @@ namespace NSeed.Tests.Unit
             return seedBucketClasses[0];
         }
 
-        public static SeedBucket GetSeedBucket(this Assembly assembly, string seedBucketTypeName = null)
+        public static SeedBucket GetSeedBucket(this Assembly assembly, string? seedBucketTypeName = null)
         {
             return (SeedBucket)Activator.CreateInstance(assembly.GetSeedBucketType(seedBucketTypeName));
         }

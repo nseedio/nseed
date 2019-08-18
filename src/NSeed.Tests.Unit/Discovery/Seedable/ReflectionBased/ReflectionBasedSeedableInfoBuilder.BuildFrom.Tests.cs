@@ -75,8 +75,10 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Description(SomeDescription)]
         private class FullyPopulatedSeed : BaseTestSeed, ISeed<object, string, int>
         {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
             public SeedWithProvidedPublicYield.Yield RequiredYieldA { get; }
             public SeedWithProvidedInternalYield.Yield RequiredYieldB { get; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
             public class Yield : YieldOf<FullyPopulatedSeed> { }
         }
         private class AdditionalMinimalSeed : BaseTestSeed { }
@@ -157,8 +159,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Fact]
         public void ReturnsﾠexactlyﾠtheﾠsameﾠSeedInfoﾠforﾠtheﾠseedﾠtypeﾠthatﾠoccursﾠseveralﾠtimesﾠinﾠtheﾠseedableﾠgraph()
         {
-            var seedThatRequiresOtherSeed = (SeedInfo)builder.BuildFrom(typeof(SeedThatRequiresOtherSeedSeveralTimes));
-            var otherSeed = (SeedInfo)builder.BuildFrom(typeof(OtherSeed));
+            var seedThatRequiresOtherSeed = (SeedInfo)builder.BuildFrom(typeof(SeedThatRequiresOtherSeedSeveralTimes))!;
+            var otherSeed = (SeedInfo)builder.BuildFrom(typeof(OtherSeed))!;
 
             var explicitlyRequired = seedThatRequiresOtherSeed.ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
             var requiredThroughYield = seedThatRequiresOtherSeed.RequiredYields.Select(yield => yield.YieldingSeed).First(seedableInfo => seedableInfo.FullName == otherSeed.FullName);
@@ -180,17 +182,21 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Requires(typeof(SeedThatRequiresYieldOfOtherSeed))]
         [Requires(typeof(ScenarioThatRequiresOtherSeed))]
         [Requires(typeof(OtherSeed))]
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
         private class SeedThatRequiresOtherSeedSeveralTimes : BaseTestSeed { public OtherSeed.Yield Yield { get; } }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
         private class OtherSeed : BaseTestSeed { public class Yield : YieldOf<OtherSeed> { } }
         [Requires(typeof(OtherSeed))]
         private class ScenarioThatRequiresOtherSeed : BaseTestScenario { }
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
         private class SeedThatRequiresYieldOfOtherSeed : BaseTestSeed { public OtherSeed.Yield Yield { get; } }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
 
         [Fact]
         public void ReturnsﾠexactlyﾠtheﾠsameﾠScenarioInfoﾠforﾠtheﾠscenarioﾠtypeﾠthatﾠoccursﾠseveralﾠtimesﾠinﾠtheﾠseedableﾠgraph()
         {
-            var scenarioThatRequiresOtherScenario = (ScenarioInfo)builder.BuildFrom(typeof(ScenarioThatRequiresOtherScenarioSeveralTimes));
-            var otherScenario = (ScenarioInfo)builder.BuildFrom(typeof(OtherScenario));
+            var scenarioThatRequiresOtherScenario = (ScenarioInfo)builder.BuildFrom(typeof(ScenarioThatRequiresOtherScenarioSeveralTimes))!;
+            var otherScenario = (ScenarioInfo)builder.BuildFrom(typeof(OtherScenario))!;
 
             var explicitlyRequired = scenarioThatRequiresOtherScenario.ExplicitlyRequiredSeedables.First(seedableInfo => seedableInfo.FullName == otherScenario.FullName);
             var requiredThroughScenario = scenarioThatRequiresOtherScenario
@@ -213,7 +219,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             Type type = typeof(SeedThatRequiresItself);
 
-            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+            var seedInfo = (SeedInfo)builder.BuildFrom(type)!;
 
             seedInfo.ExplicitlyRequiredSeedables.Should().BeEmpty();
         }
@@ -225,13 +231,15 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             Type type = typeof(SeedThatRequiresItsOwnYield);
 
-            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+            var seedInfo = (SeedInfo)builder.BuildFrom(type)!;
 
             seedInfo.RequiredYields.Should().BeEmpty();
         }
         private class SeedThatRequiresItsOwnYield : BaseTestSeed
         {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
             public Yield MyOwnYield { get; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized.
             public class Yield : YieldOf<SeedThatRequiresItsOwnYield> { }
         }
 
@@ -240,7 +248,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             Type type = typeof(ScenarioThatRequiresItself);
 
-            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
+            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type)!;
 
             scenarioInfo.ExplicitlyRequiredSeedables.Should().BeEmpty();
         }
@@ -252,9 +260,9 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             Type type = typeof(SeedThatIndirectlyRequiresItself);
 
-            var seedInfo = (SeedInfo)builder.BuildFrom(type);
+            var seedInfo = (SeedInfo)builder.BuildFrom(type)!;
 
-            seedInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(SeedA)));
+            seedInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(SeedA))!);
             seedInfo.ExplicitlyRequiredSeedables.Should().NotContain(seedInfo);
         }
         [Requires(typeof(SeedA))]
@@ -267,9 +275,9 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         {
             Type type = typeof(ScenarioThatIndirectlyRequiresItself);
 
-            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type);
+            var scenarioInfo = (ScenarioInfo)builder.BuildFrom(type)!;
 
-            scenarioInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(ScenarioA)));
+            scenarioInfo.ExplicitlyRequiredSeedables.Should().Contain(builder.BuildFrom(typeof(ScenarioA))!);
             scenarioInfo.ExplicitlyRequiredSeedables.Should().NotContain(scenarioInfo);
         }
         [Requires(typeof(ScenarioA))]
@@ -280,7 +288,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
         [Fact]
         public void Ignoresﾠindirectﾠcircularﾠdependencyﾠofﾠseedsﾠandﾠscenariosﾠoverﾠotherﾠseedsﾠandﾠscenarios()
         {
-            var seedZero = (SeedInfo)builder.BuildFrom(typeof(SeedZero));
+            var seedZero = (SeedInfo)builder.BuildFrom(typeof(SeedZero))!;
 
             var seedOne = seedZero.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(SeedOne).FullName);
             var scenarioTwo = seedOne.ExplicitlyRequiredSeedables.First(seedable => seedable.FullName == typeof(ScenarioTwo).FullName);
@@ -371,7 +379,7 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
 
             return new RequiredYieldInfo
             (
-                (SeedInfo)builder.BuildFrom(propertyInfo.PropertyType.DeclaringType),
+                (SeedInfo)builder.BuildFrom(propertyInfo.PropertyType.DeclaringType)!,
                 propertyInfo,
                 propertyInfo.Name
             );

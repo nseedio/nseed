@@ -43,7 +43,9 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 .Should()
                 .BeEmpty();
         }
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [Requires(null)]
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         private class SeedThatRequiresNull : BaseTestSeed { }
 
         [Fact]
@@ -56,7 +58,9 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 .Should()
                 .BeEmpty();
         }
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [Requires(null)]
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
         private class ScenarioThatRequiresNull : BaseTestScenario { }
 
         [Fact]
