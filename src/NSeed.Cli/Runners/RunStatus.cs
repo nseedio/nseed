@@ -1,4 +1,4 @@
-namespace NSeed.Cli.Services
+namespace NSeed.Cli.Runners
 {
     internal class RunStatus
     {

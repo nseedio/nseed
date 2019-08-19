@@ -8,7 +8,6 @@ namespace NSeed.Cli.Services
         {
             return services
                 .AddSingleton<IFileSystemService, FileSystemService>()
-                .AddSingleton<IDotNetRunner, DotNetRunner>()
                 .AddSingleton<IDependencyGraphService, DependencyGraphService>();
         }
     }

@@ -1,3 +1,4 @@
+using NSeed.Cli.Runners;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace NSeed.Cli
                 {
                     services
                         .AddCliServices()
+                        .AddRunners()
+                        .AddSubcommandRunners()
                         .AddValidators();
                 },
                 "NSeed");

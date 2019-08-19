@@ -1,27 +1,26 @@
 using DiffLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NSeed.Cli.Runners;
 using NuGet.ProjectModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace NSeed.Cli.Services
 {
     internal class DependencyGraphService : IDependencyGraphService
     {
-        private readonly IDotNetRunner dotNetRunner;
-        private readonly IFileSystemService fileSystemService;
+        private IDotNetRunner<DependencyGraphRunnerArgs> DependencyGraphRunner { get; }
 
         private DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private string projectPath = string.Empty;
 
         public DependencyGraphService(
-            IDotNetRunner dotNetRunner,
-            IFileSystemService fileSystemService)
+            IDotNetRunner<DependencyGraphRunnerArgs> dependencyGraphRunner)
         {
-            this.dotNetRunner = dotNetRunner;
-            this.fileSystemService = fileSystemService;
+            DependencyGraphRunner = dependencyGraphRunner;
         }
 
         public DependencyGraphSpec GenerateDependencyGraph(string solutionPath)
@@ -37,21 +36,23 @@ namespace NSeed.Cli.Services
                 return dependencyGraphSpec;
             }
 
-            var dgOutput = fileSystemService.Path.Combine(fileSystemService.Path.GetTempPath(), fileSystemService.Path.GetTempFileName());
+            var args = new DependencyGraphRunnerArgs
+            {
+                Solution = solutionPath,
+                SolutionDirectory = Path.GetDirectoryName(solutionPath),
+                OutputPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName())
+            };
 
-            // Use solution path because with that you get dependency graph for all projects from that solutions
-            string[] arguments = { "msbuild", $"\"{solutionPath}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath=\"{dgOutput}\"" };
+            var runStatus = DependencyGraphRunner.Run(args);
 
-            var runStatus = dotNetRunner.Run(fileSystemService.Path.GetDirectoryName(solutionPath), arguments);
-
-            if (!runStatus.IsSuccess)
+            if (!runStatus.IsSuccesful)
             {
                 dependencyGraphSpec = new DependencyGraphSpec();
                 projectPath = string.Empty;
                 return dependencyGraphSpec;
             }
 
-            var dependencyGraphText = fileSystemService.File.ReadAllText(dgOutput);
+            var dependencyGraphText = File.ReadAllText(args.OutputPath);
             dependencyGraphSpec = new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
             projectPath = solutionPath;
             return dependencyGraphSpec;

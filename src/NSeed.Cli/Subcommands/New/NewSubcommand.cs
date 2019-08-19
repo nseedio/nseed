@@ -2,8 +2,10 @@ using DiffLib;
 using McMaster.Extensions.CommandLineUtils;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
+using NSeed.Cli.Runners;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New.Models;
+using NSeed.Cli.Subcommands.New.Runner;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Subcommands.New.ValueProviders;
 using System;
@@ -130,13 +132,16 @@ namespace NSeed.Cli.Subcommands.New
             return (Assets.Framework.None, string.Empty);
         }
 
-        public Task OnExecute(CommandLineApplication app, IFileSystemService fileSystemService, IDotNetRunner dotNetRunner)
+        public Task OnExecute(
+            CommandLineApplication app,
+            IFileSystemService fileSystemService,
+            IDotNetRunner<NewSubcommandRunnerArgs> dotNetRunner)
         {
             var getTemplateResponse = fileSystemService.TryGetTemplate(Assets.Framework.NETCoreApp, out Template template);
 
             if (getTemplateResponse.IsSuccesful)
             {
-                var response = dotNetRunner.RunNewSubcommand(new NewSubcommandArgs
+                var response = dotNetRunner.Run(new NewSubcommandRunnerArgs
                 {
                     SolutionDirectory = ResolvedSolutionDirectory,
                     Solution = ResolvedSolution,

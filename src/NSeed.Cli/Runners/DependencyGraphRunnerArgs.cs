@@ -1,21 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NSeed.Cli.Subcommands.New.Models
+namespace NSeed.Cli.Runners
 {
     /// <summary>
-    /// Model for running new subcommand.
+    /// Model for generating dependency graph.
     /// </summary>
-    public class NewSubcommandArgs
+    public class DependencyGraphRunnerArgs
     {
-        /// <summary>
-        /// Gets or sets new subcommand project Template.
-        /// </summary>
-        public Template Template { get; set; } = new Template();
-
         /// <summary>
         /// Gets or sets path to solution directory.
         /// </summary>
@@ -27,13 +23,8 @@ namespace NSeed.Cli.Subcommands.New.Models
         public string Solution { get; set; } = string.Empty;
 
         /// <summary>
-        /// Gets or sets project name.
+        /// Gets or sets dependency graph runner output path.
         /// </summary>
-        public string Name { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets framework name.
-        /// </summary>
-        public string Framework { get; set; } = string.Empty;
+        public string OutputPath { get; set; } = string.Empty;
     }
 }
