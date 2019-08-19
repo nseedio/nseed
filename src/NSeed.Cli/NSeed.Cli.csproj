@@ -22,8 +22,10 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
     <Compile Include="..\Common\Abstractions\IOutputSink.cs" Link="Abstractions\IOutputSink.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.BaseCommand.cs" Link="Assets\Resources.BaseCommand.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Assets\Resources.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Assets\Resources.Info.cs" />
+    <Compile Include="..\Common\Cli\BaseCommand.cs" Link="BaseCommand.cs" />
     <Compile Include="..\Common\Cli\CommandLineApplicationExecutor.cs" Link="CommandLineApplicationExecutor.cs" />
     <Compile Include="..\Common\Cli\ConsoleOutputSink.cs" Link="ConsoleOutputSink.cs" />
     <Compile Include="..\Common\Cli\MainCommand.cs" Link="MainCommand.cs" />
