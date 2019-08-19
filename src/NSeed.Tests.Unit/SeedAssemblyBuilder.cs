@@ -60,6 +60,8 @@ namespace NSeed.Tests.Unit
 
                 void FindAdditionalAssembliesRecursively(Assembly parentAssembly)
                 {
+                    if (result.Count >= neededReferencedAssemblyNames.Length) return;
+
                     var referencedAssemblyNamesAndAssemblies = parentAssembly
                         .GetReferencedAssemblies()
                         .Where(assemblyName => neededReferencedAssemblyNames.Contains(assemblyName.Name) && !result.ContainsKey(assemblyName))
