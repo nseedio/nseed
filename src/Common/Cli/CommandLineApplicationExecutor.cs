@@ -1,8 +1,10 @@
 using McMaster.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Abstractions;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -13,7 +15,11 @@ namespace NSeed.Cli
         public static async Task<int> Execute<TApp>(string[] commandLineArguments, Action<IServiceCollection>? serviceConfigurator = null, string? executableName = null)
             where TApp : class
         {
-            var output = CreateConsoleOutputSink(false, false);
+            // For no-color see: https://no-color.org
+            var (noColor, verbose) = GetNoColorAndVerboseCommandLineOptions(commandLineArguments);
+            if (!noColor) noColor = Environment.GetEnvironmentVariable("NO_COLOR") != null;
+
+            var output = CreateConsoleOutputSink(noColor, verbose);
 
             var serviceCollection = CreateDefaultServiceCollection(output);
 
@@ -60,6 +66,35 @@ namespace NSeed.Cli
                 return new ServiceCollection()
                     .AddSingleton(PhysicalConsole.Singleton)
                     .AddSingleton(outputSink);
+            }
+
+            static (bool noColor, bool verbose) GetNoColorAndVerboseCommandLineOptions(string[] commandLineArguments)
+            {
+                var app = new CommandLineApplication<TApp>();
+                app.Conventions.UseDefaultConventions();
+                app.ThrowOnUnexpectedArgument = false;
+
+                try
+                {
+                    var parseResult = app.Parse(commandLineArguments);
+
+                    var noColor = IsBooleanOptionSet(parseResult, BaseCommand.NoColorLongName);
+                    var verbose = IsBooleanOptionSet(parseResult, BaseCommand.VerboseLongName);
+
+                    return (noColor, verbose);
+                }
+                catch (Exception)
+                {
+                    return (false, false);
+                }
+
+                static bool IsBooleanOptionSet(ParseResult parseResult, string optionLongName)
+                {
+                    return parseResult
+                        .SelectedCommand
+                        .GetOptions()
+                        .Any(option => option.LongName == optionLongName && option.Values.Count > 0);
+                }
             }
 
             static IOutputSink CreateConsoleOutputSink(bool noColor, bool acceptsVerboseMessages)
