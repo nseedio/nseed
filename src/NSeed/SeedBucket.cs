@@ -1,10 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Abstractions;
 using NSeed.Cli;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;
-using NSeed.Guards;
 using NSeed.MetaInfo;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NSeed
@@ -39,16 +40,95 @@ namespace NSeed
         protected static async Task<int> Handle<TSeedBucket>(string[] commandLineArguments)
             where TSeedBucket : SeedBucket, new()
         {
-            commandLineArguments.MustNotBeNull(nameof(commandLineArguments));
-            commandLineArguments.MustNotContain((string?)null, nameof(commandLineArguments));
+            // This method *must* be bullet-proof and must never throw any
+            // exceptions. That's why the rigorous error checking of end user
+            // errors that should never happen if the users follow the given
+            // project templates and the NSeed documentation.
 
-            // TODO: Add error checking. Should this be in try-catch?
-            var seedBucket = new TSeedBucket();
+            string? errorMessage = null;
 
-            return await CommandLineApplicationExecutor.Execute<MainCommand>(commandLineArguments, services =>
+            if (commandLineArguments == null)
+                errorMessage = GetErrorMessageForNullCommandLineArguments();
+
+            if (errorMessage == null && commandLineArguments.Any(argument => argument == null))
+                errorMessage = GetErrorMessageForCommandLineArgumentsWithNulls();
+
+            TSeedBucket? seedBucket = null;
+            if (errorMessage == null)
             {
-                services.AddSingleton(seedBucket);
+                try
+                {
+                    seedBucket = new TSeedBucket();
+                }
+                catch (Exception exception)
+                {
+                    errorMessage = GetErrorMessageForExceptionInTheSeedBucketConstructor(exception);
+                }
+            }
+
+            if (errorMessage != null)
+            {
+                ShowErrorMessage(errorMessage);
+                return 1;
+            }
+
+            // If we got this far, we know that both commandLineArguments and seedBucket exist; therefore a safe "!".
+            return await CommandLineApplicationExecutor.Execute<MainCommand>(commandLineArguments!, services =>
+            {
+                services.AddSingleton<SeedBucket>(seedBucket!);
             });
+
+            static void ShowErrorMessage(string errorMessage)
+            {
+                IOutputSink output = ConsoleOutputSink.Create(noColor: false, acceptsVerboseMessages: false);
+                output.WriteError(errorMessage);
+            }
+
+            static string GetErrorMessageForNullCommandLineArguments()
+            {
+                return
+                    $"Command line arguments passed to the {nameof(SeedBucket)}.{nameof(Handle)}() method were null." +
+                    Environment.NewLine + Environment.NewLine +
+                    $"Command line arguments passed to the {nameof(SeedBucket)}.{nameof(Handle)}() method must not be null." +
+                    GetCommonExplanationMessage();
+            }
+
+            static string GetErrorMessageForCommandLineArgumentsWithNulls()
+            {
+                return
+                    $"Command line arguments passed to the {nameof(SeedBucket)}.{nameof(Handle)}() method contain null elements." +
+                    Environment.NewLine + Environment.NewLine +
+                    $"Command line arguments passed to the {nameof(SeedBucket)}.{nameof(Handle)}() method must not contain null elements." +
+                    GetCommonExplanationMessage();
+            }
+
+            static string GetErrorMessageForExceptionInTheSeedBucketConstructor(Exception exception)
+            {
+                return
+                    $"An exception occured during the creation of the {typeof(TSeedBucket).FullName} object." +
+                    Environment.NewLine +
+                    "The exception was:" +
+                    Environment.NewLine + Environment.NewLine +
+                    exception.ToString() +
+                    GetCommonExplanationMessage();
+            }
+
+            static string GetCommonExplanationMessage()
+            {
+                return
+                    Environment.NewLine + Environment.NewLine +
+                    "Check the implementation of your Main method." +
+                    Environment.NewLine +
+                    $"If you use the standard implementation of the {nameof(SeedBucket)} Main method, the above error will never happen." +
+                    Environment.NewLine + Environment.NewLine +
+                    "The standard implementation looks like this:" +
+                    Environment.NewLine + Environment.NewLine +
+                    $"class {typeof(TSeedBucket).Name} : SeedBucket" + Environment.NewLine +
+                    "{" + Environment.NewLine +
+                    "    static async Task<int> Main(string[] args)" + Environment.NewLine +
+                    $"       => await Handle<{typeof(TSeedBucket).Name}>(args);" + Environment.NewLine +
+                    "}";
+            }
         }
     }
 }

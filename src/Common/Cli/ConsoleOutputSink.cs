@@ -16,6 +16,14 @@ namespace NSeed.Cli
             this.acceptsVerboseMessages = acceptsVerboseMessages;
         }
 
+        public static ConsoleOutputSink Create(bool noColor, bool acceptsVerboseMessages)
+        {
+            var textColorsTheme = TextColorsTheme.GetForCurrentOS();
+            var textColors = new TextColors(textColorsTheme, Console.ForegroundColor, Console.BackgroundColor, noColor);
+
+            return new ConsoleOutputSink(textColors, acceptsVerboseMessages);
+        }
+
         bool IOutputSink.AcceptsVerboseMessages => acceptsVerboseMessages;
 
         void IOutputSink.WriteConfirmation(string confirmation)

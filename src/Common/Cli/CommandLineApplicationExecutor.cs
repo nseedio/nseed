@@ -19,7 +19,7 @@ namespace NSeed.Cli
             var (noColor, verbose) = GetNoColorAndVerboseCommandLineOptions(commandLineArguments);
             if (!noColor) noColor = Environment.GetEnvironmentVariable("NO_COLOR") != null;
 
-            var output = CreateConsoleOutputSink(noColor, verbose);
+            IOutputSink output = ConsoleOutputSink.Create(noColor, verbose);
 
             var serviceCollection = CreateDefaultServiceCollection(output);
 
@@ -95,14 +95,6 @@ namespace NSeed.Cli
                         .GetOptions()
                         .Any(option => option.LongName == optionLongName && option.Values.Count > 0);
                 }
-            }
-
-            static IOutputSink CreateConsoleOutputSink(bool noColor, bool acceptsVerboseMessages)
-            {
-                var textColorsTheme = TextColorsTheme.GetForCurrentOS();
-                var textColors = new TextColors(textColorsTheme, Console.ForegroundColor, Console.BackgroundColor, noColor);
-
-                return new ConsoleOutputSink(textColors, acceptsVerboseMessages);
             }
         }
     }
