@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using System.Threading.Tasks;
 
 namespace NSeed.Cli
 {
@@ -7,5 +8,9 @@ namespace NSeed.Cli
     [HelpOption]
     internal partial class MainCommand
     {
+        public Task OnExecute(CommandLineApplication app)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

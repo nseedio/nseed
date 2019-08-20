@@ -35,6 +35,7 @@ namespace NSeed.Cli
             app.Name = executableName ?? GetExecutableName();
             app.MakeSuggestionsInErrorMessage = true;
             app.UsePagerForHelpText = false;
+            app.ShowHint();
 
             try
             {
