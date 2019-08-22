@@ -6,8 +6,9 @@ namespace NSeed.Cli
     internal abstract class BaseCommand
     {
         public const string VerboseLongName = "verbose";
+        public const string VerboseLongOption = "--" + VerboseLongName;
 
-        [Option("-v|--" + VerboseLongName, Description = Resources.BaseCommand.VerboseDescription)]
+        [Option("-v|" + VerboseLongOption, Description = Resources.BaseCommand.VerboseDescription)]
         public bool Verbose { get; private set; }
 
         public const string NoColorLongName = "no-color";

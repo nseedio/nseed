@@ -68,7 +68,7 @@ namespace NSeed
 
             if (errorMessage != null)
             {
-                ShowErrorMessage(errorMessage);
+                ConsoleOutputSink.ShowInitializationErrorMessage(errorMessage);
                 return 1;
             }
 
@@ -77,12 +77,6 @@ namespace NSeed
             {
                 services.AddSingleton<SeedBucket>(seedBucket!);
             });
-
-            static void ShowErrorMessage(string errorMessage)
-            {
-                IOutputSink output = ConsoleOutputSink.Create(noColor: false, acceptsVerboseMessages: false);
-                output.WriteError(errorMessage);
-            }
 
             static string GetErrorMessageForNullCommandLineArguments()
             {

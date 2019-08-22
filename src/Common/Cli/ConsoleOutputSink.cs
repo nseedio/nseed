@@ -24,6 +24,24 @@ namespace NSeed.Cli
             return new ConsoleOutputSink(textColors, acceptsVerboseMessages);
         }
 
+        /// <summary>
+        /// Shows the error message that happens within the initialization phase
+        /// before the <see cref="IOutputSink"/> service is created.
+        /// <br/>
+        /// Never use this method to display error messages outside of the
+        /// initialization code.
+        /// </summary>
+        /// <remarks>
+        /// This method internally safely creates an <see cref="IOutputSink"/>
+        /// and uses its <see cref="IOutputSink.WriteError(string)"/> method.
+        /// </remarks>
+        /// <param name="errorMessage">The error message to show.</param>
+        internal static void ShowInitializationErrorMessage(string errorMessage)
+        {
+            IOutputSink output = Create(noColor: false, acceptsVerboseMessages: false);
+            output.WriteError(errorMessage);
+        }
+
         bool IOutputSink.AcceptsVerboseMessages => acceptsVerboseMessages;
 
         void IOutputSink.WriteConfirmation(string confirmation)
