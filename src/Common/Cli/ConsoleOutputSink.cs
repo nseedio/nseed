@@ -19,9 +19,28 @@ namespace NSeed.Cli
         public static ConsoleOutputSink Create(bool noColor, bool acceptsVerboseMessages)
         {
             var textColorsTheme = TextColorsTheme.GetForCurrentOS();
-            var textColors = new TextColors(textColorsTheme, Console.ForegroundColor, Console.BackgroundColor, noColor);
+
+            var (foregroundColor, backgroundColor) = GetForegroundAndBackgroundColor();
+
+            var textColors = new TextColors(textColorsTheme, foregroundColor, backgroundColor, noColor);
 
             return new ConsoleOutputSink(textColors, acceptsVerboseMessages);
+
+            static (ConsoleColor, ConsoleColor) GetForegroundAndBackgroundColor()
+            {
+                // The defaults, if the physical console is not available,
+                // are actually irrelevant, so let's go with the Windows defaults.
+                var foregroundColor = ConsoleColor.Gray;
+                var backgroundColor = ConsoleColor.Black;
+
+                if (ConsoleUtil.IsPhysicalConsoleAvailable())
+                {
+                    foregroundColor = Console.ForegroundColor;
+                    backgroundColor = Console.BackgroundColor;
+                }
+
+                return (foregroundColor, backgroundColor);
+            }
         }
 
         /// <summary>
