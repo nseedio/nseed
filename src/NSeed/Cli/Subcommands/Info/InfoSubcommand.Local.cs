@@ -11,8 +11,8 @@ namespace NSeed.Cli.Subcommands.Info
 {
     internal partial class InfoSubcommand
     {
-        // We have a different rendering behavior if the
-        // physical console is available and if it is not.
+        // We have a different rendering behavior when the
+        // physical console is available and when it is not.
         private class RenderingBehavior
         {
             public Action InitializeConsole { get; }
@@ -97,35 +97,12 @@ namespace NSeed.Cli.Subcommands.Info
 
             if (numberOfSeeds > 0)
             {
-                Console.WriteLine();
-                Console.WriteLine();
-
-                Console.WriteLine($"Seeds");
-                Console.WriteLine($"=====");
-                int counter = 0;
-                foreach (var seed in seedBucketInfo.ContainedSeedables.OfType<SeedInfo>())
-                {
-                    Console.WriteLine($"Name:             {seed.FriendlyName}");
-                    Console.WriteLine($"Description:      {seed.Description}");
-                    Console.WriteLine($"Creates entities: {string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName))}");
-                    if (++counter != numberOfSeeds) Console.WriteLine("-----");
-                }
+                ConsoleRenderer.RenderDocument(GenerateSeedsInfo(), null, renderingBehavior.RenderRect);
             }
 
             if (numberOfScenarios > 0)
             {
-                Console.WriteLine();
-                Console.WriteLine();
-
-                Console.WriteLine($"Scenarios");
-                Console.WriteLine($"=========");
-                int counter = 0;
-                foreach (var scenario in seedBucketInfo.ContainedSeedables.OfType<ScenarioInfo>())
-                {
-                    Console.WriteLine($"Name:             {scenario.FriendlyName}");
-                    Console.WriteLine($"Description:      {scenario.Description}");
-                    if (++counter != numberOfScenarios) Console.WriteLine("-----");
-                }
+                ConsoleRenderer.RenderDocument(GenerateScenariosInfo(), null, renderingBehavior.RenderRect);
             }
 
             output.WriteLine();
@@ -150,20 +127,122 @@ namespace NSeed.Cli.Subcommands.Info
 
                         Children =
                         {
-                            new Cell("Name:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap },
-                            new Cell(seedBucketInfo.FriendlyName) { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap, Padding = new Thickness(1, 0, 1, 0) },
-                            new Cell("Description:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap },
-                            new Cell(seedBucketInfo.Description) { Stroke = LineThickness.None, TextWrap = TextWrap.WordWrap, Padding = new Thickness(1, 0, 1, 0) },
-                            new Cell("Number of seeds:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap },
-                            new Cell(numberOfSeeds) { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap, Padding = new Thickness(1, 0, 1, 0) },
-                            new Cell("Number of scenarios:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap },
-                            new Cell(numberOfScenarios) { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap, Padding = new Thickness(1, 0, 1, 0) },
+                            CreateDescriptionColumnCell("Name"),
+                            CreateValueColumnCell(seedBucketInfo.FriendlyName),
+                            CreateDescriptionColumnCell("Description"),
+                            CreateValueColumnCell(seedBucketInfo.Description, TextWrap.WordWrap),
+                            CreateDescriptionColumnCell("Number of seeds"),
+                            CreateValueColumnCell(numberOfSeeds),
+                            CreateDescriptionColumnCell("Number of scenarios"),
+                            CreateValueColumnCell(numberOfScenarios)
                         }
                     }
                 )
                 {
                     Color = textColors.Message,
                     Background = textColors.Background
+                };
+
+                static Cell CreateDescriptionColumnCell(string text)
+                {
+                    return new Cell($"{text}:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap };
+                }
+
+                static Cell CreateValueColumnCell<TValue>(TValue value, TextWrap textWrap = TextWrap.NoWrap)
+                {
+                    return new Cell(value) { Stroke = LineThickness.None, TextWrap = textWrap, Padding = new Thickness(1, 0, 1, 0) };
+                }
+            }
+
+            Document GenerateSeedsInfo()
+            {
+                return new Document(
+                    CreateHeading("Seeds"),
+                    new Grid
+                    {
+                        Margin = new Thickness(1, 0, 1, 1),
+
+                        Stroke = LineThickness.None,
+
+                        Columns =
+                        {
+                            new Column { Width = GridLength.Star(3) },
+                            new Column { Width = GridLength.Star(3) },
+                            new Column { Width = GridLength.Star(4) }
+                        },
+
+                        Children =
+                        {
+                            CreateInfoGridHeaderCell("Name"),
+                            CreateInfoGridHeaderCell("Creates"),
+                            CreateInfoGridHeaderCell("Description"),
+                            seedBucketInfo.ContainedSeedables
+                                .OfType<SeedInfo>()
+                                .OrderBy(seed => seed.FriendlyName)
+                                .Select(seed => new[]
+                            {
+                                CreateInfoGridValueCell(seed.FriendlyName),
+                                CreateInfoGridValueCell(string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName))),
+                                CreateInfoGridValueCell(seed.Description)
+                            })
+                        }
+                    }
+                )
+                {
+                    Color = textColors.Message,
+                    Background = textColors.Background
+                };
+            }
+
+            Document GenerateScenariosInfo()
+            {
+                return new Document(
+                    CreateHeading("Scenarios"),
+                    new Grid
+                    {
+                        Margin = new Thickness(1, 0, 1, 0),
+
+                        Stroke = LineThickness.None,
+
+                        Columns =
+                        {
+                            new Column { Width = GridLength.Star(4) },
+                            new Column { Width = GridLength.Star(6) }
+                        },
+
+                        Children =
+                        {
+                            CreateInfoGridHeaderCell("Name"),
+                            CreateInfoGridHeaderCell("Description"),
+                            seedBucketInfo.ContainedSeedables
+                                .OfType<ScenarioInfo>()
+                                .OrderBy(scenario => scenario.FriendlyName)
+                                .Select(scenario => new[]
+                            {
+                                CreateInfoGridValueCell(scenario.FriendlyName),
+                                CreateInfoGridValueCell(scenario.Description)
+                            })
+                        }
+                    }
+                )
+                {
+                    Color = textColors.Message,
+                    Background = textColors.Background
+                };
+            }
+
+            Cell CreateInfoGridHeaderCell(string text)
+            {
+                return new Cell(text) { Stroke = renderingBehavior.HeaderStroke, TextWrap = TextWrap.NoWrap };
+            }
+
+            Cell CreateInfoGridValueCell<TValue>(TValue value)
+            {
+                return new Cell
+                {
+                    Padding = new Thickness(1, 0, 1, 1),
+                    Stroke = LineThickness.None,
+                    Children = { value }
                 };
             }
 
