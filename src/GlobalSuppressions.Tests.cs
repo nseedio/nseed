@@ -16,6 +16,13 @@
     Target = "NSeed.Cli.Tests.Unit")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1600.Category,
+    SA1600.CheckId,
+    Justification = SA1600.Justification,
+    Scope = SA1600.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1513.Category,
     SA1513.CheckId,
     Justification = SA1513.Justification,
@@ -28,6 +35,13 @@
     Justification = SA1513.Justification,
     Scope = SA1513.Scope,
     Target = "NSeed.Cli.Tests.Unit")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1513.Category,
+    SA1513.CheckId,
+    Justification = SA1513.Justification,
+    Scope = SA1513.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1513.Category,
@@ -51,6 +65,13 @@
     Target = "NSeed.Cli.Tests.Unit")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1513.Category,
+    SA1513.CheckId,
+    Justification = SA1513.Justification,
+    Scope = SA1513.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1203.Category,
     SA1203.CheckId,
     Justification = SA1203.Justification,
@@ -63,6 +84,13 @@
     Justification = SA1203.Justification,
     Scope = SA1203.Scope,
     Target = "NSeed.Cli.Tests.Unit")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1513.Category,
+    SA1513.CheckId,
+    Justification = SA1513.Justification,
+    Scope = SA1513.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1649.Category,
@@ -79,6 +107,13 @@
     Target = "NSeed.Cli.Tests.Unit")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1649.Category,
+    SA1649.CheckId,
+    Justification = SA1649.Justification,
+    Scope = SA1649.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1402.Category,
     SA1402.CheckId,
     Justification = SA1402.Justification,
@@ -91,6 +126,13 @@
     Justification = SA1402.Justification,
     Scope = SA1402.Scope,
     Target = "NSeed.Cli.Tests.Unit")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1402.Category,
+    SA1402.CheckId,
+    Justification = SA1402.Justification,
+    Scope = SA1402.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1117.Category,
@@ -107,6 +149,13 @@
     Target = "NSeed.Cli.Tests.Unit")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1117.Category,
+    SA1117.CheckId,
+    Justification = SA1117.Justification,
+    Scope = SA1117.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1118.Category,
     SA1118.CheckId,
     Justification = SA1118.Justification,
@@ -119,6 +168,13 @@
     Justification = SA1118.Justification,
     Scope = SA1118.Scope,
     Target = "NSeed.Cli.Tests.Unit")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1118.Category,
+    SA1118.CheckId,
+    Justification = SA1118.Justification,
+    Scope = SA1118.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1515.Category,
@@ -135,6 +191,13 @@
     Target = "NSeed.Cli.Tests.Unit")]
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1515.Category,
+    SA1515.CheckId,
+    Justification = SA1515.Justification,
+    Scope = SA1515.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
     SA1106.Category,
     SA1106.CheckId,
     Justification = SA1106.Justification,
@@ -147,6 +210,13 @@
     Justification = SA1106.Justification,
     Scope = SA1106.Scope,
     Target = "NSeed.Cli.Tests.Unit")]
+
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage(
+    SA1515.Category,
+    SA1515.CheckId,
+    Justification = SA1515.Justification,
+    Scope = SA1515.Scope,
+    Target = "NSeed.Cli.Tests.Integration")]
 
 #pragma warning disable SA1402 // File may only contain a single type
 #pragma warning disable SA1649 // File name should match first type name

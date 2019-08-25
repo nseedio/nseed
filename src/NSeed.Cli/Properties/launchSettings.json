@@ -3,8 +3,12 @@
     "NSeed.Cli": {
       "commandName": "Project",
       //"commandLineArgs": "new"
+      //"commandLineArgs": "new sdcsdc"
+      //"commandLineArgs": "blah"
+      "commandLineArgs": ""
+      //"commandLineArgs": "--help"
       //"commandLineArgs": "new -s C:\\Repositories\\Osobno"
-      "commandLineArgs": "new -s C:\\Repositories\\Osobno\\Fit"
+      //"commandLineArgs": "new -s C:\\Repositories\\Osobno\\Fit"
       //"commandLineArgs": "new -s"
       //"commandLineArgs": "new -s C:\\Repositories\\LeadApi"
       //"commandLineArgs": "new -s C:\\Repositories\\Osobno\\Fit -f netcoreapp3.1"

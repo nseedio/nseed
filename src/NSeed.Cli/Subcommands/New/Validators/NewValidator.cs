@@ -14,10 +14,6 @@ namespace NSeed.Cli.Subcommands.New.Validators
         {
             if (value is NewSubcommand model)
             {
-                Console.WriteLine("Solution:" + model.Solution);
-                Console.WriteLine("Name:" + model.Name);
-                Console.WriteLine("Framework:" + model.Framework);
-
                 var validators = context.GetServices(typeof(IValidator<NewSubcommand>));
 
                 foreach (IValidator<NewSubcommand> validator in validators)
