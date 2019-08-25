@@ -48,6 +48,25 @@ namespace NSeed.Cli
 
                 return await app.ExecuteAsync(commandLineArguments);
             }
+            catch (UnrecognizedCommandParsingException exception)
+            {
+                // In this case, we know that the output sink object exists,
+                // because the parsing happens after the output sink object
+                // is created and assigned to the "output" variable.
+                // So we can safely access it here; therefoe "!".
+                var message = exception.Message;
+                if (!message.EndsWith(".")) message += ".";
+
+                output!.WriteMessage(message);
+
+                if (exception.NearestMatches.Any())
+                {
+                    output!.WriteLine();
+                    output!.WriteMessage($"Did you maybe mean '{exception.NearestMatches.First()}'?");
+                }
+
+                return 1;
+            }
             catch (Exception exception)
             {
                 var message = GetEmbarrassingInternalErrorMessage(exception, commandLineArguments);
@@ -57,7 +76,7 @@ namespace NSeed.Cli
                 else
                     ConsoleOutputSink.ShowInitializationErrorMessage(message);
 
-                return 1;
+                return 2;
             }
 
             static string GetEmbarrassingInternalErrorMessage(Exception exception, string[] commandLineArguments)
