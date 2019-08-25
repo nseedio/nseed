@@ -5,11 +5,13 @@ namespace NSeed.Cli
 {
     [Command(Name = "nseed", Description = "Data seeding command line tool.")]
     [Subcommand(typeof(Subcommands.Info.InfoSubcommand))]
-    [HelpOption]
+    [HelpOption(Description = "Show command line help.", Inherited = true)]
     internal partial class MainCommand
     {
         public Task OnExecute(CommandLineApplication app)
         {
+            app.ShowHelp(usePager: false);
+
             return Task.CompletedTask;
         }
     }

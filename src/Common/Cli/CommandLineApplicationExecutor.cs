@@ -1,5 +1,4 @@
 using McMaster.Extensions.CommandLineUtils;
-using McMaster.Extensions.CommandLineUtils.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Abstractions;
 using System;
@@ -46,7 +45,6 @@ namespace NSeed.Cli
                 app.ThrowOnUnexpectedArgument = false;
                 app.MakeSuggestionsInErrorMessage = true;
                 app.UsePagerForHelpText = false;
-                app.ShowHint();
 
                 return await app.ExecuteAsync(commandLineArguments);
             }
@@ -176,31 +174,22 @@ namespace NSeed.Cli
 
             static (bool noColor, bool verbose) GetNoColorAndVerboseCommandLineOptions(string[] commandLineArguments)
             {
-                var app = new CommandLineApplication<TApp>();
-                app.Conventions.UseDefaultConventions();
-                app.ThrowOnUnexpectedArgument = false;
+                // The reason why we need these two options parsed from the command
+                // line before the "standard" parsing starts is explained in the
+                // "Parsing Command Line Arguments Without Command Execution" lab:
+                // See: /lab/ParsingCommandLineArgumentsWithoutCommandExecution/README.md
 
-                try
-                {
-                    var parseResult = app.Parse(commandLineArguments);
+                // Originaly this method used CommandLineApplication for parsing, as explained
+                // in the lab. But this was causing issues with help rendering.
+                // See: https://github.com/nseedio/nseed/issues/1
+                // That's why we switched to simple manual parsing.
 
-                    var noColor = IsBooleanOptionSet(parseResult, BaseCommand.NoColorLongName);
-                    var verbose = IsBooleanOptionSet(parseResult, BaseCommand.VerboseLongName);
-
-                    return (noColor, verbose);
-                }
-                catch (Exception)
-                {
-                    return (false, false);
-                }
-
-                static bool IsBooleanOptionSet(ParseResult parseResult, string optionLongName)
-                {
-                    return parseResult
-                        .SelectedCommand
-                        .GetOptions()
-                        .Any(option => option.LongName == optionLongName && option.Values.Count > 0);
-                }
+                // Command line options are case sensitive.
+                return
+                (
+                    commandLineArguments.Any(argument => argument == BaseCommand.NoColorShortOption || argument == BaseCommand.NoColorLongOption),
+                    commandLineArguments.Any(argument => argument == BaseCommand.VerboseShortOption || argument == BaseCommand.VerboseLongOption)
+                );
             }
         }
     }

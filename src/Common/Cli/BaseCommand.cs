@@ -7,13 +7,16 @@ namespace NSeed.Cli
     {
         public const string VerboseLongName = "verbose";
         public const string VerboseLongOption = "--" + VerboseLongName;
+        public const string VerboseShortOption = "-v";
 
-        [Option("-v|" + VerboseLongOption, Description = Resources.BaseCommand.VerboseDescription)]
+        [Option(VerboseShortOption + "|" + VerboseLongOption, Description = Resources.BaseCommand.VerboseDescription)]
         public bool Verbose { get; private set; }
 
         public const string NoColorLongName = "no-color";
+        public const string NoColorLongOption = "--" + NoColorLongName;
+        public const string NoColorShortOption = "-nc";
 
-        [Option("-nc|--" + NoColorLongName, Description = Resources.BaseCommand.NoColorDescription)]
+        [Option(NoColorShortOption + "|" + NoColorLongOption, Description = Resources.BaseCommand.NoColorDescription)]
         public bool NoColor { get; private set; }
     }
 }
