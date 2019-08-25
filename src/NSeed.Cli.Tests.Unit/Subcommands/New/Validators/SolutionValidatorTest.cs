@@ -17,8 +17,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 
         [Theory]
-        [InlineData("", Resources.New.Errors.SolutionPathIsNotProvided)]
-        [InlineData(null, Resources.New.Errors.SolutionPathIsNotProvided)]
+        [InlineData("", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution)]
+        [InlineData(null, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution)]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string solution, string errorMessage)
         {
             var resultSlnPath = string.Empty;

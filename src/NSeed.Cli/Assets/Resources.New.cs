@@ -4,20 +4,19 @@ namespace NSeed.Cli.Assets
     {
         internal static class New
         {
-            public const string CommandDescription = "Scaffold new NSeed project inside current folder";
+            public const string CommandDescription = "Create new Seed Bucket project.";
 
-            public const string FrameworkDescription = "Create for a specific framework.Values: netcoreapp2.0 to create a.NET Core Class Library or netstandard2.0 to create a.NET Standard Class Library.The default value is netstandard2.0";
-            public const string SolutionDescription = "Solution name. Multiple solutions in define path";
-            public const string ProjectNameDescription = "Name of the project. Default is Seeds";
+            public const string FrameworkDescription = "The target framework for the Seed Bucket project. For .NET Core project use netcoreappX.Y. For .NET Classic project use netframeworkX.Y. The default framework is derived based on frameworks already used in the target solution.";
+            public const string SolutionDescription = "The target solution. For example: MySolution.sln, SubFolderWithSolution, C:\\Path\\To\\Solutions\\FirstSolution.sln. The default is the nearest single solution found in the working directory or its subdirectories.";
+            public const string ProjectNameDescription = "The project name. The default name is " + DefaultProjectName + " if the project with that name does not already exist.";
 
             public const string DefaultProjectName = "Seeds";
 
             internal static class Errors
             {
-                public const string SolutionPathIsNotProvided = "Solution path is not provided";
-                public const string SolutionPathDirectoryNotExist = "Directory not existing on provided solution path";
-                public const string MultipleSolutionsFound = "Multiple solutions exists on provided solution path";
-                public const string SolutionNotFound = "Solution doesn't exist on provided solution path";
+                public const string WorkingDirectoryDoesNotContainAnySolution = "Couldn't find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution";
+                public const string SolutionPathDirectoryDoesNotExist = "The provided solution directory does not exist. Do you maybe have a typo in the directory path?";
+                public const string MultipleSolutionsFound = "Multiple solutions found. Specify a single solution by using --solution with solution name.";
             }
         }
     }

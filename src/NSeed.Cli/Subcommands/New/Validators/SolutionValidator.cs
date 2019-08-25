@@ -28,7 +28,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
 
             if (command.ResolvedSolution.IsNotProvidedByUser())
             {
-                return ValidationResult.Error(Resources.New.Errors.SolutionPathIsNotProvided);
+                return ValidationResult.Error(Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
             }
 
             var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);

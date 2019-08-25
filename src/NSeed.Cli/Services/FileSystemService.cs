@@ -13,7 +13,7 @@ namespace NSeed.Cli.Services
 {
     internal class FileSystemService : FileSystem, IFileSystemService
     {
-        public const string SolutionPrefix = "sln";
+        public const string SolutionExtension = ".sln";
         public const string ZipTemplatesFile = "templates.zip";
 
         public string ZipTemplatesFilePath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), ZipTemplatesFile);
@@ -24,22 +24,28 @@ namespace NSeed.Cli.Services
         {
             var fileInfo = FileInfo.FromFileName(solution);
 
-            if (fileInfo.Extension == $".{SolutionPrefix}" && fileInfo.Exists)
+            if (string.Equals(fileInfo.Extension, SolutionExtension, StringComparison.OrdinalIgnoreCase) &&
+                !IsDirectory(fileInfo) &&
+                fileInfo.Exists)
             {
                 path = fileInfo.FullName;
                 return succesResponse;
             }
             else
             {
-                var attr = fileInfo.Attributes;
-                if ((int)attr != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory))
+                if (IsDirectory(fileInfo))
                 {
                     return TryGetSolution(fileInfo.FullName, out path);
                 }
                 else
                 {
-                    return TryGetSolution($"{fileInfo.FullName}.{SolutionPrefix}", out path);
+                    return TryGetSolution($"{fileInfo.FullName}.{SolutionExtension}", out path);
                 }
+            }
+
+            static bool IsDirectory(IFileInfo fileInfo)
+            {
+                return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
             }
         }
 
@@ -79,17 +85,14 @@ namespace NSeed.Cli.Services
 
         private (bool IsSuccesful, string Message) TryGetSolution(string path, out string solution)
         {
-            solution = string.Empty;
+            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(path));
 
-            if (string.IsNullOrEmpty(path))
-            {
-                return ErrorResponse(New.Errors.SolutionPathIsNotProvided);
-            }
+            solution = string.Empty;
 
             var directoryInfo = DirectoryInfo.FromDirectoryName(path);
             if (!directoryInfo.Exists)
             {
-                return ErrorResponse(New.Errors.SolutionPathDirectoryNotExist);
+                return ErrorResponse(New.Errors.SolutionPathDirectoryDoesNotExist);
             }
 
             var response = GetSolution(path, SearchOption.TopDirectoryOnly);
@@ -110,7 +113,7 @@ namespace NSeed.Cli.Services
 
                 if (response.notFound)
                 {
-                    return ErrorResponse(New.Errors.SolutionNotFound);
+                    return ErrorResponse(New.Errors.WorkingDirectoryDoesNotContainAnySolution);
                 }
             }
 
@@ -121,7 +124,7 @@ namespace NSeed.Cli.Services
         private (string solution, bool foundMultiple, bool notFound) GetSolution(string path, SearchOption searchOption)
         {
             var solutions = Directory
-                ?.EnumerateFiles(path, $"*.{SolutionPrefix}", searchOption)
+                ?.EnumerateFiles(path, $"*.{SolutionExtension}", searchOption)
                 ?.Take(2)
                 ?.ToList() ?? new List<string>();
 
