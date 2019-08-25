@@ -27,9 +27,11 @@ namespace NSeed.Cli
                 var (noColor, verbose) = GetNoColorAndVerboseCommandLineOptions(commandLineArguments);
                 if (!noColor) noColor = Environment.GetEnvironmentVariable("NO_COLOR") != null;
 
-                output = ConsoleOutputSink.Create(noColor, verbose);
+                var consoleOutputSink = ConsoleOutputSink.Create(noColor, verbose);
 
-                var serviceCollection = CreateDefaultServiceCollection(output);
+                output = consoleOutputSink;
+
+                var serviceCollection = CreateDefaultServiceCollection(consoleOutputSink);
 
                 serviceConfigurator?.Invoke(serviceCollection);
 
@@ -164,11 +166,12 @@ namespace NSeed.Cli
                     : executableName;
             }
 
-            static IServiceCollection CreateDefaultServiceCollection(IOutputSink outputSink)
+            static IServiceCollection CreateDefaultServiceCollection(ConsoleOutputSink outputSink)
             {
                 return new ServiceCollection()
                     .AddSingleton(PhysicalConsole.Singleton)
-                    .AddSingleton(outputSink);
+                    .AddSingleton<IOutputSink>(outputSink)
+                    .AddSingleton<ITextColorsProvider>(outputSink);
             }
 
             static (bool noColor, bool verbose) GetNoColorAndVerboseCommandLineOptions(string[] commandLineArguments)

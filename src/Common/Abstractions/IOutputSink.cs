@@ -15,6 +15,11 @@ namespace NSeed.Abstractions
         bool AcceptsVerboseMessages { get; }
 
         /// <summary>
+        /// Writes the current line terminator to the output sink.
+        /// </summary>
+        void WriteLine();
+
+        /// <summary>
         /// Writes the specified <paramref name="message"/>,
         /// followed by the current line terminator,
         /// to the output sink.

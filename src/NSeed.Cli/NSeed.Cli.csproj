@@ -29,6 +29,7 @@
     <Compile Include="..\Common\Cli\CommandLineApplicationExecutor.cs" Link="CommandLineApplicationExecutor.cs" />
     <Compile Include="..\Common\Cli\ConsoleOutputSink.cs" Link="ConsoleOutputSink.cs" />
     <Compile Include="..\Common\Cli\ConsoleUtil.cs" Link="ConsoleUtil.cs" />
+    <Compile Include="..\Common\Cli\ITextColorsProvider.cs" Link="ITextColorsProvider.cs" />
     <Compile Include="..\Common\Cli\MainCommand.cs" Link="MainCommand.cs" />
     <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Subcommands\Info\InfoSubcommand.cs" />
     <Compile Include="..\Common\Cli\TextColors.cs" Link="TextColors.cs" />

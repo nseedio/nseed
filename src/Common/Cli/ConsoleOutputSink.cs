@@ -3,7 +3,7 @@ using System;
 
 namespace NSeed.Cli
 {
-    internal class ConsoleOutputSink : IOutputSink
+    internal class ConsoleOutputSink : IOutputSink, ITextColorsProvider
     {
         private readonly TextColors textColors;
         private readonly bool acceptsVerboseMessages;
@@ -63,6 +63,8 @@ namespace NSeed.Cli
 
         bool IOutputSink.AcceptsVerboseMessages => acceptsVerboseMessages;
 
+        void IOutputSink.WriteLine() => Console.WriteLine();
+
         void IOutputSink.WriteConfirmation(string confirmation)
         {
             WriteLineInColor(confirmation, textColors.Confirmation);
@@ -89,6 +91,8 @@ namespace NSeed.Cli
         {
             WriteLineInColor(warning, textColors.Warning);
         }
+
+        TextColors ITextColorsProvider.GetTextColors() => textColors;
 
         private void WriteLineInColor(string value, ConsoleColor color)
         {
