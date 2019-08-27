@@ -17,6 +17,7 @@ namespace NSeed.Cli.Assets
                 public const string WorkingDirectoryDoesNotContainAnySolution = "Couldn't find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution";
                 public const string SolutionPathDirectoryDoesNotExist = "The provided solution directory does not exist. Do you maybe have a typo in the directory path?";
                 public const string MultipleSolutionsFound = "Multiple solutions found. Specify a single solution by using --solution with solution name.";
+                public const string InvalidFile = "The provided file is invalid. Specify a .sln file";
             }
         }
     }

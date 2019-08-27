@@ -20,32 +20,28 @@ namespace NSeed.Cli.Services
 
         public string TemplatesDirectoryPath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "templates");
 
-        public (bool IsSuccesful, string Message) TryGetSolutionPath(string solution, out string path)
+        public (bool IsSuccesful, string Message) TryGetSolutionPath(string input, out string path)
         {
-            var fileInfo = FileInfo.FromFileName(solution);
+            var fileInfo = FileInfo.FromFileName(input);
 
-            if (string.Equals(fileInfo.Extension, SolutionExtension, StringComparison.OrdinalIgnoreCase) &&
-                !IsDirectory(fileInfo) &&
-                fileInfo.Exists)
+            switch (fileInfo)
             {
-                path = fileInfo.FullName;
-                return succesResponse;
-            }
-            else
-            {
-                if (IsDirectory(fileInfo))
-                {
-                    return TryGetSolution(fileInfo.FullName, out path);
-                }
-                else
-                {
-                    return TryGetSolution($"{fileInfo.FullName}.{SolutionExtension}", out path);
-                }
+                case var info when IsFile(info):
+                    return TryGetSolutionFromFilePath(info, out path);
+                case var info when IsDirectory(info):
+                    return TryGetSolutionFromDirectoryPath(info.Directory, out path);
+                default:
+                    break;
             }
 
-            static bool IsDirectory(IFileInfo fileInfo)
+            path = string.Empty;
+
+            return (false, New.Errors.WorkingDirectoryDoesNotContainAnySolution);
+
+            bool IsFile(IFileInfo fileInfo)
             {
-                return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
+                return !string.IsNullOrEmpty(fileInfo.Extension) &&
+                    !IsDirectory(fileInfo);
             }
         }
 
@@ -83,72 +79,100 @@ namespace NSeed.Cli.Services
             return succesResponse;
         }
 
-        private (bool IsSuccesful, string Message) TryGetSolution(string path, out string solution)
+        private (bool IsSuccesful, string Message) TryGetSolutionFromFilePath(IFileInfo fileInfo, out string solutionPath)
         {
-            System.Diagnostics.Debug.Assert(!string.IsNullOrEmpty(path));
+            solutionPath = string.Empty;
 
-            solution = string.Empty;
+            if (IsSlnFile(fileInfo))
+            {
+                var response = GetSolutionFilePath();
+                if (response.IsSuccesful)
+                {
+                    solutionPath = response.Payload;
+                    return succesResponse;
+                }
 
-            var directoryInfo = DirectoryInfo.FromDirectoryName(path);
+                return ErrorResponse(response.Message);
+            }
+            else
+            {
+                return ErrorResponse(New.Errors.InvalidFile);
+            }
+
+            (bool IsSuccesful, string Message, string Payload) GetSolutionFilePath()
+            {
+                if (fileInfo.Exists)
+                {
+                    return (true, string.Empty, fileInfo.FullName);
+                }
+
+                return FindSolution(
+                    fileInfo.Directory.FullName,
+                    SearchOption.AllDirectories,
+                    fileInfo.Name);
+            }
+
+            bool IsSlnFile(IFileInfo fileInfo)
+            {
+                return
+                    string.Equals(fileInfo.Extension, SolutionExtension, StringComparison.OrdinalIgnoreCase)
+                    && !IsDirectory(fileInfo);
+            }
+        }
+
+        private (bool IsSuccesful, string Message) TryGetSolutionFromDirectoryPath(IDirectoryInfo directoryInfo, out string solutionPath)
+        {
+            solutionPath = string.Empty;
+
             if (!directoryInfo.Exists)
             {
                 return ErrorResponse(New.Errors.SolutionPathDirectoryDoesNotExist);
             }
 
-            var response = GetSolution(path, SearchOption.TopDirectoryOnly);
-
-            if (response.foundMultiple)
+            var response = FindSolution(directoryInfo.FullName, SearchOption.TopDirectoryOnly);
+            if (response.IsSuccesful)
             {
-                return ErrorResponse(New.Errors.MultipleSolutionsFound);
+                solutionPath = response.Payload;
+                return succesResponse;
             }
 
-            if (response.notFound)
+            response = FindSolution(directoryInfo.FullName, SearchOption.AllDirectories);
+            if (response.IsSuccesful)
             {
-                response = GetSolution(path, SearchOption.AllDirectories);
-
-                if (response.foundMultiple)
-                {
-                    return ErrorResponse(New.Errors.MultipleSolutionsFound);
-                }
-
-                if (response.notFound)
-                {
-                    return ErrorResponse(New.Errors.WorkingDirectoryDoesNotContainAnySolution);
-                }
+                solutionPath = response.Payload;
+                return succesResponse;
             }
 
-            solution = response.solution;
-            return succesResponse;
+            (bool isSuccesful, string message) = TryGetSolutionFromFilePath(
+                FileInfo.FromFileName($"{directoryInfo.FullName}{SolutionExtension}"),
+                out solutionPath);
+            if (response.IsSuccesful)
+            {
+                return succesResponse;
+            }
+
+            return ErrorResponse(response.Message);
         }
 
-        private (string solution, bool foundMultiple, bool notFound) GetSolution(string path, SearchOption searchOption)
+        private (bool IsSuccesful, string Message, string Payload) FindSolution(string path, SearchOption searchOption, string fileName = "")
         {
             var solutions = Directory
-                ?.EnumerateFiles(path, $"*.{SolutionExtension}", searchOption)
+                ?.EnumerateFiles(path, string.IsNullOrEmpty(fileName) ? $"*{SolutionExtension}" : fileName, searchOption)
                 ?.Take(2)
                 ?.ToList() ?? new List<string>();
 
             if (solutions.IsNullOrEmpty())
             {
-                return slnNotFound;
+                return (false, New.Errors.WorkingDirectoryDoesNotContainAnySolution, string.Empty);
             }
 
             if (solutions.Any() && solutions.Count > 1)
             {
-                return foundMultipleSln;
+                return (false, New.Errors.MultipleSolutionsFound, string.Empty);
             }
 
-            return Sln(solutions.FirstOrDefault());
+            return (true, string.Empty, solutions.FirstOrDefault());
         }
-
-        private (string solution, bool foundMultiple, bool notFound) slnNotFound = (string.Empty, false, true);
-        private (string solution, bool foundMultiple, bool notFound) foundMultipleSln = (string.Empty, true, false);
-
-        private (string solution, bool foundMultiple, bool notFound) Sln(string sln) => (sln, false, false);
-
-        private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
-
-        private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
 
         private Stream GetEmbeddedResource(string name)
         {
@@ -185,5 +209,14 @@ namespace NSeed.Cli.Services
             content = content.Replace("guid", name);
             File.WriteAllText(templateConfigFilePath, content);
         }
+
+        private bool IsDirectory(IFileInfo fileInfo)
+        {
+            return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
+        }
+
+        private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
+
+        private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }
 }

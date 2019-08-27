@@ -72,15 +72,19 @@ namespace NSeed.Cli.Tests.Unit.Services
         {
             public static IEnumerable<object[]> ValidPaths => new List<object[]>
             {
-                new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web.sln" },
+                // new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web.sln" },
                 new object[] { $@"{FileFixture.RootDirectory}Fit" },
-                new object[] { $@"{FileFixture.RootDirectory}Main" },
-                new object[] { $@"{FileFixture.RootDirectory}Test\Sub" },
+                // new object[] { $@"{FileFixture.RootDirectory}Main" },
+                // new object[] { $@"{FileFixture.RootDirectory}Test\Sub" },
             };
 
             public static IEnumerable<object[]> InvalidPaths => new List<object[]>
             {
-                new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
+                // new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
+                // new object[] { $@"Test", Resources.New.Errors.MultipleSolutionsFound },
+                // new object[] { $@"Test/SubTest/SubSubTest", Resources.New.Errors.MultipleSolutionsFound },
+                new object[] { $@"Test.sln", Resources.New.Errors.MultipleSolutionsFound },
+                // new object[] { $@"C:/Test/Test.sln", Resources.New.Errors.MultipleSolutionsFound },
             };
 
             [Theory]

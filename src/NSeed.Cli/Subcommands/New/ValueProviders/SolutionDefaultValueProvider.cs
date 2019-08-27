@@ -20,6 +20,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
                 if (solution.IsNotProvidedByUser())
                 {
+                    // Current working directory
                     fileSystemService.TryGetSolutionPath(InitDirectory, out solution);
                 }
                 else
