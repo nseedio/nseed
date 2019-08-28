@@ -19,6 +19,7 @@ namespace NSeed.Cli.Tests.Unit.Services
             ($@"{RootDirectory}Main\Sub\", "Fit.Web.sln"),
             ($@"{RootDirectory}Test\Sub\", "Fit.Web.sln"),
             ($@"{RootDirectory}Test\Sub\PSubOne\", "FitOne.Web.sln"),
+            ($@"{RootDirectory}Pims\", "Pims.sln"),
         };
 
         public FileFixture()
@@ -72,19 +73,22 @@ namespace NSeed.Cli.Tests.Unit.Services
         {
             public static IEnumerable<object[]> ValidPaths => new List<object[]>
             {
-                // new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web.sln" },
+                new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web.sln" },
                 new object[] { $@"{FileFixture.RootDirectory}Fit" },
-                // new object[] { $@"{FileFixture.RootDirectory}Main" },
-                // new object[] { $@"{FileFixture.RootDirectory}Test\Sub" },
+                new object[] { $@"{FileFixture.RootDirectory}Main" },
+                new object[] { $@"{FileFixture.RootDirectory}Test\Sub" },
+                new object[] { $@"{FileFixture.RootDirectory}\Pims\pims" },
             };
 
             public static IEnumerable<object[]> InvalidPaths => new List<object[]>
             {
-                // new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
-                // new object[] { $@"Test", Resources.New.Errors.MultipleSolutionsFound },
-                // new object[] { $@"Test/SubTest/SubSubTest", Resources.New.Errors.MultipleSolutionsFound },
-                new object[] { $@"Test.sln", Resources.New.Errors.MultipleSolutionsFound },
-                // new object[] { $@"C:/Test/Test.sln", Resources.New.Errors.MultipleSolutionsFound },
+                new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
+                new object[] { $@"Test_238e9324-65e0-4f74-ac64-748f5ea32b90", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+                new object[] { $@"TestXYZ", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+                new object[] { $@"Test/SubTest/SubSubTest", Resources.New.Errors.SolutionPathDirectoryDoesNotExist },
+                new object[] { $@"Test_cd81a251-30d9-40b0-8c98-252c03a720bc.sln", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+                new object[] { $@"C:/Test238e9324/Test.sln", Resources.New.Errors.SolutionPathDirectoryDoesNotExist },
+                new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web", Resources.New.Errors.InvalidFile }
             };
 
             [Theory]

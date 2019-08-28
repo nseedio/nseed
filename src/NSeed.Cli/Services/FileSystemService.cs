@@ -23,20 +23,19 @@ namespace NSeed.Cli.Services
         public (bool IsSuccesful, string Message) TryGetSolutionPath(string input, out string path)
         {
             var fileInfo = FileInfo.FromFileName(input);
+            path = string.Empty;
 
             switch (fileInfo)
             {
+                case var info when !IsDirectory(info.Directory):
+                    return (false, New.Errors.SolutionPathDirectoryDoesNotExist);
                 case var info when IsFile(info):
                     return TryGetSolutionFromFilePath(info, out path);
                 case var info when IsDirectory(info):
-                    return TryGetSolutionFromDirectoryPath(info.Directory, out path);
+                    return TryGetSolutionFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), out path);
                 default:
-                    break;
+                    return TryGetSolutionFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{SolutionExtension}"), out path);
             }
-
-            path = string.Empty;
-
-            return (false, New.Errors.WorkingDirectoryDoesNotContainAnySolution);
 
             bool IsFile(IFileInfo fileInfo)
             {
@@ -143,14 +142,6 @@ namespace NSeed.Cli.Services
                 return succesResponse;
             }
 
-            (bool isSuccesful, string message) = TryGetSolutionFromFilePath(
-                FileInfo.FromFileName($"{directoryInfo.FullName}{SolutionExtension}"),
-                out solutionPath);
-            if (response.IsSuccesful)
-            {
-                return succesResponse;
-            }
-
             return ErrorResponse(response.Message);
         }
 
@@ -213,6 +204,11 @@ namespace NSeed.Cli.Services
         private bool IsDirectory(IFileInfo fileInfo)
         {
             return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
+        }
+
+        private bool IsDirectory(IDirectoryInfo directoryInfo)
+        {
+            return (int)directoryInfo.Attributes != -1 && directoryInfo.Attributes.HasFlag(FileAttributes.Directory);
         }
 
         private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
