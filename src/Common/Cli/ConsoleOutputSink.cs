@@ -12,7 +12,12 @@ namespace NSeed.Cli
         {
             System.Diagnostics.Debug.Assert(textColors != null);
 
-            this.textColors = textColors;
+            this.textColors = textColors ?? new TextColors(
+                TextColorsTheme.GetForCurrentOS(),
+                ConsoleColor.Gray,
+                ConsoleColor.Black,
+                false);
+
             this.acceptsVerboseMessages = acceptsVerboseMessages;
         }
 

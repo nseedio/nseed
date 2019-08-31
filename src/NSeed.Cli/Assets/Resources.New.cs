@@ -5,6 +5,7 @@ namespace NSeed.Cli.Assets
         internal static class New
         {
             public const string CommandDescription = "Create new Seed Bucket project.";
+            public const string SuccessfulRun = "Seed Bucket project created successfully.";
 
             public const string FrameworkDescription = "The target framework for the Seed Bucket project. For .NET Core project use netcoreappX.Y. For .NET Classic project use netframeworkX.Y. The default framework is derived based on frameworks already used in the target solution.";
             public const string SolutionDescription = "The target solution. For example: MySolution.sln, SubFolderWithSolution, C:\\Path\\To\\Solutions\\FirstSolution.sln. The default is the nearest single solution found in the working directory or its subdirectories.";
@@ -12,12 +13,27 @@ namespace NSeed.Cli.Assets
 
             public const string DefaultProjectName = "Seeds";
 
+            public static readonly int MinProjectNameCharacters = 3;
+            public static readonly int MaxProjectNameCharacters = 50;
+
             internal static class Errors
             {
-                public const string WorkingDirectoryDoesNotContainAnySolution = "Couldn't find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution";
+                public const string WorkingDirectoryDoesNotContainAnySolution = "Couldn't find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution.";
                 public const string SolutionPathDirectoryDoesNotExist = "The provided solution directory does not exist. Do you maybe have a typo in the directory path?";
                 public const string MultipleSolutionsFound = "Multiple solutions found. Specify a single solution by using --solution with solution name.";
-                public const string InvalidFile = "The provided file is invalid. Specify a .sln file";
+                public const string InvalidFile = "The provided file is invalid. Specify a .sln file.";
+
+                public const string FrameworkNotProvided = "The framework is not provided or couldn't be derived based on frameworks already used in the target solution. Use --framework option to set valid framework, netcoreappX.Y. For .NET Core project or netframeworkX.Y. For .NET Classic projects.";
+                public const string InvalidFramework = "The provided framework is invalid. Do you maybe have a typo in the framework name?";
+                public const string InvalidDotNetCoreVersion = "The provided version of .NET Core framework is not supported try one of the following [1.0, 1.1, 2.0, 2.1, 2.2, 3.0].";
+                public const string InvalidDotNetClassicVersion = "The provided version of .NET Classic framework is not supported try one of the following [1.0, 1.1, 2.0, 3.0, 3.5, 4, 4.5, 4.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8].";
+
+                public const string ProjectNameNotProvided = "The project name is not provided or couldn't be assign automatically. Use --name option to set project name.";
+                public const string ProjectNameContainUnallowedCharacters = "The project name contains unallowed characters. Use --name option to set valid project name.";
+                public const string InvalidProjectName = "The project name is invalid and contain reserved words. Use --name option to set valid project name.";
+                public const string ProjectNameExists = "The project name already exist in provided solution. Use --name option to set new project name.";
+                public const string ProjectNameToLong = "The project name is to long. Maximum length of project name is 50 characters. Use --name option to set new project name.";
+                public const string ProjectNameToShort = "The project name is to short. Minimum length of project name is 3 characters. Use --name option to set new project name.";
             }
         }
     }

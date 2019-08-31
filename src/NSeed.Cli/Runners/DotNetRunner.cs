@@ -38,7 +38,11 @@ namespace NSeed.Cli.Runners
                 RedirectStandardOutput = true,
                 RedirectStandardError = true
             };
+            return Run(psi);
+        }
 
+        protected RunStatus Run(ProcessStartInfo psi)
+        {
             var p = new Process();
             try
             {
@@ -52,7 +56,7 @@ namespace NSeed.Cli.Runners
 
                 var errorTask = ConsumeStreamReaderAsync(p.StandardError, errors);
 
-                var processExited = p.WaitForExit(20000);
+                var processExited = p.WaitForExit(50000);
 
                 if (processExited == false)
                 {

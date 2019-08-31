@@ -54,10 +54,7 @@ namespace NSeed.Cli
                 // because the parsing happens after the output sink object
                 // is created and assigned to the "output" variable.
                 // So we can safely access it here; therefoe "!".
-                var message = exception.Message;
-                if (!message.EndsWith(".")) message += ".";
-
-                output!.WriteMessage(message);
+                WriteOutputMessage(exception, output!);
 
                 if (exception.NearestMatches.Any())
                 {
@@ -65,6 +62,11 @@ namespace NSeed.Cli
                     output!.WriteMessage($"Did you maybe mean '{exception.NearestMatches.First()}'?");
                 }
 
+                return 1;
+            }
+            catch (CommandParsingException exception)
+            {
+                WriteOutputMessage(exception, output!);
                 return 1;
             }
             catch (Exception exception)
@@ -209,6 +211,14 @@ namespace NSeed.Cli
                     commandLineArguments.Any(argument => argument == BaseCommand.NoColorShortOption || argument == BaseCommand.NoColorLongOption),
                     commandLineArguments.Any(argument => argument == BaseCommand.VerboseShortOption || argument == BaseCommand.VerboseLongOption)
                 );
+            }
+
+            static void WriteOutputMessage(Exception exception, IOutputSink outputSink)
+            {
+                var message = exception.Message;
+                if (!message.EndsWith(".")) message += ".";
+
+                outputSink.WriteMessage(message);
             }
         }
     }

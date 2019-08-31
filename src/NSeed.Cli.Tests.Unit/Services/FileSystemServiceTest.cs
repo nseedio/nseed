@@ -140,17 +140,5 @@ namespace NSeed.Cli.Tests.Unit.Services
                 service.RemoveTempTemplates();
             }
         }
-
-        public class RemoveTempTemplates
-        {
-            [Fact]
-            public void IsﾠSuccesful()
-            {
-                var service = new FileSystemService();
-                var response = service.RemoveTempTemplates();
-                response.IsSuccesful.Should().BeTrue();
-                response.Message.Should().BeNullOrEmpty();
-            }
-        }
     }
 }

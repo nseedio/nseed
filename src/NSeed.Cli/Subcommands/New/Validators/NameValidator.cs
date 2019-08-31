@@ -1,3 +1,4 @@
+using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Validation;
@@ -12,9 +13,6 @@ namespace NSeed.Cli.Subcommands.New.Validators
     {
         private IDependencyGraphService DependencyGraphService { get; }
 
-        private const int MinCharactersSize = 3;
-        private const int MaxCharactersSize = 50;
-
         public NameValidator(
             IDependencyGraphService dependencyGraphService)
         {
@@ -26,24 +24,24 @@ namespace NSeed.Cli.Subcommands.New.Validators
             switch (command.ResolvedName)
             {
                 case var name when name.IsNotProvidedByUser():
-                    return Error("Project name is empty");
+                    return Error(Resources.New.Errors.ProjectNameNotProvided);
 
                 case var name when ContainesUnallowedCharacters(name) ||
                                    ContainesSurrogateCharacters(name) ||
                                    ContainesUnicodeCharacters(name):
-                    return Error("Project name contain unallowed characters");
+                    return Error(Resources.New.Errors.ProjectNameContainUnallowedCharacters);
 
                 case var name when IsReserved(name):
-                    return Error("Project name is invalid");
+                    return Error(Resources.New.Errors.InvalidProjectName);
 
                 case var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSolution)):
-                    return Error("Project name already exist");
+                    return Error(Resources.New.Errors.ProjectNameExists);
 
-                case var name when name.Length > MaxCharactersSize:
-                    return Error($"Project name is to long Max. {MaxCharactersSize} characters");
+                case var name when name.Length > Resources.New.MaxProjectNameCharacters:
+                    return Error(Resources.New.Errors.ProjectNameToLong);
 
-                case var name when name.Length < MinCharactersSize:
-                    return Error($"Project name is to short Min. {MinCharactersSize} characters");
+                case var name when name.Length < Resources.New.MinProjectNameCharacters:
+                    return Error(Resources.New.Errors.ProjectNameToShort);
 
                 default:
                     return Success;
@@ -77,7 +75,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
         {
             const int maxAnsiCode = 255;
 
-            // TODO:am  Find better way to implement this
+            // Todo: am  Find better way to implement this
             return name.Any(chr => chr > maxAnsiCode);
         }
     }

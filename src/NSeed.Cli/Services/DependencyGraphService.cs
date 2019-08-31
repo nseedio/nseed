@@ -1,6 +1,7 @@
 using DiffLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NSeed.Cli.Extensions;
 using NSeed.Cli.Runners;
 using NuGet.ProjectModel;
 using System;
@@ -53,7 +54,11 @@ namespace NSeed.Cli.Services
             }
 
             var dependencyGraphText = File.ReadAllText(args.OutputPath);
-            dependencyGraphSpec = new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText));
+
+            dependencyGraphSpec = dependencyGraphText.Exists()
+                ? new DependencyGraphSpec(JsonConvert.DeserializeObject<JObject>(dependencyGraphText))
+                : new DependencyGraphSpec();
+
             projectPath = solutionPath;
             return dependencyGraphSpec;
         }

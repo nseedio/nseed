@@ -37,9 +37,11 @@ namespace NSeed.Cli.Subcommands.New
         /// </summary>
         public string ResolvedSolution { get; private set; } = string.Empty;
 
-        public string ResolvedSolutionDirectory { get; private set; } = string.Empty;
+        public string ResolvedSolutionDirectory => ResolvedSolution.Exists() ? new FileInfo(ResolvedSolution)?.DirectoryName ?? string.Empty : string.Empty;
 
         public string ResolvedFramework { get; private set; } = string.Empty;
+
+        public (Framework Name, string Version) ResolvedFrameworkWithVersion => GetFrameworkWithVersion();
 
         public string ResolvedName { get; private set; } = string.Empty;
 
@@ -47,11 +49,7 @@ namespace NSeed.Cli.Subcommands.New
 
         public void SetResolvedSolution(string solution)
         {
-            ResolvedSolution = solution ?? string.Empty;
-            if (!string.IsNullOrEmpty(solution))
-            {
-                ResolvedSolutionDirectory = new FileInfo(solution ?? string.Empty)?.DirectoryName ?? string.Empty;
-            }
+            ResolvedSolution = solution;
         }
 
         public void SetResolvedName(string name)
@@ -114,24 +112,6 @@ namespace NSeed.Cli.Subcommands.New
             }
         }
 
-        public (Framework Name, string Version) GetFrameworkWithVersion()
-        {
-            var frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETCoreApp);
-
-            if (frameworkWithVersion.IsSuccessful)
-            {
-                return (Assets.Framework.NETCoreApp, frameworkWithVersion.Version);
-            }
-
-            frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETFramework);
-            if (frameworkWithVersion.IsSuccessful)
-            {
-                return (Assets.Framework.NETFramework, frameworkWithVersion.Version);
-            }
-
-            return (Assets.Framework.None, string.Empty);
-        }
-
         public Task OnExecute(
             CommandLineApplication app,
             IFileSystemService fileSystemService,
@@ -161,7 +141,27 @@ namespace NSeed.Cli.Subcommands.New
             }
 
             fileSystemService.RemoveTempTemplates();
+            app.Out.WriteLine(Resources.New.SuccessfulRun);
             return Task.CompletedTask;
+        }
+
+        private (Framework Name, string Version) GetFrameworkWithVersion()
+        {
+            var frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETCoreApp);
+
+            if (frameworkWithVersion.IsSuccessful)
+            {
+                return (Assets.Framework.NETCoreApp, frameworkWithVersion.Version);
+            }
+
+            frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETFramework);
+
+            if (frameworkWithVersion.IsSuccessful)
+            {
+                return (Assets.Framework.NETFramework, frameworkWithVersion.Version);
+            }
+
+            return (Assets.Framework.None, string.Empty);
         }
 
         private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Framework framework)

@@ -26,9 +26,12 @@ namespace NSeed.Cli
 
             if (noColor) return;
 
-            Warning = textColorsTheme.GetWarningColorFor(foregroundColor, backgroundColor);
-            Error = textColorsTheme.GetErrorColorFor(foregroundColor, backgroundColor);
-            Confirmation = textColorsTheme.GetConfirmationColorFor(foregroundColor, backgroundColor);
+            if (textColorsTheme != null)
+            {
+                Warning = textColorsTheme.GetWarningColorFor(foregroundColor, backgroundColor);
+                Error = textColorsTheme.GetErrorColorFor(foregroundColor, backgroundColor);
+                Confirmation = textColorsTheme.GetConfirmationColorFor(foregroundColor, backgroundColor);
+            }
         }
     }
 }

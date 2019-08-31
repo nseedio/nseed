@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
@@ -46,19 +47,19 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         }
 
         [Theory]
-        [InlineData("", "Project name is empty")]
-        [InlineData(null, "Project name is empty")]
-        [InlineData(@"Name\Name", "Project name contain unallowed characters")]
-        [InlineData(@"Name/Name", "Project name contain unallowed characters")]
-        [InlineData(@"Name#Name", "Project name contain unallowed characters")]
-        [InlineData(@"Name///Name", "Project name contain unallowed characters")]
-        [InlineData(@"Name𝄞Name", "Project name contain unallowed characters")]
-        [InlineData(@"com1", "Project name is invalid")]
-        [InlineData(@"PRN", "Project name is invalid")]
-        [InlineData(@"..", "Project name is invalid")]
-        [InlineData("Project1", "Project name already exist")]
-        [InlineData("Pr", "Project name is to short Min. 3 characters")]
-        [InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "Project name is to long Max. 50 characters")]
+        [InlineData("", Resources.New.Errors.ProjectNameNotProvided)]
+        [InlineData(null, Resources.New.Errors.ProjectNameNotProvided)]
+        [InlineData(@"Name\Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
+        [InlineData(@"Name/Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
+        [InlineData(@"Name#Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
+        [InlineData(@"Name///Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
+        [InlineData(@"Name𝄞Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
+        [InlineData(@"com1", Resources.New.Errors.InvalidProjectName)]
+        [InlineData(@"PRN", Resources.New.Errors.InvalidProjectName)]
+        [InlineData(@"..", Resources.New.Errors.InvalidProjectName)]
+        [InlineData("Project1", Resources.New.Errors.ProjectNameExists)]
+        [InlineData("Pr", Resources.New.Errors.ProjectNameToShort)]
+        [InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Resources.New.Errors.ProjectNameToLong)]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessage(string projectName, string errorMessage)
         {
             Subcommand.SetResolvedName(projectName);

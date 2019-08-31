@@ -1,3 +1,4 @@
+using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
 using System;
@@ -8,36 +9,28 @@ namespace NSeed.Cli.Subcommands.New.Validators
 {
     internal class FrameworkValidator : IValidator<NewSubcommand>
     {
-        public FrameworkValidator()
-        {
-        }
-
         public ValidationResult Validate(NewSubcommand command)
         {
             if (command.ResolvedFramework.IsNotProvidedByUser())
             {
-                return ValidationResult.Error("Project framework is empty");
+                return ValidationResult.Error(Resources.New.Errors.FrameworkNotProvided);
             }
 
-            var framework = command.GetFrameworkWithVersion();
-            switch (framework.Name)
+            switch (command.ResolvedFrameworkWithVersion)
             {
-                case Assets.Framework.NETCoreApp:
-                    if (!DotNetCoreVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return ValidationResult.Error("Core project framework version is not valid");
-                    }
+                case var framework when framework.Name is Framework.None:
+                    return ValidationResult.Error(Resources.New.Errors.InvalidFramework);
 
-                    break;
-                case Assets.Framework.NETFramework:
-                    if (!DotNetClassicVersions.Any(v => framework.Version.Equals(v, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return ValidationResult.Error("Full dotnet project version is not valid");
-                    }
+                case var framework when framework.Name is Framework.NETCoreApp
+                                        && !DotNetCoreVersions.ToList().Contains(framework.Version):
+                    return ValidationResult.Error(Resources.New.Errors.InvalidDotNetCoreVersion);
 
+                case var framework when framework.Name is Framework.NETFramework
+                                        && !DotNetClassicVersions.ToList().Contains(framework.Version):
+                    return ValidationResult.Error(Resources.New.Errors.InvalidDotNetClassicVersion);
+
+                default:
                     break;
-                case Assets.Framework.None:
-                    return ValidationResult.Error("Project framework is invalid");
             }
 
             return ValidationResult.Success;

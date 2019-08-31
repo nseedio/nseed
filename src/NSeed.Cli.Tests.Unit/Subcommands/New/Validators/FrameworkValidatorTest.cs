@@ -1,4 +1,5 @@
 using FluentAssertions;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
@@ -13,13 +14,14 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         private readonly NewSubcommand subcommand = new NewSubcommand();
 
         [Theory]
-        [InlineData("", "Project framework is empty")]
-        [InlineData(null, "Project framework is empty")]
-        [InlineData("netcoreapp2.7", "Core project framework version is not valid")]
-        [InlineData("NETCoreApp2.7", "Core project framework version is not valid")]
-        [InlineData("coreapp2.7", "Project framework is invalid")]
-        [InlineData("NETFramework5.3", "Full dotnet project version is not valid")]
-        [InlineData("netcoreapp_3.1", "Core project framework version is not valid")]
+        [InlineData("", Resources.New.Errors.FrameworkNotProvided)]
+        [InlineData(null, Resources.New.Errors.FrameworkNotProvided)]
+        [InlineData("net", Resources.New.Errors.InvalidFramework)]
+        [InlineData("netcoreapp2.7", Resources.New.Errors.InvalidDotNetCoreVersion)]
+        [InlineData("NETCoreApp2.7", Resources.New.Errors.InvalidDotNetCoreVersion)]
+        [InlineData("coreapp2.7", Resources.New.Errors.InvalidFramework)]
+        [InlineData("NETFramework5.3", Resources.New.Errors.InvalidDotNetClassicVersion)]
+        [InlineData("netcoreapp_3.1", Resources.New.Errors.InvalidDotNetCoreVersion)]
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string framework, string errorMessage)
         {
             subcommand.SetResolvedFramework(framework);
