@@ -46,20 +46,31 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
             GenerateSolutionProjects(SlnProjects);
         }
 
+        public static IEnumerable<object?[]> InvalidProjectNamesAndErrorMessages =>
+            new[]
+            {
+                new object?[] { string.Empty, Resources.New.Errors.ProjectNameNotProvided },
+                new object?[] { null, Resources.New.Errors.ProjectNameNotProvided },
+                new object?[] { @"Name\Name", Resources.New.Errors.ProjectNameContainsUnallowedCharacters },
+                new object?[] { @"Name/Name", Resources.New.Errors.ProjectNameContainsUnallowedCharacters },
+                new object?[] { @"Name#Name", Resources.New.Errors.ProjectNameContainsUnallowedCharacters },
+                new object?[] { @"Name///Name", Resources.New.Errors.ProjectNameContainsUnallowedCharacters },
+                new object?[] { @"Name𝄞Name", Resources.New.Errors.ProjectNameContainsUnallowedCharacters },
+                new object?[] { @"com1", Resources.New.Errors.InvalidProjectName },
+                new object?[] { @"PRN", Resources.New.Errors.InvalidProjectName },
+                new object?[] { @"..", Resources.New.Errors.InvalidProjectName },
+                new object?[] { "Project1", Resources.New.Errors.ProjectNameExists },
+                new object?[] { "Pr", Resources.New.Errors.ProjectNameToShort },
+                new object?[] { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Resources.New.Errors.ProjectNameToLong }
+            };
         [Theory]
-        [InlineData("", Resources.New.Errors.ProjectNameNotProvided)]
-        [InlineData(null, Resources.New.Errors.ProjectNameNotProvided)]
-        [InlineData(@"Name\Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
-        [InlineData(@"Name/Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
-        [InlineData(@"Name#Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
-        [InlineData(@"Name///Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
-        [InlineData(@"Name𝄞Name", Resources.New.Errors.ProjectNameContainUnallowedCharacters)]
-        [InlineData(@"com1", Resources.New.Errors.InvalidProjectName)]
-        [InlineData(@"PRN", Resources.New.Errors.InvalidProjectName)]
-        [InlineData(@"..", Resources.New.Errors.InvalidProjectName)]
-        [InlineData("Project1", Resources.New.Errors.ProjectNameExists)]
-        [InlineData("Pr", Resources.New.Errors.ProjectNameToShort)]
-        [InlineData("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Resources.New.Errors.ProjectNameToLong)]
+        // TODO: This looks like a bug in the xUnit analyzer. Strange.
+        // For now, just disable it, but take a look at it.
+        // It suddenly doesn't work on Igor's machine and we have to see why.
+        // Take a look, fix the issue, and remove all disabling of xUnit1019 in all files..
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
+        [MemberData(nameof(InvalidProjectNamesAndErrorMessages))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessage(string projectName, string errorMessage)
         {
             Subcommand.SetResolvedName(projectName);

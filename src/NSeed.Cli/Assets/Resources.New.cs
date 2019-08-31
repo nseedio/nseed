@@ -5,35 +5,39 @@ namespace NSeed.Cli.Assets
         internal static class New
         {
             public const string CommandDescription = "Create new Seed Bucket project.";
-            public const string SuccessfulRun = "Seed Bucket project created successfully.";
 
             public const string FrameworkDescription = "The target framework for the Seed Bucket project. For .NET Core project use netcoreappX.Y. For .NET Classic project use netframeworkX.Y. The default framework is derived based on frameworks already used in the target solution.";
             public const string SolutionDescription = "The target solution. For example: MySolution.sln, SubFolderWithSolution, C:\\Path\\To\\Solutions\\FirstSolution.sln. The default is the nearest single solution found in the working directory or its subdirectories.";
             public const string ProjectNameDescription = "The project name. The default name is " + DefaultProjectName + " if the project with that name does not already exist.";
 
+            public const string SuccessfulRun = "Seed Bucket project created successfully.";
+
             public const string DefaultProjectName = "Seeds";
 
-            public static readonly int MinProjectNameCharacters = 3;
-            public static readonly int MaxProjectNameCharacters = 50;
+            public const int MinProjectNameCharacters = 3;
+            public const int MaxProjectNameCharacters = 50;
 
             internal static class Errors
             {
-                public const string WorkingDirectoryDoesNotContainAnySolution = "Couldn't find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution.";
-                public const string SolutionPathDirectoryDoesNotExist = "The provided solution directory does not exist. Do you maybe have a typo in the directory path?";
-                public const string MultipleSolutionsFound = "Multiple solutions found. Specify a single solution by using --solution with solution name.";
-                public const string InvalidFile = "The provided file is invalid. Specify a .sln file.";
+                public static readonly string WorkingDirectoryDoesNotContainAnySolution = "Could not find a solution in the working directory. Ensure that a solution exists in the working directory or any of its subdirectories, or pass the target solution by using --solution.";
+                public static readonly string SolutionPathDirectoryDoesNotExist = $"The provided solution directory does not exist. {DoYouMaybeHaveATypoInThe("directory path")}";
+                public static readonly string MultipleSolutionsFound = "Multiple solutions found. Specify a single solution by using --solution with solution name.";
+                public static readonly string InvalidFile = "The provided file is invalid. Specify a valid .sln file.";
 
-                public const string FrameworkNotProvided = "The framework is not provided or couldn't be derived based on frameworks already used in the target solution. Use --framework option to set valid framework, netcoreappX.Y. For .NET Core project or netframeworkX.Y. For .NET Classic projects.";
-                public const string InvalidFramework = "The provided framework is invalid. Do you maybe have a typo in the framework name?";
-                public const string InvalidDotNetCoreVersion = "The provided version of .NET Core framework is not supported try one of the following [1.0, 1.1, 2.0, 2.1, 2.2, 3.0].";
-                public const string InvalidDotNetClassicVersion = "The provided version of .NET Classic framework is not supported try one of the following [1.0, 1.1, 2.0, 3.0, 3.5, 4, 4.5, 4.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2, 4.8].";
+                public static readonly string FrameworkNotProvided = "The framework is not provided or could not be derived based on frameworks already used in the target solution. Use --framework option to set a valid framework, netcoreappX.Y for .NET Core project or netframeworkX.Y for .NET Classic project.";
+                public static readonly string InvalidFramework = $"The provided framework is invalid. {DoYouMaybeHaveATypoInThe("framework name")}";
+                public static readonly string InvalidDotNetCoreVersion = $"The provided version of .NET Core framework is not supported. The supported versions are: {string.Join(", ", Resources.DotNetCoreVersions)}.";
+                public static readonly string InvalidDotNetClassicVersion = $"The provided version of .NET Classic framework is not supported. The supported versions are: {string.Join(", ", Resources.DotNetClassicVersions)}.";
 
-                public const string ProjectNameNotProvided = "The project name is not provided or couldn't be assign automatically. Use --name option to set project name.";
-                public const string ProjectNameContainUnallowedCharacters = "The project name contains unallowed characters. Use --name option to set valid project name.";
-                public const string InvalidProjectName = "The project name is invalid and contain reserved words. Use --name option to set valid project name.";
-                public const string ProjectNameExists = "The project name already exist in provided solution. Use --name option to set new project name.";
-                public const string ProjectNameToLong = "The project name is to long. Maximum length of project name is 50 characters. Use --name option to set new project name.";
-                public const string ProjectNameToShort = "The project name is to short. Minimum length of project name is 3 characters. Use --name option to set new project name.";
+                public static readonly string ProjectNameNotProvided = $"The project name is not provided or could not be assigned automatically. {UseNameOptionToSetProjectName()}";
+                public static readonly string ProjectNameContainsUnallowedCharacters = $"The provided project name contains unallowed characters. {UseNameOptionToSetProjectName("a valid")}";
+                public static readonly string InvalidProjectName = $"The provided project name is invalid (contains reserved words like PRN or COM1). {UseNameOptionToSetProjectName("a valid")}";
+                public static readonly string ProjectNameExists = $"The project name already exists in the provided solution. {UseNameOptionToSetProjectName("a new")}";
+                public static readonly string ProjectNameToLong = "The provided project name is to long. The maximum length of the project name is " + MaxProjectNameCharacters + " characters.";
+                public static readonly string ProjectNameToShort = "The provided project name is to short. The minimum length of project name is " + MinProjectNameCharacters + " characters.";
+
+                private static string UseNameOptionToSetProjectName(string projectNameQualifier = "the") =>
+                    $"Use --name option to set {projectNameQualifier} project name.";
             }
         }
     }

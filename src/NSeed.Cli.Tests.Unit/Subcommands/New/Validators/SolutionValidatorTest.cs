@@ -6,6 +6,7 @@ using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
 using NuGet.ProjectModel;
+using System.Collections.Generic;
 using Xunit;
 
 namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
@@ -16,9 +17,20 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         private readonly Mock<IFileSystemService> mockFileSystemService = new Mock<IFileSystemService>();
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 
+        public static IEnumerable<object?[]> InvalidSolutionsAndErrorMessages =>
+            new[]
+            {
+                new object?[] { string.Empty, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+                new object?[] { null, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+            };
         [Theory]
-        [InlineData("", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution)]
-        [InlineData(null, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution)]
+        // TODO: This looks like a bug in the xUnit analyzer. Strange.
+        // For now, just disable it, but take a look at it.
+        // It suddenly doesn't work on Igor's machine and we have to see why.
+        // Take a look, fix the issue, and remove all disabling of xUnit1019 in all files.
+#pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
+        [MemberData(nameof(InvalidSolutionsAndErrorMessages))]
+#pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string solution, string errorMessage)
         {
             var resultSlnPath = string.Empty;

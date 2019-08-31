@@ -29,7 +29,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 case var name when ContainesUnallowedCharacters(name) ||
                                    ContainesSurrogateCharacters(name) ||
                                    ContainesUnicodeCharacters(name):
-                    return Error(Resources.New.Errors.ProjectNameContainUnallowedCharacters);
+                    return Error(Resources.New.Errors.ProjectNameContainsUnallowedCharacters);
 
                 case var name when IsReserved(name):
                     return Error(Resources.New.Errors.InvalidProjectName);
