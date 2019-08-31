@@ -90,7 +90,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var response = nSeedFixture.Runner.RunNSeed(nSeedFixture.SrcFolderPath, new string[] { });
             OutputShouldBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
+            OutputShouldShowHelpMessage(response);
         }
 
         [Fact]
