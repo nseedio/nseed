@@ -69,7 +69,7 @@ namespace NSeed.Cli.Subcommands.New
                 SetResolvedName(defaultName);
                 var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSolution).ToList();
                 var commonPrefix = GetCommonValue(projectNames);
-                if (commonPrefix.Exists())
+                if (commonPrefix.Exists() && !commonPrefix.Equals(defaultName, StringComparison.OrdinalIgnoreCase))
                 {
                     SetResolvedName($"{commonPrefix}.{defaultName}");
                 }

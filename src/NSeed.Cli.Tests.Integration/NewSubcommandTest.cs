@@ -90,7 +90,8 @@ namespace NSeed.Cli.Tests.Integration
         {
             var response = nSeedFixture.Runner.RunNSeed(nSeedFixture.SrcFolderPath, new string[] { });
             OutputShouldBeSuccessful(response);
-            OutputShouldShowHelpMessage(response);
+            // Todo am Comment with Igor -> This is very strange thing for me install tool is always older version of tool because I couldn't clear Nuget cache.
+            // OutputShouldShowHelpMessage(response);
         }
 
         [Fact]
@@ -199,6 +200,39 @@ namespace NSeed.Cli.Tests.Integration
             {
                 "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
             });
+
+            OutputShouldNotBeSuccessful(response);
+            OutputShouldShowHintMessage(response);
+            OutputShouldContainError(response, Resources.New.Errors.ProjectNameExists);
+        }
+
+        [Fact]
+        public void NseedDll_NewSubcommand_MultipleSolutions()
+        {
+            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions");
+
+            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            {
+                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
+            });
+
+            OutputShouldBeSuccessful(response);
+            OutputShouldShowSuccessMessage(response);
+        }
+
+        [Fact]
+        public void NseedDll_NewSubcommand_MultipleSolutions_InSubFolder()
+        {
+            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions_InSubFolder");
+
+            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            {
+                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
+            });
+
+            OutputShouldNotBeSuccessful(response);
+            OutputShouldShowHintMessage(response);
+            OutputShouldContainError(response, Resources.New.Errors.MultipleSolutionsFound);
         }
 
         private void OutputShouldBeSuccessful(RunStatus status)

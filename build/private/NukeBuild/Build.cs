@@ -28,10 +28,19 @@ class Build : NukeBuild
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath OutputDirectory => RootDirectory / "output";
+    AbsolutePath TemplatesDirectory => RootDirectory / "templates";
+    AbsolutePath NSeedCliDirectory => SourceDirectory / "NSeed.Cli";
+    AbsolutePath TemplatesZipFile => NSeedCliDirectory / "templates.zip";
 
     void DeleteOutputFiles()
     {
         OutputDirectory.GlobFiles("*.nupkg", "*.snupkg").ForEach(DeleteFile);
+    }
+
+    void CreateTemplatesZip()
+    {
+        DeleteFile(TemplatesZipFile);
+        System.IO.Compression.ZipFile.CreateFromDirectory(TemplatesDirectory, TemplatesZipFile);
     }
 
     Target Clean => _ => _
@@ -49,8 +58,15 @@ class Build : NukeBuild
                 .SetProjectFile(Solution));
         });
 
-    Target Compile => _ => _
+    Target CompressTemplates => _ => _
         .DependsOn(Restore)
+        .Executes(() =>
+        {
+            CreateTemplatesZip();
+        });
+
+    Target Compile => _ => _
+        .DependsOn(CompressTemplates)
         .Executes(() =>
         {
             DotNetBuild(s => s

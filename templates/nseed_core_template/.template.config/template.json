@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "NSeed",
+  "classifications": [ "Common", "Library" ],
+  "name": "guid",
+  "identity": "guid", 
+  "shortName": "guid", 
+  "tags": {
+    "language": "C#"
+  },
+  "sourceName": "nseed_core_template", // Will replace the string 'nseed_basic_template' with the value provided via -n.
+  
+  "symbols": {
+    "framework": {
+      "type": "parameter",
+      "defaultValue": "netcoreapp2.2",
+      "replaces": "SelectedFramework"
+    }
+  }
+}

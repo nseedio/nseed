@@ -16,7 +16,10 @@
       //"commandLineArgs": "new -s C:\\Repositories\\Osobno\\Fit -f netcoreapp_3.1"
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjects --framework"
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjects --fraework",
-      "commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjectsV1 -f netcoreapp2.2"
+      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjectsV1 -f netcoreapp2.2",
+      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithExistingSeedsProject -f netcoreapp2.2"
+      "commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\MultipleSolutions_InSubFolder -f netcoreapp2.2"
+
     }
   }
 }
