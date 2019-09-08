@@ -18,22 +18,27 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
             {
                 var solution = context.GetStringValue(nameof(NewSubcommand.Solution));
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
+                (bool IsSuccesful, string Message) response = (false, string.Empty);
                 if (solution.IsNotProvidedByUser())
                 {
                     // Current working directory
-                    fileSystemService.TryGetSolutionPath(InitDirectory, out solution);
+                    response = fileSystemService.TryGetSolutionPath(InitDirectory, out solution);
                 }
                 else
                 {
-                    fileSystemService.TryGetSolutionPath(solution, out solution);
+                    response = fileSystemService.TryGetSolutionPath(solution, out solution);
                 }
 
-                var model = context.ModelAccessor?.GetModel() as NewSubcommand;
-                model?.SetResolvedSolution(solution);
-                var solutionValidator = context.GetValidator<SolutionValidator>();
-                if (model != null)
+                if (context.ModelAccessor?.GetModel() is NewSubcommand model && model != null)
                 {
-                    solutionValidator.Validate(model);
+                    if (!response.IsSuccesful && response.Message.Exists())
+                    {
+                        model.SetResolvedSolutionErrorMessage(response.Message);
+                    }
+
+                    model?.SetResolvedSolution(solution);
+                    var solutionValidator = context.GetValidator<SolutionValidator>();
+                    solutionValidator.Validate(model!);
                 }
             });
         }

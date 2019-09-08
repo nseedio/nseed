@@ -8,10 +8,13 @@ using NSeed.Cli.Subcommands.New.Models;
 using NSeed.Cli.Subcommands.New.Runner;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Subcommands.New.ValueProviders;
+using NuGet.ProjectModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands.New
@@ -41,11 +44,13 @@ namespace NSeed.Cli.Subcommands.New
 
         public string ResolvedFramework { get; private set; } = string.Empty;
 
-        public (Framework Name, string Version) ResolvedFrameworkWithVersion => GetFrameworkWithVersion();
+        public (Framework Name, string Version) ResolvedFrameworkWithVersion { get; private set; }
 
         public string ResolvedName { get; private set; } = string.Empty;
 
-        public bool ResolvedSolutionIsValid { get; set; } = false;
+        public bool IsValidResolvedSolution { get; private set; } = false;
+
+        public string ResolvedSolutionErrorMessage { get; private set; } = string.Empty;
 
         public void SetResolvedSolution(string solution)
         {
@@ -60,11 +65,12 @@ namespace NSeed.Cli.Subcommands.New
         public void SetResolvedFramework(string framework)
         {
             ResolvedFramework = framework;
+            SetResolvedFrameworkWithVersion(framework);
         }
 
         public void ResolveDefaultNameWithPrefix(IDependencyGraphService dependencyGraphService, string defaultName)
         {
-            if (ResolvedSolutionIsValid && dependencyGraphService != null)
+            if (IsValidResolvedSolution && dependencyGraphService != null)
             {
                 SetResolvedName(defaultName);
                 var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSolution).ToList();
@@ -78,37 +84,100 @@ namespace NSeed.Cli.Subcommands.New
 
         public void ResolveFramework(IDependencyGraphService dependencyGraphService)
         {
-            if (ResolvedSolutionIsValid && dependencyGraphService != null)
+            if (IsValidResolvedSolution && dependencyGraphService != null)
             {
                 var dependencyGraph = dependencyGraphService.GenerateDependencyGraph(ResolvedSolution);
                 if (dependencyGraph != null)
                 {
-                    var frameworks = dependencyGraph.Projects
-                        .SelectMany(p => p.TargetFrameworks, (t, v) => { return v; })
-                        .ToList();
+                    var frameworkInfos = dependencyGraph.Projects
+                        ?.SelectMany(p => p.TargetFrameworks, (packageSpec, targetFrameworkInfo) => { return targetFrameworkInfo; })
+                        ?.ToList() ?? new List<TargetFrameworkInformation>();
 
-                    if (frameworks.Any())
+                    if (AllFrameworksAreEqual(frameworkInfos))
                     {
-                        var frameworkNames = frameworks.Select(f => $"{f.FrameworkName.Framework}{f.FrameworkName.Version.Major}{f.FrameworkName.Version.Minor}{f.FrameworkName.Version.Build}").ToList();
-
-                        if (frameworkNames.Any() && frameworkNames.All(fn => fn == frameworkNames.First()))
+                        var frameworkInfo = frameworkInfos.FirstOrDefault();
+                        var frameworkType = GetFrameworkType(frameworkInfo);
+                        var frameworkVersion = GetFrameworkVersion(frameworkInfo, frameworkType);
+                        switch (frameworkType)
                         {
-                            var framework = frameworks.FirstOrDefault();
-                            if (framework.FrameworkName.Framework.Equals(Resources.DotNetCoreFramework))
-                            {
-                                ResolvedFramework = $"{framework.FrameworkName.Framework.ToLower().TrimStart('.')}{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
-                            }
-                            else if (framework.FrameworkName.Framework.Equals(Resources.DotNetClassicFramework))
-                            {
-                                ResolvedFramework = $"v{framework.FrameworkName.Version.Major}.{framework.FrameworkName.Version.Minor}";
-                                if (framework.FrameworkName.Version.Build != 0)
-                                {
-                                    ResolvedFramework = $"{ResolvedFramework}.{framework.FrameworkName.Version.Build}";
-                                }
-                            }
+                            case Assets.Framework.NETCoreApp:
+                                ResolvedFramework = $"{frameworkType.ToString().ToLower()}{frameworkVersion}";
+                                ResolvedFrameworkWithVersion = (frameworkType, frameworkVersion);
+                                break;
+                            case Assets.Framework.NETFramework:
+                                ResolvedFramework = $"v{frameworkVersion}";
+                                ResolvedFrameworkWithVersion = (frameworkType, frameworkVersion);
+                                break;
+                            case Assets.Framework.None:
+                                ResolvedFramework = string.Empty;
+                                ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
+                                break;
                         }
                     }
                 }
+            }
+
+            static bool AllFrameworksAreEqual(IEnumerable<TargetFrameworkInformation> frameworkInfos)
+            {
+                var frameworkNames = frameworkInfos.Select(frameworkInfo => frameworkInfo.ToString()).ToList();
+                return frameworkNames.Any()
+                    && frameworkNames.All(fName => fName.Equals(frameworkNames.First(), StringComparison.OrdinalIgnoreCase));
+            }
+
+            static Framework GetFrameworkType(TargetFrameworkInformation frameworkInfo)
+            {
+                var frameworkName = frameworkInfo.FrameworkName.Framework.TrimStart('.');
+                return frameworkName switch
+                {
+                    var name when name.Equals(Assets.Framework.NETCoreApp.ToString(), StringComparison.OrdinalIgnoreCase) => Assets.Framework.NETCoreApp,
+                    var name when name.Equals(Assets.Framework.NETFramework.ToString(), StringComparison.OrdinalIgnoreCase) => Assets.Framework.NETFramework,
+                    _ => Assets.Framework.None,
+                };
+            }
+
+            static string GetFrameworkVersion(TargetFrameworkInformation frameworkInfo, Framework framework)
+            {
+                var major = frameworkInfo.FrameworkName.Version.Major;
+                var minor = frameworkInfo.FrameworkName.Version.Minor;
+                var build = frameworkInfo.FrameworkName.Version.Build;
+                var version = $"{major}.{minor}";
+                if (build > 0 && framework is Assets.Framework.NETFramework)
+                {
+                    version = $"{version}.{build}";
+                }
+
+                return version;
+            }
+        }
+
+        public void ResolvedSolutionIsValid()
+        {
+            IsValidResolvedSolution = true;
+        }
+
+        public void SetResolvedSolutionErrorMessage(string errorMessage)
+        {
+            ResolvedSolutionErrorMessage = errorMessage;
+        }
+
+        public void SetResolvedFrameworkWithVersion(string frameworkWithVersion)
+        {
+            switch (frameworkWithVersion)
+            {
+                case var _ when frameworkWithVersion.IsNullOrEmpty():
+                    ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
+                    break;
+                case var _ when frameworkWithVersion.Contains(Assets.Framework.NETCoreApp.ToString(), StringComparison.OrdinalIgnoreCase):
+                    var version = Regex.Split(frameworkWithVersion, Assets.Framework.NETCoreApp.ToString(), RegexOptions.IgnoreCase).Last().Trim();
+                    ResolvedFrameworkWithVersion = (Assets.Framework.NETCoreApp, version);
+                    break;
+                case var _ when frameworkWithVersion.Contains(Assets.Framework.NETFramework.ToString(), StringComparison.OrdinalIgnoreCase):
+                    version = Regex.Split(frameworkWithVersion, Assets.Framework.NETFramework.ToString(), RegexOptions.IgnoreCase).Last().Trim();
+                    ResolvedFrameworkWithVersion = (Assets.Framework.NETFramework, version);
+                    break;
+                default:
+                    ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
+                    break;
             }
         }
 
@@ -117,7 +186,7 @@ namespace NSeed.Cli.Subcommands.New
             IFileSystemService fileSystemService,
             IDotNetRunner<NewSubcommandRunnerArgs> dotNetRunner)
         {
-            var getTemplateResponse = fileSystemService.TryGetTemplate(Assets.Framework.NETCoreApp, out Template template);
+            var getTemplateResponse = fileSystemService.TryGetTemplate(ResolvedFrameworkWithVersion.Name, out Template template);
 
             if (getTemplateResponse.IsSuccesful)
             {
@@ -143,39 +212,6 @@ namespace NSeed.Cli.Subcommands.New
             fileSystemService.RemoveTempTemplates();
             app.Out.WriteLine(Resources.New.SuccessfulRun);
             return Task.CompletedTask;
-        }
-
-        private (Framework Name, string Version) GetFrameworkWithVersion()
-        {
-            var frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETCoreApp);
-
-            if (frameworkWithVersion.IsSuccessful)
-            {
-                return (Assets.Framework.NETCoreApp, frameworkWithVersion.Version);
-            }
-
-            frameworkWithVersion = GetFrameworkWithVersion(Assets.Framework.NETFramework);
-
-            if (frameworkWithVersion.IsSuccessful)
-            {
-                return (Assets.Framework.NETFramework, frameworkWithVersion.Version);
-            }
-
-            return (Assets.Framework.None, string.Empty);
-        }
-
-        private (string Name, string Version, bool IsSuccessful) GetFrameworkWithVersion(Framework framework)
-        {
-            if (ResolvedFramework.Contains(framework.ToString(), StringComparison.OrdinalIgnoreCase))
-            {
-                var parts = ResolvedFramework.ToLower().Split(framework.ToString().ToLower()).ToList();
-                if (!parts.IsNullOrEmpty() && parts.Count == 2)
-                {
-                    return (parts.First(), parts.Last(), true);
-                }
-            }
-
-            return (string.Empty, string.Empty, false);
         }
 
         private string GetCommonValue(IList<string> values)

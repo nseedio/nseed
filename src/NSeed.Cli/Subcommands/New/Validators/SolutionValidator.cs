@@ -21,14 +21,16 @@ namespace NSeed.Cli.Subcommands.New.Validators
 
         public ValidationResult Validate(NewSubcommand command)
         {
-            if (command.ResolvedSolutionIsValid)
+            if (command.IsValidResolvedSolution)
             {
                 return ValidationResult.Success;
             }
 
             if (command.ResolvedSolution.IsNotProvidedByUser())
             {
-                return ValidationResult.Error(Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
+                return command.ResolvedSolutionErrorMessage.Exists() ?
+                    ValidationResult.Error(command.ResolvedSolutionErrorMessage) :
+                    ValidationResult.Error(Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
             }
 
             var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);
@@ -43,7 +45,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
                 return ValidationResult.Error("Provided solution is invalid Solution can't be processed dependencyGraph");
             }
 
-            command.ResolvedSolutionIsValid = true;
+            command.ResolvedSolutionIsValid();
             return ValidationResult.Success;
         }
     }

@@ -235,6 +235,35 @@ namespace NSeed.Cli.Tests.Integration
             OutputShouldContainError(response, Resources.New.Errors.MultipleSolutionsFound);
         }
 
+        [Fact]
+        public void NseedDll_NewSubcommand_SingleSolutions_WithMultipleProjects_DifferentFrameworks()
+        {
+            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithMultipleProjectWithDifferentFrameworks");
+
+            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            {
+                "NSeed.Cli.dll new --solution ", path, "-n MyCustomProjectName"
+            });
+
+            OutputShouldNotBeSuccessful(response);
+            OutputShouldShowHintMessage(response);
+            OutputShouldContainError(response, Resources.New.Errors.FrameworkNotProvided);
+        }
+
+        [Fact]
+        public void NseedDll_NewSubcommand_SingleSolution_ExistingDotNetClassicFrameworkProject()
+        {
+            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework");
+
+            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            {
+                "NSeed.Cli.dll new --solution ", path
+            });
+
+            OutputShouldBeSuccessful(response);
+            OutputShouldShowSuccessMessage(response);
+        }
+
         private void OutputShouldBeSuccessful(RunStatus status)
         {
             status.IsSuccess.Should().BeTrue();

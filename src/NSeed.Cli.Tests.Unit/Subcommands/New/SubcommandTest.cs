@@ -13,7 +13,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
     public abstract class BaseSubcommand
     {
-        private readonly NewSubcommand subcommand = new NewSubcommand { ResolvedSolutionIsValid = true };
+        private readonly NewSubcommand subcommand = new NewSubcommand();
         private readonly Mock<IDependencyGraphService> mockDependencyGraphService = new Mock<IDependencyGraphService>();
         private readonly DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private readonly List<string> projectNames = new List<string>();
@@ -22,6 +22,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 
         private BaseSubcommand()
         {
+            subcommand.ResolvedSolutionIsValid();
             subcommand.SetResolvedSolution(SlnName);
         }
 
@@ -86,6 +87,11 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             return this;
         }
 
+        protected BaseSubcommand WithEmptyDotNetCoreProjects()
+        {
+            return this;
+        }
+
         public static IEnumerable<object[]> EqualPrefixes => new List<object[]>
         {
             new object[] { new List<string> { "NSeed.Web", "NSeed.Test", "NSeed.Data", "NSeed.Core" } },
@@ -138,9 +144,17 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             }
 
             [Fact]
-            public void Resolvedﾠemptyﾠframeworkﾠ()
+            public void ResolvedﾠemptyﾠframeworkﾠWhenﾠFrameworksﾠAreﾠDifferent()
             {
                 GenerateDependencyGraph.WithDifferentDotNetCoreProjects();
+                ResolveFramework();
+                subcommand.ResolvedFramework.Should().BeEmpty();
+            }
+
+            [Fact]
+            public void ResolvedﾠemptyﾠframeworkﾠWhenﾠNoﾠProjectsﾠInﾠDependencyGraph()
+            {
+                GenerateDependencyGraph.WithEmptyDotNetCoreProjects();
                 ResolveFramework();
                 subcommand.ResolvedFramework.Should().BeEmpty();
             }

@@ -34,7 +34,9 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 #pragma warning disable xUnit1019 // MemberData must reference a member providing a valid data type
         [MemberData(nameof(InvalidFrameworksAndErrorMessages))]
 #pragma warning restore xUnit1019 // MemberData must reference a member providing a valid data type
-        public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string framework, string errorMessage)
+        public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(
+            string framework,
+            string errorMessage)
         {
             subcommand.SetResolvedFramework(framework);
             var result = validator.Validate(subcommand);

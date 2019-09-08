@@ -4,6 +4,7 @@ using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using System;
 using System.Reflection;
+using System.Runtime.Versioning;
 
 namespace NSeed.Cli.Subcommands.New.ValueProviders
 {
