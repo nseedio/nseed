@@ -17,8 +17,14 @@ namespace NSeed.Cli.Extensions
 
         public static string TakeFirstOrEmpty(this string item, params char[] separators)
         {
-            var splitItems = item.Split(separators)?.ToList() ?? new List<string>();
-            return splitItems.FirstOrDefault() ?? string.Empty;
+            var index = item.LastIndexOfAny(separators);
+            if (index >= 0)
+            {
+                var result = item.Substring(0, index);
+                return result;
+            }
+
+            return item;
         }
     }
 }

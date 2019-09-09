@@ -96,7 +96,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
         {
             new object[] { new List<string> { "NSeed.Web", "NSeed.Test", "NSeed.Data", "NSeed.Core" } },
             new object[] { new List<string> { "NSeed.Web", "NSeed.Web.Test", "NSeed.Data", "NSeed.Core", "NSeed.Auth" } },
-            new object[] { new List<string> { "NSeed.Web" } },
+            new object[] { new List<string> { "NSeed.Web", "NSeed_Api", "NSeed-Data" } },
+            new object[] { new List<string> { ".NSeedWeb", ".NSeedApi", ".NSeedData" } }
         };
 
         public static IEnumerable<object[]> NotEqualPrefixes => new List<object[]>
