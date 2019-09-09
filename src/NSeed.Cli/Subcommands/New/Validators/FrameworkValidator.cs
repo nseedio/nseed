@@ -1,7 +1,6 @@
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
-using System;
 using System.Linq;
 using static NSeed.Cli.Assets.Resources;
 

@@ -19,14 +19,6 @@ namespace NSeed.Cli.Extensions
             return optionValue ?? string.Empty;
         }
 
-        public static void SetValue(this ConventionContext context, string parameterName, string value)
-        {
-            var solutionValues = GetCommandOptionsByLongName(
-                context.Application.GetOptions() ?? new List<CommandOption>(),
-                parameterName).ToList();
-            solutionValues.Clear();
-        }
-
         public static IValidator<NewSubcommand> GetValidator<T>(this ConventionContext context)
             where T : IValidator<NewSubcommand>
         {
@@ -35,10 +27,13 @@ namespace NSeed.Cli.Extensions
                     .FirstOrDefault(s => s.GetType() == typeof(T));
         }
 
-        private static IEnumerable<string?> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
+        private static IEnumerable<string?> GetCommandOptionsByLongName(
+            IEnumerable<CommandOption> options,
+            string longName)
         {
             return options
-                .FirstOrDefault(b => (b.LongName != null && b.LongName.Equals(longName, StringComparison.InvariantCultureIgnoreCase)))?.Values
+                .FirstOrDefault(b => b.LongName != null
+                && b.LongName.Equals(longName, StringComparison.InvariantCultureIgnoreCase))?.Values
                 ?? Enumerable.Empty<string?>();
         }
     }

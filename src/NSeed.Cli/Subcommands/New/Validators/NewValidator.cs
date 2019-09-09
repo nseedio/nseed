@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Validation;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 

@@ -6,7 +6,6 @@ using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators

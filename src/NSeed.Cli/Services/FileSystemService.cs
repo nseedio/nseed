@@ -1,5 +1,4 @@
 using NSeed.Cli.Assets;
-using NSeed.Cli.Extensions;
 using NSeed.Cli.Subcommands.New.Models;
 using System;
 using System.Collections.Generic;

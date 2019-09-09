@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -35,9 +34,6 @@ namespace NSeed.Cli.Subcommands.New
         [NameDefaultValueProvider(Resources.New.DefaultProjectName)]
         public string Name { get; private set; } = string.Empty;
 
-        /// <summary>
-        /// Gets .sln file path.
-        /// </summary>
         public string ResolvedSolution { get; private set; } = string.Empty;
 
         public string ResolvedSolutionDirectory => ResolvedSolution.Exists() ? new FileInfo(ResolvedSolution)?.DirectoryName ?? string.Empty : string.Empty;

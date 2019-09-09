@@ -5,10 +5,7 @@ using System.IO.Abstractions;
 
 namespace NSeed.Cli.Services
 {
-    /// <summary>
-    /// Service for working with file system.
-    /// </summary>
-    public interface IFileSystemService
+    internal interface IFileSystemService
     {
         IFile File { get; }
 
