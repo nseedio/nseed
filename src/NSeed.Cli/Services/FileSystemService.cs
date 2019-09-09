@@ -191,7 +191,7 @@ namespace NSeed.Cli.Services
                 ?.Take(2)
                 ?.ToList() ?? new List<string>();
 
-            if (solutions.IsNullOrEmpty())
+            if (!solutions.Any())
             {
                 return (false, New.Errors.WorkingDirectoryDoesNotContainAnySolution, string.Empty);
             }

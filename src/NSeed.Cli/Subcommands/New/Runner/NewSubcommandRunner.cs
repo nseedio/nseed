@@ -4,7 +4,7 @@ namespace NSeed.Cli.Subcommands.New.Runner
 {
     internal class NewSubcommandRunner : DotNetRunner, IDotNetRunner<NewSubcommandRunnerArgs>
     {
-        public (bool IsSuccesful, string Message) Run(NewSubcommandRunnerArgs args)
+        public (bool IsSuccessful, string Message) Run(NewSubcommandRunnerArgs args)
         {
             return Run(
                 args,

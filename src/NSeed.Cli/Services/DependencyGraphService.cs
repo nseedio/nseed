@@ -1,4 +1,3 @@
-using DiffLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NSeed.Cli.Extensions;
@@ -46,7 +45,7 @@ namespace NSeed.Cli.Services
 
             var runStatus = DependencyGraphRunner.Run(args);
 
-            if (!runStatus.IsSuccesful)
+            if (!runStatus.IsSuccessful)
             {
                 dependencyGraphSpec = new DependencyGraphSpec();
                 projectPath = string.Empty;

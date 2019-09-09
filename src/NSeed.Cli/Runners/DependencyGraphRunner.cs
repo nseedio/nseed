@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NSeed.Cli.Runners
 {
     internal class DependencyGraphRunner : DotNetRunner, IDotNetRunner<DependencyGraphRunnerArgs>
     {
-        public (bool IsSuccesful, string Message) Run(DependencyGraphRunnerArgs args)
+        public (bool IsSuccessful, string Message) Run(DependencyGraphRunnerArgs args)
         {
             return GenerateDependencyGraph(args);
         }

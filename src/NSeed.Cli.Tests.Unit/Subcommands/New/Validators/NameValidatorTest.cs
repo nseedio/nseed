@@ -17,6 +17,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
         internal NewSubcommand Subcommand { get; } = new NewSubcommand();
 
+        internal Mock<IDependencyGraphService> MockDependencyGraphService { get; } = new Mock<IDependencyGraphService>();
+
         internal BaseNameValidatorTest()
         {
             Validator = new NameValidator(MockDependencyGraphService.Object);
@@ -28,8 +30,6 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         }
 
         protected static List<string> SlnProjects { get; } = new List<string> { "Project1", "Project2", "Project3", "Project4" };
-
-        protected Mock<IDependencyGraphService> MockDependencyGraphService { get; } = new Mock<IDependencyGraphService>();
 
         protected void GenerateSolutionProjects(IEnumerable<string> projectNames)
         {

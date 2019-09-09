@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NSeed.Cli.Extensions
@@ -14,15 +15,10 @@ namespace NSeed.Cli.Extensions
             return !string.IsNullOrEmpty(item);
         }
 
-        public static string SplitAndTakeFirst(this string item, params char[] separator)
+        public static string TakeFirstOrEmpty(this string item, params char[] separators)
         {
-            var splitItems = item.Split(separator).ToList();
-            if (splitItems.IsNullOrEmpty())
-            {
-                return string.Empty;
-            }
-
-            return splitItems.FirstOrDefault();
+            var splitItems = item.Split(separators)?.ToList() ?? new List<string>();
+            return splitItems.FirstOrDefault() ?? string.Empty;
         }
     }
 }

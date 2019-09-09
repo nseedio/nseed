@@ -13,14 +13,17 @@ namespace NSeed.Cli.Extensions
     {
         public static string GetStringValue(this ConventionContext context, string parameterName)
         {
-            var optionValue = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName)
-                ?.FirstOrDefault();
+            var optionValue = GetCommandOptionsByLongName(
+                context.Application.GetOptions() ?? new List<CommandOption>(),
+                parameterName)?.FirstOrDefault();
             return optionValue ?? string.Empty;
         }
 
         public static void SetValue(this ConventionContext context, string parameterName, string value)
         {
-            var solutionValues = GetCommandOptionsByLongName(context.Application.GetOptions(), parameterName).ToList();
+            var solutionValues = GetCommandOptionsByLongName(
+                context.Application.GetOptions() ?? new List<CommandOption>(),
+                parameterName).ToList();
             solutionValues.Clear();
         }
 
@@ -34,7 +37,6 @@ namespace NSeed.Cli.Extensions
 
         private static IEnumerable<string?> GetCommandOptionsByLongName(IEnumerable<CommandOption> options, string longName)
         {
-            options.AreEmptyIfNull();
             return options
                 .FirstOrDefault(b => (b.LongName != null && b.LongName.Equals(longName, StringComparison.InvariantCultureIgnoreCase)))?.Values
                 ?? Enumerable.Empty<string?>();

@@ -73,7 +73,8 @@ namespace NSeed.Cli.Subcommands.New
             if (IsValidResolvedSolution && dependencyGraphService != null)
             {
                 SetResolvedName(defaultName);
-                var projectNames = dependencyGraphService.GetSolutionProjectsNames(ResolvedSolution).ToList();
+                var projectNames = dependencyGraphService
+                    .GetSolutionProjectsNames(ResolvedSolution).ToList();
                 var commonPrefix = GetCommonValue(projectNames);
                 if (commonPrefix.Exists() && !commonPrefix.Equals(defaultName, StringComparison.OrdinalIgnoreCase))
                 {
@@ -164,7 +165,7 @@ namespace NSeed.Cli.Subcommands.New
         {
             switch (frameworkWithVersion)
             {
-                case var _ when frameworkWithVersion.IsNullOrEmpty():
+                case var _ when string.IsNullOrEmpty(frameworkWithVersion):
                     ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
                     break;
                 case var _ when frameworkWithVersion.Contains(Assets.Framework.NETCoreApp.ToString(), StringComparison.OrdinalIgnoreCase):
@@ -199,7 +200,7 @@ namespace NSeed.Cli.Subcommands.New
                     Template = template
                 });
 
-                if (!response.IsSuccesful)
+                if (!response.IsSuccessful)
                 {
                     app.Error.WriteLine(response.Message);
                 }
@@ -217,19 +218,21 @@ namespace NSeed.Cli.Subcommands.New
         private string GetCommonValue(IList<string> values)
         {
             var byCharacters = new char[] { '.', '-', '_' };
-            if (values.IsNullOrEmpty())
+
+            if (!values.Any())
             {
                 return string.Empty;
             }
 
             if (values.Count == 1)
             {
-                return values.First().SplitAndTakeFirst(byCharacters);
+                return values.First().TakeFirstOrEmpty(byCharacters);
             }
 
-            var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray()).ToList();
+            var diffSection = Diff.CalculateSections(values[0].ToCharArray(), values[1].ToCharArray())
+                ?.ToList() ?? new List<DiffSection>();
 
-            if (diffSection.IsNullOrEmpty())
+            if (!diffSection.Any())
             {
                 return string.Empty;
             }
@@ -240,7 +243,7 @@ namespace NSeed.Cli.Subcommands.New
                 var prefix = values[0].Substring(0, firstdiffSection.LengthInCollection1).Trim('.');
                 if (!string.IsNullOrEmpty(prefix))
                 {
-                    return prefix.SplitAndTakeFirst(byCharacters);
+                    return prefix.TakeFirstOrEmpty(byCharacters);
                 }
             }
 
