@@ -22,10 +22,9 @@ namespace NSeed.Discovery.Seedable
             this.yieldBuilder = yieldBuilder;
         }
 
-        ProvidedYieldInfo? IExtractor<TSeedImplementation, ProvidedYieldInfo?>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
+        ProvidedYieldInfo? IExtractor<TSeedImplementation, ProvidedYieldInfo?>.ExtractFrom(TSeedImplementation seedImplementation)
         {
             System.Diagnostics.Debug.Assert(seedImplementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             var discoveredYields = yieldDiscoverer.DiscoverIn(seedImplementation).DiscoveredItems;
 

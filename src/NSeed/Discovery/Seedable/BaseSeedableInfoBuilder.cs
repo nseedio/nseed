@@ -74,19 +74,17 @@ namespace NSeed.Discovery.Seedable
 
         private SeedableInfo CreateSeedableInfo(TSeedableImplementation implementation)
         {
-            var errorCollector = new DistinctErrorCollectorAndProvider();
-
             // A "Seedable" is actually a dicriminated union of ISeed and IScenario.
             // The way we distinguis between them everywhere is just a workaround
             // for non-existing discriminated unions in C#.
 
             bool isSeedImplementation = IsSeedImplemenation(implementation);
 
-            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
-            string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
-            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation, errorCollector);
-            string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
-            var explicitelyRequires = explicitlyRequiredSeedablesExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation);
+            string fullName = fullNameExtractor.ExtractFrom(implementation);
+            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
+            string description = descriptionExtractor.ExtractFrom(implementation);
+            var explicitelyRequires = explicitlyRequiredSeedablesExtractor.ExtractFrom(implementation);
 
             return isSeedImplementation
                 ? (SeedableInfo)new SeedInfo
@@ -97,9 +95,9 @@ namespace NSeed.Discovery.Seedable
                       friendlyName,
                       description,
                       explicitelyRequires,
-                      entitiesExtractor.ExtractFrom(implementation, errorCollector),
-                      providedYieldExtractor.ExtractFrom(implementation, errorCollector),
-                      requiredYieldsExtractor.ExtractFrom(implementation, errorCollector),
+                      entitiesExtractor.ExtractFrom(implementation),
+                      providedYieldExtractor.ExtractFrom(implementation),
+                      requiredYieldsExtractor.ExtractFrom(implementation),
                       Array.Empty<Error>()
                   )
                 : new ScenarioInfo

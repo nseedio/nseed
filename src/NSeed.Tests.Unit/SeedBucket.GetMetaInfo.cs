@@ -69,7 +69,7 @@ namespace NSeed.Tests.Unit
                 type.FullName,
                 seedBucketFriendlyName,
                 seedBucketDescription,
-                containedSeedablesExtractor.ExtractFrom(type, new DistinctErrorCollectorAndProvider()),
+                containedSeedablesExtractor.ExtractFrom(type),
                 Array.Empty<Error>()
             );
 

@@ -13,15 +13,13 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
     public partial class ReflectionBasedFriendlyNameExtractorﾠExtractFrom
     {
         private readonly IFriendlyNameExtractor<Type> extractor = new ReflectionBasedFriendlyNameExtractor();
-        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void ExtractsﾠhumanizedﾠtypeﾠnameﾠwithoutﾠerrorsﾠwhenﾠseedﾠtypeﾠdoesﾠnotﾠhaveﾠFriendlyNameﾠattribute()
         {
             Type type = typeof(SeedWithoutFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         private class SeedWithoutFriendlyNameAttribute : BaseTestSeed { }
 
@@ -30,8 +28,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithoutFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         private class ScenarioWithoutFriendlyNameAttribute : BaseTestScenario { }
 
@@ -41,8 +38,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(SeedWithFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(SomeFriendlyName);
-            collector.GetErrors().Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().Be(SomeFriendlyName);
         }
         [FriendlyName(SomeFriendlyName)]
         private class SeedWithFriendlyNameAttribute : BaseTestSeed { }
@@ -52,8 +48,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(SomeFriendlyName);
-            collector.GetErrors().Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().Be(SomeFriendlyName);
         }
         [FriendlyName(SomeFriendlyName)]
         private class ScenarioWithFriendlyNameAttribute : BaseTestScenario { }
@@ -63,8 +58,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(SeedWithNullFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [FriendlyName(null)]
@@ -76,8 +70,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithNullFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeNull);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
         [FriendlyName(null)]
@@ -89,8 +82,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(SeedWithEmptyStringFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeEmptyString);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         [FriendlyName("")]
         private class SeedWithEmptyStringFriendlyNameAttribute : BaseTestSeed { }
@@ -100,8 +92,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithEmptyStringFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeEmptyString);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         [FriendlyName("")]
         private class ScenarioWithEmptyStringFriendlyNameAttribute : BaseTestScenario { }
@@ -111,8 +102,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(SeedWithWhitespaceFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeWhitespace);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         [FriendlyName("    ")]
         private class SeedWithWhitespaceFriendlyNameAttribute : BaseTestSeed { }
@@ -122,8 +112,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithWhitespaceFriendlyNameAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type.Name.Humanize());
-            collector.GetErrors().Should().BeEquivalentTo(Errors.FriendlyName.MustNotBeWhitespace);
+            extractor.ExtractFrom(type).Should().Be(type.Name.Humanize());
         }
         [FriendlyName("    ")]
         private class ScenarioWithWhitespaceFriendlyNameAttribute : BaseTestScenario { }

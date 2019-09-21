@@ -23,10 +23,9 @@ namespace NSeed.Discovery.Seedable
             this.entityBuilder = entityBuilder;
         }
 
-        IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation, IErrorCollector errorCollector)
+        IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation)
         {
             System.Diagnostics.Debug.Assert(seedImplementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return entityDiscoverer.DiscoverIn(seedImplementation)
                                 .DiscoveredItems

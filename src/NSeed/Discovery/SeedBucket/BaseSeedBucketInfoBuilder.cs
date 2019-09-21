@@ -50,13 +50,11 @@ namespace NSeed.Discovery.SeedBucket
 
         private SeedBucketInfo CreateSeedBucketInfo(TSeedBucketImplementation implementation)
         {
-            var errorCollector = new DistinctErrorCollectorAndProvider();
-
-            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
-            string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
-            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation, errorCollector);
-            string description = descriptionExtractor.ExtractFrom(implementation, errorCollector);
-            var containedSeedables = seedablesExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation);
+            string fullName = fullNameExtractor.ExtractFrom(implementation);
+            string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
+            string description = descriptionExtractor.ExtractFrom(implementation);
+            var containedSeedables = seedablesExtractor.ExtractFrom(implementation);
 
             SetSeedBucketInfosForNonContainedSeedables();
 
@@ -74,7 +72,7 @@ namespace NSeed.Discovery.SeedBucket
             void SetSeedBucketInfosForNonContainedSeedables()
             {
                 foreach (var nonContainedSeedable in SeedableInfo.GetRequiredSeedableInfosNotContainedIn(containedSeedables))
-                    nonContainedSeedable.SeedBucket = seedBucketOfSeedableExtractor.ExtractFrom((TSeedableImplementation)nonContainedSeedable.Implementation, errorCollector);
+                    nonContainedSeedable.SeedBucket = seedBucketOfSeedableExtractor.ExtractFrom((TSeedableImplementation)nonContainedSeedable.Implementation);
             }
         }
     }

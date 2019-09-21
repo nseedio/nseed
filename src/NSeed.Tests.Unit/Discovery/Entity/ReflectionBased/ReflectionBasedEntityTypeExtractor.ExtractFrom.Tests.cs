@@ -10,14 +10,13 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
     public class ReflectionBasedEntityTypeExtractorﾠExtractFrom
     {
         private readonly IEntityTypeExtractor<Type> extractor = new ReflectionBasedEntityTypeExtractor();
-        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void Extractsﾠtypeﾠwhenﾠtypeﾠisﾠconcreteﾠreferenceﾠtype()
         {
             Type type = typeof(string);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type);
+            extractor.ExtractFrom(type).Should().Be(type);
         }
 
         [Fact]
@@ -25,7 +24,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         {
             Type type = typeof(int);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type);
+            extractor.ExtractFrom(type).Should().Be(type);
         }
 
         [Fact]
@@ -33,7 +32,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         {
             Type type = typeof(ICloneable);
 
-            extractor.ExtractFrom(type, collector).Should().Be(type);
+            extractor.ExtractFrom(type).Should().Be(type);
         }
 
         [Fact]
@@ -41,7 +40,7 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
         {
             Type type = TestHelper.GetGenericTypeParameter();
 
-            extractor.ExtractFrom(type, collector).Should().BeNull();
+            extractor.ExtractFrom(type).Should().BeNull();
         }
     }
 }

@@ -236,7 +236,7 @@ namespace NSeed.Cli.Subcommands.Info
                 return new Cell(text) { Stroke = renderingBehavior.HeaderStroke, TextWrap = TextWrap.NoWrap };
             }
 
-            Cell CreateInfoGridValueCell<TValue>(TValue value)
+            static Cell CreateInfoGridValueCell<TValue>(TValue value)
             {
                 return new Cell
                 {

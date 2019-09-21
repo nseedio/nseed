@@ -22,10 +22,9 @@ namespace NSeed.Discovery.Seedable
             this.seedableBuilder = seedableBuilder;
         }
 
-        IReadOnlyCollection<SeedableInfo> IExtractor<TSourceSeedableImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSourceSeedableImplementation seedableImplementation, IErrorCollector errorCollector)
+        IReadOnlyCollection<SeedableInfo> IExtractor<TSourceSeedableImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSourceSeedableImplementation seedableImplementation)
         {
             System.Diagnostics.Debug.Assert(seedableImplementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             // CS8619:
             // The compiler is not able to figure out that we filter out nulls

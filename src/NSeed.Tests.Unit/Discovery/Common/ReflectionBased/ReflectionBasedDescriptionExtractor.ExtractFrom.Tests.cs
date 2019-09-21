@@ -11,14 +11,13 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
     public partial class ReflectionBasedDescriptionExtractorﾠExtractFrom
     {
         private readonly IDescriptionExtractor<Type> extractor = new ReflectionBasedDescriptionExtractor();
-        private readonly DistinctErrorCollectorAndProvider collector = new DistinctErrorCollectorAndProvider();
 
         [Fact]
         public void ExtractsﾠemptyﾠstringﾠwhenﾠseedﾠtypeﾠdoesﾠnotﾠhaveﾠDescriptionﾠattribute()
         {
             Type type = typeof(SeedWithoutDescriptionAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().BeEmpty();
         }
         private class SeedWithoutDescriptionAttribute : BaseTestSeed { }
 
@@ -27,7 +26,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithoutDescriptionAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().BeEmpty();
+            extractor.ExtractFrom(type).Should().BeEmpty();
         }
         private class ScenarioWithoutDescriptionAttribute : BaseTestScenario { }
 
@@ -37,7 +36,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(SeedWithDescriptionAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(SomeDescription);
+            extractor.ExtractFrom(type).Should().Be(SomeDescription);
         }
         [Description(SomeDescription)]
         private class SeedWithDescriptionAttribute : BaseTestSeed { }
@@ -47,7 +46,7 @@ namespace NSeed.Tests.Unit.Discovery.Common.ReflectionBased
         {
             Type type = typeof(ScenarioWithDescriptionAttribute);
 
-            extractor.ExtractFrom(type, collector).Should().Be(SomeDescription);
+            extractor.ExtractFrom(type).Should().Be(SomeDescription);
         }
         [Description(SomeDescription)]
         private class ScenarioWithDescriptionAttribute : BaseTestScenario { }

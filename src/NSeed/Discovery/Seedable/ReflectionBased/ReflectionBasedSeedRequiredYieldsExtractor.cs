@@ -22,10 +22,9 @@ namespace NSeed.Discovery.Seedable
             this.seedableBuilder = seedableBuilder;
         }
 
-        IReadOnlyCollection<RequiredYieldInfo> IExtractor<Type, IReadOnlyCollection<RequiredYieldInfo>>.ExtractFrom(Type seedImplementation, IErrorCollector errorCollector)
+        IReadOnlyCollection<RequiredYieldInfo> IExtractor<Type, IReadOnlyCollection<RequiredYieldInfo>>.ExtractFrom(Type seedImplementation)
         {
             System.Diagnostics.Debug.Assert(seedImplementation.IsSeedType());
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             // CS8600:
             // CS8604:

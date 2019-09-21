@@ -23,10 +23,9 @@ namespace NSeed.Discovery.SeedBucket
             this.seedableBuilder = seedableBuilder;
         }
 
-        IReadOnlyCollection<SeedableInfo> IExtractor<TSeedBucketImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSeedBucketImplementation seedBucketImplementation, IErrorCollector errorCollector)
+        IReadOnlyCollection<SeedableInfo> IExtractor<TSeedBucketImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSeedBucketImplementation seedBucketImplementation)
         {
             System.Diagnostics.Debug.Assert(seedBucketImplementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             // CS8619:
             // We filter out nulls in "Where(seedable => seedable != null)", but

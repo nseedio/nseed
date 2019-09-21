@@ -1,6 +1,5 @@
 using NSeed.Discovery.Common.ErrorMessages;
 using NSeed.Extensions;
-using NSeed.MetaInfo;
 using System;
 using System.Linq;
 
@@ -8,10 +7,9 @@ namespace NSeed.Discovery.Common.ReflectionBased
 {
     internal class ReflectionBasedFriendlyNameExtractor : IFriendlyNameExtractor<Type>
     {
-        string IExtractor<Type, string>.ExtractFrom(Type implementation, IErrorCollector errorCollector)
+        string IExtractor<Type, string>.ExtractFrom(Type implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             var friendlyNameAttribute = implementation
                 .GetCustomAttributes(typeof(FriendlyNameAttribute), false)
@@ -23,17 +21,7 @@ namespace NSeed.Discovery.Common.ReflectionBased
 
             var friendlyName = friendlyNameAttribute.FriendlyName;
 
-            bool hasErrors = errorCollector.Collect(collector =>
-            {
-                if (friendlyName == null)
-                    collector.Collect(Errors.FriendlyName.MustNotBeNull);
-                else if (string.IsNullOrEmpty(friendlyName))
-                    collector.Collect(Errors.FriendlyName.MustNotBeEmptyString);
-                else if (string.IsNullOrWhiteSpace(friendlyName))
-                    collector.Collect(Errors.FriendlyName.MustNotBeWhitespace);
-            });
-
-            return hasErrors
+            return string.IsNullOrWhiteSpace(friendlyName)
                 ? implementation.Name.Humanize()
                 : friendlyName;
         }

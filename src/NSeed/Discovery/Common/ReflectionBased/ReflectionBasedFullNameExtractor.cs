@@ -1,14 +1,12 @@
-using NSeed.MetaInfo;
 using System;
 
 namespace NSeed.Discovery.Common.ReflectionBased
 {
     internal class ReflectionBasedFullNameExtractor : IFullNameExtractor<Type>
     {
-        string IExtractor<Type, string>.ExtractFrom(Type implementation, IErrorCollector errorCollector)
+        string IExtractor<Type, string>.ExtractFrom(Type implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             return implementation.FullName;
         }

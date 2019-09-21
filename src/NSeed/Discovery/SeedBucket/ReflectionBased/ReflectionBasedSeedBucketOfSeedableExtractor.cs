@@ -18,10 +18,9 @@ namespace NSeed.Discovery.SeedBucket.ReflectionBased
             this.seedBucketInfoBuilder = seedBucketInfoBuilder;
         }
 
-        SeedBucketInfo? IExtractor<Type, SeedBucketInfo?>.ExtractFrom(Type seedableImplementation, IErrorCollector errorCollector)
+        SeedBucketInfo? IExtractor<Type, SeedBucketInfo?>.ExtractFrom(Type seedableImplementation)
         {
             System.Diagnostics.Debug.Assert(seedableImplementation.IsSeedableType());
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             var discoverdSeedBucketTypes = seedBucketOfSeedableDiscoverer.DiscoverIn(seedableImplementation).DiscoveredItems;
 

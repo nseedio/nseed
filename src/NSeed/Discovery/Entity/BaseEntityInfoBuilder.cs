@@ -34,10 +34,8 @@ namespace NSeed.Discovery.Entity
 
         private EntityInfo CreateEntityInfo(TEntityImplementation implementation)
         {
-            var errorCollector = new DistinctErrorCollectorAndProvider();
-
-            Type? type = typeExtractor.ExtractFrom(implementation, errorCollector);
-            string fullName = fullNameExtractor.ExtractFrom(implementation, errorCollector);
+            Type? type = typeExtractor.ExtractFrom(implementation);
+            string fullName = fullNameExtractor.ExtractFrom(implementation);
 
             return new EntityInfo
             (

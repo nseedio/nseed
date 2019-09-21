@@ -1,4 +1,3 @@
-using NSeed.MetaInfo;
 using System;
 using System.Linq;
 
@@ -6,10 +5,9 @@ namespace NSeed.Discovery.Common.ReflectionBased
 {
     internal class ReflectionBasedDescriptionExtractor : IDescriptionExtractor<Type>
     {
-        string IExtractor<Type, string>.ExtractFrom(Type implementation, IErrorCollector errorCollector)
+        string IExtractor<Type, string>.ExtractFrom(Type implementation)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
-            System.Diagnostics.Debug.Assert(errorCollector != null);
 
             var description = implementation
                 .GetCustomAttributes(typeof(DescriptionAttribute), false)
