@@ -34,8 +34,9 @@ namespace NSeed.MetaInfo
             string fullName,
             string friendlyName,
             string description,
-            IReadOnlyCollection<SeedableInfo> containedSeedables)
-            : base(implementation, type, fullName)
+            IReadOnlyCollection<SeedableInfo> containedSeedables,
+            IReadOnlyCollection<Error> directErrors)
+            : base(implementation, type, fullName, directErrors)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);
@@ -48,5 +49,8 @@ namespace NSeed.MetaInfo
             ContainedSeedables = containedSeedables;
             foreach (var seedable in containedSeedables) seedable.SeedBucket = this;
         }
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos() => ContainedSeedables;
     }
 }

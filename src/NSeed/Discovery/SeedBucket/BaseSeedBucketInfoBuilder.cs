@@ -67,7 +67,8 @@ namespace NSeed.Discovery.SeedBucket
                 fullName,
                 friendlyName,
                 description,
-                containedSeedables
+                containedSeedables,
+                Array.Empty<Error>()
             );
 
             void SetSeedBucketInfosForNonContainedSeedables()

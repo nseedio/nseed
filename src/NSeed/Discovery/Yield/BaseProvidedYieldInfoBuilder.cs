@@ -33,9 +33,8 @@ namespace NSeed.Discovery.Yield
             (
                 implementation,
                 type,
-                fullName
-
-            // TODO-IG: Errors.
+                fullName,
+                Array.Empty<Error>()
             );
         }
     }

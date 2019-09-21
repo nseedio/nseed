@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -40,16 +42,51 @@ namespace NSeed.MetaInfo
         public string FullName { get; }
 
         /// <summary>
+        /// Gets the errors that occur directly in the definition of the NSeed abstraction described with this meta info.
+        /// <br/>
+        /// To get the errors that occur in the NSeed abstraction and all its child abstractions use the <see cref="AllErrors"/> properties.
+        /// </summary>
+        public IReadOnlyCollection<Error> DirectErrors { get; }
+
+        /// <summary>
+        /// Gets the errors that occur in the definition of the NSeed abstraction described with this meta info and all its child abstractions.
+        /// <br/>
+        /// To get the errors that occur only in the NSeed abstraction itself without the errors in its child abstractions use the <see cref="DirectErrors"/> property.
+        /// </summary>
+        public IEnumerable<Error> AllErrors => GetAllErrors();
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MetaInfo"/> class.
         /// </summary>
-        internal MetaInfo(object implementation, Type? type, string fullName)
+        internal MetaInfo(object implementation, Type? type, string fullName, IReadOnlyCollection<Error> directErrors)
         {
             System.Diagnostics.Debug.Assert(implementation != null);
             System.Diagnostics.Debug.Assert(fullName != null);
+            System.Diagnostics.Debug.Assert(directErrors != null);
+            System.Diagnostics.Debug.Assert(directErrors.All(directError => directError != null));
 
             Implementation = implementation;
             Type = type;
             FullName = fullName;
+            DirectErrors = directErrors;
+        }
+
+        /// <summary>
+        /// Gets all direct child <see cref="MetaInfo"/>s of this meta info.
+        /// </summary>
+        /// <returns>All direct child <see cref="MetaInfo"/>s contained within this meta info.</returns>
+        protected abstract IEnumerable<MetaInfo> GetDirectChildMetaInfos();
+
+        private IEnumerable<Error> GetAllErrors()
+        {
+            foreach (var directError in DirectErrors)
+                yield return directError;
+
+            foreach (var directChildMetaInfo in GetDirectChildMetaInfos())
+            {
+                foreach (var error in directChildMetaInfo.AllErrors)
+                    yield return error;
+            }
         }
     }
 }

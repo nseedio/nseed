@@ -52,8 +52,9 @@ namespace NSeed.MetaInfo
             string fullName,
             string friendlyName,
             string description,
-            IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
-            : base(implementation, type, fullName)
+            IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
+            IReadOnlyCollection<Error> directErrors)
+            : base(implementation, type, fullName, directErrors)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
             System.Diagnostics.Debug.Assert(description != null);

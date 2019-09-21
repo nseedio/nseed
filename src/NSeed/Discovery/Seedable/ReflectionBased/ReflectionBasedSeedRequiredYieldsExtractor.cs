@@ -48,7 +48,8 @@ namespace NSeed.Discovery.Seedable
                                     propertyAndYieldingSeed.yieldingSeed,
 #pragma warning restore CS8604 // Possible null reference argument.
                                     propertyAndYieldingSeed.property,
-                                    propertyAndYieldingSeed.property.Name
+                                    propertyAndYieldingSeed.property.Name,
+                                    Array.Empty<Error>()
                                 ))
                                 .ToArray();
         }

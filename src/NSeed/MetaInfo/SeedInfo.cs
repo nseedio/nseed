@@ -45,8 +45,9 @@ namespace NSeed.MetaInfo
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
             IReadOnlyCollection<EntityInfo> yieldedEntities,
             ProvidedYieldInfo? yield,
-            IReadOnlyCollection<RequiredYieldInfo> requiredYields)
-            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+            IReadOnlyCollection<RequiredYieldInfo> requiredYields,
+            IReadOnlyCollection<Error> directErrors)
+            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables, directErrors)
         {
             System.Diagnostics.Debug.Assert(type == null || type.IsSeedType());
             System.Diagnostics.Debug.Assert(yieldedEntities != null);
@@ -67,6 +68,15 @@ namespace NSeed.MetaInfo
 
             RequiredYields = requiredYields;
             foreach (var requiredYield in requiredYields) requiredYield.RequiringSeed = this;
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
+        {
+            foreach (var yieldedEntity in YieldedEntities)
+                yield return yieldedEntity;
+
+            if (Yield != null) yield return Yield;
         }
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace NSeed.MetaInfo
@@ -36,18 +38,25 @@ namespace NSeed.MetaInfo
         // CS8618:
         // The RequiringSeed property will be set later by the SeedInfo of the requiring seed.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
-        internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo? yieldAccessProperty, string yieldAccessPropertyName)
+        internal RequiredYieldInfo(SeedInfo yieldingSeed, PropertyInfo? yieldAccessProperty, string yieldAccessPropertyName, IReadOnlyCollection<Error> directErrors)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized.
             : base(
                   yieldingSeed.Yield!.Implementation, // The yielding seed, by definition, must have yield, therefore, safe "!".
                   yieldingSeed.Yield.Type,
-                  yieldingSeed.Yield.FullName)
+                  yieldingSeed.Yield.FullName,
+                  directErrors)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(yieldAccessPropertyName));
 
             YieldingSeed = yieldingSeed;
             YieldAccessProperty = yieldAccessProperty;
             YieldAccessPropertyName = yieldAccessPropertyName;
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
+        {
+            return Enumerable.Empty<MetaInfo>();
         }
     }
 }

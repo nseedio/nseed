@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -17,10 +19,16 @@ namespace NSeed.MetaInfo
         // CS8618:
         // The YieldingSeed property will be set later by the SeedInfo of the yielding seed.
 #pragma warning disable CS8618 // Non-nullable field is uninitialized.
-        internal ProvidedYieldInfo(object implementation, Type? type, string fullName)
+        internal ProvidedYieldInfo(object implementation, Type? type, string fullName, IReadOnlyCollection<Error> directErrors)
 #pragma warning restore CS8618 // Non-nullable field is uninitialized.
-            : base(implementation, type, fullName)
+            : base(implementation, type, fullName, directErrors)
         {
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
+        {
+            return Enumerable.Empty<MetaInfo>();
         }
     }
 }

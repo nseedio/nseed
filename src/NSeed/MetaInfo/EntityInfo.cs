@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -10,9 +12,15 @@ namespace NSeed.MetaInfo
     /// </remarks>
     public sealed class EntityInfo : MetaInfo
     {
-        internal EntityInfo(object implementation, Type? type, string fullName)
-            : base(implementation, type, fullName)
+        internal EntityInfo(object implementation, Type? type, string fullName, IReadOnlyCollection<Error> directErrors)
+            : base(implementation, type, fullName, directErrors)
         {
+        }
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
+        {
+            return Enumerable.Empty<MetaInfo>();
         }
     }
 }

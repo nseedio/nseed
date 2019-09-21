@@ -1,5 +1,4 @@
 using Microsoft.Extensions.DependencyInjection;
-using NSeed.Abstractions;
 using NSeed.Cli;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;

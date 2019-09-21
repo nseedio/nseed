@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NSeed.MetaInfo
 {
@@ -14,8 +15,9 @@ namespace NSeed.MetaInfo
             string fullName,
             string friendlyName,
             string description,
-            IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables)
-            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables)
+            IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
+            IReadOnlyCollection<Error> directErrors)
+            : base(implementation, type, fullName, friendlyName, description, explicitlyRequiredSeedables, directErrors)
         {
         }
 
@@ -27,5 +29,11 @@ namespace NSeed.MetaInfo
         /// <see cref="RequiresAttribute"/>).
         /// </summary>
         public override IEnumerable<SeedableInfo> RequiredSeedables => ExplicitlyRequiredSeedables;
+
+        /// <inheritdoc />
+        protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
+        {
+            return Enumerable.Empty<MetaInfo>();
+        }
     }
 }

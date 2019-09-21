@@ -42,21 +42,23 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                             CreateSeedInfoForMinimalSeedType(typeof(MinimalSeed)),
                             CreateSeedInfoForMinimalSeedType(typeof(AdditionalMinimalSeed)),
                             CreateSeedInfoForMinimalScenarioType(typeof(AdditionalMinimalScenario))
-                        }
+                        },
+                        Array.Empty<Error>()
                     )
                 },
                 new[]
                 {
-                    new EntityInfo(typeof(object), typeof(object), typeof(object).FullName),
-                    new EntityInfo(typeof(string), typeof(string), typeof(string).FullName),
-                    new EntityInfo(typeof(int), typeof(int), typeof(int).FullName)
+                    new EntityInfo(typeof(object), typeof(object), typeof(object).FullName, Array.Empty<Error>()),
+                    new EntityInfo(typeof(string), typeof(string), typeof(string).FullName, Array.Empty<Error>()),
+                    new EntityInfo(typeof(int), typeof(int), typeof(int).FullName, Array.Empty<Error>())
                 },
-                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName),
+                new ProvidedYieldInfo(typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield), typeof(FullyPopulatedSeed.Yield).FullName, Array.Empty<Error>()),
                 new[]
                 {
                     CreateRequiredYieldInfoFromYieldAccessProperty(typeof(FullyPopulatedSeed), "RequiredYieldA"),
                     CreateRequiredYieldInfoFromYieldAccessProperty(typeof(FullyPopulatedSeed), "RequiredYieldB")
-                }
+                },
+                Array.Empty<Error>()
             );
 
             builder.BuildFrom(type)
@@ -102,7 +104,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                     CreateSeedInfoForMinimalSeedType(typeof(MinimalSeed)),
                     CreateSeedInfoForMinimalSeedType(typeof(AdditionalMinimalSeed)),
                     CreateSeedInfoForMinimalScenarioType(typeof(AdditionalMinimalScenario))
-                }
+                },
+                Array.Empty<Error>()
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected, options => options.WithoutStrictOrdering());
@@ -356,7 +359,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 Array.Empty<SeedableInfo>(),
                 Array.Empty<EntityInfo>(),
                 null,
-                Array.Empty<RequiredYieldInfo>()
+                Array.Empty<RequiredYieldInfo>(),
+                Array.Empty<Error>()
             );
         }
 
@@ -369,7 +373,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
                 minimalScenarioType.FullName,
                 minimalScenarioType.Name.Humanize(),
                 string.Empty,
-                Array.Empty<SeedableInfo>()
+                Array.Empty<SeedableInfo>(),
+                Array.Empty<Error>()
             );
         }
 
@@ -381,7 +386,8 @@ namespace NSeed.Tests.Unit.Discovery.Seedable.ReflectionBased
             (
                 (SeedInfo)builder.BuildFrom(propertyInfo.PropertyType.DeclaringType)!,
                 propertyInfo,
-                propertyInfo.Name
+                propertyInfo.Name,
+                Array.Empty<Error>()
             );
         }
     }

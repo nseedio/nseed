@@ -35,7 +35,8 @@ namespace NSeed.Tests.Unit
                 type.FullName,
                 type.Name.Humanize(),
                 string.Empty,
-                Array.Empty<SeedableInfo>()
+                Array.Empty<SeedableInfo>(),
+                Array.Empty<Error>()
             );
 
             seedBucket.GetMetaInfo().Should().BeEquivalentTo(expected);
@@ -68,7 +69,8 @@ namespace NSeed.Tests.Unit
                 type.FullName,
                 seedBucketFriendlyName,
                 seedBucketDescription,
-                containedSeedablesExtractor.ExtractFrom(type, new DistinctErrorCollectorAndProvider())
+                containedSeedablesExtractor.ExtractFrom(type, new DistinctErrorCollectorAndProvider()),
+                Array.Empty<Error>()
             );
 
             var metaInfo = seedBucket.GetMetaInfo();

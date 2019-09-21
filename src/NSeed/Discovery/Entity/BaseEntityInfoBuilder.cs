@@ -1,5 +1,6 @@
 using NSeed.MetaInfo;
 using System;
+using System.Linq;
 
 namespace NSeed.Discovery.Entity
 {
@@ -42,7 +43,8 @@ namespace NSeed.Discovery.Entity
             (
                 type ?? MetaInfo.MetaInfo.UnknownImplementation,
                 type,
-                fullName
+                fullName,
+                Array.Empty<Error>()
             );
         }
     }

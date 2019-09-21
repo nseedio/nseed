@@ -20,7 +20,8 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
             (
                 type,
                 type,
-                type.FullName
+                type.FullName,
+                Array.Empty<Error>()
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);
@@ -35,7 +36,8 @@ namespace NSeed.Tests.Unit.Discovery.Entity.ReflectionBased
             (
                 MetaInfo.MetaInfo.UnknownImplementation,
                 null,
-                string.Empty
+                string.Empty,
+                Array.Empty<Error>()
             );
 
             builder.BuildFrom(type).Should().BeEquivalentTo(expected);

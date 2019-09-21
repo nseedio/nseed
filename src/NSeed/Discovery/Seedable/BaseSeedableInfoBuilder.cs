@@ -99,7 +99,8 @@ namespace NSeed.Discovery.Seedable
                       explicitelyRequires,
                       entitiesExtractor.ExtractFrom(implementation, errorCollector),
                       providedYieldExtractor.ExtractFrom(implementation, errorCollector),
-                      requiredYieldsExtractor.ExtractFrom(implementation, errorCollector)
+                      requiredYieldsExtractor.ExtractFrom(implementation, errorCollector),
+                      Array.Empty<Error>()
                   )
                 : new ScenarioInfo
                  (
@@ -108,7 +109,8 @@ namespace NSeed.Discovery.Seedable
                       fullName,
                       friendlyName,
                       description,
-                      explicitelyRequires
+                      explicitelyRequires,
+                      Array.Empty<Error>()
                   );
         }
     }
