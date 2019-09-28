@@ -18,10 +18,7 @@ namespace NSeed.Cli.Services
         private string projectPath = string.Empty;
 
         public DependencyGraphService(
-            IDotNetRunner<DependencyGraphRunnerArgs> dependencyGraphRunner)
-        {
-            DependencyGraphRunner = dependencyGraphRunner;
-        }
+            IDotNetRunner<DependencyGraphRunnerArgs> dependencyGraphRunner) => DependencyGraphRunner = dependencyGraphRunner;
 
         public DependencyGraphSpec GenerateDependencyGraph(string solutionPath)
         {

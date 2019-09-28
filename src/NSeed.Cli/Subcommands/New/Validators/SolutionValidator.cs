@@ -30,7 +30,7 @@ namespace NSeed.Cli.Subcommands.New.Validators
             {
                 return command.ResolvedSolutionErrorMessage.Exists() ?
                     ValidationResult.Error(command.ResolvedSolutionErrorMessage) :
-                    ValidationResult.Error(Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
+                    ValidationResult.Error(Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile);
             }
 
             var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);

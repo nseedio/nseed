@@ -14,38 +14,28 @@ namespace NSeed.Cli.Subcommands.New.Validators
         private IDependencyGraphService DependencyGraphService { get; }
 
         public NameValidator(
-            IDependencyGraphService dependencyGraphService)
-        {
-            DependencyGraphService = dependencyGraphService;
-        }
+            IDependencyGraphService dependencyGraphService) => DependencyGraphService = dependencyGraphService;
 
         public ValidationResult Validate(NewSubcommand command)
         {
-            switch (command.ResolvedName)
+            return command.ResolvedName switch
             {
-                case var name when name.IsNotProvidedByUser():
-                    return Error(Resources.New.Errors.ProjectNameNotProvided);
+                var name when name.IsNotProvidedByUser() => Error(Resources.New.Errors.ProjectNameNotProvided),
 
-                case var name when ContainesUnallowedCharacters(name) ||
+                var name when ContainesUnallowedCharacters(name) ||
                                    ContainesSurrogateCharacters(name) ||
-                                   ContainesUnicodeCharacters(name):
-                    return Error(Resources.New.Errors.ProjectNameContainsUnallowedCharacters);
+                                   ContainesUnicodeCharacters(name) => Error(Resources.New.Errors.ProjectNameContainsUnallowedCharacters),
 
-                case var name when IsReserved(name):
-                    return Error(Resources.New.Errors.InvalidProjectName);
+                var name when IsReserved(name) => Error(Resources.New.Errors.InvalidProjectName),
 
-                case var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSolution)):
-                    return Error(Resources.New.Errors.ProjectNameExists);
+                var name when Exist(name, DependencyGraphService.GetSolutionProjectsNames(command.ResolvedSolution)) => Error(Resources.New.Errors.ProjectNameExists),
 
-                case var name when name.Length > Resources.New.MaxProjectNameCharacters:
-                    return Error(Resources.New.Errors.ProjectNameToLong);
+                var name when name.Length > Resources.New.MaxProjectNameCharacters => Error(Resources.New.Errors.ProjectNameTooLong),
 
-                case var name when name.Length < Resources.New.MinProjectNameCharacters:
-                    return Error(Resources.New.Errors.ProjectNameToShort);
+                var name when name.Length < Resources.New.MinProjectNameCharacters => Error(Resources.New.Errors.ProjectNameTooShort),
 
-                default:
-                    return Success;
-            }
+                _ => Success,
+            };
         }
 
         private bool Exist(string name, IEnumerable<string> projectNames)

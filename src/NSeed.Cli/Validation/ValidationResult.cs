@@ -7,15 +7,9 @@ namespace NSeed.Cli.Validation
     {
         public static ValidationResult Success => new ValidationResult { IsValid = true };
 
-        public static ValidationResult Error(string message)
-        {
-            return new ValidationResult(message) { IsValid = false };
-        }
+        public static ValidationResult Error(string message) => new ValidationResult(message) { IsValid = false };
 
-        public ValidationResult()
-        {
-            Messages = new List<string>();
-        }
+        public ValidationResult() => Messages = new List<string>();
 
         public ValidationResult(string errorMessage)
         {

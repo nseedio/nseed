@@ -1,0 +1,15 @@
+using McMaster.Extensions.CommandLineUtils;
+using NSeed.Cli.Assets;
+using NSeed.Cli.Subcommands.Info.Validators;
+using NSeed.Cli.Subcommands.Info.ValueProviders;
+
+namespace NSeed.Cli.Subcommands.Info
+{
+    [InfoValidator]
+    internal partial class InfoSubcommand
+    {
+        [Option("-p|--project", Description = Resources.Info.ProjectDescription)]
+        [ProjectDefaultValueProvider]
+        public string SeedProject { get; private set; } = string.Empty;
+    }
+}

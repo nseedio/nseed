@@ -18,10 +18,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
         internal Mock<IDependencyGraphService> MockDependencyGraphService { get; } = new Mock<IDependencyGraphService>();
 
-        internal BaseNameValidatorTest()
-        {
-            Validator = new NameValidator(MockDependencyGraphService.Object);
-        }
+        internal BaseNameValidatorTest() => Validator = new NameValidator(MockDependencyGraphService.Object);
 
         internal ValidationResult Validate()
         {
@@ -40,10 +37,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
     public class NameValidatorﾠWithﾠInvalidﾠName : BaseNameValidatorTest
     {
-        public NameValidatorﾠWithﾠInvalidﾠName()
-        {
-            GenerateSolutionProjects(SlnProjects);
-        }
+        public NameValidatorﾠWithﾠInvalidﾠName() => GenerateSolutionProjects(SlnProjects);
 
         public static IEnumerable<object?[]> InvalidProjectNamesAndErrorMessages =>
             new[]
@@ -59,8 +53,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
                 new object?[] { @"PRN", Resources.New.Errors.InvalidProjectName },
                 new object?[] { @"..", Resources.New.Errors.InvalidProjectName },
                 new object?[] { "Project1", Resources.New.Errors.ProjectNameExists },
-                new object?[] { "Pr", Resources.New.Errors.ProjectNameToShort },
-                new object?[] { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Resources.New.Errors.ProjectNameToLong }
+                new object?[] { "Pr", Resources.New.Errors.ProjectNameTooShort },
+                new object?[] { "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", Resources.New.Errors.ProjectNameTooLong }
             };
         [Theory]
         // TODO: This looks like a bug in the xUnit analyzer. Strange.
@@ -82,10 +76,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 
     public class NameValidatorﾠWithﾠValidﾠName : BaseNameValidatorTest
     {
-        public NameValidatorﾠWithﾠValidﾠName()
-        {
-            GenerateSolutionProjects(SlnProjects);
-        }
+        public NameValidatorﾠWithﾠValidﾠName() => GenerateSolutionProjects(SlnProjects);
 
         [Theory]
         [InlineData("MyProject.Seeds")]

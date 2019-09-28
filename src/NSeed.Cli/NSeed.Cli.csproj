@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\BuildProperties.Packages.props" />
 
@@ -53,8 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\" />
-    <Folder Include="Subcommands\Info\" />
+    <Folder Include="Subcommands\Info\Runner\" />
   </ItemGroup>
 
 </Project>

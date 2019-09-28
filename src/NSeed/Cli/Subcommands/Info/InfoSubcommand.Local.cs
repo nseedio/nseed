@@ -68,9 +68,9 @@ namespace NSeed.Cli.Subcommands.Info
             }
         }
 
-        private readonly SeedBucket seedBucket;
-        private readonly IOutputSink output;
-        private readonly TextColors textColors;
+        private readonly SeedBucket? seedBucket;
+        private readonly IOutputSink? output;
+        private readonly TextColors? textColors;
         private readonly RenderingBehavior renderingBehavior = RenderingBehavior.Create();
 
         public InfoSubcommand(SeedBucket seedBucket, IOutputSink output, ITextColorsProvider textColorsProvider)
@@ -81,17 +81,17 @@ namespace NSeed.Cli.Subcommands.Info
 
             this.seedBucket = seedBucket;
             this.output = output;
-            textColors = textColorsProvider.GetTextColors();
+            textColors = textColorsProvider?.GetTextColors();
         }
 
         public Task OnExecute()
         {
-            output.WriteLine();
+            output?.WriteLine();
 
-            var seedBucketInfo = seedBucket.GetMetaInfo();
+            var seedBucketInfo = seedBucket?.GetMetaInfo();
 
-            int numberOfSeeds = seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Count();
-            int numberOfScenarios = seedBucketInfo.ContainedSeedables.OfType<ScenarioInfo>().Count();
+            int numberOfSeeds = seedBucketInfo?.ContainedSeedables?.OfType<SeedInfo>()?.Count() ?? default;
+            int numberOfScenarios = seedBucketInfo?.ContainedSeedables?.OfType<ScenarioInfo>()?.Count() ?? default;
 
             ConsoleRenderer.RenderDocument(GenerateSummary(), null, renderingBehavior.RenderRect);
 
@@ -105,7 +105,7 @@ namespace NSeed.Cli.Subcommands.Info
                 ConsoleRenderer.RenderDocument(GenerateScenariosInfo(), null, renderingBehavior.RenderRect);
             }
 
-            output.WriteLine();
+            output?.WriteLine();
 
             return Task.CompletedTask;
 
@@ -139,8 +139,8 @@ namespace NSeed.Cli.Subcommands.Info
                     }
                 )
                 {
-                    Color = textColors.Message,
-                    Background = textColors.Background
+                    Color = textColors?.Message,
+                    Background = textColors?.Background
                 };
 
                 static Cell CreateDescriptionColumnCell(string text)
@@ -189,8 +189,8 @@ namespace NSeed.Cli.Subcommands.Info
                     }
                 )
                 {
-                    Color = textColors.Message,
-                    Background = textColors.Background
+                    Color = textColors?.Message,
+                    Background = textColors?.Background
                 };
             }
 
@@ -226,8 +226,8 @@ namespace NSeed.Cli.Subcommands.Info
                     }
                 )
                 {
-                    Color = textColors.Message,
-                    Background = textColors.Background
+                    Color = textColors?.Message,
+                    Background = textColors?.Background
                 };
             }
 

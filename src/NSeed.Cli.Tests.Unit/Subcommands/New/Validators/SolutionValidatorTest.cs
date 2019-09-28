@@ -20,8 +20,8 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         public static IEnumerable<object?[]> InvalidSolutionsAndErrorMessages =>
             new[]
             {
-                new object?[] { string.Empty, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
-                new object?[] { null, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
+                new object?[] { string.Empty, Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile },
+                new object?[] { null, Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile },
             };
         [Theory]
         // TODO: This looks like a bug in the xUnit analyzer. Strange.

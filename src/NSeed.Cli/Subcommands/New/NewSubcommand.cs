@@ -178,7 +178,7 @@ namespace NSeed.Cli.Subcommands.New
             }
         }
 
-        public Task OnExecute(
+        public async Task OnExecute(
             CommandLineApplication app,
             IFileSystemService fileSystemService,
             IDotNetRunner<NewSubcommandRunnerArgs> dotNetRunner)
@@ -187,7 +187,7 @@ namespace NSeed.Cli.Subcommands.New
 
             if (getTemplateResponse.IsSuccesful)
             {
-                var response = dotNetRunner.Run(new NewSubcommandRunnerArgs
+                var (isSuccessful, message) = dotNetRunner.Run(new NewSubcommandRunnerArgs
                 {
                     SolutionDirectory = ResolvedSolutionDirectory,
                     Solution = ResolvedSolution,
@@ -196,19 +196,18 @@ namespace NSeed.Cli.Subcommands.New
                     Template = template
                 });
 
-                if (!response.IsSuccessful)
+                if (!isSuccessful)
                 {
-                    app.Error.WriteLine(response.Message);
+                    await app.Error.WriteLineAsync(message);
                 }
             }
             else
             {
-                app.Error.WriteLine(getTemplateResponse.Message);
+                await app.Error.WriteLineAsync(getTemplateResponse.Message);
             }
 
             fileSystemService.RemoveTempTemplates();
-            app.Out.WriteLine(Resources.New.SuccessfulRun);
-            return Task.CompletedTask;
+            await app.Out.WriteLineAsync(Resources.New.SuccessfulRun);
         }
 
         private string GetCommonValue(IList<string> values)

@@ -79,11 +79,9 @@ namespace NSeed.Cli.Tests.Integration
     public class NewSubcommandToolTest : IClassFixture<NSeedFixture>
     {
         private readonly NSeedFixture nSeedFixture;
+        private readonly Resources.New.SearchSolutionPathErrors searchSolutionPathErrors = Resources.New.SearchSolutionPathErrors.Instance;
 
-        public NewSubcommandToolTest(NSeedFixture nSeedFixture)
-        {
-            this.nSeedFixture = nSeedFixture;
-        }
+        public NewSubcommandToolTest(NSeedFixture nSeedFixture) => this.nSeedFixture = nSeedFixture;
 
         [Fact]
         public void NSeedDllInstalledTool_Empty()
@@ -127,7 +125,7 @@ namespace NSeed.Cli.Tests.Integration
             });
             OutputShouldNotBeSuccessful(response);
             OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
+            OutputShouldContainError(response, searchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
         }
 
         [Fact]
@@ -142,7 +140,7 @@ namespace NSeed.Cli.Tests.Integration
 
             OutputShouldNotBeSuccessful(response);
             OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution);
+            OutputShouldContainError(response, searchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
         }
 
         [Fact]
@@ -232,7 +230,7 @@ namespace NSeed.Cli.Tests.Integration
 
             OutputShouldNotBeSuccessful(response);
             OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.MultipleSolutionsFound);
+            OutputShouldContainError(response, searchSolutionPathErrors.MultipleFilesFound);
         }
 
         [Fact]

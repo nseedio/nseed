@@ -22,5 +22,9 @@ namespace NSeed.Cli.Assets
         };
 
         public static readonly string InitDirectory = Environment.CurrentDirectory;
+
+        public static readonly string NSeedClassicTemplateDirectory = "nseed_classic_template";
+
+        public static readonly string NSeedCoreTemplateDirectory = "nseed_core_template";
     }
 }

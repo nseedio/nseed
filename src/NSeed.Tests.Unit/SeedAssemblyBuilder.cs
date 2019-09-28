@@ -174,7 +174,9 @@ namespace NSeed.Tests.Unit
             using MemoryStream ms = BuildAssemblyStream();
             var assemblyFileName = Path.GetTempFileName();
             using (FileStream fs = File.OpenWrite(assemblyFileName))
+            {
                 ms.CopyTo(fs);
+            }
 
             return Assembly.LoadFrom(assemblyFileName);
         }

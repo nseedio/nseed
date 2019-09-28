@@ -82,13 +82,13 @@ namespace NSeed.Cli.Tests.Unit.Services
 
             public static IEnumerable<object[]> InvalidPaths => new List<object[]>
             {
-                new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.Errors.MultipleSolutionsFound },
-                new object[] { $@"Test_238e9324-65e0-4f74-ac64-748f5ea32b90", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
-                new object[] { $@"TestXYZ", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
-                new object[] { $@"Test/SubTest/SubSubTest", Resources.New.Errors.SolutionPathDirectoryDoesNotExist },
-                new object[] { $@"Test_cd81a251-30d9-40b0-8c98-252c03a720bc.sln", Resources.New.Errors.WorkingDirectoryDoesNotContainAnySolution },
-                new object[] { $@"C:/Test238e9324/Test.sln", Resources.New.Errors.SolutionPathDirectoryDoesNotExist },
-                new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web", Resources.New.Errors.InvalidFile }
+                new object[] { $@"{FileFixture.RootDirectory}Test", Resources.New.SearchSolutionPathErrors.Instance.MultipleFilesFound },
+                new object[] { $@"Test_238e9324-65e0-4f74-ac64-748f5ea32b90", Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile },
+                new object[] { $@"TestXYZ", Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile },
+                new object[] { $@"Test/SubTest/SubSubTest", Resources.New.SearchSolutionPathErrors.Instance.FilePathDirectoryDoesNotExist },
+                new object[] { $@"Test_cd81a251-30d9-40b0-8c98-252c03a720bc.sln", Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile },
+                new object[] { $@"C:/Test238e9324/Test.sln", Resources.New.SearchSolutionPathErrors.Instance.FilePathDirectoryDoesNotExist },
+                new object[] { $@"{FileFixture.RootDirectory}Fit\Fit.Web", Resources.New.SearchSolutionPathErrors.Instance.InvalidFile }
             };
 
             [Theory]

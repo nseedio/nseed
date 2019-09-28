@@ -1,3 +1,4 @@
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Subcommands.New.Models;
 using System;
@@ -12,9 +13,6 @@ namespace NSeed.Cli.Services
 {
     internal class FileSystemService : FileSystem, IFileSystemService
     {
-        public const string SolutionExtension = ".sln";
-        public const string ZipTemplatesFile = "templates.zip";
-
         public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
         {
             // Get the subdirectories for the specified directory.
@@ -54,32 +52,23 @@ namespace NSeed.Cli.Services
             }
         }
 
+        public const string SolutionExtension = ".sln";
+        public const string ProjectExtension = ".csproj";
+        public const string ZipTemplatesFile = "templates.zip";
+        public const string TemplatesDirectory = "templates";
+
         public string ZipTemplatesFilePath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), ZipTemplatesFile);
 
-        public string TemplatesDirectoryPath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "templates");
+        public string TemplatesDirectoryPath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), TemplatesDirectory);
 
         public (bool IsSuccesful, string Message) TryGetSolutionPath(string input, out string path)
         {
-            var fileInfo = FileInfo.FromFileName(input);
-            path = string.Empty;
+            return TryGetFilePath(input, SolutionExtension, New.SearchSolutionPathErrors.Instance, out path);
+        }
 
-            switch (fileInfo)
-            {
-                case var info when !IsDirectory(info.Directory):
-                    return (false, New.Errors.SolutionPathDirectoryDoesNotExist);
-                case var info when IsFile(info):
-                    return TryGetSolutionFromFilePath(info, out path);
-                case var info when IsDirectory(info):
-                    return TryGetSolutionFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), out path);
-                default:
-                    return TryGetSolutionFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{SolutionExtension}"), out path);
-            }
-
-            bool IsFile(IFileInfo fileInfo)
-            {
-                return !string.IsNullOrEmpty(fileInfo.Extension) &&
-                    !IsDirectory(fileInfo);
-            }
+        public (bool IsSuccesful, string Message) TryGetNSeedProjectPath(string input, out string path)
+        {
+            return TryGetFilePath(input, ProjectExtension, Info.SearchNSeedProjectPathErrors.Instance, out path);
         }
 
         public (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template)
@@ -87,7 +76,8 @@ namespace NSeed.Cli.Services
             template = new Template();
 
             using Stream stream = GetEmbeddedResource(ZipTemplatesFile);
-            using (var fileStream = File.Create(ZipTemplatesFilePath))
+
+            using (Stream fileStream = File.Create(ZipTemplatesFilePath))
             {
                 stream.Seek(0, SeekOrigin.Begin);
                 stream.CopyTo(fileStream);
@@ -116,13 +106,83 @@ namespace NSeed.Cli.Services
             return succesResponse;
         }
 
-        private (bool IsSuccesful, string Message) TryGetSolutionFromFilePath(IFileInfo fileInfo, out string solutionPath)
+        private (bool IsSuccesful, string Message) TryGetFilePath(string input, string extension, IFileSearchErrorMessage errorMessage, out string path)
         {
-            solutionPath = string.Empty;
+            var fileInfo = FileInfo.FromFileName(input);
+            path = string.Empty;
 
-            if (IsSlnFile(fileInfo))
+            return fileInfo switch
             {
-                var response = GetSolutionFilePath();
+                var info when !IsDirectory(info.Directory) => (false, errorMessage.FilePathDirectoryDoesNotExist),
+                var info when IsFile(info) => TryGetFileFromFilePath(info, extension, errorMessage, out path),
+                var info when IsDirectory(info) => TryGetFileFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), extension, errorMessage, out path),
+                _ => TryGetFileFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{extension}"), extension, errorMessage, out path),
+            };
+
+            static bool IsFile(IFileInfo fileInfo)
+            {
+                return !string.IsNullOrEmpty(fileInfo.Extension) &&
+                    !IsDirectory(fileInfo);
+            }
+
+            static bool IsDirectory(IFileSystemInfo info)
+            {
+                return (int)info.Attributes != -1 && info.Attributes.HasFlag(FileAttributes.Directory);
+            }
+
+            (bool IsSuccesful, string Message) TryGetFileFromFilePath(IFileInfo fileInfo, string extension, IFileSearchErrorMessage errorMessage, out string solutionPath)
+            {
+                solutionPath = string.Empty;
+
+                if (fileInfo.Extension.Equals(extension, StringComparison.OrdinalIgnoreCase))
+                {
+                    var (isSuccesful, message, payload) = GetFilePath(fileInfo);
+                    if (isSuccesful)
+                    {
+                        solutionPath = payload;
+                        return succesResponse;
+                    }
+
+                    return ErrorResponse(message);
+                }
+                else
+                {
+                    return ErrorResponse(errorMessage.InvalidFile);
+                }
+
+                (bool isSuccesful, string message, string payload) GetFilePath(IFileInfo fileInfo)
+                {
+                    if (fileInfo.Exists)
+                    {
+                        return (true, string.Empty, fileInfo.FullName);
+                    }
+
+                    return FindFile(
+                        fileInfo.Directory.FullName,
+                        SearchOption.AllDirectories,
+                        extension,
+                        errorMessage,
+                        fileInfo.Name);
+                }
+            }
+
+            (bool IsSuccesful, string Message) TryGetFileFromDirectoryPath(IDirectoryInfo directoryInfo, string extension, IFileSearchErrorMessage errorMessage, out string solutionPath)
+            {
+                solutionPath = string.Empty;
+
+                if (!directoryInfo.Exists)
+                {
+                    return ErrorResponse(errorMessage.FilePathDirectoryDoesNotExist);
+                }
+
+                var response = FindFile(directoryInfo.FullName, SearchOption.TopDirectoryOnly, extension, errorMessage);
+                if (response.IsSuccesful)
+                {
+                    solutionPath = response.Payload;
+                    return succesResponse;
+                }
+
+                response = FindFile(directoryInfo.FullName, SearchOption.AllDirectories, extension, errorMessage);
                 if (response.IsSuccesful)
                 {
                     solutionPath = response.Payload;
@@ -131,76 +191,31 @@ namespace NSeed.Cli.Services
 
                 return ErrorResponse(response.Message);
             }
-            else
-            {
-                return ErrorResponse(New.Errors.InvalidFile);
-            }
 
-            (bool IsSuccesful, string Message, string Payload) GetSolutionFilePath()
+            (bool IsSuccesful, string Message, string Payload) FindFile(
+                string path,
+                SearchOption searchOption,
+                string extension,
+                IFileSearchErrorMessage errorMessage,
+                string fileName = "")
             {
-                if (fileInfo.Exists)
+                var solutions = Directory
+                    ?.EnumerateFiles(path, string.IsNullOrEmpty(fileName) ? $"*{extension}" : fileName, searchOption)
+                    ?.Take(2)
+                    ?.ToList() ?? new List<string>();
+
+                if (!solutions.Any())
                 {
-                    return (true, string.Empty, fileInfo.FullName);
+                    return (false, errorMessage.WorkingDirectoryDoesNotContainAnyFile, string.Empty);
                 }
 
-                return FindSolution(
-                    fileInfo.Directory.FullName,
-                    SearchOption.AllDirectories,
-                    fileInfo.Name);
+                if (solutions.Any() && solutions.Count > 1)
+                {
+                    return (false, errorMessage.MultipleFilesFound, string.Empty);
+                }
+
+                return (true, string.Empty, solutions.FirstOrDefault());
             }
-
-            bool IsSlnFile(IFileInfo fileInfo)
-            {
-                return
-                    string.Equals(fileInfo.Extension, SolutionExtension, StringComparison.OrdinalIgnoreCase)
-                    && !IsDirectory(fileInfo);
-            }
-        }
-
-        private (bool IsSuccesful, string Message) TryGetSolutionFromDirectoryPath(IDirectoryInfo directoryInfo, out string solutionPath)
-        {
-            solutionPath = string.Empty;
-
-            if (!directoryInfo.Exists)
-            {
-                return ErrorResponse(New.Errors.SolutionPathDirectoryDoesNotExist);
-            }
-
-            var response = FindSolution(directoryInfo.FullName, SearchOption.TopDirectoryOnly);
-            if (response.IsSuccesful)
-            {
-                solutionPath = response.Payload;
-                return succesResponse;
-            }
-
-            response = FindSolution(directoryInfo.FullName, SearchOption.AllDirectories);
-            if (response.IsSuccesful)
-            {
-                solutionPath = response.Payload;
-                return succesResponse;
-            }
-
-            return ErrorResponse(response.Message);
-        }
-
-        private (bool IsSuccesful, string Message, string Payload) FindSolution(string path, SearchOption searchOption, string fileName = "")
-        {
-            var solutions = Directory
-                ?.EnumerateFiles(path, string.IsNullOrEmpty(fileName) ? $"*{SolutionExtension}" : fileName, searchOption)
-                ?.Take(2)
-                ?.ToList() ?? new List<string>();
-
-            if (!solutions.Any())
-            {
-                return (false, New.Errors.WorkingDirectoryDoesNotContainAnySolution, string.Empty);
-            }
-
-            if (solutions.Any() && solutions.Count > 1)
-            {
-                return (false, New.Errors.MultipleSolutionsFound, string.Empty);
-            }
-
-            return (true, string.Empty, solutions.FirstOrDefault());
         }
 
         private Stream GetEmbeddedResource(string name)
@@ -212,16 +227,16 @@ namespace NSeed.Cli.Services
 
         private string GetTemplateDirectory(Framework framework)
         {
-            switch (framework)
+            return framework switch
             {
-                case Framework.NETCoreApp:
-                    return "nseed_core_template";
+                Framework.NETCoreApp => NSeedCoreTemplateDirectory,
 
-                case Framework.NETFramework:
-                    return "nseed_classic_template";
-            }
+                Framework.NETFramework => NSeedClassicTemplateDirectory,
 
-            return string.Empty;
+                Framework.None => string.Empty,
+
+                _ => string.Empty,
+            };
         }
 
         private string GetTemplateName(string path)
@@ -239,18 +254,8 @@ namespace NSeed.Cli.Services
             File.WriteAllText(templateConfigFilePath, content);
         }
 
-        private bool IsDirectory(IFileInfo fileInfo)
-        {
-            return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
-        }
+        private static (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
 
-        private bool IsDirectory(IDirectoryInfo directoryInfo)
-        {
-            return (int)directoryInfo.Attributes != -1 && directoryInfo.Attributes.HasFlag(FileAttributes.Directory);
-        }
-
-        private (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
-
-        private (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
+        private static (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }
 }

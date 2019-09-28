@@ -12,10 +12,7 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
     {
         private readonly string defaultName;
 
-        public NameDefaultValueProvider(string defaultName)
-        {
-            this.defaultName = defaultName;
-        }
+        public NameDefaultValueProvider(string defaultName) => this.defaultName = defaultName;
 
         public void Apply(ConventionContext context, MemberInfo member)
         {
