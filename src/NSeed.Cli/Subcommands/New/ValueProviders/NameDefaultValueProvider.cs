@@ -19,11 +19,15 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
             context.Application.OnParsingComplete(_ =>
             {
                 var name = context.GetStringValue(nameof(NewSubcommand.Name));
+
                 var model = context.ModelAccessor?.GetModel() as NewSubcommand;
+
                 model?.SetResolvedName(name);
-                if (name.IsNotProvidedByUser())
+
+                if (name.IsNotProvidedByUser() && (model?.IsValidResolvedSolution ?? false))
                 {
                     var dependencyGraphService = context.Application.GetService<IDependencyGraphService>();
+
                     model?.ResolveDefaultNameWithPrefix(dependencyGraphService, defaultName);
                 }
             });

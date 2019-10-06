@@ -102,10 +102,10 @@ namespace NSeed.Cli.Tests.Unit.Services
             public void IsﾠSuccesfulﾠAndﾠReturnsﾠValidﾠPath(string path)
             {
                 var service = new FileSystemService();
-                var response = service.TryGetSolutionPath(path, out var sln);
+                var response = service.GetSolutionPath(path);
 
-                response.IsSuccesful.Should().Be(true);
-                sln.Should().NotBeNullOrEmpty();
+                response.IsSuccessful.Should().Be(true);
+                response.Payload.Should().NotBeNullOrEmpty();
             }
 
             [Theory]
@@ -115,11 +115,11 @@ namespace NSeed.Cli.Tests.Unit.Services
             public void IsﾠNotﾠSuccesfulﾠAndﾠReturnsﾠErrorﾠResponse(string path, string errorMessage)
             {
                 var service = new FileSystemService();
-                var response = service.TryGetSolutionPath(path, out var sln);
+                var response = service.GetSolutionPath(path);
 
-                response.IsSuccesful.Should().Be(false);
+                response.IsSuccessful.Should().Be(false);
                 response.Message.Should().Be(errorMessage);
-                sln.Should().BeNullOrEmpty();
+                response.Payload.Should().BeNullOrEmpty();
             }
         }
 

@@ -8,5 +8,7 @@ namespace NSeed.Cli.Services
         DependencyGraphSpec GenerateDependencyGraph(string projectPath);
 
         IEnumerable<string> GetSolutionProjectsNames(string solutionPath);
+
+        bool ProjectContainsNseedNugetDependency(string projectPath);
     }
 }

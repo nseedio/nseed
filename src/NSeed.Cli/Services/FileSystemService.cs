@@ -1,5 +1,6 @@
 using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
+using NSeed.Cli.Extensions;
 using NSeed.Cli.Subcommands.New.Models;
 using System;
 using System.Collections.Generic;
@@ -61,14 +62,14 @@ namespace NSeed.Cli.Services
 
         public string TemplatesDirectoryPath { get; } = System.IO.Path.Combine(System.IO.Path.GetTempPath(), TemplatesDirectory);
 
-        public (bool IsSuccesful, string Message) TryGetSolutionPath(string input, out string path)
+        public IOperationResponse<string> GetSolutionPath(string input)
         {
-            return TryGetFilePath(input, SolutionExtension, New.SearchSolutionPathErrors.Instance, out path);
+            return GetFilePath(input, SolutionExtension, New.SearchSolutionPathErrors.Instance);
         }
 
-        public (bool IsSuccesful, string Message) TryGetNSeedProjectPath(string input, out string path)
+        public IOperationResponse<string> GetNSeedProjectPath(string input)
         {
-            return TryGetFilePath(input, ProjectExtension, Info.SearchNSeedProjectPathErrors.Instance, out path);
+            return GetFilePath(input, ProjectExtension, Info.SearchNSeedProjectPathErrors.Instance);
         }
 
         public (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template)
@@ -106,17 +107,19 @@ namespace NSeed.Cli.Services
             return succesResponse;
         }
 
-        private (bool IsSuccesful, string Message) TryGetFilePath(string input, string extension, IFileSearchErrorMessage errorMessage, out string path)
+        private IOperationResponse<string> GetFilePath(
+            string input,
+            string extension,
+            IFileSearchErrorMessage errorMessage)
         {
             var fileInfo = FileInfo.FromFileName(input);
-            path = string.Empty;
 
             return fileInfo switch
             {
-                var info when !IsDirectory(info.Directory) => (false, errorMessage.FilePathDirectoryDoesNotExist),
-                var info when IsFile(info) => TryGetFileFromFilePath(info, extension, errorMessage, out path),
-                var info when IsDirectory(info) => TryGetFileFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), extension, errorMessage, out path),
-                _ => TryGetFileFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{extension}"), extension, errorMessage, out path),
+                var info when !IsDirectory(info.Directory) => OperationResponse<string>.Error(errorMessage.FilePathDirectoryDoesNotExist),
+                var info when IsFile(info) => TryGetFileFromFilePath(info, extension, errorMessage),
+                var info when IsDirectory(info) => TryGetFileFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), extension, errorMessage),
+                _ => TryGetFileFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{extension}"), extension, errorMessage),
             };
 
             static bool IsFile(IFileInfo fileInfo)
@@ -130,31 +133,22 @@ namespace NSeed.Cli.Services
                 return (int)info.Attributes != -1 && info.Attributes.HasFlag(FileAttributes.Directory);
             }
 
-            (bool IsSuccesful, string Message) TryGetFileFromFilePath(IFileInfo fileInfo, string extension, IFileSearchErrorMessage errorMessage, out string solutionPath)
+            IOperationResponse<string> TryGetFileFromFilePath(IFileInfo fileInfo, string extension, IFileSearchErrorMessage errorMessage)
             {
-                solutionPath = string.Empty;
-
                 if (fileInfo.Extension.Equals(extension, StringComparison.OrdinalIgnoreCase))
                 {
-                    var (isSuccesful, message, payload) = GetFilePath(fileInfo);
-                    if (isSuccesful)
-                    {
-                        solutionPath = payload;
-                        return succesResponse;
-                    }
-
-                    return ErrorResponse(message);
+                    return GetFilePath(fileInfo);
                 }
                 else
                 {
-                    return ErrorResponse(errorMessage.InvalidFile);
+                    return OperationResponse<string>.Error(errorMessage.InvalidFile);
                 }
 
-                (bool isSuccesful, string message, string payload) GetFilePath(IFileInfo fileInfo)
+                IOperationResponse<string> GetFilePath(IFileInfo fileInfo)
                 {
                     if (fileInfo.Exists)
                     {
-                        return (true, string.Empty, fileInfo.FullName);
+                        return OperationResponse<string>.Success(fileInfo.FullName);
                     }
 
                     return FindFile(
@@ -166,55 +160,42 @@ namespace NSeed.Cli.Services
                 }
             }
 
-            (bool IsSuccesful, string Message) TryGetFileFromDirectoryPath(IDirectoryInfo directoryInfo, string extension, IFileSearchErrorMessage errorMessage, out string solutionPath)
+            IOperationResponse<string> TryGetFileFromDirectoryPath(IDirectoryInfo directoryInfo, string extension, IFileSearchErrorMessage errorMessage)
             {
-                solutionPath = string.Empty;
-
                 if (!directoryInfo.Exists)
                 {
-                    return ErrorResponse(errorMessage.FilePathDirectoryDoesNotExist);
+                    return OperationResponse<string>.Error(errorMessage.FilePathDirectoryDoesNotExist);
                 }
 
                 var response = FindFile(directoryInfo.FullName, SearchOption.TopDirectoryOnly, extension, errorMessage);
-                if (response.IsSuccesful)
+                if (response.IsSuccessful)
                 {
-                    solutionPath = response.Payload;
-                    return succesResponse;
+                    return response;
                 }
 
-                response = FindFile(directoryInfo.FullName, SearchOption.AllDirectories, extension, errorMessage);
-                if (response.IsSuccesful)
-                {
-                    solutionPath = response.Payload;
-                    return succesResponse;
-                }
-
-                return ErrorResponse(response.Message);
+                return FindFile(directoryInfo.FullName, SearchOption.AllDirectories, extension, errorMessage);
             }
 
-            (bool IsSuccesful, string Message, string Payload) FindFile(
+            IOperationResponse<string> FindFile(
                 string path,
                 SearchOption searchOption,
                 string extension,
                 IFileSearchErrorMessage errorMessage,
                 string fileName = "")
             {
+                var searchItem = fileName.IsNotProvidedByUser() ? $"*{extension}" : fileName;
+
                 var solutions = Directory
-                    ?.EnumerateFiles(path, string.IsNullOrEmpty(fileName) ? $"*{extension}" : fileName, searchOption)
+                    ?.EnumerateFiles(path, searchItem, searchOption)
                     ?.Take(2)
                     ?.ToList() ?? new List<string>();
 
-                if (!solutions.Any())
+                return solutions switch
                 {
-                    return (false, errorMessage.WorkingDirectoryDoesNotContainAnyFile, string.Empty);
-                }
-
-                if (solutions.Any() && solutions.Count > 1)
-                {
-                    return (false, errorMessage.MultipleFilesFound, string.Empty);
-                }
-
-                return (true, string.Empty, solutions.FirstOrDefault());
+                    var _ when !solutions.Any() => OperationResponse<string>.Error(errorMessage.WorkingDirectoryDoesNotContainAnyFile),
+                    var _ when solutions.Any() && solutions.Count > 1 => OperationResponse<string>.Error(errorMessage.MultipleFilesFound),
+                    _ => OperationResponse<string>.Success(solutions.FirstOrDefault()),
+                };
             }
         }
 
@@ -255,7 +236,5 @@ namespace NSeed.Cli.Services
         }
 
         private static (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);
-
-        private static (bool IsSuccesful, string Message) ErrorResponse(string message) => (false, message);
     }
 }

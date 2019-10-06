@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
@@ -34,7 +35,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         public void Returnﾠinvalidﾠvalidationﾠresponseﾠwithﾠerrorﾠmessageﾠ(string solution, string errorMessage)
         {
             var resultSlnPath = string.Empty;
-            mockFileSystemService.Setup(t => t.TryGetSolutionPath(It.IsAny<string>(), out resultSlnPath)).Returns((true, string.Empty));
+            mockFileSystemService.Setup(t => t.GetSolutionPath(It.IsAny<string>())).Returns(OperationResponse<string>.Success(string.Empty));
             dependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>())).Returns(new DependencyGraphSpec());
 
             var validator = new SolutionValidator(mockFileSystemService.Object, dependencyGraphService.Object);

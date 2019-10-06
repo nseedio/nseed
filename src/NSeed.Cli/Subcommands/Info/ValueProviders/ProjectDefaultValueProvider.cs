@@ -1,9 +1,11 @@
 using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using System;
 using System.Reflection;
+using static NSeed.Cli.Assets.Resources;
 
 namespace NSeed.Cli.Subcommands.Info.ValueProviders
 {
@@ -14,14 +16,22 @@ namespace NSeed.Cli.Subcommands.Info.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
-                var project = context.GetStringValue(nameof(InfoSubcommand.SeedProject));
+                var project = context.GetStringValue(nameof(InfoSubcommand.Project));
+
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
 
-                if (project.IsNotProvidedByUser())
+                IOperationResponse<string> response = project.IsNotProvidedByUser()
+                 ? fileSystemService.GetNSeedProjectPath(InitDirectory)
+                 : fileSystemService.GetNSeedProjectPath(project);
+
+                if (context.ModelAccessor?.GetModel() is InfoSubcommand model && model != null)
                 {
-                }
-                else
-                {
+                    if (!response.IsSuccessful && response.Message.Exists())
+                    {
+                        model.SetResolvedProjectErrorMessage(response.Message);
+                    }
+
+                    model?.SetResolvedProject(response?.Payload ?? string.Empty);
                 }
             });
         }

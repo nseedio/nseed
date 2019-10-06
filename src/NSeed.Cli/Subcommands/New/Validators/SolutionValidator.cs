@@ -33,16 +33,18 @@ namespace NSeed.Cli.Subcommands.New.Validators
                     ValidationResult.Error(Resources.New.SearchSolutionPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile);
             }
 
-            var (isSuccesful, message) = FileSystemService.TryGetSolutionPath(command.ResolvedSolution, out var path);
-            if (!isSuccesful)
+            var response = FileSystemService.GetSolutionPath(command.ResolvedSolution);
+
+            if (!response.IsSuccessful)
             {
-                return ValidationResult.Error(message);
+                return ValidationResult.Error(response.Message);
             }
 
-            var dependencyGraph = DependencyGraphService.GenerateDependencyGraph(path);
+            var dependencyGraph = DependencyGraphService.GenerateDependencyGraph(response?.Payload ?? string.Empty);
+
             if (dependencyGraph == null)
             {
-                return ValidationResult.Error("Provided solution is invalid Solution can't be processed dependencyGraph");
+                return ValidationResult.Error(Resources.New.Errors.InvalidSolution);
             }
 
             command.ResolvedSolutionIsValid();

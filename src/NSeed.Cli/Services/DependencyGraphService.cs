@@ -70,5 +70,13 @@ namespace NSeed.Cli.Services
             var projectNames = dependencyGraph.Projects.Select(p => p.Name).ToList();
             return projectNames ?? new List<string>();
         }
+
+        public bool ProjectContainsNseedNugetDependency(string projectPath)
+        {
+            var dependencyGraph = GenerateDependencyGraph(projectPath);
+            var targetFrameworks = dependencyGraph.Projects.SelectMany(p => p.TargetFrameworks);
+            var dependencies = targetFrameworks.SelectMany(tf => tf.Dependencies);
+            return dependencies.Any(d => d.Name.Equals("nseed", StringComparison.OrdinalIgnoreCase));
+        }
     }
 }

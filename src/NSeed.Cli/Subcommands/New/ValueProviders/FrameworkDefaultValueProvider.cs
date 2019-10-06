@@ -15,11 +15,15 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
             context.Application.OnParsingComplete(_ =>
             {
                 var framework = context.GetStringValue(nameof(NewSubcommand.Framework));
+
                 var model = context.ModelAccessor?.GetModel() as NewSubcommand;
+
                 model?.SetResolvedFramework(framework);
-                if (framework.IsNotProvidedByUser())
+
+                if (framework.IsNotProvidedByUser() && (model?.IsValidResolvedSolution ?? false))
                 {
                     var dependencyGraphService = context.Application.GetService<IDependencyGraphService>();
+
                     model?.ResolveFramework(dependencyGraphService);
                 }
             });

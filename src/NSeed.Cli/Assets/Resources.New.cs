@@ -22,6 +22,8 @@ namespace NSeed.Cli.Assets
 
             internal static class Errors
             {
+                public static readonly string InvalidSolution = "The provided solution (*.sln) file is invalid or corrupted. Use --solution to set a valid solution file";
+
                 public static readonly string FrameworkNotProvided = "The framework is not provided or could not be derived based on frameworks already used in the target solution. Use --framework option to set a valid framework, netcoreappX.Y for .NET Core project or netframeworkX.Y for .NET Classic project.";
                 public static readonly string InvalidFramework = $"The provided framework is invalid. {DoYouMaybeHaveATypoInThe("framework name")}";
                 public static readonly string InvalidDotNetCoreVersion = $"The provided version of .NET Core framework is not supported. The supported versions are: {string.Join(", ", DotNetCoreVersions)}.";

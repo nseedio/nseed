@@ -1,5 +1,6 @@
 using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New.Validators;
@@ -17,27 +18,24 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
             context.Application.OnParsingComplete(_ =>
             {
                 var solution = context.GetStringValue(nameof(NewSubcommand.Solution));
+
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
-                (bool IsSuccesful, string Message) response = (false, string.Empty);
-                if (solution.IsNotProvidedByUser())
-                {
-                    // Current working directory
-                    response = fileSystemService.TryGetSolutionPath(InitDirectory, out solution);
-                }
-                else
-                {
-                    response = fileSystemService.TryGetSolutionPath(solution, out solution);
-                }
+
+                IOperationResponse<string> response = solution.IsNotProvidedByUser()
+                ? fileSystemService.GetSolutionPath(InitDirectory)
+                : fileSystemService.GetSolutionPath(solution);
 
                 if (context.ModelAccessor?.GetModel() is NewSubcommand model && model != null)
                 {
-                    if (!response.IsSuccesful && response.Message.Exists())
+                    if (!response.IsSuccessful && response.Message.Exists())
                     {
                         model.SetResolvedSolutionErrorMessage(response.Message);
                     }
 
-                    model?.SetResolvedSolution(solution);
+                    model?.SetResolvedSolution(response?.Payload ?? string.Empty);
+
                     var solutionValidator = context.GetValidator<SolutionValidator>();
+
                     solutionValidator.Validate(model!);
                 }
             });

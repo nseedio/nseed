@@ -36,7 +36,9 @@ namespace NSeed.Cli.Subcommands.New
 
         public string ResolvedSolution { get; private set; } = string.Empty;
 
-        public string ResolvedSolutionDirectory => ResolvedSolution.Exists() ? new FileInfo(ResolvedSolution)?.DirectoryName ?? string.Empty : string.Empty;
+        public string ResolvedSolutionDirectory => ResolvedSolution.Exists()
+            ? new FileInfo(ResolvedSolution)?.DirectoryName ?? string.Empty
+            : string.Empty;
 
         public string ResolvedFramework { get; private set; } = string.Empty;
 
@@ -66,7 +68,7 @@ namespace NSeed.Cli.Subcommands.New
 
         public void ResolveDefaultNameWithPrefix(IDependencyGraphService dependencyGraphService, string defaultName)
         {
-            if (IsValidResolvedSolution && dependencyGraphService != null)
+            if (dependencyGraphService != null)
             {
                 SetResolvedName(defaultName);
                 var projectNames = dependencyGraphService
@@ -81,7 +83,7 @@ namespace NSeed.Cli.Subcommands.New
 
         public void ResolveFramework(IDependencyGraphService dependencyGraphService)
         {
-            if (IsValidResolvedSolution && dependencyGraphService != null)
+            if (dependencyGraphService != null)
             {
                 var dependencyGraph = dependencyGraphService.GenerateDependencyGraph(ResolvedSolution);
                 if (dependencyGraph != null)

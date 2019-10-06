@@ -1,3 +1,4 @@
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Subcommands.New.Models;
 using System.Collections.Generic;
@@ -11,7 +12,9 @@ namespace NSeed.Cli.Services
 
         IPath Path { get; }
 
-        (bool IsSuccesful, string Message) TryGetSolutionPath(string solution, out string path);
+        IOperationResponse<string> GetSolutionPath(string solution);
+
+        IOperationResponse<string> GetNSeedProjectPath(string input);
 
         (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template);
 
