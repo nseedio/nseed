@@ -12,8 +12,6 @@ namespace NSeed.Discovery.SeedBucket.ReflectionBased
 
         public ReflectionBasedSeedBucketOfSeedableExtractor(ISeedBucketInfoBuilder<Type> seedBucketInfoBuilder)
         {
-            System.Diagnostics.Debug.Assert(seedBucketInfoBuilder != null);
-
             seedBucketOfSeedableDiscoverer = new ReflectionBasedSeedBucketOfSeedableDiscoverer();
             this.seedBucketInfoBuilder = seedBucketInfoBuilder;
         }

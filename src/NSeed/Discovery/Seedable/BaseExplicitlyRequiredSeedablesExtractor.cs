@@ -15,17 +15,12 @@ namespace NSeed.Discovery.Seedable
             IExplicitlyRequiredSeedablesDiscoverer<TSourceSeedableImplementation, TSeedableImplementation> explicitlyRequiredSeedableDiscoverer,
             ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {
-            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedableDiscoverer != null);
-            System.Diagnostics.Debug.Assert(seedableBuilder != null);
-
             this.explicitlyRequiredSeedableDiscoverer = explicitlyRequiredSeedableDiscoverer;
             this.seedableBuilder = seedableBuilder;
         }
 
         IReadOnlyCollection<SeedableInfo> IExtractor<TSourceSeedableImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSourceSeedableImplementation seedableImplementation)
         {
-            System.Diagnostics.Debug.Assert(seedableImplementation != null);
-
             // CS8619:
             // The compiler is not able to figure out that we filter out nulls
             // with the "Where(seedable => seedable != null)".

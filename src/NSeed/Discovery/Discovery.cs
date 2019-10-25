@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NSeed.Discovery
@@ -9,7 +9,6 @@ namespace NSeed.Discovery
 
         public Discovery(IReadOnlyCollection<TDiscovery> discoveredItems)
         {
-            System.Diagnostics.Debug.Assert(discoveredItems != null);
             System.Diagnostics.Debug.Assert(discoveredItems.All(item => item != null));
 
             DiscoveredItems = discoveredItems;

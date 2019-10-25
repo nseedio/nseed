@@ -211,7 +211,10 @@ namespace McMaster.Extensions.CommandLineUtils
             {
                 if (!string.IsNullOrEmpty(Name))
                 {
-                    yield return Name;
+                    // At the moment the IsNullOrEmpty method is not marked to
+                    // return false if the parameter is null. So we have to use
+                    // ! here.
+                    yield return Name!;
                 }
 
                 foreach (var names in _names)
@@ -468,9 +471,9 @@ namespace McMaster.Extensions.CommandLineUtils
                     continue;
                 }
 
-                if (cmd.MatchesName(name))
+                if (cmd.MatchesName(name!))
                 {
-                    throw new InvalidOperationException(Strings.DuplicateSubcommandName(name));
+                    throw new InvalidOperationException(Strings.DuplicateSubcommandName(name!));
                 }
             }
         }

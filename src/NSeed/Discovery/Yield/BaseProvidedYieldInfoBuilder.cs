@@ -13,17 +13,12 @@ namespace NSeed.Discovery.Yield
             ITypeExtractor<TYieldImplementation> typeExtractor,
             IFullNameExtractor<TYieldImplementation> fullNameExtractor)
         {
-            System.Diagnostics.Debug.Assert(typeExtractor != null);
-            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
-
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
         }
 
         ProvidedYieldInfo IMetaInfoBuilder<TYieldImplementation, ProvidedYieldInfo>.BuildFrom(TYieldImplementation implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             Type? type = typeExtractor.ExtractFrom(implementation);
             string fullName = fullNameExtractor.ExtractFrom(implementation);
 

@@ -60,9 +60,6 @@ namespace NSeed.MetaInfo
         /// </summary>
         internal MetaInfo(object implementation, Type? type, string fullName, IReadOnlyCollection<Error> directErrors)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-            System.Diagnostics.Debug.Assert(fullName != null);
-            System.Diagnostics.Debug.Assert(directErrors != null);
             System.Diagnostics.Debug.Assert(directErrors.All(directError => directError != null));
 
             Implementation = implementation;

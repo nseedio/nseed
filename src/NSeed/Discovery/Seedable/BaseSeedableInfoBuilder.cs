@@ -36,16 +36,6 @@ namespace NSeed.Discovery.Seedable
             Func<ISeedableInfoBuilder<TSeedableImplementation>, ISeedRequiredYieldsExtractor<TSeedableImplementation>> requiredYieldsExtractorFactory,
             IMetaInfoPool<TSeedableImplementation, SeedableInfo> seedableInfoPool)
         {
-            System.Diagnostics.Debug.Assert(typeExtractor != null);
-            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
-            System.Diagnostics.Debug.Assert(friendlyNameExtractor != null);
-            System.Diagnostics.Debug.Assert(descriptionExtractor != null);
-            System.Diagnostics.Debug.Assert(entitiesExtractor != null);
-            System.Diagnostics.Debug.Assert(providedYieldExtractor != null);
-            System.Diagnostics.Debug.Assert(explicitlyRequiredSeedablesExtractorFactory != null);
-            System.Diagnostics.Debug.Assert(requiredYieldsExtractorFactory != null);
-            System.Diagnostics.Debug.Assert(seedableInfoPool != null);
-
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
             this.friendlyNameExtractor = friendlyNameExtractor;
@@ -59,8 +49,6 @@ namespace NSeed.Discovery.Seedable
 
         SeedableInfo? IMetaInfoBuilder<TSeedableImplementation, SeedableInfo>.BuildFrom(TSeedableImplementation implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             if (buildChain.Contains(implementation)) return null;
 
             buildChain.Push(implementation);

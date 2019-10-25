@@ -6,8 +6,6 @@ namespace NSeed.Discovery.Common.ReflectionBased
     {
         Type IExtractor<Type, Type?>.ExtractFrom(Type implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             return implementation;
         }
     }

@@ -6,8 +6,6 @@ namespace NSeed.Discovery.Entity.ReflectionBased
     {
         Type? IExtractor<Type, Type?>.ExtractFrom(Type entityImplementation)
         {
-            System.Diagnostics.Debug.Assert(entityImplementation != null);
-
             return entityImplementation.IsGenericParameter
                 ? null
                 : entityImplementation;

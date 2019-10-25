@@ -87,11 +87,13 @@ namespace NSeed.Tests.Unit.Discovery.Yield.ReflectionBased
         }
         private class SeedThatRequiresYieldsViaStaticProperties : BaseTestSeed
         {
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
             public static SeedA.Yield YieldOfA { get; }
             internal static SeedB.Yield YieldOfB { get; }
             protected static SeedD.Yield YieldOfD { get; }
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Code Quality", "IDE0051:Remove unused private members", Justification = "Used in tests via reflection.")]
             private static SeedC.Yield YieldOfC { get; }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         }
 
         [Fact]

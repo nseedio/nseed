@@ -9,8 +9,6 @@ namespace NSeed.Discovery.Common.ReflectionBased
     {
         string IExtractor<Type, string>.ExtractFrom(Type implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             var friendlyNameAttribute = implementation
                 .GetCustomAttributes(typeof(FriendlyNameAttribute), false)
                 .Cast<FriendlyNameAttribute>()

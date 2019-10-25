@@ -16,17 +16,12 @@ namespace NSeed.Discovery.SeedBucket
             IContainedSeedablesDiscoverer<TSeedBucketImplementation, TSeedableImplementation> seedablesDiscoverer,
             ISeedableInfoBuilder<TSeedableImplementation> seedableBuilder)
         {
-            System.Diagnostics.Debug.Assert(seedablesDiscoverer != null);
-            System.Diagnostics.Debug.Assert(seedableBuilder != null);
-
             this.seedablesDiscoverer = seedablesDiscoverer;
             this.seedableBuilder = seedableBuilder;
         }
 
         IReadOnlyCollection<SeedableInfo> IExtractor<TSeedBucketImplementation, IReadOnlyCollection<SeedableInfo>>.ExtractFrom(TSeedBucketImplementation seedBucketImplementation)
         {
-            System.Diagnostics.Debug.Assert(seedBucketImplementation != null);
-
             // CS8619:
             // We filter out nulls in "Where(seedable => seedable != null)", but
             // the compiler is not able to figure that out.

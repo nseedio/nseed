@@ -16,10 +16,6 @@ namespace NSeed.Discovery.Entity
             IEntityFullNameExtractor<TEntityImplementation> fullNameExtractor,
             IMetaInfoPool<TEntityImplementation, EntityInfo> entityInfoPool)
         {
-            System.Diagnostics.Debug.Assert(typeExtractor != null);
-            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
-            System.Diagnostics.Debug.Assert(entityInfoPool != null);
-
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
             this.entityInfoPool = entityInfoPool;
@@ -27,8 +23,6 @@ namespace NSeed.Discovery.Entity
 
         EntityInfo IMetaInfoBuilder<TEntityImplementation, EntityInfo>.BuildFrom(TEntityImplementation implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             return entityInfoPool.GetOrAdd(implementation, CreateEntityInfo);
         }
 

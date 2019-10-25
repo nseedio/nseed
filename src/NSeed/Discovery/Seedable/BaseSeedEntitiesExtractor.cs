@@ -16,17 +16,12 @@ namespace NSeed.Discovery.Seedable
             IEntityInSeedDiscoverer<TSeedImplementation, TEntityImplementation> entityDiscoverer,
             IEntityInfoBuilder<TEntityImplementation> entityBuilder)
         {
-            System.Diagnostics.Debug.Assert(entityDiscoverer != null);
-            System.Diagnostics.Debug.Assert(entityBuilder != null);
-
             this.entityDiscoverer = entityDiscoverer;
             this.entityBuilder = entityBuilder;
         }
 
         IReadOnlyCollection<EntityInfo> IExtractor<TSeedImplementation, IReadOnlyCollection<EntityInfo>>.ExtractFrom(TSeedImplementation seedImplementation)
         {
-            System.Diagnostics.Debug.Assert(seedImplementation != null);
-
             return entityDiscoverer.DiscoverIn(seedImplementation)
                                 .DiscoveredItems
 

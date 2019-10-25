@@ -56,7 +56,7 @@ namespace McMaster.Extensions.CommandLineUtils
 
             var mainModule = Process.GetCurrentProcess().MainModule;
             if (!string.IsNullOrEmpty(mainModule?.FileName)
-                && Path.GetFileName(mainModule.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
+                && Path.GetFileName(mainModule!.FileName).Equals(fileName, StringComparison.OrdinalIgnoreCase))
             {
                 return mainModule.FileName;
             }

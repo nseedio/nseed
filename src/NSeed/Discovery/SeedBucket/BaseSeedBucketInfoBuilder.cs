@@ -24,14 +24,6 @@ namespace NSeed.Discovery.SeedBucket
             Func<ISeedBucketInfoBuilder<TSeedBucketImplementation>, ISeedBucketOfSeedableExtractor<TSeedableImplementation>> seedBucketOfSeedableExtractorFactory,
             IMetaInfoPool<TSeedBucketImplementation, SeedBucketInfo> seedBucketInfoPool)
         {
-            System.Diagnostics.Debug.Assert(typeExtractor != null);
-            System.Diagnostics.Debug.Assert(fullNameExtractor != null);
-            System.Diagnostics.Debug.Assert(friendlyNameExtractor != null);
-            System.Diagnostics.Debug.Assert(descriptionExtractor != null);
-            System.Diagnostics.Debug.Assert(seedablesExtractor != null);
-            System.Diagnostics.Debug.Assert(seedBucketOfSeedableExtractorFactory != null);
-            System.Diagnostics.Debug.Assert(seedBucketInfoPool != null);
-
             this.typeExtractor = typeExtractor;
             this.fullNameExtractor = fullNameExtractor;
             this.friendlyNameExtractor = friendlyNameExtractor;
@@ -43,8 +35,6 @@ namespace NSeed.Discovery.SeedBucket
 
         SeedBucketInfo IMetaInfoBuilder<TSeedBucketImplementation, SeedBucketInfo>.BuildFrom(TSeedBucketImplementation implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             return seedBucketInfoPool.GetOrAdd(implementation, CreateSeedBucketInfo);
         }
 

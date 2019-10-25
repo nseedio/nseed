@@ -15,17 +15,12 @@ namespace NSeed.Discovery.Seedable
             IProvidedYieldInSeedDiscoverer<TSeedImplementation, TYieldImplementation> yieldDiscoverer,
             IProvidedYieldInfoBuilder<TYieldImplementation> yieldBuilder)
         {
-            System.Diagnostics.Debug.Assert(yieldDiscoverer != null);
-            System.Diagnostics.Debug.Assert(yieldBuilder != null);
-
             this.yieldDiscoverer = yieldDiscoverer;
             this.yieldBuilder = yieldBuilder;
         }
 
         ProvidedYieldInfo? IExtractor<TSeedImplementation, ProvidedYieldInfo?>.ExtractFrom(TSeedImplementation seedImplementation)
         {
-            System.Diagnostics.Debug.Assert(seedImplementation != null);
-
             var discoveredYields = yieldDiscoverer.DiscoverIn(seedImplementation).DiscoveredItems;
 
             if (discoveredYields.Count != 1) return null;

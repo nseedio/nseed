@@ -46,8 +46,6 @@ namespace NSeed.Extensions
         /// <param name="input">The string to be humanized.</param>
         public static string Humanize(this string input)
         {
-            System.Diagnostics.Debug.Assert(input != null);
-
             // if input is all capitals (e.g. an acronym) then return it without change
             if (input.ToCharArray().All(char.IsUpper))
             {

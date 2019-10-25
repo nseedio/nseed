@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace NSeed.Extensions
 {
@@ -6,9 +6,6 @@ namespace NSeed.Extensions
     {
         internal static bool Contains(this string source, string value, StringComparison comparisonType)
         {
-            System.Diagnostics.Debug.Assert(source != null);
-            System.Diagnostics.Debug.Assert(value != null);
-
             return source.IndexOf(value, comparisonType) >= 0;
         }
     }

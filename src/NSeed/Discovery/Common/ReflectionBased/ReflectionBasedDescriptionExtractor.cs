@@ -7,8 +7,6 @@ namespace NSeed.Discovery.Common.ReflectionBased
     {
         string IExtractor<Type, string>.ExtractFrom(Type implementation)
         {
-            System.Diagnostics.Debug.Assert(implementation != null);
-
             var description = implementation
                 .GetCustomAttributes(typeof(DescriptionAttribute), false)
                 .Cast<DescriptionAttribute>()

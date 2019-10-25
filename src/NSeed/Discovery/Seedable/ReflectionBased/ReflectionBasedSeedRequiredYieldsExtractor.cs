@@ -16,8 +16,6 @@ namespace NSeed.Discovery.Seedable
 
         internal ReflectionBasedSeedRequiredYieldsExtractor(ISeedableInfoBuilder<Type> seedableBuilder)
         {
-            System.Diagnostics.Debug.Assert(seedableBuilder != null);
-
             requiredYieldAccessPropertyInSeedDiscoverer = new ReflectionBasedRequiredYieldAccessPropertyInSeedDiscoverer();
             this.seedableBuilder = seedableBuilder;
         }

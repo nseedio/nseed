@@ -39,8 +39,6 @@ namespace NSeed.MetaInfo
             : base(implementation, type, fullName, directErrors)
         {
             System.Diagnostics.Debug.Assert(!string.IsNullOrWhiteSpace(friendlyName));
-            System.Diagnostics.Debug.Assert(description != null);
-            System.Diagnostics.Debug.Assert(containedSeedables != null);
             System.Diagnostics.Debug.Assert(containedSeedables.All(seedable => seedable != null && seedable.SeedBucket == null));
 
             FriendlyName = friendlyName;
