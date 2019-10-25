@@ -17,7 +17,8 @@ namespace NSeed.Cli
                         .AddCliServices()
                         .AddRunners()
                         .AddSubcommandRunners()
-                        .AddValidators();
+                        .AddValidators()
+                        .AddDetectors();
                 },
                 "NSeed");
         }

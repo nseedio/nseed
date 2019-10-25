@@ -125,7 +125,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualDotNetCoreProjects();
                 ResolveFramework();
-                subcommand.ResolvedFramework.Should().Be("netcoreapp2.0");
+                subcommand.ResolvedFramework.Name.Should().Be("netcoreapp2.0");
             }
 
             [Fact]
@@ -133,7 +133,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualFullDotNetProjects();
                 ResolveFramework();
-                subcommand.ResolvedFramework.Should().Be("v4.6.1");
+                subcommand.ResolvedFramework.Name.Should().Be("v4.6.1");
             }
 
             [Fact]
@@ -141,7 +141,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEqualFullDotNetProjectsBuildAndMinorVersionNotSet();
                 ResolveFramework();
-                subcommand.ResolvedFramework.Should().Be("v4.0");
+                subcommand.ResolvedFramework.Name.Should().Be("v4.0");
             }
 
             [Fact]
@@ -149,7 +149,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithDifferentDotNetCoreProjects();
                 ResolveFramework();
-                subcommand.ResolvedFramework.Should().BeEmpty();
+                subcommand.ResolvedFramework.Name.Should().BeEmpty();
             }
 
             [Fact]
@@ -157,7 +157,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             {
                 GenerateDependencyGraph.WithEmptyDotNetCoreProjects();
                 ResolveFramework();
-                subcommand.ResolvedFramework.Should().BeEmpty();
+                subcommand.ResolvedFramework.Name.Should().BeEmpty();
             }
         }
 

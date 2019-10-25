@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +26,12 @@ namespace NSeed.Cli.Extensions
             }
 
             return item;
+        }
+
+        public static bool Contain(this IEnumerable<string> items, string item)
+        {
+            items ??= Enumerable.Empty<string>();
+            return items.Any(d => d.Equals(item, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

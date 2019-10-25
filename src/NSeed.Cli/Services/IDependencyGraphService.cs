@@ -1,3 +1,4 @@
+using NSeed.Cli.Abstractions;
 using NuGet.ProjectModel;
 using System.Collections.Generic;
 
@@ -9,6 +10,8 @@ namespace NSeed.Cli.Services
 
         IEnumerable<string> GetSolutionProjectsNames(string solutionPath);
 
-        bool ProjectContainsNseedNugetDependency(string projectPath);
+        IOperationResponse<IFramework> GetProjectFramework(string projectPath);
+
+        IOperationResponse<string> GetNSeedProjectPath(IEnumerable<string> projectPaths);
     }
 }

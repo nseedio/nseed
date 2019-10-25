@@ -7,6 +7,11 @@ namespace NSeed.Cli.Assets
     {
         internal static partial class Info
         {
+            internal static class Errors
+            {
+                public static readonly string NSeedProjectCouldNotBeFound = "The NSeed project could not be found.";
+            }
+
             internal class SearchNSeedProjectPathErrors : IFileSearchErrorMessage
             {
                 private static readonly Lazy<SearchNSeedProjectPathErrors> Lazy =

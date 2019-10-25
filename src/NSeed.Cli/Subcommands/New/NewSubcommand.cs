@@ -1,5 +1,6 @@
 using DiffLib;
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Runners;
@@ -13,7 +14,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands.New
@@ -40,9 +40,7 @@ namespace NSeed.Cli.Subcommands.New
             ? new FileInfo(ResolvedSolution)?.DirectoryName ?? string.Empty
             : string.Empty;
 
-        public string ResolvedFramework { get; private set; } = string.Empty;
-
-        public (Framework Name, string Version) ResolvedFrameworkWithVersion { get; private set; }
+        public IFramework ResolvedFramework { get; private set; } = new Framework();
 
         public string ResolvedName { get; private set; } = string.Empty;
 
@@ -60,10 +58,9 @@ namespace NSeed.Cli.Subcommands.New
             ResolvedName = name;
         }
 
-        public void SetResolvedFramework(string framework)
+        public void SetResolvedFramework(string frameworkName)
         {
-            ResolvedFramework = framework;
-            SetResolvedFrameworkWithVersion(framework);
+            ResolvedFramework = new Framework(frameworkName);
         }
 
         public void ResolveDefaultNameWithPrefix(IDependencyGraphService dependencyGraphService, string defaultName)
@@ -94,24 +91,7 @@ namespace NSeed.Cli.Subcommands.New
 
                     if (AllFrameworksAreEqual(frameworkInfos))
                     {
-                        var frameworkInfo = frameworkInfos.FirstOrDefault();
-                        var frameworkType = GetFrameworkType(frameworkInfo);
-                        var frameworkVersion = GetFrameworkVersion(frameworkInfo, frameworkType);
-                        switch (frameworkType)
-                        {
-                            case Assets.Framework.NETCoreApp:
-                                ResolvedFramework = $"{frameworkType.ToString().ToLower()}{frameworkVersion}";
-                                ResolvedFrameworkWithVersion = (frameworkType, frameworkVersion);
-                                break;
-                            case Assets.Framework.NETFramework:
-                                ResolvedFramework = $"v{frameworkVersion}";
-                                ResolvedFrameworkWithVersion = (frameworkType, frameworkVersion);
-                                break;
-                            case Assets.Framework.None:
-                                ResolvedFramework = string.Empty;
-                                ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
-                                break;
-                        }
+                        ResolvedFramework = new Framework(frameworkInfos.FirstOrDefault());
                     }
                 }
             }
@@ -121,31 +101,6 @@ namespace NSeed.Cli.Subcommands.New
                 var frameworkNames = frameworkInfos.Select(frameworkInfo => frameworkInfo.ToString()).ToList();
                 return frameworkNames.Any()
                     && frameworkNames.All(fName => fName.Equals(frameworkNames.First(), StringComparison.OrdinalIgnoreCase));
-            }
-
-            static Framework GetFrameworkType(TargetFrameworkInformation frameworkInfo)
-            {
-                var frameworkName = frameworkInfo.FrameworkName.Framework.TrimStart('.');
-                return frameworkName switch
-                {
-                    var name when name.Equals(Assets.Framework.NETCoreApp.ToString(), StringComparison.OrdinalIgnoreCase) => Assets.Framework.NETCoreApp,
-                    var name when name.Equals(Assets.Framework.NETFramework.ToString(), StringComparison.OrdinalIgnoreCase) => Assets.Framework.NETFramework,
-                    _ => Assets.Framework.None,
-                };
-            }
-
-            static string GetFrameworkVersion(TargetFrameworkInformation frameworkInfo, Framework framework)
-            {
-                var major = frameworkInfo.FrameworkName.Version.Major;
-                var minor = frameworkInfo.FrameworkName.Version.Minor;
-                var build = frameworkInfo.FrameworkName.Version.Build;
-                var version = $"{major}.{minor}";
-                if (build > 0 && framework is Assets.Framework.NETFramework)
-                {
-                    version = $"{version}.{build}";
-                }
-
-                return version;
             }
         }
 
@@ -159,33 +114,12 @@ namespace NSeed.Cli.Subcommands.New
             ResolvedSolutionErrorMessage = errorMessage;
         }
 
-        public void SetResolvedFrameworkWithVersion(string frameworkWithVersion)
-        {
-            switch (frameworkWithVersion)
-            {
-                case var _ when string.IsNullOrEmpty(frameworkWithVersion):
-                    ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
-                    break;
-                case var _ when frameworkWithVersion.Contains(Assets.Framework.NETCoreApp.ToString(), StringComparison.OrdinalIgnoreCase):
-                    var version = Regex.Split(frameworkWithVersion, Assets.Framework.NETCoreApp.ToString(), RegexOptions.IgnoreCase).Last().Trim();
-                    ResolvedFrameworkWithVersion = (Assets.Framework.NETCoreApp, version);
-                    break;
-                case var _ when frameworkWithVersion.Contains(Assets.Framework.NETFramework.ToString(), StringComparison.OrdinalIgnoreCase):
-                    version = Regex.Split(frameworkWithVersion, Assets.Framework.NETFramework.ToString(), RegexOptions.IgnoreCase).Last().Trim();
-                    ResolvedFrameworkWithVersion = (Assets.Framework.NETFramework, version);
-                    break;
-                default:
-                    ResolvedFrameworkWithVersion = (Assets.Framework.None, string.Empty);
-                    break;
-            }
-        }
-
         public async Task OnExecute(
             CommandLineApplication app,
             IFileSystemService fileSystemService,
             IDotNetRunner<NewSubcommandRunnerArgs> dotNetRunner)
         {
-            var getTemplateResponse = fileSystemService.TryGetTemplate(ResolvedFrameworkWithVersion.Name, out Template template);
+            var getTemplateResponse = fileSystemService.TryGetTemplate(ResolvedFramework.Type, out Template template);
 
             if (getTemplateResponse.IsSuccesful)
             {
@@ -193,7 +127,7 @@ namespace NSeed.Cli.Subcommands.New
                 {
                     SolutionDirectory = ResolvedSolutionDirectory,
                     Solution = ResolvedSolution,
-                    Framework = ResolvedFramework,
+                    Framework = ResolvedFramework.Name,
                     Name = ResolvedName,
                     Template = template
                 });

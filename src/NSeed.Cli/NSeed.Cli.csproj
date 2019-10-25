@@ -48,12 +48,9 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NuGet.Packaging" Version="5.3.0" />
     <PackageReference Include="NuGet.ProjectModel" Version="5.2.0" />
     <PackageReference Include="System.IO.Abstractions" Version="6.0.21" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Subcommands\Info\Runner\" />
   </ItemGroup>
 
 </Project>

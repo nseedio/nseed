@@ -14,9 +14,9 @@ namespace NSeed.Cli.Services
 
         IOperationResponse<string> GetSolutionPath(string solution);
 
-        IOperationResponse<string> GetNSeedProjectPath(string input);
+        IOperationResponse<IEnumerable<string>> GetNSeedProjectPaths(string input);
 
-        (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template);
+        (bool IsSuccesful, string Message) TryGetTemplate(FrameworkType framework, out Template template);
 
         (bool IsSuccesful, string Message) RemoveTempTemplates();
     }

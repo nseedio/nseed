@@ -1,11 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Abstractions;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Runners;
 using NSeed.Cli.Subcommands.Info;
+using NSeed.Cli.Subcommands.Info.Detector;
+using NSeed.Cli.Subcommands.Info.Runner;
 using NSeed.Cli.Subcommands.Info.Validators;
 using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Runner;
 using NSeed.Cli.Subcommands.New.Validators;
 using NSeed.Cli.Validation;
+using System;
 
 namespace NSeed.Cli.Subcommands
 {
@@ -23,7 +28,24 @@ namespace NSeed.Cli.Subcommands
         public static IServiceCollection AddSubcommandRunners(this IServiceCollection services)
         {
             return services
-                .AddSingleton<IDotNetRunner<NewSubcommandRunnerArgs>, NewSubcommandRunner>();
+                .AddSingleton<IDotNetRunner<NewSubcommandRunnerArgs>, NewSubcommandRunner>()
+                .AddSingleton<IDotNetRunner<InfoSubcommandRunnerArgs>, InfoSubcommandRunner>();
+        }
+
+        public static IServiceCollection AddDetectors(this IServiceCollection services)
+        {
+            return services
+               .AddSingleton<NSeedClassicDetector>()
+               .AddSingleton<NSeedCoreDetector>()
+               .AddSingleton<Func<FrameworkType, IDetector>>(serviceProvider => key =>
+               {
+                   return key switch
+                   {
+                       FrameworkType.NETCoreApp => serviceProvider.GetRequiredService<NSeedCoreDetector>(),
+                       FrameworkType.NETFramework => serviceProvider.GetRequiredService<NSeedClassicDetector>(),
+                       _ => serviceProvider.GetRequiredService<NSeedCoreDetector>(),
+                   };
+               });
         }
     }
 }

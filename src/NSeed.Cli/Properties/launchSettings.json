@@ -23,7 +23,11 @@
       //"commandLineArgs": "info"
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit\\Fit.Seeds",
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit\\Fit.Web",
-      "commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit"
+      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit"
+      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithExistingDotNetClassicSeedsProject",
+      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithExistingSeedsProject"
+      "commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithDotNetClassicFramework"
+
 
     }
   }

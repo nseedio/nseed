@@ -1,5 +1,8 @@
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
+using NSeed.Cli.Runners;
+using NSeed.Cli.Subcommands.Info.Runner;
 using NSeed.Cli.Subcommands.Info.Validators;
 using NSeed.Cli.Subcommands.Info.ValueProviders;
 using System.Threading.Tasks;
@@ -13,11 +16,11 @@ namespace NSeed.Cli.Subcommands.Info
         [ProjectDefaultValueProvider]
         public string Project { get; private set; } = string.Empty;
 
-        public string ResolvedProject { get; private set; } = string.Empty;
+        public Project ResolvedProject { get; private set; } = new Project();
 
         public string ResolvedProjectErrorMessage { get; private set; } = string.Empty;
 
-        public void SetResolvedProject(string project)
+        public void SetResolvedProject(Project project)
         {
             ResolvedProject = project;
         }
@@ -28,8 +31,14 @@ namespace NSeed.Cli.Subcommands.Info
         }
 
         public async Task OnExecute(
-           CommandLineApplication app)
+           CommandLineApplication app,
+           IDotNetRunner<InfoSubcommandRunnerArgs> dotNetRunner)
         {
+            dotNetRunner.Run(new InfoSubcommandRunnerArgs
+            {
+                NseedProject = ResolvedProject.Path,
+                NseedProjectDirectory = ResolvedProject.Directory
+            });
             await Task.Run(() => { });
         }
     }

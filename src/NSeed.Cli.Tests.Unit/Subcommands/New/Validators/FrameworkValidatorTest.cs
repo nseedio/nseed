@@ -26,6 +26,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
                 new object?[] { "NETFramework5.3", Resources.New.Errors.InvalidDotNetClassicVersion },
                 new object?[] { "netcoreapp_3.1", Resources.New.Errors.InvalidDotNetCoreVersion }
             };
+
         [Theory]
         // TODO: This looks like a bug in the xUnit analyzer. Strange.
         // For now, just disable it, but take a look at it.

@@ -1,5 +1,4 @@
 using NSeed.Cli.Assets;
-using NSeed.Cli.Extensions;
 using NSeed.Cli.Validation;
 using System.Linq;
 using static NSeed.Cli.Assets.Resources;
@@ -10,29 +9,24 @@ namespace NSeed.Cli.Subcommands.New.Validators
     {
         public ValidationResult Validate(NewSubcommand command)
         {
-            if (command.ResolvedFramework.IsNotProvidedByUser())
+            return command.ResolvedFramework switch
             {
-                return ValidationResult.Error(Resources.New.Errors.FrameworkNotProvided);
-            }
+                var framework when framework.Type is FrameworkType.None =>
+                        ValidationResult.Error(Resources.New.Errors.FrameworkNotProvided),
 
-            switch (command.ResolvedFrameworkWithVersion)
-            {
-                case var framework when framework.Name is Framework.None:
-                    return ValidationResult.Error(Resources.New.Errors.InvalidFramework);
+                var framework when framework.Type is FrameworkType.Undefined =>
+                        ValidationResult.Error(Resources.New.Errors.InvalidFramework),
 
-                case var framework when framework.Name is Framework.NETCoreApp
-                                        && !DotNetCoreVersions.ToList().Contains(framework.Version):
-                    return ValidationResult.Error(Resources.New.Errors.InvalidDotNetCoreVersion);
+                var framework when framework.Type is FrameworkType.NETCoreApp
+                                        && !DotNetCoreVersions.Contains(framework.Version) =>
+                        ValidationResult.Error(Resources.New.Errors.InvalidDotNetCoreVersion),
 
-                case var framework when framework.Name is Framework.NETFramework
-                                        && !DotNetClassicVersions.ToList().Contains(framework.Version):
-                    return ValidationResult.Error(Resources.New.Errors.InvalidDotNetClassicVersion);
+                var framework when framework.Type is FrameworkType.NETFramework
+                                        && !DotNetClassicVersions.Contains(framework.Version) =>
+                        ValidationResult.Error(Resources.New.Errors.InvalidDotNetClassicVersion),
 
-                default:
-                    break;
-            }
-
-            return ValidationResult.Success;
+                _ => ValidationResult.Success,
+            };
         }
     }
 }

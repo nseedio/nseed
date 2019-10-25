@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NSeed.Cli.Abstractions;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Runners;
 using NuGet.ProjectModel;
@@ -15,6 +16,7 @@ namespace NSeed.Cli.Services
         private IDotNetRunner<DependencyGraphRunnerArgs> DependencyGraphRunner { get; }
 
         private DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
+
         private string projectPath = string.Empty;
 
         public DependencyGraphService(
@@ -40,9 +42,9 @@ namespace NSeed.Cli.Services
                 OutputPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName())
             };
 
-            var runStatus = DependencyGraphRunner.Run(args);
+            var (isSuccessful, message) = DependencyGraphRunner.Run(args);
 
-            if (!runStatus.IsSuccessful)
+            if (!isSuccessful)
             {
                 dependencyGraphSpec = new DependencyGraphSpec();
                 projectPath = string.Empty;
@@ -71,12 +73,60 @@ namespace NSeed.Cli.Services
             return projectNames ?? new List<string>();
         }
 
-        public bool ProjectContainsNseedNugetDependency(string projectPath)
+        public IOperationResponse<string> GetNSeedProjectPath(IEnumerable<string> projectPaths)
+        {
+            var nseedProjectPaths = new List<string>();
+
+            foreach (var projectPath in projectPaths)
+            {
+                // It is not allowed to have multiple NSeed projects
+                if (nseedProjectPaths.Count > 1)
+                {
+                    return OperationResponse<string>.Error("Multiple nseed project");
+                }
+
+                var dependencyGraph = GenerateDependencyGraph(projectPath);
+                var targetFrameworks = dependencyGraph.Projects.SelectMany(p => p.TargetFrameworks);
+
+                // Za svaki target framework moras dobiti framework instancu
+                // Ovisno o frameworku moram dobiti
+                var dependencies = targetFrameworks.SelectMany(tf => tf.Dependencies);
+                if (dependencies is null || !dependencies.Any())
+                {
+                    return OperationResponse<string>.Error("Project doesn't contain NSeed dependency please add NSeed nuget package");
+                }
+
+                var nseedProjects = dependencies.Where(d => d.Name.Equals("nseed", StringComparison.OrdinalIgnoreCase));
+                if (nseedProjects != null && nseedProjects.Any())
+                {
+                    nseedProjectPaths.Add(projectPath);
+                }
+            }
+
+            return OperationResponse<string>.Success(nseedProjectPaths.FirstOrDefault() ?? string.Empty);
+        }
+
+        public IOperationResponse<IFramework> GetProjectFramework(string projectPath)
         {
             var dependencyGraph = GenerateDependencyGraph(projectPath);
-            var targetFrameworks = dependencyGraph.Projects.SelectMany(p => p.TargetFrameworks);
-            var dependencies = targetFrameworks.SelectMany(tf => tf.Dependencies);
-            return dependencies.Any(d => d.Name.Equals("nseed", StringComparison.OrdinalIgnoreCase));
+
+            var frameworks = dependencyGraph.Projects
+                .SelectMany(p => p.TargetFrameworks)
+                .Select(f => new Framework(f));
+
+            if (frameworks.Count() > 1)
+            {
+                return OperationResponse<IFramework>.Error("Multiple frameworks in one project");
+            }
+
+            var framework = frameworks.FirstOrDefault();
+
+            if (framework == null)
+            {
+                return OperationResponse<IFramework>.Error("Framework not found");
+            }
+
+            return OperationResponse<IFramework>.Success(framework);
         }
     }
 }

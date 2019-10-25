@@ -53,6 +53,24 @@ namespace NSeed.Cli.Services
             }
         }
 
+        public static bool IsFile(IFileSystemInfo info)
+        {
+            return !string.IsNullOrEmpty(info.Extension) &&
+                !IsDirectory(info);
+        }
+
+        public static bool IsDirectory(IFileSystemInfo info)
+        {
+            return (int)info.Attributes != -1 && info.Attributes.HasFlag(FileAttributes.Directory);
+        }
+
+        public bool IsDirectory(string path)
+        {
+            var fileInfo = FileInfo.FromFileName(path);
+
+            return (int)fileInfo.Attributes != -1 && fileInfo.Attributes.HasFlag(FileAttributes.Directory);
+        }
+
         public const string SolutionExtension = ".sln";
         public const string ProjectExtension = ".csproj";
         public const string ZipTemplatesFile = "templates.zip";
@@ -64,15 +82,22 @@ namespace NSeed.Cli.Services
 
         public IOperationResponse<string> GetSolutionPath(string input)
         {
-            return GetFilePath(input, SolutionExtension, New.SearchSolutionPathErrors.Instance);
+            var response = GetFilePaths(input, SolutionExtension, New.SearchSolutionPathErrors.Instance);
+
+            if (!response.IsSuccessful)
+            {
+                return OperationResponse<string>.Error(response.Message);
+            }
+
+            return OperationResponse<string>.Success(response.Payload.FirstOrDefault());
         }
 
-        public IOperationResponse<string> GetNSeedProjectPath(string input)
+        public IOperationResponse<IEnumerable<string>> GetNSeedProjectPaths(string input)
         {
-            return GetFilePath(input, ProjectExtension, Info.SearchNSeedProjectPathErrors.Instance);
+            return GetFilePaths(input, ProjectExtension, Info.SearchNSeedProjectPathErrors.Instance, allowMultiple: true);
         }
 
-        public (bool IsSuccesful, string Message) TryGetTemplate(Framework framework, out Template template)
+        public (bool IsSuccesful, string Message) TryGetTemplate(FrameworkType framework, out Template template)
         {
             template = new Template();
 
@@ -107,33 +132,27 @@ namespace NSeed.Cli.Services
             return succesResponse;
         }
 
-        private IOperationResponse<string> GetFilePath(
+        private IOperationResponse<IEnumerable<string>> GetFilePaths(
             string input,
             string extension,
-            IFileSearchErrorMessage errorMessage)
+            IFileSearchErrorMessage errorMessage,
+            bool allowMultiple = false)
         {
             var fileInfo = FileInfo.FromFileName(input);
 
             return fileInfo switch
             {
-                var info when !IsDirectory(info.Directory) => OperationResponse<string>.Error(errorMessage.FilePathDirectoryDoesNotExist),
-                var info when IsFile(info) => TryGetFileFromFilePath(info, extension, errorMessage),
-                var info when IsDirectory(info) => TryGetFileFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), extension, errorMessage),
-                _ => TryGetFileFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{extension}"), extension, errorMessage),
+                var info when !IsDirectory(info.Directory) => OperationResponse<IEnumerable<string>>.Error(errorMessage.FilePathDirectoryDoesNotExist),
+                var info when IsFile(info) => GetFilesFromFilePath(info, extension, errorMessage, allowMultiple),
+                var info when IsDirectory(info) => GetFilesFromDirectoryPath(DirectoryInfo.FromDirectoryName(info.FullName), extension, errorMessage, allowMultiple),
+                _ => GetFilesFromFilePath(FileInfo.FromFileName($"{fileInfo.FullName}{extension}"), extension, errorMessage, allowMultiple),
             };
 
-            static bool IsFile(IFileInfo fileInfo)
-            {
-                return !string.IsNullOrEmpty(fileInfo.Extension) &&
-                    !IsDirectory(fileInfo);
-            }
-
-            static bool IsDirectory(IFileSystemInfo info)
-            {
-                return (int)info.Attributes != -1 && info.Attributes.HasFlag(FileAttributes.Directory);
-            }
-
-            IOperationResponse<string> TryGetFileFromFilePath(IFileInfo fileInfo, string extension, IFileSearchErrorMessage errorMessage)
+            IOperationResponse<IEnumerable<string>> GetFilesFromFilePath(
+                IFileInfo fileInfo,
+                string extension,
+                IFileSearchErrorMessage errorMessage,
+                bool allowMultiple)
             {
                 if (fileInfo.Extension.Equals(extension, StringComparison.OrdinalIgnoreCase))
                 {
@@ -141,42 +160,83 @@ namespace NSeed.Cli.Services
                 }
                 else
                 {
-                    return OperationResponse<string>.Error(errorMessage.InvalidFile);
+                    return OperationResponse<IEnumerable<string>>.Error(errorMessage.InvalidFile);
                 }
 
-                IOperationResponse<string> GetFilePath(IFileInfo fileInfo)
+                IOperationResponse<IEnumerable<string>> GetFilePath(IFileInfo fileInfo)
                 {
                     if (fileInfo.Exists)
                     {
-                        return OperationResponse<string>.Success(fileInfo.FullName);
+                        return OperationResponse<IEnumerable<string>>.Success(new string[] { fileInfo.FullName });
                     }
 
-                    return FindFile(
-                        fileInfo.Directory.FullName,
-                        SearchOption.AllDirectories,
-                        extension,
-                        errorMessage,
-                        fileInfo.Name);
+                    if (allowMultiple)
+                    {
+                        return FindFiles(
+                           fileInfo.Directory.FullName,
+                           extension,
+                           errorMessage,
+                           fileInfo.Name);
+                    }
+                    else
+                    {
+                        return FindFile(
+                            fileInfo.Directory.FullName,
+                            SearchOption.AllDirectories,
+                            extension,
+                            errorMessage,
+                            fileInfo.Name);
+                    }
                 }
             }
 
-            IOperationResponse<string> TryGetFileFromDirectoryPath(IDirectoryInfo directoryInfo, string extension, IFileSearchErrorMessage errorMessage)
+            IOperationResponse<IEnumerable<string>> GetFilesFromDirectoryPath(
+                IDirectoryInfo directoryInfo,
+                string extension,
+                IFileSearchErrorMessage errorMessage,
+                bool allowMultiple)
             {
                 if (!directoryInfo.Exists)
                 {
-                    return OperationResponse<string>.Error(errorMessage.FilePathDirectoryDoesNotExist);
+                    return OperationResponse<IEnumerable<string>>.Error(errorMessage.FilePathDirectoryDoesNotExist);
                 }
 
-                var response = FindFile(directoryInfo.FullName, SearchOption.TopDirectoryOnly, extension, errorMessage);
-                if (response.IsSuccessful)
+                if (allowMultiple)
                 {
-                    return response;
+                    return FindFiles(directoryInfo.FullName, extension, errorMessage);
                 }
+                else
+                {
+                    var response = FindFile(directoryInfo.FullName, SearchOption.TopDirectoryOnly, extension, errorMessage);
+                    if (response.IsSuccessful)
+                    {
+                        return response;
+                    }
 
-                return FindFile(directoryInfo.FullName, SearchOption.AllDirectories, extension, errorMessage);
+                    return FindFile(directoryInfo.FullName, SearchOption.AllDirectories, extension, errorMessage);
+                }
             }
 
-            IOperationResponse<string> FindFile(
+            IOperationResponse<IEnumerable<string>> FindFiles(
+               string path,
+               string extension,
+               IFileSearchErrorMessage errorMessage,
+               string fileName = "")
+            {
+                var searchItem = fileName.IsNotProvidedByUser() ? $"*{extension}" : fileName;
+
+                var files = Directory
+                    ?.GetFiles(path, searchItem, SearchOption.AllDirectories)
+                    ?.ToList() ?? new List<string>();
+
+                return files switch
+                {
+                    var _ when !files.Any() => OperationResponse<IEnumerable<string>>.Error(errorMessage.WorkingDirectoryDoesNotContainAnyFile),
+                    _ => OperationResponse<string>.Success(files),
+                };
+            }
+
+            IOperationResponse<IEnumerable<string>> FindFile(
                 string path,
                 SearchOption searchOption,
                 string extension,
@@ -185,16 +245,16 @@ namespace NSeed.Cli.Services
             {
                 var searchItem = fileName.IsNotProvidedByUser() ? $"*{extension}" : fileName;
 
-                var solutions = Directory
+                var files = Directory
                     ?.EnumerateFiles(path, searchItem, searchOption)
                     ?.Take(2)
                     ?.ToList() ?? new List<string>();
 
-                return solutions switch
+                return files switch
                 {
-                    var _ when !solutions.Any() => OperationResponse<string>.Error(errorMessage.WorkingDirectoryDoesNotContainAnyFile),
-                    var _ when solutions.Any() && solutions.Count > 1 => OperationResponse<string>.Error(errorMessage.MultipleFilesFound),
-                    _ => OperationResponse<string>.Success(solutions.FirstOrDefault()),
+                    var _ when !files.Any() => OperationResponse<IEnumerable<string>>.Error(errorMessage.WorkingDirectoryDoesNotContainAnyFile),
+                    var _ when files.Any() && files.Count > 1 => OperationResponse<IEnumerable<string>>.Error(errorMessage.MultipleFilesFound),
+                    _ => OperationResponse<string>.Success(files),
                 };
             }
         }
@@ -206,15 +266,15 @@ namespace NSeed.Cli.Services
             return assembly.GetManifestResourceStream(resourceName);
         }
 
-        private string GetTemplateDirectory(Framework framework)
+        private string GetTemplateDirectory(FrameworkType framework)
         {
             return framework switch
             {
-                Framework.NETCoreApp => NSeedCoreTemplateDirectory,
+                FrameworkType.NETCoreApp => NSeedCoreTemplateDirectory,
 
-                Framework.NETFramework => NSeedClassicTemplateDirectory,
+                FrameworkType.NETFramework => NSeedClassicTemplateDirectory,
 
-                Framework.None => string.Empty,
+                FrameworkType.None => string.Empty,
 
                 _ => string.Empty,
             };

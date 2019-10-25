@@ -1,9 +1,11 @@
 using McMaster.Extensions.CommandLineUtils.Conventions;
 using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Abstractions;
+using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using static NSeed.Cli.Assets.Resources;
 
@@ -20,18 +22,38 @@ namespace NSeed.Cli.Subcommands.Info.ValueProviders
 
                 var fileSystemService = context.Application.GetService<IFileSystemService>();
 
-                IOperationResponse<string> response = project.IsNotProvidedByUser()
-                 ? fileSystemService.GetNSeedProjectPath(InitDirectory)
-                 : fileSystemService.GetNSeedProjectPath(project);
+                IOperationResponse<IEnumerable<string>> response = project.IsNotProvidedByUser()
+                 ? fileSystemService.GetNSeedProjectPaths(InitDirectory)
+                 : fileSystemService.GetNSeedProjectPaths(project);
 
                 if (context.ModelAccessor?.GetModel() is InfoSubcommand model && model != null)
                 {
-                    if (!response.IsSuccessful && response.Message.Exists())
+                    if (response.IsSuccessful)
                     {
-                        model.SetResolvedProjectErrorMessage(response.Message);
-                    }
+                        var dependencyGraphService = context.Application.GetService<IDependencyGraphService>();
 
-                    model?.SetResolvedProject(response?.Payload ?? string.Empty);
+                        var projectPaths = response!.Payload;
+
+                        foreach (var path in projectPaths!)
+                        {
+                            var frameworkResponse = dependencyGraphService.GetProjectFramework(path);
+
+                            if (frameworkResponse.IsSuccessful && frameworkResponse.Payload!.IsDefined)
+                            {
+                                var detectorReolver = context.Application.GetService<Func<FrameworkType, IDetector>>();
+                                var detector = detectorReolver(frameworkResponse.Payload.Type);
+                                var detectorResponse = detector.Detect(new Project(path));
+                                if (detectorResponse.IsSuccessful)
+                                {
+                                    model.SetResolvedProject(detectorResponse.Payload!);
+                                }
+                                else
+                                {
+                                    model.SetResolvedProjectErrorMessage(detectorResponse.Message);
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }

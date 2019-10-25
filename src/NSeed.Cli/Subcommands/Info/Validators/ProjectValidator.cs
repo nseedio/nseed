@@ -21,23 +21,11 @@ namespace NSeed.Cli.Subcommands.Info.Validators
 
         public ValidationResult Validate(InfoSubcommand command)
         {
-            if (command.ResolvedProject.IsNotProvidedByUser())
+            if (command.ResolvedProject.Path.IsNotProvidedByUser())
             {
                 return command.ResolvedProjectErrorMessage.Exists() ?
                     ValidationResult.Error(command.ResolvedProjectErrorMessage) :
                     ValidationResult.Error(Resources.Info.SearchNSeedProjectPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile);
-            }
-
-            var response = FileSystemService.GetNSeedProjectPath(command.ResolvedProject);
-
-            if (!response.IsSuccessful)
-            {
-                return ValidationResult.Error(response.Message);
-            }
-
-            if (!DependencyGraphService.ProjectContainsNseedNugetDependency(command.ResolvedProject))
-            {
-                return ValidationResult.Error("Provided project is invalid NSeed dependency is not found");
             }
 
             return ValidationResult.Success;

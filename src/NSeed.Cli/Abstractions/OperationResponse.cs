@@ -41,6 +41,11 @@ namespace NSeed.Cli.Abstractions
             return new OperationResponse<TPayload> { Payload = payload, IsSuccessful = true };
         }
 
+        public static IOperationResponse<IEnumerable<TPayload>> Success(IEnumerable<TPayload> payload)
+        {
+            return new OperationResponse<IEnumerable<TPayload>> { Payload = payload, IsSuccessful = true };
+        }
+
         public static new IOperationResponse<TPayload> Error(params string[] messages)
         {
             return new OperationResponse<TPayload> { IsSuccessful = false, Messages = messages };
