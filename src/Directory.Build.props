@@ -12,14 +12,7 @@
 
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Analyzers.ruleset</CodeAnalysisRuleSet>
 
-    <!-- TODO: Strange, for some reason these settings were not recognized everywhere in the project.
-               It could be that the reason is in the preview version of VS.
-               Just to get things compile I put #nullable enable everywhere where it was needed.
-               Remove those once we start using nullable reference types in the whole solution.
-    -->
     <Nullable>enable</Nullable>
-    <!-- Some previews of .NET Core 3 don't have the rename yet. -->
-    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
 
   <ItemGroup>
