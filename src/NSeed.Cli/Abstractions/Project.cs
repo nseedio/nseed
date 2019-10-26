@@ -7,9 +7,10 @@ namespace NSeed.Cli.Abstractions
     {
         public Project() { }
 
-        public Project(string path)
+        public Project(string path, IFramework framework)
         {
             Path = path;
+            Framework = framework;
         }
 
         public const string Extension = "csproj";

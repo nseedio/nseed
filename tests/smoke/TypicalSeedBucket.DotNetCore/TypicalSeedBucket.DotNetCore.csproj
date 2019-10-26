@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp2.2;netcoreapp3.0</TargetFrameworks>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>TypicalSeedBucket</AssemblyName>
     <RootNamespace>TypicalSeedBucket</RootNamespace>
   </PropertyGroup>

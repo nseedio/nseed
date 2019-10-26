@@ -1,9 +1,13 @@
+using NSeed.Cli.Assets;
+
 namespace NSeed.Cli.Subcommands.Info.Runner
 {
     internal class InfoSubcommandRunnerArgs
     {
-        public string NseedProjectDirectory { get; set; } = string.Empty;
+        public string NSeedProjectDirectory { get; set; } = string.Empty;
 
-        public string NseedProject { get; set; } = string.Empty;
+        public string NSeedProjectPath { get; set; } = string.Empty;
+
+        public string NSeedProjectName { get; set; } = string.Empty;
     }
 }

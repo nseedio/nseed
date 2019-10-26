@@ -11,7 +11,5 @@ namespace NSeed.Cli.Services
         IEnumerable<string> GetSolutionProjectsNames(string solutionPath);
 
         IOperationResponse<IFramework> GetProjectFramework(string projectPath);
-
-        IOperationResponse<string> GetNSeedProjectPath(IEnumerable<string> projectPaths);
     }
 }

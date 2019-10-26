@@ -5,6 +5,7 @@ using NSeed.Cli.Runners;
 using NSeed.Cli.Subcommands.Info.Runner;
 using NSeed.Cli.Subcommands.Info.Validators;
 using NSeed.Cli.Subcommands.Info.ValueProviders;
+using System;
 using System.Threading.Tasks;
 
 namespace NSeed.Cli.Subcommands.Info
@@ -32,12 +33,14 @@ namespace NSeed.Cli.Subcommands.Info
 
         public async Task OnExecute(
            CommandLineApplication app,
-           IDotNetRunner<InfoSubcommandRunnerArgs> dotNetRunner)
+           Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>> runnerResolverFunc)
         {
-            dotNetRunner.Run(new InfoSubcommandRunnerArgs
+            var runner = runnerResolverFunc(ResolvedProject.Framework.Type);
+            runner.Run(new InfoSubcommandRunnerArgs
             {
-                NseedProject = ResolvedProject.Path,
-                NseedProjectDirectory = ResolvedProject.Directory
+                NSeedProjectPath = ResolvedProject.Path,
+                NSeedProjectDirectory = ResolvedProject.Directory,
+                NSeedProjectName = string.Empty // TODO Take that from resolved project
             });
             await Task.Run(() => { });
         }

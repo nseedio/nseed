@@ -73,39 +73,6 @@ namespace NSeed.Cli.Services
             return projectNames ?? new List<string>();
         }
 
-        public IOperationResponse<string> GetNSeedProjectPath(IEnumerable<string> projectPaths)
-        {
-            var nseedProjectPaths = new List<string>();
-
-            foreach (var projectPath in projectPaths)
-            {
-                // It is not allowed to have multiple NSeed projects
-                if (nseedProjectPaths.Count > 1)
-                {
-                    return OperationResponse<string>.Error("Multiple nseed project");
-                }
-
-                var dependencyGraph = GenerateDependencyGraph(projectPath);
-                var targetFrameworks = dependencyGraph.Projects.SelectMany(p => p.TargetFrameworks);
-
-                // Za svaki target framework moras dobiti framework instancu
-                // Ovisno o frameworku moram dobiti
-                var dependencies = targetFrameworks.SelectMany(tf => tf.Dependencies);
-                if (dependencies is null || !dependencies.Any())
-                {
-                    return OperationResponse<string>.Error("Project doesn't contain NSeed dependency please add NSeed nuget package");
-                }
-
-                var nseedProjects = dependencies.Where(d => d.Name.Equals("nseed", StringComparison.OrdinalIgnoreCase));
-                if (nseedProjects != null && nseedProjects.Any())
-                {
-                    nseedProjectPaths.Add(projectPath);
-                }
-            }
-
-            return OperationResponse<string>.Success(nseedProjectPaths.FirstOrDefault() ?? string.Empty);
-        }
-
         public IOperationResponse<IFramework> GetProjectFramework(string projectPath)
         {
             var dependencyGraph = GenerateDependencyGraph(projectPath);
@@ -128,5 +95,20 @@ namespace NSeed.Cli.Services
 
             return OperationResponse<IFramework>.Success(framework);
         }
+
+        // public IOperationResponse<Project> GetProject(string projectPath)
+        // {
+        //    var frameworkResponse = GetProjectFramework(projectPath);
+        //    if (!frameworkResponse.IsSuccessful)
+        //        return OperationResponse<Project>.Error(frameworkResponse.Message);
+        //    var dependencyGraphSpec = GenerateDependencyGraph(projectPath);
+        //    var project = dependencyGraphSpec.Projects.FirstOrDefault();
+        //    if (project != null)
+        //    {
+        //        return OperationResponse
+        //    }
+        //    return OperationResponse.Error("dfvdv");
+
+        // }
     }
 }

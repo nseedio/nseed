@@ -309,17 +309,9 @@ namespace NSeed.Cli.Tests.Integration
 
         public RunStatus RunNSeed(string workingDirectory, string[] arguments)
         {
-            var nseedToolExePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "tools", "nseed.exe");
+            var nseedToolExeCommand = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "tools", "nseed.exe");
 
-            var psi = new ProcessStartInfo(nseedToolExePath, string.Join(" ", arguments))
-            {
-                WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            };
-            return Run(psi);
+            return Run(nseedToolExeCommand, workingDirectory, arguments);
         }
     }
 }

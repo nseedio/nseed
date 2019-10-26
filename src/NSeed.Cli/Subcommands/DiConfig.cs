@@ -29,7 +29,17 @@ namespace NSeed.Cli.Subcommands
         {
             return services
                 .AddSingleton<IDotNetRunner<NewSubcommandRunnerArgs>, NewSubcommandRunner>()
-                .AddSingleton<IDotNetRunner<InfoSubcommandRunnerArgs>, InfoSubcommandRunner>();
+                .AddSingleton<InfoSubcommandCoreRunner>()
+                .AddSingleton<InfoSubcommandClassicRunner>()
+                .AddSingleton<Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>>>(serviceProvider => key =>
+                {
+                    return key switch
+                    {
+                        FrameworkType.NETCoreApp => serviceProvider.GetRequiredService<InfoSubcommandCoreRunner>(),
+                        FrameworkType.NETFramework => serviceProvider.GetRequiredService<InfoSubcommandClassicRunner>(),
+                        _ => throw new MissingMemberException()
+                    };
+                });
         }
 
         public static IServiceCollection AddDetectors(this IServiceCollection services)

@@ -23,6 +23,12 @@ namespace NSeed.Cli.Runners
             return SuccessResponse;
         }
 
+        /// <summary>
+        /// This run method by default starts dotnet command.
+        /// </summary>
+        /// <param name="workingDirectory">Working directory where dotnet command will be executed.</param>
+        /// <param name="arguments">dotnet command arguments.</param>
+        /// <returns>Status.</returns>
         protected RunStatus Run(string workingDirectory, string[] arguments)
         {
             var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), string.Join(" ", arguments))
@@ -36,7 +42,30 @@ namespace NSeed.Cli.Runners
             return Run(psi);
         }
 
-        protected RunStatus Run(ProcessStartInfo processStartInfo)
+        protected RunStatus Run(string command, string workingDirectory, string[] arguments)
+        {
+            var psi = new ProcessStartInfo(command, string.Join(" ", arguments))
+            {
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
+            return Run(psi);
+        }
+
+        protected (bool IsSuccessful, string Message) Response(RunStatus status)
+        {
+            if (status.IsSuccess)
+            {
+                return SuccessResponse;
+            }
+
+            return ErrorResponse(status.Errors);
+        }
+
+        private static RunStatus Run(ProcessStartInfo processStartInfo)
         {
             var process = new Process();
             try
@@ -58,16 +87,6 @@ namespace NSeed.Cli.Runners
             {
                 process.Dispose();
             }
-        }
-
-        protected (bool IsSuccessful, string Message) Response(RunStatus status)
-        {
-            if (status.IsSuccess)
-            {
-                return SuccessResponse;
-            }
-
-            return ErrorResponse(status.Errors);
         }
 
         private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)

@@ -16,7 +16,7 @@ namespace NSeed.Cli.Subcommands.Info.Detector
         {
             switch (project)
             {
-                case var proj when proj.Framework.IsDefined && proj.Framework.Dependencies.Contains(NSeed):
+                case var proj when proj.Framework.IsDefined && proj.Framework.Dependencies.Any(d => d.Equals(NSeed, StringComparison.OrdinalIgnoreCase)):
                     return OperationResponse<Project>.Success(project);
                 case var proj when proj.Path.Exists():
                     var frameworkResponse = DependencyGraphService.GetProjectFramework(proj.Path);

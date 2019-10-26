@@ -38,11 +38,13 @@ namespace NSeed.Cli.Subcommands.Info.ValueProviders
                         {
                             var frameworkResponse = dependencyGraphService.GetProjectFramework(path);
 
+                            // Return not just framework but everything that I need the whole project object
+
                             if (frameworkResponse.IsSuccessful && frameworkResponse.Payload!.IsDefined)
                             {
                                 var detectorReolver = context.Application.GetService<Func<FrameworkType, IDetector>>();
                                 var detector = detectorReolver(frameworkResponse.Payload.Type);
-                                var detectorResponse = detector.Detect(new Project(path));
+                                var detectorResponse = detector.Detect(new Project(path, frameworkResponse.Payload));
                                 if (detectorResponse.IsSuccessful)
                                 {
                                     model.SetResolvedProject(detectorResponse.Payload!);
