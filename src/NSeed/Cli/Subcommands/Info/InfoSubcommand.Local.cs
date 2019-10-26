@@ -36,35 +36,36 @@ namespace NSeed.Cli.Subcommands.Info
 
             public static RenderingBehavior Create()
             {
-                // Standard behavior if the physical console is available.
-                Action initializeConsole = () =>
+                if (ConsoleUtil.IsPhysicalConsoleAvailable())
                 {
-                    // According to CsConsoleFormat docummentation,
-                    // if OS is Windows we have to set encoding to UTF8 if we want to
-                    // use Unicode rendering, which we do.
-                    // See: https://github.com/Athari/CsConsoleFormat#getting-started
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                        Console.OutputEncoding = Encoding.UTF8;
-                };
-
-                // We limit the length to 150 characters, otherwise, if the
-                // whole buffer is used on widescreen the output will be too
-                // much spread out.
-                var renderRect = new Rect(0, 0, Math.Min(Console.BufferWidth, 150), Size.Infinity);
-                var headerStroke = new LineThickness(LineWidth.None, LineWidth.None, LineWidth.None, LineWidth.Single);
-                bool underlineGridHeader = false;
-                bool writeFinalLineTerminator = true;
-
-                if (!ConsoleUtil.IsPhysicalConsoleAvailable())
-                {
-                    initializeConsole = () => { };
-                    renderRect = new Rect(0, 0, 72, Size.Infinity);
-                    headerStroke = LineThickness.None;
-                    underlineGridHeader = true;
-                    writeFinalLineTerminator = false;
+                    return new RenderingBehavior
+                    (
+                        initializeConsole: () =>
+                        {
+                            // According to CsConsoleFormat docummentation,
+                            // if OS is Windows we have to set encoding to UTF8 if we want to
+                            // use Unicode rendering, which we do.
+                            // See: https://github.com/Athari/CsConsoleFormat#getting-started
+                            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                                Console.OutputEncoding = Encoding.UTF8;
+                        },
+                        renderRect: new Rect(0, 0, Math.Min(Console.BufferWidth, 150), Size.Infinity),  // We limit the length to 150 characters, otherwise, if the whole buffer is used on widescreen the output will be too much spread out. We limit the length to 150 characters, otherwise, if the whole buffer is used on widescreen the output will be too much spread out. (BDW this comment is in one line because of a StyleCop bug :-()
+                        headerStroke: new LineThickness(LineWidth.None, LineWidth.None, LineWidth.None, LineWidth.Single),
+                        underlineGridHeader: false,
+                        writeFinalLineTerminator: true
+                    );
                 }
-
-                return new RenderingBehavior(initializeConsole, renderRect, headerStroke, underlineGridHeader, writeFinalLineTerminator);
+                else
+                {
+                    return new RenderingBehavior
+                    (
+                        initializeConsole: () => { },
+                        renderRect: new Rect(0, 0, 72, Size.Infinity),
+                        headerStroke: LineThickness.None,
+                        underlineGridHeader: true,
+                        writeFinalLineTerminator: false
+                    );
+                }
             }
         }
 
