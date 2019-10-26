@@ -55,6 +55,27 @@ namespace NSeed.Cli.Runners
             return Run(psi);
         }
 
+        protected void RunSeedBucket(string workingDirectory, string[] arguments)
+        {
+            var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), string.Join(" ", arguments))
+            {
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+            };
+
+            var process = new Process();
+            try
+            {
+                process.StartInfo = psi;
+                process.Start();
+                process.WaitForExit();
+            }
+            finally
+            {
+                process.Dispose();
+            }
+        }
+
         protected (bool IsSuccessful, string Message) Response(RunStatus status)
         {
             if (status.IsSuccess)

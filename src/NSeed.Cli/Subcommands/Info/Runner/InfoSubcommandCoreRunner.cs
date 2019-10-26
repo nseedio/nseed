@@ -7,9 +7,9 @@ namespace NSeed.Cli.Subcommands.Info.Runner
     {
         public (bool IsSuccessful, string Message) Run(InfoSubcommandRunnerArgs args)
         {
-            var arguments = new[] { "run", "--project", args.NSeedProjectPath };
-            var response = Run(args.NSeedProjectDirectory, arguments);
-            return Response(response);
+            var arguments = new[] { "run", "--project", args.NSeedProjectPath, "info" };
+            RunSeedBucket(args.NSeedProjectDirectory, arguments);
+            return (true, string.Empty);
         }
     }
 }

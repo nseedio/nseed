@@ -12,51 +12,52 @@ namespace ProccessRunner
         {
             var psi = new ProcessStartInfo(command, string.Join(" ", arguments))
             {
-                WorkingDirectory = workingDirectory,
+                //WorkingDirectory = workingDirectory,
                 UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
+                //CreateNoWindow = true,
+                //RedirectStandardOutput = true,
+                //RedirectStandardError = true
             };
             Run(psi);
         }
 
-        private static void Run(ProcessStartInfo processStartInfo)
+        private RunStatus Run(ProcessStartInfo processStartInfo)
         {
             var process = new Process();
 
             try
             {
                 process.StartInfo = processStartInfo;
+                
 
-                process.OutputDataReceived += (sender, data) =>
-                {
-                    Console.WriteLine(data.Data);
-                };
+                //process.OutputDataReceived += (sender, data) =>
+                //{
+                //    Console.WriteLine(data.Data);
+                //};
 
-                process.ErrorDataReceived += (sender, data) =>
-                {
+                //process.ErrorDataReceived += (sender, data) =>
+                //{
 
-                    Console.WriteLine(data.Data);
-                };
+                //    Console.WriteLine(data.Data);
+                //};
 
                 process.Start();
 
-                process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
+                //process.BeginErrorReadLine();
+                //process.BeginOutputReadLine();
 
-                process.WaitForExit();
+                //process.WaitForExit();
 
-                //var output = new StringBuilder();
+                var output = new StringBuilder();
 
-                //var errors = new StringBuilder();
+                var errors = new StringBuilder();
 
-                //var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
+                var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
 
-                //var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
+                var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
 
-                //Task.WaitAll(outputTask, errorTask);
-                //return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
+                Task.WaitAll(outputTask, errorTask);
+                return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
             }
             finally
             {
