@@ -68,30 +68,27 @@ namespace NSeed.Cli.Subcommands.Info
             }
         }
 
-        private readonly SeedBucket? seedBucket;
-        private readonly IOutputSink? output;
-        private readonly TextColors? textColors;
+        private readonly SeedBucket seedBucket;
+        private readonly IOutputSink output;
+        private readonly TextColors textColors;
         private readonly RenderingBehavior renderingBehavior = RenderingBehavior.Create();
 
         public InfoSubcommand(SeedBucket seedBucket, IOutputSink output, ITextColorsProvider textColorsProvider)
         {
-            System.Diagnostics.Debug.Assert(seedBucket != null);
-            System.Diagnostics.Debug.Assert(output != null);
-            System.Diagnostics.Debug.Assert(textColorsProvider != null);
-
             this.seedBucket = seedBucket;
             this.output = output;
-            textColors = textColorsProvider?.GetTextColors();
+            textColors = textColorsProvider.GetTextColors();
         }
 
         public Task OnExecute()
         {
-            output?.WriteLine();
+            output.WriteLine();
 
-            var seedBucketInfo = seedBucket?.GetMetaInfo();
+            var seedBucketInfo = seedBucket.GetMetaInfo();
 
-            int numberOfSeeds = seedBucketInfo?.ContainedSeedables?.OfType<SeedInfo>()?.Count() ?? default;
-            int numberOfScenarios = seedBucketInfo?.ContainedSeedables?.OfType<ScenarioInfo>()?.Count() ?? default;
+            int numberOfSeeds = seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Count();
+            int numberOfScenarios = seedBucketInfo.ContainedSeedables.OfType<ScenarioInfo>().Count();
+            int numberOfErrors = seedBucketInfo.AllErrors.Count();
 
             ConsoleRenderer.RenderDocument(GenerateSummary(), null, renderingBehavior.RenderRect);
 
@@ -105,7 +102,7 @@ namespace NSeed.Cli.Subcommands.Info
                 ConsoleRenderer.RenderDocument(GenerateScenariosInfo(), null, renderingBehavior.RenderRect);
             }
 
-            output?.WriteLine();
+            output.WriteLine();
 
             return Task.CompletedTask;
 
@@ -130,17 +127,23 @@ namespace NSeed.Cli.Subcommands.Info
                             CreateDescriptionColumnCell("Name"),
                             CreateValueColumnCell(seedBucketInfo.FriendlyName),
                             CreateDescriptionColumnCell("Description"),
-                            CreateValueColumnCell(seedBucketInfo.Description, TextWrap.WordWrap),
+                            CreateValueColumnCell(seedBucketInfo.Description, textWrap: TextWrap.WordWrap),
                             CreateDescriptionColumnCell("Number of seeds"),
                             CreateValueColumnCell(numberOfSeeds),
                             CreateDescriptionColumnCell("Number of scenarios"),
-                            CreateValueColumnCell(numberOfScenarios)
+                            CreateValueColumnCell(numberOfScenarios),
+                            numberOfErrors > 0
+                                ? CreateDescriptionColumnCell("Number of errors")
+                                : null,
+                            numberOfErrors > 0
+                                ? CreateValueColumnCell(numberOfErrors, textColors.Error)
+                                : null
                         }
                     }
                 )
                 {
-                    Color = textColors?.Message,
-                    Background = textColors?.Background
+                    Color = textColors.Message,
+                    Background = textColors.Background
                 };
 
                 static Cell CreateDescriptionColumnCell(string text)
@@ -148,9 +151,15 @@ namespace NSeed.Cli.Subcommands.Info
                     return new Cell($"{text}:") { Stroke = LineThickness.None, TextWrap = TextWrap.NoWrap };
                 }
 
-                static Cell CreateValueColumnCell<TValue>(TValue value, TextWrap textWrap = TextWrap.NoWrap)
+                static Cell CreateValueColumnCell<TValue>(TValue value, ConsoleColor? color = null, TextWrap textWrap = TextWrap.NoWrap)
                 {
-                    return new Cell(value) { Stroke = LineThickness.None, TextWrap = textWrap, Padding = new Thickness(1, 0, 1, 0) };
+                    return new Cell(value)
+                    {
+                        Stroke = LineThickness.None,
+                        TextWrap = textWrap,
+                        Padding = new Thickness(1, 0, 1, 0),
+                        Color = color
+                    };
                 }
             }
 
@@ -179,18 +188,22 @@ namespace NSeed.Cli.Subcommands.Info
                             seedBucketInfo.ContainedSeedables
                                 .OfType<SeedInfo>()
                                 .OrderBy(seed => seed.FriendlyName)
-                                .Select(seed => new[]
-                            {
-                                CreateInfoGridValueCell(seed.FriendlyName),
-                                CreateInfoGridValueCell(string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName))),
-                                CreateInfoGridValueCell(seed.Description)
-                            })
+                                .Select(seed =>
+                                {
+                                    var textColor = GetCellTextColor(seed);
+                                    return new[]
+                                    {
+                                        CreateInfoGridValueCell(seed.FriendlyName, textColor),
+                                        CreateInfoGridValueCell(string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName)), textColor),
+                                        CreateInfoGridValueCell(seed.Description, textColor)
+                                    };
+                                })
                         }
                     }
                 )
                 {
-                    Color = textColors?.Message,
-                    Background = textColors?.Background
+                    Color = textColors.Message,
+                    Background = textColors.Background
                 };
             }
 
@@ -217,17 +230,21 @@ namespace NSeed.Cli.Subcommands.Info
                             seedBucketInfo.ContainedSeedables
                                 .OfType<ScenarioInfo>()
                                 .OrderBy(scenario => scenario.FriendlyName)
-                                .Select(scenario => new[]
-                            {
-                                CreateInfoGridValueCell(scenario.FriendlyName),
-                                CreateInfoGridValueCell(scenario.Description)
-                            })
+                                .Select(scenario =>
+                                {
+                                    var textColor = GetCellTextColor(scenario);
+                                    return new[]
+                                    {
+                                        CreateInfoGridValueCell(scenario.FriendlyName, textColor),
+                                        CreateInfoGridValueCell(scenario.Description, textColor)
+                                    };
+                                })
                         }
                     }
                 )
                 {
-                    Color = textColors?.Message,
-                    Background = textColors?.Background
+                    Color = textColors.Message,
+                    Background = textColors.Background
                 };
             }
 
@@ -236,14 +253,22 @@ namespace NSeed.Cli.Subcommands.Info
                 return new Cell(text) { Stroke = renderingBehavior.HeaderStroke, TextWrap = TextWrap.NoWrap };
             }
 
-            static Cell CreateInfoGridValueCell<TValue>(TValue value)
+            static Cell CreateInfoGridValueCell<TValue>(TValue value, ConsoleColor? color)
             {
                 return new Cell
                 {
                     Padding = new Thickness(1, 0, 1, 1),
                     Stroke = LineThickness.None,
-                    Children = { value }
+                    Children = { value },
+                    Color = color
                 };
+            }
+
+            ConsoleColor? GetCellTextColor(MetaInfo.MetaInfo metaInfo)
+            {
+                return metaInfo.AllErrors.Any()
+                    ? textColors.Error
+                    : (ConsoleColor?)null;
             }
 
             Grid CreateHeading(string headingText)

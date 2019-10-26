@@ -1,28 +1,31 @@
 using NSeed.MetaInfo;
 
-namespace NSeed.Discovery.Common.ErrorMessages
+namespace NSeed.Discovery.ErrorMessages
 {
     internal static partial class Errors
     {
-        // TODO-IG: Refactor this later on when we introduce IWeedOut. It should be a common thing.
         internal static class FriendlyName
         {
-            internal static readonly Error MustNotBeNull = new Error
+            internal static readonly string MustNotBeNullErrorCode = ErrorCodePrefixes.FriendlyName.Prefix + "01";
+            internal static readonly string MustNotBeEmptyStringErrorCode = ErrorCodePrefixes.FriendlyName.Prefix + "02";
+            internal static readonly string MustNotBeWhitespaceErrorCode = ErrorCodePrefixes.FriendlyName.Prefix + "03";
+
+            internal static Error MustNotBeNull { get; } = new Error
             (
-                ErrorCodePrefixes.Seed.FriendlyName.Prefix + "01",
-                $"The value of the seed {nameof(FriendlyNameAttribute)} must not be null."
+                MustNotBeNullErrorCode,
+                $"The value of the {nameof(FriendlyNameAttribute)} must not be null."
             );
 
-            internal static readonly Error MustNotBeEmptyString = new Error
+            internal static Error MustNotBeEmptyString { get; } = new Error
             (
-                ErrorCodePrefixes.Seed.FriendlyName.Prefix + "02",
-                $"The value of the seed {nameof(FriendlyNameAttribute)} must not be empty string."
+                MustNotBeEmptyStringErrorCode,
+                $"The value of the {nameof(FriendlyNameAttribute)} must not be an empty string."
             );
 
-            internal static readonly Error MustNotBeWhitespace = new Error
+            internal static Error MustNotBeWhitespace { get; } = new Error
             (
-                ErrorCodePrefixes.Seed.FriendlyName.Prefix + "03",
-                $"The value of the seed {nameof(FriendlyNameAttribute)} must not be whitespace."
+                MustNotBeWhitespaceErrorCode,
+                $"The value of the {nameof(FriendlyNameAttribute)} must not be whitespace."
             );
         }
     }

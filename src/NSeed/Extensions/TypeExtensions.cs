@@ -28,6 +28,12 @@ namespace NSeed.Extensions
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsScenarioType(this Type type)
+        {
+            return type.GetInterfaces().Contains(typeof(IScenario));
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsSeedableType(this Type type)
         {
             return type.GetInterfaces().Any(@interface => @interface == typeof(ISeed) || @interface == typeof(IScenario));

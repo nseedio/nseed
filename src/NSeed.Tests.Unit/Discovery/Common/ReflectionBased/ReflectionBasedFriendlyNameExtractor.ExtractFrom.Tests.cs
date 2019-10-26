@@ -1,9 +1,7 @@
 using FluentAssertions;
 using NSeed.Discovery;
-using NSeed.Discovery.Common.ErrorMessages;
 using NSeed.Discovery.Common.ReflectionBased;
 using NSeed.Extensions;
-using NSeed.MetaInfo;
 using NSeed.Tests.Unit.Discovery.Seedable;
 using System;
 using Xunit;

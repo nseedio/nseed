@@ -1,4 +1,3 @@
-using NSeed.Discovery.Common.ErrorMessages;
 using NSeed.Extensions;
 using System;
 using System.Linq;
