@@ -193,7 +193,7 @@ namespace NSeed.Cli.Tests.Unit.Services
                 response.Message.Should().BeNullOrEmpty();
                 template.Should().NotBeNull();
                 template.Name.Should().NotBeNullOrEmpty();
-                Directory.Exists(template.Path).Should().BeTrue();
+                Directory.Exists(template.DirectoryName).Should().BeTrue();
 
                 service.RemoveTempTemplates();
             }

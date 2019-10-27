@@ -5,14 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove=".template.config\**" />
-    <EmbeddedResource Remove=".template.config\**" />
-    <None Remove=".template.config\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-	<PackageReference Include="NSeed" Version="0.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NSeed" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

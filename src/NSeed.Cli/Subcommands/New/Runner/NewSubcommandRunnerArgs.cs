@@ -4,7 +4,7 @@ namespace NSeed.Cli.Subcommands.New.Runner
 {
     internal class NewSubcommandRunnerArgs
     {
-        public Template Template { get; set; } = new Template();
+        public Template Template { get; set; } = Template.Empty;
 
         public string SolutionDirectory { get; set; } = string.Empty;
 

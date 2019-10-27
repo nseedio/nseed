@@ -2,18 +2,17 @@
   "$schema": "http://json.schemastore.org/template",
   "author": "NSeed",
   "classifications": [ "Common", "Library" ],
-  "name": "guid",
-  "identity": "guid", 
-  "shortName": "guid",
+  "name": "{{TemplateName}}",
+  "identity": "{{TemplateName}}", 
+  "shortName": "{{TemplateName}}",
   "tags": {
     "language": "C#"
   },
   "sourceName": "nseed_classic_template",
-  //"preferNameDirectory": "true"
   "symbols": {
     "framework": {
       "type": "parameter",
-      "defaultValue": "v4.7.2",
+      "defaultValue": "v4.6.1",
       "replaces": "SelectedFramework"
     }
   }

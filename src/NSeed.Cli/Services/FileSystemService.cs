@@ -99,8 +99,6 @@ namespace NSeed.Cli.Services
 
         public (bool IsSuccesful, string Message) TryGetTemplate(FrameworkType framework, out Template template)
         {
-            template = new Template();
-
             using Stream stream = GetEmbeddedResource(ZipTemplatesFile);
 
             using (Stream fileStream = File.Create(ZipTemplatesFilePath))
@@ -111,8 +109,9 @@ namespace NSeed.Cli.Services
 
             System.IO.Compression.ZipFile.ExtractToDirectory(ZipTemplatesFilePath, Path.GetTempPath());
 
-            template.Path = Path.Combine(TemplatesDirectoryPath, GetTemplateDirectory(framework));
-            template.Name = GetTemplateName(template.Path);
+            template = new Template(TemplatesDirectoryPath, framework);
+
+            template.ReplacePlaceholders();
 
             return succesResponse;
         }
@@ -264,35 +263,6 @@ namespace NSeed.Cli.Services
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith(name, System.StringComparison.OrdinalIgnoreCase));
             return assembly.GetManifestResourceStream(resourceName);
-        }
-
-        private string GetTemplateDirectory(FrameworkType framework)
-        {
-            return framework switch
-            {
-                FrameworkType.NETCoreApp => NSeedCoreTemplateDirectory,
-
-                FrameworkType.NETFramework => NSeedClassicTemplateDirectory,
-
-                FrameworkType.None => string.Empty,
-
-                _ => string.Empty,
-            };
-        }
-
-        private string GetTemplateName(string path)
-        {
-            var name = Guid.NewGuid().ToString();
-            ReplaceAllPlaceholders(path, name);
-            return name;
-        }
-
-        private void ReplaceAllPlaceholders(string path, string name)
-        {
-            var templateConfigFilePath = Path.Combine(path, ".template.config", "template.json");
-            string content = File.ReadAllText(templateConfigFilePath);
-            content = content.Replace("guid", name);
-            File.WriteAllText(templateConfigFilePath, content);
         }
 
         private static (bool IsSuccesful, string Message) succesResponse = (true, string.Empty);

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.IO.Compression;
 using Nuke.Common;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
@@ -40,7 +41,7 @@ class Build : NukeBuild
     void CreateTemplatesZip()
     {
         DeleteFile(TemplatesZipFile);
-        System.IO.Compression.ZipFile.CreateFromDirectory(TemplatesDirectory, TemplatesZipFile);
+        ZipFile.CreateFromDirectory(TemplatesDirectory, TemplatesZipFile, CompressionLevel.Optimal, true);
     }
 
     Target Clean => _ => _
