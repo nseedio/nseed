@@ -40,7 +40,7 @@ namespace NSeed.Cli.Subcommands.Info
             {
                 NSeedProjectPath = ResolvedProject.Path,
                 NSeedProjectDirectory = ResolvedProject.Directory,
-                NSeedProjectName = string.Empty // TODO Take that from resolved project
+                NSeedProjectName = "TypicalSeedBucket"// string.Empty // TODO Take that from resolved project
             });
             await Task.Run(() => { });
         }

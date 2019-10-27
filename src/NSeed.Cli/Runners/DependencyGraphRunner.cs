@@ -10,7 +10,7 @@ namespace NSeed.Cli.Runners
         private (bool IsSuccesful, string Message) GenerateDependencyGraph(DependencyGraphRunnerArgs args)
         {
             string[] arguments = { "msbuild", $"\"{args.Solution}\"", "/t:GenerateRestoreGraphFile", $"/p:RestoreGraphOutputPath=\"{args.OutputPath}\"" };
-            return Response(Run(args.SolutionDirectory, arguments));
+            return Response(RunDotNet(args.SolutionDirectory, arguments));
         }
     }
 }

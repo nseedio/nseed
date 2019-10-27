@@ -46,7 +46,7 @@ namespace NSeed.Cli.Tests.Integration
                 Directory.Delete(NugetNSeedPackageCachePath, true);
             }
 
-            var installToolResponse = Runner.Run(SrcFolderPath, new string[]
+            var installToolResponse = Runner.RunDotNet(SrcFolderPath, new string[]
             {
                  @$"tool install -g --add-source {ToolNupkgPath} NSeed.Cli"
             });
@@ -64,7 +64,7 @@ namespace NSeed.Cli.Tests.Integration
 
         public void Dispose()
         {
-            Runner.Run(SrcFolderPath, new string[]
+            Runner.RunDotNet(SrcFolderPath, new string[]
             {
                 "tool uninstall --global NSeed.Cli"
             });
@@ -95,7 +95,7 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NSeedDll_Empty()
         {
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll"
             });
@@ -107,7 +107,7 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NSeedDll_HelpOption()
         {
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll --help"
             });
@@ -119,7 +119,7 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NseedDll_NewSubcommand_Empty()
         {
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new"
             });
@@ -133,7 +133,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "EmptyFolder");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path
             });
@@ -150,7 +150,7 @@ namespace NSeed.Cli.Tests.Integration
 
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path
             });
@@ -166,7 +166,7 @@ namespace NSeed.Cli.Tests.Integration
 
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "--framework"
             });
@@ -181,7 +181,7 @@ namespace NSeed.Cli.Tests.Integration
 
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
             });
@@ -194,7 +194,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithExistingSeedsProject");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
             });
@@ -209,7 +209,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
             });
@@ -223,7 +223,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions_InSubFolder");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
             });
@@ -238,7 +238,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithMultipleProjectWithDifferentFrameworks");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path, "-n MyCustomProjectName"
             });
@@ -253,7 +253,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework");
 
-            var response = nSeedFixture.Runner.Run(nSeedFixture.ToolDllPath, new string[]
+            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
             {
                 "NSeed.Cli.dll new --solution ", path
             });
@@ -302,9 +302,9 @@ namespace NSeed.Cli.Tests.Integration
 
     internal class TestRunner : DotNetRunner
     {
-        public new RunStatus Run(string workingDirectory, string[] arguments)
+        public new RunStatus RunDotNet(string workingDirectory, string[] arguments)
         {
-            return base.Run(workingDirectory, arguments);
+            return base.RunDotNet(workingDirectory, arguments);
         }
 
         public RunStatus RunNSeed(string workingDirectory, string[] arguments)

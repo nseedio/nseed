@@ -29,7 +29,7 @@ namespace NSeed.Cli.Runners
         /// <param name="workingDirectory">Working directory where dotnet command will be executed.</param>
         /// <param name="arguments">dotnet command arguments.</param>
         /// <returns>Status.</returns>
-        protected RunStatus Run(string workingDirectory, string[] arguments)
+        protected RunStatus RunDotNet(string workingDirectory, string[] arguments)
         {
             var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), string.Join(" ", arguments))
             {
@@ -55,7 +55,7 @@ namespace NSeed.Cli.Runners
             return Run(psi);
         }
 
-        protected void RunSeedBucket(string workingDirectory, string[] arguments)
+        protected void RunDotNetSeedBucket(string workingDirectory, string[] arguments)
         {
             var psi = new ProcessStartInfo(DotNetExe.FullPathOrDefault(), string.Join(" ", arguments))
             {
@@ -63,17 +63,18 @@ namespace NSeed.Cli.Runners
                 UseShellExecute = false,
             };
 
-            var process = new Process();
-            try
+            RunSeedBucket(psi);
+        }
+
+        protected void RunSeedBucket(string command, string workingDirectory, string[] arguments)
+        {
+            var psi = new ProcessStartInfo(command, string.Join(" ", arguments))
             {
-                process.StartInfo = psi;
-                process.Start();
-                process.WaitForExit();
-            }
-            finally
-            {
-                process.Dispose();
-            }
+                WorkingDirectory = workingDirectory,
+                UseShellExecute = false,
+            };
+
+            RunSeedBucket(psi);
         }
 
         protected (bool IsSuccessful, string Message) Response(RunStatus status)
@@ -88,26 +89,34 @@ namespace NSeed.Cli.Runners
 
         private static RunStatus Run(ProcessStartInfo processStartInfo)
         {
-            var process = new Process();
-            try
+            using var process = new Process
             {
-                process.StartInfo = processStartInfo;
-                process.Start();
-                var output = new StringBuilder();
+                StartInfo = processStartInfo
+            };
 
-                var errors = new StringBuilder();
+            process.Start();
 
-                var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
+            var output = new StringBuilder();
 
-                var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
+            var errors = new StringBuilder();
 
-                Task.WaitAll(outputTask, errorTask);
-                return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
-            }
-            finally
+            var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
+
+            var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
+
+            Task.WaitAll(outputTask, errorTask);
+
+            return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
+        }
+
+        private static void RunSeedBucket(ProcessStartInfo processStartInfo)
+        {
+            using var process = new Process
             {
-                process.Dispose();
-            }
+                StartInfo = processStartInfo
+            };
+            process.Start();
+            process.WaitForExit();
         }
 
         private static async Task ConsumeStreamReaderAsync(StreamReader reader, StringBuilder lines)

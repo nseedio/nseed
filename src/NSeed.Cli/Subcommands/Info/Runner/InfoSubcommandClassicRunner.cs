@@ -8,11 +8,18 @@ namespace NSeed.Cli.Subcommands.Info.Runner
     {
         public (bool IsSuccessful, string Message) Run(InfoSubcommandRunnerArgs args)
         {
-            var tempBuildOutput = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var tempBuildOutput = Path.Combine(Path.GetTempPath(), $"BucketBuild{Guid.NewGuid().ToString()}");
+
             var arguments = new[] { "build", args.NSeedProjectPath, $"-o {tempBuildOutput}" };
+            var response = RunDotNet(args.NSeedProjectDirectory, arguments);
+            if (!response.IsSuccess)
+            {
+                return (false, response.Errors);
+            }
+
             var exeCommand = Path.Combine(tempBuildOutput, $"{args.NSeedProjectName}.exe");
-            var response = Response(Run(exeCommand, args.NSeedProjectDirectory, arguments));
-            return response;
+            RunSeedBucket(exeCommand, args.NSeedProjectDirectory, new[] { "info" });
+            return (true, string.Empty);
         }
     }
 }
