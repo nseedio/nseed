@@ -16,7 +16,7 @@ namespace NSeed.Cli.Subcommands.New.Runner
 
         private (bool IsSuccesful, string Message) AddTemplate(NewSubcommandRunnerArgs args)
         {
-            var arguments = new[] { "new --install", args.Template.Path };
+            var arguments = new[] { "new --install", args.Template.DirectoryName };
             return Response(RunDotNet(args.SolutionDirectory, arguments));
         }
 
@@ -29,7 +29,7 @@ namespace NSeed.Cli.Subcommands.New.Runner
 
         private (bool IsSuccesful, string Message) RemoveTemplate(NewSubcommandRunnerArgs args)
         {
-            string[] arguments = new[] { "new --uninstall", args.Template.Path };
+            string[] arguments = new[] { "new --uninstall", args.Template.DirectoryName };
             return Response(RunDotNet(args.SolutionDirectory, arguments));
         }
 
