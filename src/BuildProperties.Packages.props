@@ -7,6 +7,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/nseedio/nseed</PackageProjectUrl>
     <RepositoryUrl></RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/nseedio/nseed/master/images/dandelion128x128.png</PackageIconUrl>
+    <PackageIcon>Icon.png</PackageIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="Icon.png" Pack="true" Visible="false" PackagePath="\" />
+  </ItemGroup>
 </Project>
