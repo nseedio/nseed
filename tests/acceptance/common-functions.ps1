@@ -18,6 +18,11 @@ function Confirmation($message) {
     Write-Host
 }
 
+function Step($message) {
+    Write-Host (" --> " + $message) -ForegroundColor Cyan
+    Write-Host
+}
+
 function ExitIfError() {
     if ((!$?) -or ($LASTEXITCODE -ne 0) -or ($error.count -gt 0))
     {
@@ -29,8 +34,19 @@ function ExitIfError() {
 function StepName($stepName) {
     $horizontalLine = new-object System.String('-', $stepName.Length)
     Write-Host
-    Write-Host $horizontalLine
-    Write-Host $stepName
-    Write-Host $horizontalLine
+    Write-Host $horizontalLine -ForegroundColor Cyan
+    Write-Host $stepName -ForegroundColor Cyan
+    Write-Host $horizontalLine -ForegroundColor Cyan
+    Write-Host
+}
+
+function AssertTestIsSuccessful($message) {
+    if ($Host.UI.PromptForChoice("", $message, @('&Yes'; '&No'), 1) -ne 0)
+    {
+        Write-Host
+        Error "The test was not successful.`nThe script execution will terminate.`nFix the error and run the acceptance tests again."
+        Exit                
+    }
+
     Write-Host
 }
