@@ -31,16 +31,16 @@ function ExitIfError() {
     }
 }
 
-function StepName($stepName) {
-    $horizontalLine = new-object System.String('-', $stepName.Length)
+function TestName($testName) {
+    $horizontalLine = new-object System.String('-', $testName.Length)
     Write-Host
     Write-Host $horizontalLine -ForegroundColor Cyan
-    Write-Host $stepName -ForegroundColor Cyan
+    Write-Host $testName -ForegroundColor Cyan
     Write-Host $horizontalLine -ForegroundColor Cyan
     Write-Host
 }
 
-function AssertTestIsSuccessful($message) {
+function AssertStepIsSuccessful($message) {
     if ($Host.UI.PromptForChoice("", $message, @('&Yes'; '&No'), 1) -ne 0)
     {
         Write-Host
@@ -51,7 +51,7 @@ function AssertTestIsSuccessful($message) {
     Write-Host
 }
 
-function RunStep($stepDescription, $action, $assertTestMessage) {
+function RunStep($stepDescription, $action, $assertMessage) {
     Step $stepDescription
 
     Invoke-Command -ScriptBlock $action
@@ -60,7 +60,7 @@ function RunStep($stepDescription, $action, $assertTestMessage) {
 
     ExitIfError
 
-    if (![string]::IsNullOrWhitespace($assertTestMessage)) {
-        AssertTestIsSuccessful $assertTestMessage
+    if (![string]::IsNullOrWhitespace($assertMessage)) {
+        AssertStepIsSuccessful $assertMessage
     }
 }

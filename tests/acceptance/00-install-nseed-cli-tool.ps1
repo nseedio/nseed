@@ -1,5 +1,5 @@
 function InstallNSeedCliTool($version) {
-    StepName "Install NSeed CLI Tool"
+    TestName "Install NSeed CLI Tool"
 
     if (IsNSeedCliToolAlreadyInstalled)
     {

@@ -1,5 +1,5 @@
 function DisplayHelp() {
-    StepName "Display Help"
+    TestName "Display Help"
 
     $assertTestMessage = "Does the help output look like expected?"
 

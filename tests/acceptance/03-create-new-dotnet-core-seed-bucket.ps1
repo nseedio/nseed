@@ -1,5 +1,5 @@
 function CreateNewDotNetCoreSeedBucket($testDirectoryName) {
-    StepName "Create New .NET Core Seed Bucket"
+    TestName "Create New .NET Core Seed Bucket"
 
     CreateNewDotNetCoreSeedBucketCore $testDirectoryName
 }

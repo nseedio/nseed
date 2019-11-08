@@ -1,5 +1,5 @@
 function CopyInitialSolution($testDirectoryName) {
-    StepName "Copy Initial Solution"
+    TestName "Copy Initial Solution"
 
     if(test-path $testDirectoryName)
     {
