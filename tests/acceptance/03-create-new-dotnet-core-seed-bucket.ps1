@@ -5,12 +5,9 @@ function CreateNewDotNetCoreSeedBucket($testDirectoryName) {
 }
 
 function CreateNewDotNetCoreSeedBucketCore($testDirectoryName) {
-    Step "Creating new .NET Core Seed Bucket in '$testDirectoryName'."
+    $action = { nseed new --solution $testDirectoryName//Solution.sln --framework netcoreapp2.0 }
 
-    nseed new --solution $testDirectoryName//Solution.sln --framework netcoreapp2.0
-    Write-Host
+    $message = "Open the Solution.sln and check the following:`n - The solution builds without errors.`n - The Program.cs and SampleSeed.cs look as expected.`nDoes the created project look like expected?"
 
-    ExitIfError
-
-    AssertTestIsSuccessful "Open the Solution.sln and check the following:`n - The solution builds without errors.`n - The Program.cs and SampleSeed.cs look as expected.`nDoes the created project look like expected?"
+    RunStep "Creating new .NET Core Seed Bucket in '$testDirectoryName'." $action $message
 }

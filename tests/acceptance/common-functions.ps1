@@ -50,3 +50,17 @@ function AssertTestIsSuccessful($message) {
 
     Write-Host
 }
+
+function RunStep($stepDescription, $action, $assertTestMessage) {
+    Step $stepDescription
+
+    Invoke-Command -ScriptBlock $action
+
+    Write-Host
+
+    ExitIfError
+
+    if (![string]::IsNullOrWhitespace($assertTestMessage)) {
+        AssertTestIsSuccessful $assertTestMessage
+    }
+}

@@ -1,45 +1,23 @@
 function DisplayHelp() {
     StepName "Display Help"
 
-    CallOnlyNSeed
+    $assertTestMessage = "Does the help output look like expected?"
 
-    CallNSeedHelp
+    CallOnlyNSeed $assertTestMessage
 
-    CallNSeedInfoHelp
+    CallNSeedHelp $assertTestMessage
+
+    CallNSeedInfoHelp $assertTestMessage
 }
 
-function CallOnlyNSeed() {
-    Step "Calling: nseed."
-
-    nseed
-
-    Write-Host
-
-    ExitIfError
-
-    AssertTestIsSuccessful "Does the help output look like expected?"
+function CallOnlyNSeed($message) {
+    RunStep "Calling: nseed." { nseed } $message
 }
 
-function CallNSeedHelp() {
-    Step "Calling: nseed --help."
-
-    nseed --help
-
-    Write-Host
-
-    ExitIfError
-
-    AssertTestIsSuccessful "Does the help output look like expected?"
+function CallNSeedHelp($message) {
+    RunStep "Calling: nseed --help." { nseed --help } $message
 }
 
-function CallNSeedInfoHelp() {
-    Step "Calling: nseed info --help."
-
-    nseed info --help
-
-    Write-Host
-
-    ExitIfError
-
-    AssertTestIsSuccessful "Does the help output look like expected?"
+function CallNSeedInfoHelp($message) {
+    RunStep "Calling: nseed info --help." { nseed info --help } $message
 }

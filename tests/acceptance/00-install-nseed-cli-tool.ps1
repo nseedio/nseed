@@ -17,19 +17,9 @@ function IsNSeedCliToolAlreadyInstalled() {
 }
 
 function UninstallNSeedCliTool() {
-    Step "Uninstalling existing NSeed CLI Tool."
-
-    dotnet tool uninstall -g NSeed.Cli
-    Write-Host
-
-    ExitIfError
+    RunStep "Uninstalling existing NSeed CLI Tool." { dotnet tool uninstall -g NSeed.Cli }
 }
 
 function InstallNSeedCliToolCore($version) {
-    Step "Installing NSeed CLI Tool v$version."
-
-    dotnet tool install -g --version $version --add-source "../../output" NSeed.Cli
-    Write-Host
-
-    ExitIfError
+    RunStep "Installing NSeed CLI Tool v$version." { dotnet tool install -g --version $version --add-source "../../output" NSeed.Cli }
 }

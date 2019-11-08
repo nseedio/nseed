@@ -14,28 +14,13 @@ function CopyInitialSolution($testDirectoryName) {
 }
 
 function RemoveDirectory($testDirectoryName) {
-    Step "Removing directory '$testDirectoryName'."
-
-    Remove-Item -Recurse -Force $testDirectoryName
-    Write-Host
-
-    ExitIfError
+    RunStep "Removing directory '$testDirectoryName'." { Remove-Item -Recurse -Force $testDirectoryName }
 }
 
 function CreateDirectory($testDirectoryName) {
-    Step "Creating the test directory '$testDirectoryName'."
-
-    New-Item -ItemType Directory -Force -Path $testDirectoryName
-    Write-Host
-
-    ExitIfError
+    RunStep "Creating the test directory '$testDirectoryName'." { New-Item -ItemType Directory -Force -Path $testDirectoryName }
 }
 
 function CopyInitialSolutionCore($testDirectoryName) {
-    Step "Copying the initial solution to '$testDirectoryName'."
-
-    Copy-Item templates//initial-solution//* $testDirectoryName -Force -Recurse
-    Write-Host
-
-    ExitIfError
+    RunStep "Copying the initial solution to '$testDirectoryName'." { Copy-Item templates//initial-solution//* $testDirectoryName -Force -Recurse }
 }
