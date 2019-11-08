@@ -11,4 +11,6 @@ function CreateNewDotNetCoreSeedBucketCore($testDirectoryName) {
     Write-Host
 
     ExitIfError
+
+    AssertTestIsSuccessful "Open the Solution.sln and check the following:`n - The solution builds without errors.`n - The Program.cs and SampleSeed.cs look as expected.`nDoes the created project look like expected?"
 }
