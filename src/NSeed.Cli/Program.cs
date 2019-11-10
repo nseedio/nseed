@@ -18,7 +18,7 @@ namespace NSeed.Cli
                         .AddRunners()
                         .AddSubcommandRunners()
                         .AddValidators()
-                        .AddDetectors();
+                        .AddSeedBucketVerifier();
                 },
                 "NSeed");
         }

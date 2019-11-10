@@ -28,8 +28,8 @@
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithExistingSeedsProject"
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithDotNetClassicFramework"
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\SeedBucketWithErrors.DotNetCore"
-      "commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetClassic"
-      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetCore"
+      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetClassic"
+      "commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetCore"
     }
   }
 }

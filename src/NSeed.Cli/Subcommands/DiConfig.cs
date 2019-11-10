@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Runners;
+using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.Info;
-using NSeed.Cli.Subcommands.Info.Detector;
 using NSeed.Cli.Subcommands.Info.Runner;
 using NSeed.Cli.Subcommands.Info.Validators;
 using NSeed.Cli.Subcommands.New;
@@ -42,18 +42,19 @@ namespace NSeed.Cli.Subcommands
                 });
         }
 
-        public static IServiceCollection AddDetectors(this IServiceCollection services)
+        public static IServiceCollection AddSeedBucketVerifier(this IServiceCollection services)
         {
             return services
-               .AddSingleton<NSeedClassicDetector>()
-               .AddSingleton<NSeedCoreDetector>()
-               .AddSingleton<Func<FrameworkType, IDetector>>(serviceProvider => key =>
+               .AddSingleton<Func<FrameworkType, ISeedBucketVerifier>>(serviceProvider => key =>
                {
+                   var dependencyGraphService = serviceProvider.GetRequiredService<IDependencyGraphService>();
+                   var fileSystemService = serviceProvider.GetRequiredService<IFileSystemService>();
+
                    return key switch
                    {
-                       FrameworkType.NETCoreApp => serviceProvider.GetRequiredService<NSeedCoreDetector>(),
-                       FrameworkType.NETFramework => serviceProvider.GetRequiredService<NSeedClassicDetector>(),
-                       _ => serviceProvider.GetRequiredService<NSeedCoreDetector>(),
+                       FrameworkType.NETCoreApp => new SeedBucketVerifier(dependencyGraphService, fileSystemService, serviceProvider.GetRequiredService<CoreNugetPackageDetector>()),
+                       FrameworkType.NETFramework => new SeedBucketVerifier(dependencyGraphService, fileSystemService, serviceProvider.GetRequiredService<ClassicNugetPackageDetector>()),
+                       _ => throw new MissingMemberException()
                    };
                });
         }

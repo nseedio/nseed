@@ -23,8 +23,8 @@ namespace NSeed.Cli.Subcommands.Info.Validators
         {
             if (command.ResolvedProject.Path.IsNotProvidedByUser())
             {
-                return command.ResolvedProjectErrorMessage.Exists() ?
-                    ValidationResult.Error(command.ResolvedProjectErrorMessage) :
+                return command.ResolvedProject.ErrorMessage.Exists() ?
+                    ValidationResult.Error(command.ResolvedProject.ErrorMessage) :
                     ValidationResult.Error(Resources.Info.SearchNSeedProjectPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile);
             }
 

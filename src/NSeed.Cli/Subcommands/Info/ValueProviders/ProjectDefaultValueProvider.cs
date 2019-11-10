@@ -38,24 +38,29 @@ namespace NSeed.Cli.Subcommands.Info.ValueProviders
                         {
                             var frameworkResponse = dependencyGraphService.GetProjectFramework(path);
 
-                            // Return not just framework but everything that I need the whole project object
-
                             if (frameworkResponse.IsSuccessful && frameworkResponse.Payload!.IsDefined)
                             {
-                                var detectorReolver = context.Application.GetService<Func<FrameworkType, IDetector>>();
-                                var detector = detectorReolver(frameworkResponse.Payload.Type);
-                                var detectorResponse = detector.Detect(new Project(path, frameworkResponse.Payload));
-                                if (detectorResponse.IsSuccessful)
+                                var resolvedProject = new Project(path, frameworkResponse.Payload);
+
+                                var verifier = GetSeedBucketVerifier(frameworkResponse.Payload);
+
+                                var verifyResponse = verifier.Verify(resolvedProject);
+
+                                if (!verifyResponse.IsSuccessful)
                                 {
-                                    model.SetResolvedProject(detectorResponse.Payload!);
+                                    resolvedProject.ErrorMessage = verifyResponse.Message;
                                 }
-                                else
-                                {
-                                    model.SetResolvedProjectErrorMessage(detectorResponse.Message);
-                                }
+
+                                model.SetResolvedProject(resolvedProject);
                             }
                         }
                     }
+                }
+
+                ISeedBucketVerifier GetSeedBucketVerifier(IFramework framework)
+                {
+                    var seedBucketVerifierDiReolver = context.Application.GetService<Func<FrameworkType, ISeedBucketVerifier>>();
+                    return seedBucketVerifierDiReolver(framework.Type);
                 }
             });
         }

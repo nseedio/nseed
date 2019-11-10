@@ -17,18 +17,11 @@ namespace NSeed.Cli.Subcommands.Info
         [ProjectDefaultValueProvider]
         public string Project { get; private set; } = string.Empty;
 
-        public Project ResolvedProject { get; private set; } = new Project();
-
-        public string ResolvedProjectErrorMessage { get; private set; } = string.Empty;
+        public Project ResolvedProject { get; private set; } = Abstractions.Project.Empty;
 
         public void SetResolvedProject(Project project)
         {
             ResolvedProject = project;
-        }
-
-        public void SetResolvedProjectErrorMessage(string errorMessage)
-        {
-            ResolvedProjectErrorMessage = errorMessage;
         }
 
         public async Task OnExecute(
@@ -40,7 +33,7 @@ namespace NSeed.Cli.Subcommands.Info
             {
                 NSeedProjectPath = ResolvedProject.Path,
                 NSeedProjectDirectory = ResolvedProject.Directory,
-                NSeedProjectName = "TypicalSeedBucket"// string.Empty // TODO Take that from resolved project
+                NSeedProjectName = ResolvedProject.Name
             });
             await Task.Run(() => { });
         }

@@ -5,22 +5,27 @@ using NSeed.Cli.Services;
 using System;
 using System.Linq;
 
-namespace NSeed.Cli.Subcommands.Info.Detector
+namespace NSeed.Cli.Services
 {
-    internal class NSeedCoreDetector : NSeedDetector
+    internal class CoreNugetPackageDetector : INugetPackageDetector
     {
-        public NSeedCoreDetector(IDependencyGraphService dependencyGraphService, IFileSystemService fileSystemService)
-            : base(dependencyGraphService, fileSystemService) { }
+        protected IDependencyGraphService DependencyGraphService { get; }
 
-        protected override IOperationResponse<Project> DetectDependency(Project project)
+        public CoreNugetPackageDetector(IDependencyGraphService dependencyGraphService)
+        {
+            DependencyGraphService = dependencyGraphService;
+        }
+
+        public IOperationResponse Detect(Project project, string nugetPackageName)
         {
             switch (project)
             {
-                case var proj when proj.Framework.IsDefined && proj.Framework.Dependencies.Any(d => d.Equals(NSeed, StringComparison.OrdinalIgnoreCase)):
+                case var proj when proj.Framework.IsDefined
+                    && proj.Framework.Dependencies.Any(d => d.Equals(nugetPackageName, StringComparison.OrdinalIgnoreCase)):
                     return OperationResponse<Project>.Success(project);
                 case var proj when proj.Path.Exists():
                     var frameworkResponse = DependencyGraphService.GetProjectFramework(proj.Path);
-                    return frameworkResponse.IsSuccessful && frameworkResponse.Payload!.Dependencies.Contains(NSeed)
+                    return frameworkResponse.IsSuccessful && frameworkResponse.Payload!.Dependencies.Contains(nugetPackageName)
                         ? OperationResponse<Project>.Success(project)
                         : OperationResponse<Project>.Error(frameworkResponse.Message);
                 default:

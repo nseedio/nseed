@@ -1,5 +1,3 @@
-using NSeed.Cli.Assets;
-
 namespace NSeed.Cli.Subcommands.Info.Runner
 {
     internal class InfoSubcommandRunnerArgs

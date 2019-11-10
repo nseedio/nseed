@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using NSeed.Cli.Abstractions;
 
 namespace NSeed.Cli.Services
 {
@@ -8,7 +9,9 @@ namespace NSeed.Cli.Services
         {
             return services
                 .AddSingleton<IFileSystemService, FileSystemService>()
-                .AddSingleton<IDependencyGraphService, DependencyGraphService>();
+                .AddSingleton<IDependencyGraphService, DependencyGraphService>()
+                .AddSingleton<ClassicNugetPackageDetector>()
+                .AddSingleton<CoreNugetPackageDetector>();
         }
     }
 }

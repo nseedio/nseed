@@ -1,11 +1,14 @@
 using NSeed.Cli.Extensions;
+using System;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace NSeed.Cli.Abstractions
 {
     internal class Project
     {
-        public Project() { }
+        public static Project Empty => new Project();
 
         public Project(string path, IFramework framework)
         {
@@ -13,9 +16,22 @@ namespace NSeed.Cli.Abstractions
             Framework = framework;
         }
 
+        private Project() { }
+
         public const string Extension = "csproj";
 
-        public string Name { get; set; } = string.Empty;
+        public string Name
+        {
+            get
+            {
+                var doc = XDocument.Load(Path);
+                return doc.Root
+                    ?.Elements()
+                    ?.SelectMany(el => el.Elements())
+                    ?.FirstOrDefault(el => el.Name.LocalName == "AssemblyName")
+                    ?.Value ?? string.Empty;
+            }
+        }
 
         public string Path { get; set; } = string.Empty;
 
@@ -24,5 +40,7 @@ namespace NSeed.Cli.Abstractions
             : string.Empty;
 
         public IFramework Framework { get; set; } = new Framework();
+
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 }
