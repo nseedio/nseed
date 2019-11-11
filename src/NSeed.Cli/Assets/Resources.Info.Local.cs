@@ -10,6 +10,7 @@ namespace NSeed.Cli.Assets
             internal static class Errors
             {
                 public static readonly string NSeedProjectCouldNotBeFound = "The NSeed project could not be found.";
+                public static readonly string SeedBucketProjectNameCouldNotBeDefined = "The SeedBucket project name could not be defined from provided *.csproj file";
             }
 
             internal class SearchNSeedProjectPathErrors : IFileSearchErrorMessage

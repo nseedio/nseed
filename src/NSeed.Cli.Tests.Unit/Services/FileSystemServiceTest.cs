@@ -33,8 +33,7 @@ namespace NSeed.Cli.Tests.Unit.Services
                 Directory.CreateDirectory(testPath.Directory);
                 if (!string.IsNullOrEmpty(testPath.File))
                 {
-                    using (File.Create(path))
-                    { }
+                    using (File.Create(path)) { }
                 }
             }
         }

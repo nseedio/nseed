@@ -24,12 +24,22 @@ namespace NSeed.Cli.Abstractions
         {
             get
             {
-                var doc = XDocument.Load(Path);
-                return doc.Root
-                    ?.Elements()
-                    ?.SelectMany(el => el.Elements())
-                    ?.FirstOrDefault(el => el.Name.LocalName == "AssemblyName")
-                    ?.Value ?? string.Empty;
+                 try
+                 {
+                    var doc = XDocument.Load(Path, LoadOptions.PreserveWhitespace);
+
+                    return doc.Root
+                        ?.Elements()
+                        ?.SelectMany(el => el.Elements())
+                        ?.FirstOrDefault(el => el.Name.LocalName == "AssemblyName")
+                        ?.Value ?? string.Empty;
+                 }
+                 catch (System.Xml.XmlException ex)
+                 {
+                    var g = ex;
+                    ErrorMessage = Assets.Resources.Info.Errors.SeedBucketProjectNameCouldNotBeDefined;
+                    return string.Empty;
+                 }
             }
         }
 

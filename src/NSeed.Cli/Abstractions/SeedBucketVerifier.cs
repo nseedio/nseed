@@ -26,29 +26,13 @@ namespace NSeed.Cli.Abstractions
         public IOperationResponse Verify(Project project)
         {
             var response = NugetPackageDetector.Detect(project, NSeed);
+
+            // Is project .exe project is it console app
+            // Does project contains SeedBucket class or have class that derive from SeedBucket
+
             return response.IsSuccessful
                 ? OperationResponse.Success()
                 : OperationResponse.Error(response.Message);
         }
-
-        // public IOperationResponse<Project> Detect(Project project)
-        // {
-        //     var response = DetectDependency(project);
-        //     // response = IsExecutable(response);
-        //     if (!response.IsSuccessful)
-        //     {
-        //         return response;
-        //     }
-        //     return response;
-        // }
-        // protected abstract IOperationResponse<Project> DetectDependency(Project project);
-        // private IOperationResponse<Project> IsExecutable(IOperationResponse<Project> operationResponse)
-        // {
-        //     if (!operationResponse.IsSuccessful)
-        //     {
-        //         return operationResponse;
-        //     }
-        //     throw new NotImplementedException();
-        // }
     }
 }
