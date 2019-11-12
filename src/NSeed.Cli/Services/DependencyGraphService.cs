@@ -95,20 +95,5 @@ namespace NSeed.Cli.Services
 
             return OperationResponse<IFramework>.Success(framework);
         }
-
-        // public IOperationResponse<Project> GetProject(string projectPath)
-        // {
-        //    var frameworkResponse = GetProjectFramework(projectPath);
-        //    if (!frameworkResponse.IsSuccessful)
-        //        return OperationResponse<Project>.Error(frameworkResponse.Message);
-        //    var dependencyGraphSpec = GenerateDependencyGraph(projectPath);
-        //    var project = dependencyGraphSpec.Projects.FirstOrDefault();
-        //    if (project != null)
-        //    {
-        //        return OperationResponse
-        //    }
-        //    return OperationResponse.Error("dfvdv");
-
-        // }
     }
 }

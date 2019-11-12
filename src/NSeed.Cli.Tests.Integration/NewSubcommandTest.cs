@@ -5,6 +5,7 @@ using NSeed.Cli.Services;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Xunit;
 
@@ -19,6 +20,8 @@ namespace NSeed.Cli.Tests.Integration
         internal string IntegrationTestScenariosTempFolderPath { get; }
 
         internal TestRunner Runner { get; }
+
+        internal DependencyGraphService DependencyGraphService { get; }
 
         private string IntegrationTestScenariosPath { get; }
 
@@ -38,6 +41,7 @@ namespace NSeed.Cli.Tests.Integration
             ToolDllPath = Path.Combine(ToolNupkgPath, "netcoreapp2.2");
             NugetNSeedPackageCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages", "nseed");
             IntegrationTestScenariosTempFolderPath = Path.Combine(Path.GetTempPath(), "004332117_NSeedIntegrationTestScenarios");
+            DependencyGraphService = new DependencyGraphService(new DependencyGraphRunner());
 
             CopyIntegrationTestScenariosToTempFolder();
 
@@ -187,6 +191,8 @@ namespace NSeed.Cli.Tests.Integration
             });
             OutputShouldBeSuccessful(response);
             OutputShouldShowSuccessMessage(response);
+            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MyEmptySolution.sln"));
+            projectNames.Should().Contain("Seeds");
         }
 
         [Fact]
@@ -216,6 +222,8 @@ namespace NSeed.Cli.Tests.Integration
 
             OutputShouldBeSuccessful(response);
             OutputShouldShowSuccessMessage(response);
+            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MainSolution.sln"));
+            projectNames.Should().Contain("Seeds");
         }
 
         [Fact]
@@ -260,6 +268,8 @@ namespace NSeed.Cli.Tests.Integration
 
             OutputShouldBeSuccessful(response);
             OutputShouldShowSuccessMessage(response);
+            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MyEmptySolution.sln"));
+            projectNames.Should().Contain("ConsoleApp.Seeds");
         }
 
         private void OutputShouldBeSuccessful(RunStatus status)
