@@ -8,9 +8,7 @@ namespace NSeed.Cli.Tests.Unit.Entities
 {
     public abstract class BaseProjectTest
     {
-        protected string DirectoryPath { get; set; } = string.Empty;
-
-        private const string RootDirectory = @"../../../TestData\";
+        private string TestDirectory { get; set; } = string.Empty;
 
         private string EmptyCoreCsprojFileContent { get; } = string.Empty;
         private string ValidCoreCsprojFileContent { get; } = @"
@@ -404,9 +402,9 @@ namespace NSeed.Cli.Tests.Unit.Entities
 
         protected string CreateCsprojFile(string name, string content)
         {
-            DirectoryPath = $@"{RootDirectory}{Guid.NewGuid()}\";
-            var path = $@"{DirectoryPath}{name}.csproj";
-            Directory.CreateDirectory(DirectoryPath);
+            TestDirectory = @$"../../../TestData_{Guid.NewGuid()}\";
+            var path = $@"{TestDirectory}{name}.csproj";
+            Directory.CreateDirectory(TestDirectory);
             using var tw = new StreamWriter(path, true);
             tw.WriteLine(content);
             return path;
@@ -414,7 +412,7 @@ namespace NSeed.Cli.Tests.Unit.Entities
 
         protected void DeleteTestData()
         {
-            Directory.Delete(DirectoryPath, true);
+            Directory.Delete(TestDirectory, true);
         }
 
         public class GetCoreProjectName : BaseProjectTest

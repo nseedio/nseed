@@ -11,7 +11,7 @@ namespace NSeed.Cli.Tests.Unit.Services
 {
     public class FileFixture : IDisposable
     {
-        public const string RootDirectory = @"../../../TestDataBla\";
+        public const string RootDirectory = @"../../../TestData\";
 
         private readonly List<(string Directory, string File)> testSlnPaths = new List<(string Directory, string File)>
         {
