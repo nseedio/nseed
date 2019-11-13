@@ -5,7 +5,7 @@ function CreateNewDotNetCoreSeedBucket($testDirectoryName) {
 }
 
 function CreateNewDotNetCoreSeedBucketCore($testDirectoryName) {
-    $action = { nseed new --solution $testDirectoryName//Solution.sln --framework netcoreapp2.0 }
+    $action = { nseed new --solution $testDirectoryName//Solution.sln --framework netcoreapp2.0 --name DotNetCoreSeeds }
 
     $message = "Open the Solution.sln and check the following:`n - The solution builds without errors.`n - The Program.cs and SampleSeed.cs look as expected.`nDoes the created project look like expected?"
 

@@ -7,6 +7,7 @@ param(
 . (Join-Path $PSScriptRoot "01-display-help.ps1")
 . (Join-Path $PSScriptRoot "02-copy-initial-solution.ps1")
 . (Join-Path $PSScriptRoot "03-create-new-dotnet-core-seed-bucket.ps1")
+. (Join-Path $PSScriptRoot "04-create-new-dotnet-classic-seed-bucket.ps1")
 
 $error.clear()
 
@@ -14,10 +15,12 @@ Info "Running acceptance tests for the NSeed CLI Tool v$Version."
 
 InstallNSeedCliTool $Version
 
-DisplayHelp
+#DisplayHelp
 
 $testDirectoryName = "test-v$Version"
 
 CopyInitialSolution $testDirectoryName
 
 CreateNewDotNetCoreSeedBucket $testDirectoryName
+
+CreateNewDotNetClassicSeedBucket $testDirectoryName

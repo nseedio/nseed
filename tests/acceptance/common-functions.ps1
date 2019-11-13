@@ -27,6 +27,7 @@ function ExitIfError() {
     if ((!$?) -or ($LASTEXITCODE -ne 0) -or ($error.count -gt 0))
     {
         Error "An error occured while executing the previous step.`nThe script execution will terminate.`nFix the error and run the acceptance tests again."
+        #TODO Write to error history file.
         Exit
     }
 }
@@ -45,6 +46,7 @@ function AssertStepIsSuccessful($message) {
     {
         Write-Host
         Error "The test was not successful.`nThe script execution will terminate.`nFix the error and run the acceptance tests again."
+        #TODO Write to error history file.
         Exit                
     }
 
