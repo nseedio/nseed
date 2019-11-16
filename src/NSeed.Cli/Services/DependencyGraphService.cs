@@ -22,7 +22,7 @@ namespace NSeed.Cli.Services
         public DependencyGraphService(
             IDotNetRunner<DependencyGraphRunnerArgs> dependencyGraphRunner) => DependencyGraphRunner = dependencyGraphRunner;
 
-        public DependencyGraphSpec GenerateDependencyGraph(string solutionPath)
+        public DependencyGraphSpec GenerateDependencyGraph(string solutionPath, bool useCache = true)
         {
             if (string.IsNullOrEmpty(solutionPath))
             {
@@ -30,7 +30,8 @@ namespace NSeed.Cli.Services
             }
 
             if (dependencyGraphSpec != null
-                && projectPath.Equals(solutionPath, StringComparison.CurrentCultureIgnoreCase))
+                && projectPath.Equals(solutionPath, StringComparison.CurrentCultureIgnoreCase)
+                && useCache)
             {
                 return dependencyGraphSpec;
             }
@@ -66,9 +67,9 @@ namespace NSeed.Cli.Services
         /// </summary>
         /// <param name="solutionPath">Path to solution (.sln file).</param>
         /// <returns>List of project names.</returns>
-        public IEnumerable<string> GetSolutionProjectsNames(string solutionPath)
+        public IEnumerable<string> GetSolutionProjectsNames(string solutionPath, bool useCache = true)
         {
-            var dependencyGraph = GenerateDependencyGraph(solutionPath);
+            var dependencyGraph = GenerateDependencyGraph(solutionPath, useCache);
             var projectNames = dependencyGraph.Projects.Select(p => p.Name).ToList();
             return projectNames ?? new List<string>();
         }

@@ -1,9 +1,15 @@
 using NSeed.Cli.Runners;
+using NSeed.Cli.Services;
+using System.Linq;
 
 namespace NSeed.Cli.Subcommands.New.Runner
 {
     internal class NewSubcommandRunner : DotNetRunner, IDotNetRunner<NewSubcommandRunnerArgs>
     {
+        private IDependencyGraphService DependencyGraphService { get; }
+
+        public NewSubcommandRunner(IDependencyGraphService dependencyGraphService) => DependencyGraphService = dependencyGraphService;
+
         public (bool IsSuccessful, string Message) Run(NewSubcommandRunnerArgs args)
         {
             return Run(
@@ -11,7 +17,8 @@ namespace NSeed.Cli.Subcommands.New.Runner
                 AddTemplate,
                 CreateProject,
                 RemoveTemplate,
-                AddProjectToSolution);
+                AddProjectToSolution,
+                DoesSolutionContainsProject);
         }
 
         private (bool IsSuccesful, string Message) AddTemplate(NewSubcommandRunnerArgs args)
@@ -38,6 +45,14 @@ namespace NSeed.Cli.Subcommands.New.Runner
             var newProjectCsprojFilePath = System.IO.Path.Combine(args.SolutionDirectory, args.Name, $"{args.Name}.csproj");
             string[] arguments = new[] { $"sln", args.Solution, "add", newProjectCsprojFilePath };
             return Response(RunDotNet(args.SolutionDirectory, arguments));
+        }
+
+        private (bool IsSuccesful, string Message) DoesSolutionContainsProject(NewSubcommandRunnerArgs args)
+        {
+            var solutionProjectNames = DependencyGraphService.GetSolutionProjectsNames(args.Solution, useCache: false);
+            return solutionProjectNames.Any(name => name.Equals(args.Name))
+                ? (true, string.Empty)
+                : (false, Assets.Resources.New.Errors.ProjectNotAddedToSolution);
         }
     }
 }

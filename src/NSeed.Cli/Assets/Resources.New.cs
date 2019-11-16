@@ -35,6 +35,7 @@ namespace NSeed.Cli.Assets
                 public static readonly string ProjectNameExists = $"The project name already exists in the provided solution. {UseNameOptionToSetProjectName("a new")}";
                 public static readonly string ProjectNameTooLong = "The provided project name is too long. The maximum length of the project name is " + MaxProjectNameCharacters + " characters.";
                 public static readonly string ProjectNameTooShort = "The provided project name is too short. The minimum length of project name is " + MinProjectNameCharacters + " characters.";
+                public static readonly string ProjectNotAddedToSolution = "The provided project is not added to existing solution.";
 
                 private static string UseNameOptionToSetProjectName(string projectNameQualifier = "the") =>
                     $"Use --name option to set {projectNameQualifier} project name.";

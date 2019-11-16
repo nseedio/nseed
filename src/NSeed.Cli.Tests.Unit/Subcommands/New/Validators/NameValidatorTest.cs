@@ -30,7 +30,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         protected void GenerateSolutionProjects(IEnumerable<string> projectNames)
         {
             MockDependencyGraphService
-                .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
+                .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>(), true))
                 .Returns(projectNames);
         }
     }

@@ -6,9 +6,9 @@ namespace NSeed.Cli.Services
 {
     internal interface IDependencyGraphService
     {
-        DependencyGraphSpec GenerateDependencyGraph(string projectPath);
+        DependencyGraphSpec GenerateDependencyGraph(string projectPath, bool useCache = true);
 
-        IEnumerable<string> GetSolutionProjectsNames(string solutionPath);
+        IEnumerable<string> GetSolutionProjectsNames(string solutionPath, bool useCache = true);
 
         IOperationResponse<IFramework> GetProjectFramework(string projectPath);
     }

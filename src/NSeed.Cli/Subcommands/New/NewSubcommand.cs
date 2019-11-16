@@ -134,16 +134,21 @@ namespace NSeed.Cli.Subcommands.New
 
                 if (!isSuccessful)
                 {
+                    fileSystemService.RemoveTempTemplates();
                     await app.Error.WriteLineAsync(message);
+                    return;
                 }
             }
             else
             {
+                fileSystemService.RemoveTempTemplates();
                 await app.Error.WriteLineAsync(getTemplateResponse.Message);
+                return;
             }
 
             fileSystemService.RemoveTempTemplates();
             await app.Out.WriteLineAsync(Resources.New.SuccessfulRun);
+            return;
         }
 
         private string GetCommonValue(IList<string> values)

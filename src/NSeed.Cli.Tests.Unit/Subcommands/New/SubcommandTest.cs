@@ -31,7 +31,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
             get
             {
                 mockDependencyGraphService
-                .Setup(dgs => dgs.GenerateDependencyGraph(It.IsAny<string>()))
+                .Setup(dgs => dgs.GenerateDependencyGraph(It.IsAny<string>(), true))
                 .Returns(dependencyGraphSpec);
                 return this;
             }
@@ -40,7 +40,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
         protected void GenerateSoluitonProjects(IEnumerable<string> projectNames)
         {
             mockDependencyGraphService
-            .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>()))
+            .Setup(dgs => dgs.GetSolutionProjectsNames(It.IsAny<string>(), true))
             .Returns(projectNames);
         }
 

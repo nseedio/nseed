@@ -8,7 +8,7 @@ namespace NSeed.Cli.Runners
 
         public int ExitCode { get; }
 
-        public bool IsSuccess => ExitCode == 0;
+        public bool IsSuccess => ExitCode == 0 && string.IsNullOrEmpty(Errors);
 
         public RunStatus(string output, string errors, int exitCode)
         {

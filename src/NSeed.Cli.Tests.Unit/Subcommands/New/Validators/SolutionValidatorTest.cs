@@ -36,7 +36,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
         {
             var resultSlnPath = string.Empty;
             mockFileSystemService.Setup(t => t.GetSolutionPath(It.IsAny<string>())).Returns(OperationResponse<string>.Success(string.Empty));
-            dependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>())).Returns(new DependencyGraphSpec());
+            dependencyGraphService.Setup(t => t.GenerateDependencyGraph(It.IsAny<string>(), true)).Returns(new DependencyGraphSpec());
 
             var validator = new SolutionValidator(mockFileSystemService.Object, dependencyGraphService.Object);
             subcommand.SetResolvedSolution(solution);
