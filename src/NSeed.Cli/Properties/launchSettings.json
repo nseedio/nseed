@@ -18,9 +18,11 @@
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjects --fraework",
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_NoProjects -f netcoreapp2.2"
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithExistingSeedsProject -f netcoreapp2.2"
-      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\MultipleSolutions_InSubFolder -f netcoreapp2.2"
+      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\test\\integration\\MultipleSolutions_InSubFolder -f netcoreapp2.2"
       //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\SingleSolution_WithDotNetClassicFramework"
-      "commandLineArgs": "new --solution C:\\Repositories\\Osobno\\MultipleSolutions -f netcoreapp2.2"
+      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\MultipleSolutions -f netcoreapp2.2 --name MyCustomProject",
+      //"commandLineArgs": "new --solution C:\\Repositories\\Osobno\\MultipleSolutions -f netcoreapp2.2",
+      "commandLineArgs": "new --solution C:\\Repositories\\Osobno\\SingleSolution_WithDotNetClassicFramework"
       //"commandLineArgs": "info"
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit\\Fit.Seeds",
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\Fit\\Fit.Web",

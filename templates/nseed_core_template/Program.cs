@@ -1,11 +1,11 @@
 ﻿using NSeed;
 using System.Threading.Tasks;
 
-namespace nseed_core_template
+namespace SeedsProject
 {
-    internal class nseed_core_templateSeedBucket : SeedBucket
+    internal class SeedsProjectSeedBucket : SeedBucket
     {
         internal static async Task<int> Main(string[] args)
-            => await Handle<nseed_core_templateSeedBucket>(args);
+            => await Handle<SeedsProjectSeedBucket>(args);
     }
 }

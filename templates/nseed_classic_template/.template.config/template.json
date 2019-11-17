@@ -8,7 +8,8 @@
   "tags": {
     "language": "C#"
   },
-  "sourceName": "nseed_classic_template",
+  "sourceName": "SeedsProject",
+  "preferNameDirectory" : "true",
   "symbols": {
     "framework": {
       "type": "parameter",

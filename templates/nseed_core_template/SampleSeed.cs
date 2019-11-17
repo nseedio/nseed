@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace nseed_core_template
+namespace SeedsProject
 {
     // TODO: To learn how to write seeds see TODO-URL.
     internal sealed class SampleSeed : ISeed
