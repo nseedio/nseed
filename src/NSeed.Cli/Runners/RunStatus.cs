@@ -10,6 +10,9 @@ namespace NSeed.Cli.Runners
 
         public bool IsSuccess => ExitCode == 0 && string.IsNullOrEmpty(Errors);
 
+        public RunStatus()
+           : this(string.Empty, string.Empty, default) { }
+
         public RunStatus(string output, string errors, int exitCode)
         {
             Output = output;

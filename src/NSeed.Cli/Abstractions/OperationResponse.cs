@@ -20,13 +20,15 @@ namespace NSeed.Cli.Abstractions
 
         public static IOperationResponse Error(params string[] messages)
         {
-            return new OperationResponse { IsSuccessful = false, Messages = messages };
+            return new OperationResponse { Messages = messages };
         }
 
         public static IOperationResponse Error(string message)
         {
-            var response = new OperationResponse { IsSuccessful = false };
-            response.Messages.ToList().Add(message);
+            var response = new OperationResponse
+            {
+                Message = message
+            };
             return response;
         }
     }

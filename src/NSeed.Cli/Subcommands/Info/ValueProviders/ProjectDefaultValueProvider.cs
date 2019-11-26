@@ -6,6 +6,7 @@ using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using static NSeed.Cli.Assets.Resources;
 
@@ -18,6 +19,8 @@ namespace NSeed.Cli.Subcommands.Info.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
+                if (_.ShowHelp()) return;
+
                 var project = context.GetStringValue(nameof(InfoSubcommand.Project));
 
                 var fileSystemService = context.Application.GetService<IFileSystemService>();

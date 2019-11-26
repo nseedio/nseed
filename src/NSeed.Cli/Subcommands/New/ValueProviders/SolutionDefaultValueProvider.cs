@@ -5,6 +5,7 @@ using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New.Validators;
 using System;
+using System.Linq;
 using System.Reflection;
 using static NSeed.Cli.Assets.Resources;
 
@@ -17,6 +18,8 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
+                if (_.ShowHelp()) return;
+
                 var solution = context.GetStringValue(nameof(NewSubcommand.Solution));
 
                 var fileSystemService = context.Application.GetService<IFileSystemService>();

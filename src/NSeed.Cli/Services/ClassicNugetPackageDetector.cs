@@ -12,7 +12,14 @@ namespace NSeed.Cli.Services
     {
         public IOperationResponse Detect(Project project, string nugetPackageName)
         {
-            var document = XDocument.Load(Path.Combine(project.Directory, "packages.config"));
+            var packagesConfigPath = Path.Combine(project.Directory, "packages.config");
+
+            if (!File.Exists(Path.Combine(packagesConfigPath)))
+            {
+                return OperationResponse.Error(Resources.Info.Errors.NSeedProjectCouldNotBeFound);
+            }
+
+            var document = XDocument.Load(packagesConfigPath);
             var reader = new PackagesConfigReader(document);
             return reader
                 .GetPackages()

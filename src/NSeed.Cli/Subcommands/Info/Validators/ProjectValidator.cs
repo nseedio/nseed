@@ -21,14 +21,12 @@ namespace NSeed.Cli.Subcommands.Info.Validators
 
         public ValidationResult Validate(InfoSubcommand command)
         {
-            if (command.ResolvedProject.Path.IsNotProvidedByUser())
+            return command.ResolvedProject switch
             {
-                return command.ResolvedProject.ErrorMessage.Exists() ?
-                    ValidationResult.Error(command.ResolvedProject.ErrorMessage) :
-                    ValidationResult.Error(Resources.Info.SearchNSeedProjectPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile);
-            }
-
-            return ValidationResult.Success;
+                var project when project.ErrorMessage.Exists() => ValidationResult.Error(command.ResolvedProject.ErrorMessage),
+                var project when project.Path.IsNotProvidedByUser() => ValidationResult.Error(Resources.Info.SearchNSeedProjectPathErrors.Instance.WorkingDirectoryDoesNotContainAnyFile),
+                _ => ValidationResult.Success
+            };
         }
     }
 }

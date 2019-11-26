@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Services;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace NSeed.Cli.Subcommands.New.ValueProviders
@@ -18,6 +19,8 @@ namespace NSeed.Cli.Subcommands.New.ValueProviders
         {
             context.Application.OnParsingComplete(_ =>
             {
+                if (_.ShowHelp()) return;
+
                 var name = context.GetStringValue(nameof(NewSubcommand.Name));
 
                 var model = context.ModelAccessor?.GetModel() as NewSubcommand;

@@ -15,7 +15,7 @@ Info "Running acceptance tests for the NSeed CLI Tool v$Version."
 
 InstallNSeedCliTool $Version
 
-#DisplayHelp
+DisplayHelp
 
 $testDirectoryName = "test-v$Version"
 

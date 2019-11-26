@@ -1,327 +1,196 @@
 using FluentAssertions;
-using NSeed.Cli.Assets;
-using NSeed.Cli.Runners;
-using NSeed.Cli.Services;
+using NSeed.Cli.Tests.Integration.Fixtures;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using Xunit;
+using static NSeed.Cli.Assets.Resources.New;
+using static NSeed.Cli.Tests.Integration.Thens;
 
 namespace NSeed.Cli.Tests.Integration
 {
-    public class NSeedFixture : IDisposable
+    public class NewSubcommandToolTest : IClassFixture<NSeedFixture>, IDisposable
     {
-        internal string SrcFolderPath { get; }
+        private SearchSolutionPathErrors SearchSolutionPathErrors { get; } = SearchSolutionPathErrors.Instance;
 
-        internal string ToolDllPath { get; }
+        private NSeedFixture NSeed { get; }
 
-        internal string IntegrationTestScenariosTempFolderPath { get; }
-
-        internal TestRunner Runner { get; }
-
-        internal DependencyGraphService DependencyGraphService { get; }
-
-        private string IntegrationTestScenariosPath { get; }
-
-        private string CurrentAssemblyPath { get; }
-
-        private string ToolNupkgPath { get; }
-
-        private string NugetNSeedPackageCachePath { get; }
-
-        public NSeedFixture()
+        public NewSubcommandToolTest(NSeedFixture nSeedFixture)
         {
-            Runner = new TestRunner();
-            CurrentAssemblyPath = Assembly.GetExecutingAssembly().Location;
-            SrcFolderPath = Path.GetFullPath(Path.Combine(CurrentAssemblyPath, "..", "..", "..", "..", ".."));
-            IntegrationTestScenariosPath = Path.Combine(CurrentAssemblyPath, "..", "..", "..", "..", "..", "..");
-            ToolNupkgPath = Path.Combine(SrcFolderPath, "NSeed.Cli", "bin", "Debug");
-            ToolDllPath = Path.Combine(ToolNupkgPath, "netcoreapp2.2");
-            NugetNSeedPackageCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages", "nseed");
-            IntegrationTestScenariosTempFolderPath = Path.Combine(Path.GetTempPath(), "004332117_NSeedIntegrationTestScenarios");
-            DependencyGraphService = new DependencyGraphService(new DependencyGraphRunner());
-
-            CopyIntegrationTestScenariosToTempFolder();
-
-            if (Directory.Exists(NugetNSeedPackageCachePath))
-            {
-                Directory.Delete(NugetNSeedPackageCachePath, true);
-            }
-
-            var installToolResponse = Runner.RunDotNet(SrcFolderPath, new string[]
-            {
-                 @$"tool install -g --add-source {ToolNupkgPath} NSeed.Cli"
-            });
+            NSeed = nSeedFixture;
+            NSeed.CopyIntegrationTestScenariosToTempFolder();
         }
 
-        public void CopyIntegrationTestScenariosToTempFolder()
-        {
-            if (Directory.Exists(IntegrationTestScenariosTempFolderPath))
-            {
-                Directory.Delete(IntegrationTestScenariosTempFolderPath, true);
-            }
-            string fullScenarioDirectoryPath = Path.Combine(IntegrationTestScenariosPath, "tests", "integration");
-            FileSystemService.DirectoryCopy(fullScenarioDirectoryPath, IntegrationTestScenariosTempFolderPath, true);
-        }
-
-        public void Dispose()
-        {
-            Runner.RunDotNet(SrcFolderPath, new string[]
-            {
-                "tool uninstall --global NSeed.Cli"
-            });
-
-            if (Directory.Exists(IntegrationTestScenariosTempFolderPath))
-            {
-                Directory.Delete(IntegrationTestScenariosTempFolderPath, true);
-            }
-        }
-    }
-
-    public class NewSubcommandToolTest : IClassFixture<NSeedFixture>
-    {
-        private readonly NSeedFixture nSeedFixture;
-        private readonly Resources.New.SearchSolutionPathErrors searchSolutionPathErrors = Resources.New.SearchSolutionPathErrors.Instance;
-
-        public NewSubcommandToolTest(NSeedFixture nSeedFixture) => this.nSeedFixture = nSeedFixture;
-
-        [Fact]
-        public void NSeedDllInstalledTool_Empty()
-        {
-            var response = nSeedFixture.Runner.RunNSeed(nSeedFixture.SrcFolderPath, new string[] { });
-            OutputShouldBeSuccessful(response);
-            // Todo am Comment with Igor -> This is very strange thing for me install tool is always older version of tool because I couldn't clear Nuget cache.
-            // OutputShouldShowHelpMessage(response);
-        }
+        // [Fact]
+        // public void NSeedDllInstalledTool_Empty()
+        // {
+        //     var response = NSeedFixture.Runner.RunNSeed(NSeedFixture.SrcFolderPath, new string[] { });
+        //     OutputShouldBeSuccessful(response);
+        //     // Todo am Comment with Igor -> This is very strange thing for me install tool is always older version of tool because I couldn't clear Nuget cache.
+        //     // OutputShouldShowHelpMessage(response);
+        // }
 
         [Fact]
         public void NSeedDll_Empty()
         {
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll"
-            });
+            NSeed.Run("NSeed.Cli.dll");
 
-            OutputShouldBeSuccessful(response);
-            OutputShouldShowHelpMessage(response);
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowHelpMessageForNSeedCommand();
         }
 
         [Fact]
         public void NSeedDll_HelpOption()
         {
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll --help"
-            });
+            NSeed.Run("NSeed.Cli.dll --help");
 
-            OutputShouldBeSuccessful(response);
-            OutputShouldShowHelpMessage(response);
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowHelpMessageForNSeedCommand();
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_Empty()
+        public void NSeedDll_New_HelpOption()
         {
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new"
-            });
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, searchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
+            NSeed.Run("NSeed.Cli.dll new --help");
+
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowHelpMessageForNewSubcommand();
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_NoSolution()
+        public void NseedDll_New_Empty()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "EmptyFolder");
+            NSeed.Run("NSeed.Cli.dll new");
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path
-            });
-
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, searchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
+            Then(NSeed.Response)
+                .ShouldNotBeSuccessful(SearchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolution_NoProjects()
+        public void NseedDll_New_NoSolution()
         {
-            nSeedFixture.CopyIntegrationTestScenariosToTempFolder();
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("EmptyFolder"));
 
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
-
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path
-            });
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.FrameworkNotProvided);
+            Then(NSeed.Response)
+               .ShouldNotBeSuccessful(SearchSolutionPathErrors.WorkingDirectoryDoesNotContainAnyFile);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolution_NoProjects_EmptyFramework()
+        public void NseedDll_New_SingleSolution_NoProjects()
         {
-            nSeedFixture.CopyIntegrationTestScenariosToTempFolder();
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("SingleSolution_NoProjects"));
 
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
-
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "--framework"
-            });
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessageForMissingFramework(response);
+            Then(NSeed.Response)
+                .ShouldNotBeSuccessful(Errors.FrameworkNotProvided);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolution_NoProjects_ProvidedFramework()
+        public void NseedDll_New_SingleSolution_NoProjects_EmptyFramework()
         {
-            nSeedFixture.CopyIntegrationTestScenariosToTempFolder();
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("SingleSolution_NoProjects"),
+                "--framework");
 
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects");
+            Then(NSeed.Response)
+              .ShouldNotBeSuccessful(output: "Specify --help for a list of available options and commands.\r\nMissing value for option 'framework'.\r\n");
+        }
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
-            });
-            OutputShouldBeSuccessful(response);
-            OutputShouldShowSuccessMessage(response);
-            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MyEmptySolution.sln"));
+        [Fact]
+        public void NseedDll_New_SingleSolution_NoProjects_ProvidedFramework()
+        {
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("SingleSolution_NoProjects"),
+                "-f netcoreapp2.2");
+
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowSuccessMessage();
+             // .ShouldContainSeedBucketProject(projectName: Name)
+
+            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects", "MyEmptySolution.sln"));
             projectNames.Should().Contain("Seeds");
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolution_ExistingSeedProject_ProvidedFramework()
+        public void NseedDll_New_SingleSolution_ExistingSeedProject_ProvidedFramework()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithExistingSeedsProject");
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("SingleSolution_WithExistingSeedsProject"),
+                "-f netcoreapp2.2");
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
-            });
-
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.ProjectNameExists);
+            Then(NSeed.Response)
+                .ShouldNotBeSuccessful(Errors.ProjectNameExists);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_MultipleSolutions()
+        public void NseedDll_New_MultipleSolutions()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions");
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("MultipleSolutions"),
+                "-f netcoreapp2.2");
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
-            });
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowSuccessMessage();
+             // .ShouldContainSeedBucketProject(projectName: Name)
 
-            OutputShouldBeSuccessful(response);
-            OutputShouldShowSuccessMessage(response);
-            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MainSolution.sln"));
+            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "MultipleSolutions", "MainSolution.sln"));
             projectNames.Should().Contain("Seeds");
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_MultipleSolutions_InSubFolder()
+        public void NseedDll_New_MultipleSolutions_InSubFolder()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "MultipleSolutions_InSubFolder");
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("MultipleSolutions_InSubFolder"),
+                "-f netcoreapp2.2");
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "-f netcoreapp2.2"
-            });
-
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, searchSolutionPathErrors.MultipleFilesFound);
+            Then(NSeed.Response)
+               .ShouldNotBeSuccessful(SearchSolutionPathErrors.MultipleFilesFound);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolutions_WithMultipleProjects_DifferentFrameworks()
+        public void NseedDll_New_SingleSolutions_WithMultipleProjects_DifferentFrameworks()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithMultipleProjectWithDifferentFrameworks");
+            NSeed.Run(
+                "NSeed.Cli.dll new --solution ",
+                NSeed.Scenario("SingleSolution_WithMultipleProjectWithDifferentFrameworks"),
+                "-n MyCustomProjectName");
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path, "-n MyCustomProjectName"
-            });
-
-            OutputShouldNotBeSuccessful(response);
-            OutputShouldShowHintMessage(response);
-            OutputShouldContainError(response, Resources.New.Errors.FrameworkNotProvided);
+            Then(NSeed.Response)
+               .ShouldNotBeSuccessful(Errors.FrameworkNotProvided);
         }
 
         [Fact]
-        public void NseedDll_NewSubcommand_SingleSolution_ExistingDotNetClassicFrameworkProject()
+        public void NseedDll_New_SingleSolution_ExistingDotNetClassicFrameworkProject()
         {
-            var path = Path.Combine(nSeedFixture.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework");
+            NSeed.Run(
+               "NSeed.Cli.dll new --solution ",
+               NSeed.Scenario("SingleSolution_WithDotNetClassicFramework"));
 
-            var response = nSeedFixture.Runner.RunDotNet(nSeedFixture.ToolDllPath, new string[]
-            {
-                "NSeed.Cli.dll new --solution ", path
-            });
+            Then(NSeed.Response)
+                .ShouldBeSuccessful()
+                .ShouldShowSuccessMessage();
+             // .ShouldContainSeedBucketProject(projectName: Name)
 
-            OutputShouldBeSuccessful(response);
-            OutputShouldShowSuccessMessage(response);
-            var projectNames = nSeedFixture.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(path, "MyEmptySolution.sln"));
+            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework", "MyEmptySolution.sln"));
             projectNames.Should().Contain("ConsoleApp.Seeds");
         }
 
-        private void OutputShouldBeSuccessful(RunStatus status)
+        public void Dispose()
         {
-            status.IsSuccess.Should().BeTrue();
-        }
-
-        private void OutputShouldNotBeSuccessful(RunStatus status)
-        {
-            status.IsSuccess.Should().BeFalse();
-        }
-
-        private void OutputShouldShowHelpMessage(RunStatus status)
-        {
-            status.Output.Should().StartWith("Data seeding command line tool.");
-            status.Output.Should().Contain("Usage:");
-            status.Output.Should().EndWith("Run 'NSeed [command] --help' for more information about a command.\r\n\r\n");
-        }
-
-        private void OutputShouldShowHintMessage(RunStatus status)
-        {
-            status.Output.Should().Be("Specify --help for a list of available options and commands.\r\n");
-        }
-
-        private void OutputShouldShowHintMessageForMissingFramework(RunStatus status)
-        {
-            status.Output.Should().Be("Specify --help for a list of available options and commands.\r\nMissing value for option 'framework'.\r\n");
-        }
-
-        private void OutputShouldContainError(RunStatus status, string errorMessage)
-        {
-            status.Errors.Should().BeEquivalentTo($"{errorMessage}\r\n");
-        }
-
-        private void OutputShouldShowSuccessMessage(RunStatus status)
-        {
-            status.Output.Should().BeEquivalentTo($"{Resources.New.SuccessfulRun}\r\n");
-        }
-    }
-
-    internal class TestRunner : DotNetRunner
-    {
-        public new RunStatus RunDotNet(string workingDirectory, string[] arguments)
-        {
-            return base.RunDotNet(workingDirectory, arguments);
-        }
-
-        public RunStatus RunNSeed(string workingDirectory, string[] arguments)
-        {
-            var nseedToolExeCommand = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "tools", "nseed.exe");
-
-            return Run(nseedToolExeCommand, workingDirectory, arguments);
+            NSeed.ClearTestData();
         }
     }
 }
