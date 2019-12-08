@@ -1,6 +1,7 @@
 using FluentAssertions;
 using NSeed.Cli.Extensions;
 using NSeed.Cli.Runners;
+using NSeed.Cli.Services;
 using static NSeed.Cli.Assets.Resources.Info;
 using static NSeed.Cli.Assets.Resources.New;
 
@@ -73,6 +74,17 @@ namespace NSeed.Cli.Tests.Integration
             RunStatus.Output.Should().Contain($"-f|--framework  {FrameworkDescription}");
             RunStatus.Output.Should().Contain($"-n|--name       {ProjectNameDescription}");
             RunStatus.Output.Should().EndWith("-?|-h|--help    Show command line help.\r\n\r\n");
+            return this;
+        }
+
+        internal Thens ShouldContainSeedBucketProject(string projectName, string slnPath)
+        {
+            var dependencyGraphService = new DependencyGraphService(new DependencyGraphRunner());
+
+            var projectNames = dependencyGraphService.GetSolutionProjectsNames(slnPath);
+
+            projectNames.Should().Contain(projectName);
+
             return this;
         }
     }

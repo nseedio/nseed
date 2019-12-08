@@ -23,8 +23,6 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
 
             IntegrationTestScenariosTempFolderPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}_NSeedIntegrationTestScenarios");
 
-            DependencyGraphService = new DependencyGraphService(new DependencyGraphRunner());
-
             // var installToolResponse = Runner.RunDotNet(RepositorySrcFolderPath, new string[]
             // {
             //      @$"tool install -g --add-source {ToolNupkgPath} NSeed.Cli"
@@ -73,8 +71,6 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
         internal RunStatus Response { get; private set; } = new RunStatus();
 
         internal string IntegrationTestScenariosTempFolderPath { get; }
-
-        internal DependencyGraphService DependencyGraphService { get; }
 
         private string ToolNupkgPath { get; }
 

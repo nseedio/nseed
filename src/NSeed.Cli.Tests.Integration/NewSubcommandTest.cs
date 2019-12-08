@@ -112,11 +112,8 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage();
-             // .ShouldContainSeedBucketProject(projectName: Name)
-
-            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects", "MyEmptySolution.sln"));
-            projectNames.Should().Contain("Seeds");
+                .ShouldShowSuccessMessage()
+                .ShouldContainSeedBucketProject("Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects", "MyEmptySolution.sln"));
         }
 
         [Fact]
@@ -141,11 +138,8 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage();
-             // .ShouldContainSeedBucketProject(projectName: Name)
-
-            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "MultipleSolutions", "MainSolution.sln"));
-            projectNames.Should().Contain("Seeds");
+                .ShouldShowSuccessMessage()
+                .ShouldContainSeedBucketProject("Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "MultipleSolutions", "MainSolution.sln"));
         }
 
         [Fact]
@@ -181,11 +175,8 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage();
-             // .ShouldContainSeedBucketProject(projectName: Name)
-
-            var projectNames = NSeed.DependencyGraphService.GetSolutionProjectsNames(Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework", "MyEmptySolution.sln"));
-            projectNames.Should().Contain("ConsoleApp.Seeds");
+                .ShouldShowSuccessMessage()
+                .ShouldContainSeedBucketProject("ConsoleApp.Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework", "MyEmptySolution.sln"));
         }
 
         public void Dispose()
