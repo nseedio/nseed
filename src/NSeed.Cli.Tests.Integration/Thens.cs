@@ -35,7 +35,8 @@ namespace NSeed.Cli.Tests.Integration
 
         internal Thens ShouldNotBeSuccessful(
             string errorMessage = "",
-            string output = "Specify --help for a list of available options and commands.\r\n")
+            string output = "Specify --help for a list of available options and commands.\r\n",
+            string argOutput = "")
         {
             RunStatus.IsSuccess.Should().BeFalse();
 
@@ -44,7 +45,7 @@ namespace NSeed.Cli.Tests.Integration
                 RunStatus.Errors.Should().BeEquivalentTo($"{errorMessage}\r\n");
             }
 
-            RunStatus.Output.Should().Be(output);
+            RunStatus.Output.Should().Be($"{output}{argOutput}");
 
             return this;
         }

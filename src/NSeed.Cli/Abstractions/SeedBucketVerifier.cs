@@ -4,7 +4,7 @@ namespace NSeed.Cli.Abstractions
 {
     internal class SeedBucketVerifier : ISeedBucketVerifier
     {
-        protected const string NSeed = "nseed";
+        protected string NSeed { get; } = nameof(NSeed).ToLower();
 
         protected IDependencyGraphService DependencyGraphService { get; }
 
@@ -27,6 +27,7 @@ namespace NSeed.Cli.Abstractions
         {
             var response = NugetPackageDetector.Detect(project, NSeed);
 
+            // TODO:am
             // Is project .exe project is it console app
             // Does project contains SeedBucket class or have class that derive from SeedBucket
 
