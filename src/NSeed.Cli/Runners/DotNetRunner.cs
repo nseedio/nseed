@@ -104,7 +104,8 @@ namespace NSeed.Cli.Runners
 
             var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
 
-            Task.WaitAll(outputTask, errorTask);
+            // Task.Run(async () => await Task.WhenAll(outputTask, errorTask));
+            Task.WhenAll(outputTask, errorTask).GetAwaiter().GetResult();
 
             return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
         }
