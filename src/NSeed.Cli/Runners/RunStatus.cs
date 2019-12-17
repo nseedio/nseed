@@ -19,5 +19,12 @@ namespace NSeed.Cli.Runners
             Errors = errors;
             ExitCode = exitCode;
         }
+
+        public RunStatus(string output, string errors)
+        {
+            Output = output;
+            Errors = errors;
+            ExitCode = -1;
+        }
     }
 }

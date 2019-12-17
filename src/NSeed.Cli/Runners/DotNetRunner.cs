@@ -89,25 +89,36 @@ namespace NSeed.Cli.Runners
 
         private static RunStatus Run(ProcessStartInfo processStartInfo)
         {
-            using var process = new Process
+            var process = new Process();
+            try
             {
-                StartInfo = processStartInfo
-            };
+                process.StartInfo = processStartInfo;
 
-            process.Start();
+                process.Start();
 
-            var output = new StringBuilder();
+                var output = new StringBuilder();
 
-            var errors = new StringBuilder();
+                var errors = new StringBuilder();
 
-            var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
+                var outputTask = ConsumeStreamReaderAsync(process.StandardOutput, output);
 
-            var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
+                var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
 
-            // Task.Run(async () => await Task.WhenAll(outputTask, errorTask));
-            Task.WhenAll(outputTask, errorTask).GetAwaiter().GetResult();
+                // TODO please convert this method to be async method and change all other places to be async where it is used.
+                Task.Run(async () => await Task.WhenAll(outputTask, errorTask)).ConfigureAwait(false).GetAwaiter().GetResult();
 
-            return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                    return new RunStatus(output.ToString(), errors.ToString());
+                }
+
+                return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
+            }
+            finally
+            {
+                process.Dispose();
+            }
         }
 
         private static void RunSeedBucket(ProcessStartInfo processStartInfo)
