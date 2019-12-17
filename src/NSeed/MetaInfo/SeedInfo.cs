@@ -26,15 +26,21 @@ namespace NSeed.MetaInfo
         /// </summary>
         public IReadOnlyCollection<RequiredYieldInfo> RequiredYields { get; }
 
+// TODO: Bug in StyleCop. Two suggestions clashing.
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
+        private SeedableInfo[]? requiredSeedables;
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
+
         /// <summary>
         /// Gets all seedables required by this seed.
         /// <br/>
         /// Returns union of <see cref="SeedableInfo.ExplicitlyRequiredSeedables"/> and
         /// seeds whose yields are used in <see cref="RequiredYields"/>.
         /// </summary>
-        public override IEnumerable<SeedableInfo> RequiredSeedables =>
-            ExplicitlyRequiredSeedables
-            .Union(RequiredYields.Select(requiredYield => requiredYield.YieldingSeed));
+        public override IReadOnlyCollection<SeedableInfo> RequiredSeedables =>
+            requiredSeedables ??= ExplicitlyRequiredSeedables
+                                  .Union(RequiredYields.Select(requiredYield => requiredYield.YieldingSeed))
+                                  .ToArray();
 
         internal SeedInfo(
             object implementation,

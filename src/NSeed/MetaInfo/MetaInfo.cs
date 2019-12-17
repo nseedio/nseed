@@ -42,18 +42,28 @@ namespace NSeed.MetaInfo
         public string FullName { get; }
 
         /// <summary>
-        /// Gets the errors that occur directly in the definition of the NSeed abstraction described with this meta info.
+        /// Gets the errors that occur directly in the definition of the NSeed abstraction
+        /// described with this meta info.
         /// <br/>
-        /// To get the errors that occur in the NSeed abstraction and all its child abstractions use the <see cref="AllErrors"/> properties.
+        /// To get the errors that occur in the NSeed abstraction and all its child abstractions
+        /// use the <see cref="AllErrors"/> properties.
         /// </summary>
         public IReadOnlyCollection<Error> DirectErrors { get; }
 
         /// <summary>
-        /// Gets the errors that occur in the definition of the NSeed abstraction described with this meta info and all its child abstractions.
+        /// Gets the errors that occur in the definition of the NSeed abstraction
+        /// described with this meta info and all its child abstractions, recursively.
         /// <br/>
-        /// To get the errors that occur only in the NSeed abstraction itself without the errors in its child abstractions use the <see cref="DirectErrors"/> property.
+        /// To get the errors that occur only in the NSeed abstraction itself without
+        /// the errors in its child abstractions use the <see cref="DirectErrors"/> property.
         /// </summary>
         public IEnumerable<Error> AllErrors => GetAllErrors();
+
+        /// <summary>
+        /// Gets a value indicating whether there are errors that occur in the definition of the NSeed abstraction
+        /// described with this meta info or any of its child abstractions, recursively.
+        /// </summary>
+        public bool HasAnyErrors => GetHasAnyErrors();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaInfo"/> class.
@@ -84,6 +94,18 @@ namespace NSeed.MetaInfo
                 foreach (var error in directChildMetaInfo.AllErrors)
                     yield return error;
             }
+        }
+
+        private bool GetHasAnyErrors()
+        {
+            if (DirectErrors.Any()) return true;
+
+            foreach (var directChildMetaInfo in GetDirectChildMetaInfos())
+            {
+                if (directChildMetaInfo.AllErrors.Any()) return true;
+            }
+
+            return false;
         }
     }
 }

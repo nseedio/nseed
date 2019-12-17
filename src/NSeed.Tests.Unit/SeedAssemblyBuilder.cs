@@ -30,7 +30,10 @@ namespace NSeed.Tests.Unit
 
         private class SeedDescription : SeedableDescription
         {
+            public IEnumerable<string> Entities { get; set; } = Array.Empty<string>();
             public bool HasYield { get; set; }
+            public bool Fails { get; set; }
+            public bool HasAlreadyYielded { get; set; }
         }
 
         private class ScenarioDescription : SeedableDescription { }
@@ -106,9 +109,21 @@ namespace NSeed.Tests.Unit
         }
 
         private const string DefaultTestSeedTypeName = "DefaultTestSeed";
-        public SeedAssemblyBuilder AddSeed(string? seedTypeName = null, string? seedFriendlyName = null, string? seedDescription = null, bool hasYield = false, params string[] requires)
+        public SeedAssemblyBuilder AddSeed(
+            string? seedTypeName = null,
+            string? seedFriendlyName = null,
+            string? seedDescription = null,
+            bool hasYield = false,
+            bool fails = false,
+            bool hasAlreadyYielded = false,
+            // TODO: Bug in StyleCop.
+#pragma warning disable SA1011 // Closing square brackets should be spaced correctly
+            string[]? entities = null,
+#pragma warning restore SA1011 // Closing square brackets should be spaced correctly
+            params string[] requires)
         {
             seedTypeName ??= DefaultTestSeedTypeName;
+            entities ??= Array.Empty<string>();
             requires ??= Array.Empty<string>();
 
             seedTypeName.Where(char.IsWhiteSpace).Should().BeEmpty("seed type name must not contain white spaces");
@@ -121,6 +136,9 @@ namespace NSeed.Tests.Unit
                 FriendlyName = seedFriendlyName,
                 Description = seedDescription,
                 HasYield = hasYield,
+                Fails = fails,
+                HasAlreadyYielded = hasAlreadyYielded,
+                Entities = entities,
                 Requires = requires
             });
 
@@ -254,16 +272,41 @@ namespace NSeed.Tests.Unit
 
                     var requiresAttributes = CreateRequiresAttributes(seedDescription);
 
+                    var iseedInterface = CreateISeedInterface();
+
+                    var seedMethodBody = CreateSeedMethodBody();
+
+                    var hasAlreadyYieldedMethodBody = CreateHasAlreadyYieldedMethodBody();
+
                     return
                         $"{requiresAttributes}" +
                         $"{friendlyNameAttribute}" +
                         $"{descriptionAttribute}" +
-                        $"public class {seedDescription.Name} : ISeed{Environment.NewLine}" +
+                        $"public class {seedDescription.Name} : {iseedInterface}{Environment.NewLine}" +
                         $"{{{Environment.NewLine}" +
-                        $"    public Task<bool> HasAlreadyYielded() => throw new NotImplementedException();{Environment.NewLine}" +
-                        $"    public Task Seed() => throw new NotImplementedException();{Environment.NewLine}" +
+                        $"    public Task Seed() => {seedMethodBody};{Environment.NewLine}" +
+                        $"    public Task<bool> HasAlreadyYielded() => {hasAlreadyYieldedMethodBody};{Environment.NewLine}" +
                         yield +
                         $"}}{Environment.NewLine}";
+
+                    string CreateHasAlreadyYieldedMethodBody()
+                        => $"Task.FromResult({seedDescription.HasAlreadyYielded.ToString().ToLowerInvariant()})";
+
+                    string CreateSeedMethodBody()
+                    {
+                        return seedDescription.Fails
+                            ? @"throw new Exception($""The seed {GetType().Name} has failed."")"
+                            : "Task.CompletedTask";
+                    }
+
+                    string CreateISeedInterface()
+                    {
+                        var entites = seedDescription.Entities.Any()
+                            ? $"<{string.Join(", ", seedDescription.Entities)}>"
+                            : string.Empty;
+
+                        return $"ISeed{entites}";
+                    }
                 }
 
                 static string CreateScenarioSourceCode(ScenarioDescription scenarioDescription)

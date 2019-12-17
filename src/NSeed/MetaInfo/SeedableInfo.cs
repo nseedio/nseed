@@ -44,7 +44,7 @@ namespace NSeed.MetaInfo
         /// For example, seeds can implicitly require other seeds
         /// by requiring their yields (see: <see cref="SeedInfo.RequiredYields"/>).
         /// </summary>
-        public abstract IEnumerable<SeedableInfo> RequiredSeedables { get; }
+        public abstract IReadOnlyCollection<SeedableInfo> RequiredSeedables { get; }
 
         internal SeedableInfo(
             object implementation,

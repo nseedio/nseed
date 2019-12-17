@@ -28,7 +28,7 @@ namespace NSeed.MetaInfo
         /// scenarios can only explicitly require other seedables (through the
         /// <see cref="RequiresAttribute"/>).
         /// </summary>
-        public override IEnumerable<SeedableInfo> RequiredSeedables => ExplicitlyRequiredSeedables;
+        public override IReadOnlyCollection<SeedableInfo> RequiredSeedables => ExplicitlyRequiredSeedables;
 
         /// <inheritdoc />
         protected override IEnumerable<MetaInfo> GetDirectChildMetaInfos()
