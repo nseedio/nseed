@@ -34,7 +34,8 @@
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetClassic"
       //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\smoke\\TypicalSeedBucket.DotNetCore"
       //"commandLineArgs": "info --help"
-      "commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\NetClassicConsoleApp"
+      //"commandLineArgs": "info --project C:\\Repositories\\Osobno\\25.06.2019_NSeed\\tests\\integration\\NetClassicConsoleApp",
+      "commandLineArgs": "info --project C:\\Repositories\\NSeed\\tests\\acceptance\\test-v0.2.0\\DotNetClassicSeeds"
       //"commandLineArgs": "info"
     }
   }

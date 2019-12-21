@@ -29,12 +29,18 @@ namespace NSeed.Cli.Subcommands.Info
            Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>> runnerResolverFunc)
         {
             var runner = runnerResolverFunc(ResolvedProject.Framework.Type);
-            runner.Run(new InfoSubcommandRunnerArgs
+            var result = runner.Run(new InfoSubcommandRunnerArgs
             {
                 NSeedProjectPath = ResolvedProject.Path,
                 NSeedProjectDirectory = ResolvedProject.Directory,
                 NSeedProjectName = ResolvedProject.Name
             });
+
+            if (!result.IsSuccessful)
+            {
+                await app.Error.WriteLineAsync(result.Message);
+            }
+
             await Task.Run(() => { });
         }
     }

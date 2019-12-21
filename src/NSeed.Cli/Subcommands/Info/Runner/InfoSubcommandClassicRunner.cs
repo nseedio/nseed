@@ -14,7 +14,14 @@ namespace NSeed.Cli.Subcommands.Info.Runner
             var response = RunDotNet(args.NSeedProjectDirectory, arguments);
             if (!response.IsSuccess)
             {
-                return (false, response.Errors);
+                var error = response.Errors;
+                if (string.IsNullOrEmpty(error))
+                {
+                    // Log response.Output.
+                    error = Assets.Resources.Info.Errors.SeedBucketProjectCouldNotBeBuild;
+                }
+
+                return (false, error);
             }
 
             var exeCommand = Path.Combine(tempBuildOutput, $"{args.NSeedProjectName}.exe");
