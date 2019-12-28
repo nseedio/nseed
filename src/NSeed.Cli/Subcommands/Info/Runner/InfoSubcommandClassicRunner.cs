@@ -17,8 +17,8 @@ namespace NSeed.Cli.Subcommands.Info.Runner
                 var error = response.Errors;
                 if (string.IsNullOrEmpty(error))
                 {
-                    // Log response.Output.
-                    error = Assets.Resources.Info.Errors.SeedBucketProjectCouldNotBeBuild;
+                    // TODO: Log response. Output.
+                    error = Assets.Resources.Info.Errors.SeedBucketProjectCouldNotBeBuilt;
                 }
 
                 return (false, error);

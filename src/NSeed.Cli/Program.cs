@@ -20,7 +20,7 @@ namespace NSeed.Cli
                         .AddValidators()
                         .AddSeedBucketVerifier();
                 },
-                "NSeed");
+                "nseed");
         }
     }
 }

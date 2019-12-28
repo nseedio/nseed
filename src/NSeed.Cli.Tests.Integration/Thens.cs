@@ -52,9 +52,9 @@ namespace NSeed.Cli.Tests.Integration
 
         internal Thens ShouldShowHelpMessageForNSeedCommand()
         {
-            RunStatus.Output.Should().StartWith("Data seeding command line tool.");
+            RunStatus.Output.Should().StartWith("Data seeding tool for .NET.");
             RunStatus.Output.Should().Contain("Usage:");
-            RunStatus.Output.Should().EndWith("Run 'NSeed [command] --help' for more information about a command.\r\n\r\n");
+            RunStatus.Output.Should().EndWith("Run 'nseed [command] --help' for more information about a command.\r\n\r\n");
             return this;
         }
 
@@ -69,7 +69,7 @@ namespace NSeed.Cli.Tests.Integration
 
         internal Thens ShouldShowHelpMessageForNewSubcommand()
         {
-            RunStatus.Output.Should().StartWith("Create new Seed Bucket project.");
+            RunStatus.Output.Should().StartWith("Create a new seed bucket project.");
             RunStatus.Output.Should().Contain("Options:");
             RunStatus.Output.Should().Contain($"-s|--solution   {SolutionDescription}");
             RunStatus.Output.Should().Contain($"-f|--framework  {FrameworkDescription}");

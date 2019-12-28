@@ -9,9 +9,9 @@ namespace NSeed.Cli.Assets
         {
             internal static class Errors
             {
-                public static readonly string NSeedProjectCouldNotBeFound = "The NSeed project could not be found.";
-                public static readonly string SeedBucketProjectNameCouldNotBeDefined = "The SeedBucket project name could not be defined from provided *.csproj file";
-                public static readonly string SeedBucketProjectCouldNotBeBuild = "The SeedBucket project could not be build.";
+                public static readonly string SeedBucketProjectCouldNotBeFound = "The seed bucket project could not be found.";
+                public static readonly string SeedBucketProjectNameCouldNotBeDefined = "The seed bucket project name could not be defined from the provided *.csproj file.";
+                public static readonly string SeedBucketProjectCouldNotBeBuilt = "The seed bucket project could not be built.";
             }
 
             internal class SearchNSeedProjectPathErrors : IFileSearchErrorMessage
@@ -25,11 +25,11 @@ namespace NSeed.Cli.Assets
                 {
                 }
 
-                public string WorkingDirectoryDoesNotContainAnyFile => "Could not find a project in the working directory. Ensure that a project exists in the working directory or any of its subdirectories, or pass the target project by using --project.";
+                public string WorkingDirectoryDoesNotContainAnyFile => "Could not find a project in the working directory. Ensure that a project exists in the working directory or any of its subdirectories, or pass the target project by using the --project option.";
 
                 public string FilePathDirectoryDoesNotExist => $"The provided project directory does not exist. {DoYouMaybeHaveATypoInThe("directory path")}";
 
-                public string MultipleFilesFound => "Multiple projects found. Specify a single project by using --project with project name.";
+                public string MultipleFilesFound => "Multiple projects found. Specify a single project by using the --project option.";
 
                 public string InvalidFile => "The provided file is invalid. Specify a valid .csproj file.";
             }

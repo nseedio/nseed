@@ -6,4 +6,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 [assembly: AssemblyTitle("NSeed CLI")]
-[assembly: AssemblyDescription("NSeed CLI tool.")]
+[assembly: AssemblyDescription("Data seeding tool for .NET.")]

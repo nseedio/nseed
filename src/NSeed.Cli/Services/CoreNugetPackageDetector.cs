@@ -29,7 +29,7 @@ namespace NSeed.Cli.Services
                         ? OperationResponse<Project>.Success(project)
                         : OperationResponse<Project>.Error(frameworkResponse.Message);
                 default:
-                    return OperationResponse<Project>.Error(Resources.Info.Errors.NSeedProjectCouldNotBeFound);
+                    return OperationResponse<Project>.Error(Resources.Info.Errors.SeedBucketProjectCouldNotBeFound);
             }
         }
     }

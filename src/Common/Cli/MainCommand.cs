@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace NSeed.Cli
 {
-    [Command(Name = "nseed", Description = "Data seeding command line tool.")]
+    [Command(Name = "nseed", Description = "Data seeding tool for .NET.")]
     [Subcommand(typeof(Subcommands.Info.InfoSubcommand))]
     [HelpOption(Description = "Show command line help.", Inherited = true)]
     internal partial class MainCommand

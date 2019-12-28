@@ -55,7 +55,7 @@ namespace NSeed.Cli.Tests.Integration
             NSeed.Run("NSeed.Cli.dll info --project ", NSeed.Scenario("NetClassicConsoleApp"));
 
             Then(NSeed.Response)
-                .ShouldNotBeSuccessful(Resources.Info.Errors.NSeedProjectCouldNotBeFound);
+                .ShouldNotBeSuccessful(Resources.Info.Errors.SeedBucketProjectCouldNotBeFound);
         }
 
         [Fact]

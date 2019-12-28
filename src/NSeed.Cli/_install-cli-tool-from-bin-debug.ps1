@@ -56,7 +56,7 @@ function InstallNSeedCliToolFromBinDebug($version) {
         UninstallNSeedCliTool
     }
 
-    InstallNSeedCliToolCore $version
+    InstallNSeedCliTool $version
 }
 
 function IsNSeedCliToolAlreadyInstalled() {
@@ -68,8 +68,8 @@ function UninstallNSeedCliTool() {
     Run "Uninstalling existing NSeed CLI Tool." { dotnet tool uninstall -g NSeed.Cli }
 }
 
-function InstallNSeedCliToolCore($version) {
-    Run "Installing NSeed CLI Tool v$version." { dotnet tool install -g --version $version --add-source "../../output" NSeed.Cli }
+function InstallNSeedCliTool($version) {
+    Run "Installing NSeed CLI Tool v$version." { dotnet tool install -g --version $version --add-source "bin/Debug" NSeed.Cli }
 }
 
 

@@ -16,7 +16,7 @@ namespace NSeed.Cli.Services
 
             if (!File.Exists(Path.Combine(packagesConfigPath)))
             {
-                return OperationResponse.Error(Resources.Info.Errors.NSeedProjectCouldNotBeFound);
+                return OperationResponse.Error(Resources.Info.Errors.SeedBucketProjectCouldNotBeFound);
             }
 
             var document = XDocument.Load(packagesConfigPath);
@@ -26,7 +26,7 @@ namespace NSeed.Cli.Services
                 .Select(p => p.PackageIdentity.Id)
                 .Any(txt => txt.Equals(nugetPackageName, StringComparison.OrdinalIgnoreCase))
                 ? OperationResponse.Success()
-                : OperationResponse.Error(Resources.Info.Errors.NSeedProjectCouldNotBeFound);
+                : OperationResponse.Error(Resources.Info.Errors.SeedBucketProjectCouldNotBeFound);
         }
     }
 }
