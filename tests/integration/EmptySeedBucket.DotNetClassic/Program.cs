@@ -5,7 +5,7 @@ namespace EmptySeedBucket
 {
     internal class EmptySeedBucket : SeedBucket
     {
-        internal static async Task<int> Main(string[] args)
-             => await Handle<EmptySeedBucket>(args);
+        internal static async Task<int> Main(string[] args) { return 0; }
+            // => await Handle<EmptySeedBucket>(args);
     }
 }

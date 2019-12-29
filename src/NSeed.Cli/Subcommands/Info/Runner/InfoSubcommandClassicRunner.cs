@@ -21,11 +21,14 @@ namespace NSeed.Cli.Subcommands.Info.Runner
                     error = Assets.Resources.Info.Errors.SeedBucketProjectCouldNotBeBuilt;
                 }
 
+                Directory.Delete(tempBuildOutput, true);
                 return (false, error);
             }
 
             var exeCommand = Path.Combine(tempBuildOutput, $"{args.NSeedProjectName}.exe");
             RunSeedBucket(exeCommand, args.NSeedProjectDirectory, new[] { "info" });
+
+            Directory.Delete(tempBuildOutput, true);
             return (true, string.Empty);
         }
     }
