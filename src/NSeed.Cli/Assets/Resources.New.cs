@@ -13,7 +13,7 @@ namespace NSeed.Cli.Assets
             public const string SolutionDescription = "The target solution. For example: MySolution.sln, SubFolderWithSolution, C:\\Path\\To\\Several\\Solutions\\SomeSolution.sln. The default solution is the nearest single solution found in the working directory or its subdirectories.";
             public const string ProjectNameDescription = "The project name. The default name is " + DefaultProjectName + " (if a project with that name does not already exist).";
 
-            public const string SuccessfulRun = "The seed bucket project was created successfully.";
+            public static string SuccessfulRun(string projectName) => $"The seed bucket project '{projectName}' was created successfully.";
 
             public const string DefaultProjectName = "Seeds";
 

@@ -27,9 +27,9 @@ namespace NSeed.Cli.Tests.Integration
             return this;
         }
 
-        internal Thens ShouldShowSuccessMessage()
+        internal Thens ShouldShowSuccessMessage(string projectName)
         {
-            RunStatus.Output.Should().BeEquivalentTo($"{SuccessfulRun}\r\n");
+            RunStatus.Output.Should().BeEquivalentTo($"{SuccessfulRun(projectName)}\r\n");
             return this;
         }
 

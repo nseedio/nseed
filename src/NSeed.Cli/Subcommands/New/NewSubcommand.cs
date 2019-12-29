@@ -147,7 +147,7 @@ namespace NSeed.Cli.Subcommands.New
             }
 
             fileSystemService.RemoveTempTemplates();
-            await app.Out.WriteLineAsync(Resources.New.SuccessfulRun);
+            await app.Out.WriteLineAsync(Resources.New.SuccessfulRun(ResolvedName));
             return;
         }
 

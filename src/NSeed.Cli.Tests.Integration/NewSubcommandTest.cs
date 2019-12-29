@@ -112,7 +112,7 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage()
+                .ShouldShowSuccessMessage("Seeds")
                 .ShouldContainSeedBucketProject("Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_NoProjects", "MyEmptySolution.sln"));
         }
 
@@ -138,7 +138,7 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage()
+                .ShouldShowSuccessMessage("Seeds")
                 .ShouldContainSeedBucketProject("Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "MultipleSolutions", "MainSolution.sln"));
         }
 
@@ -175,7 +175,7 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage()
+                .ShouldShowSuccessMessage("ConsoleApp.Seeds")
                 .ShouldContainSeedBucketProject("ConsoleApp.Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework", "MyEmptySolution.sln"));
         }
 
