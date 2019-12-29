@@ -3,7 +3,8 @@ param(
 )
 
 . (Join-Path $PSScriptRoot "common-functions.ps1")
-. (Join-Path $PSScriptRoot "00-install-nseed-cli-tool.ps1")
+. (Join-Path $PSScriptRoot "00A-check-minimum-required-powershell-version.ps1")
+. (Join-Path $PSScriptRoot "00B-install-nseed-cli-tool.ps1")
 . (Join-Path $PSScriptRoot "01-display-help.ps1")
 . (Join-Path $PSScriptRoot "02-copy-initial-solution.ps1")
 . (Join-Path $PSScriptRoot "03-create-new-dotnet-core-seed-bucket.ps1")
@@ -14,6 +15,8 @@ param(
 $error.clear()
 
 Info "Running acceptance tests for the NSeed CLI Tool v$Version."
+
+CheckMinimumRequiredPowerShellVersion "6.0.0.0"
 
 InstallNSeedCliTool $Version
 

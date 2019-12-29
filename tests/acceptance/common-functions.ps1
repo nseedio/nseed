@@ -24,8 +24,7 @@ function Step($message) {
 }
 
 function ExitIfError() {
-    if ((!$?) -or ($LASTEXITCODE -ne 0) -or ($error.count -gt 0))
-    {
+    if ((!$?) -or ($LASTEXITCODE -ne 0) -or ($error.count -gt 0)) {
         Error "An error occured while executing the previous step.`nThe script execution will terminate.`nFix the error and run the acceptance tests again."
         #TODO Write to error history file.
         Exit
@@ -42,8 +41,7 @@ function TestName($testName) {
 }
 
 function AssertStepIsSuccessful($message) {
-    if ($Host.UI.PromptForChoice("", $message, @('&Yes'; '&No'), 1) -ne 0)
-    {
+    if ($Host.UI.PromptForChoice("", $message, @('&Yes'; '&No'), 1) -ne 0) {
         Write-Host
         Error "The test was not successful.`nThe script execution will terminate.`nFix the error and run the acceptance tests again."
         #TODO Write to error history file.
