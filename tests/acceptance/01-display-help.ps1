@@ -7,6 +7,8 @@ function DisplayHelp() {
 
     CallNSeedHelp $assertTestMessage
 
+    CallNSeedNewHelp $assertTestMessage
+
     CallNSeedInfoHelp $assertTestMessage
 }
 
@@ -16,6 +18,10 @@ function CallOnlyNSeed($message) {
 
 function CallNSeedHelp($message) {
     RunStep "Calling: nseed --help." { nseed --help } $message
+}
+
+function CallNSeedNewHelp($message) {
+    RunStep "Calling: nseed new --help." { nseed new --help } $message
 }
 
 function CallNSeedInfoHelp($message) {
