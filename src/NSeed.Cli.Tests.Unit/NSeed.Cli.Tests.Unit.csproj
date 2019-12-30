@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Subcommands\Info\InfoSubcommand.cs" />
     <Compile Include="..\GlobalSuppressions.Tests.cs" Link="GlobalSuppressions.Tests.cs" />
   </ItemGroup>
 
@@ -24,10 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NSeed.Cli\NSeed.Cli.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Subcommands\Info\" />
   </ItemGroup>
 
 </Project>

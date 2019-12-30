@@ -70,20 +70,19 @@ namespace NSeed.Cli.Subcommands.Info
         }
 
         private readonly SeedBucket seedBucket;
-        private readonly IOutputSink output;
         private readonly TextColors textColors;
         private readonly RenderingBehavior renderingBehavior = RenderingBehavior.Create();
 
         public InfoSubcommand(SeedBucket seedBucket, IOutputSink output, ITextColorsProvider textColorsProvider)
+            : base(output)
         {
             this.seedBucket = seedBucket;
-            this.output = output;
             textColors = textColorsProvider.GetTextColors();
         }
 
         public Task OnExecute()
         {
-            output.WriteLine();
+            Output.WriteLine();
 
             var seedBucketInfo = seedBucket.GetMetaInfo();
 
@@ -103,7 +102,7 @@ namespace NSeed.Cli.Subcommands.Info
                 ConsoleRenderer.RenderDocument(GenerateScenariosInfo(), null, renderingBehavior.RenderRect);
             }
 
-            output.WriteLine();
+            Output.WriteLine();
 
             return Task.CompletedTask;
 

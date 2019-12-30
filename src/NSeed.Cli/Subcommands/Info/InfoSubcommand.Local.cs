@@ -14,22 +14,20 @@ namespace NSeed.Cli.Subcommands.Info
     [InfoValidator]
     internal partial class InfoSubcommand
     {
-        private readonly IOutputSink output;
-
         [Option("-p|--project", Description = Resources.Info.ProjectDescription)]
         [ProjectDefaultValueProvider]
         public string Project { get; private set; } = string.Empty;
 
         public Project ResolvedProject { get; private set; } = Abstractions.Project.Empty;
 
+        public InfoSubcommand(IOutputSink output)
+            : base(output)
+        {
+        }
+
         public void SetResolvedProject(Project project)
         {
             ResolvedProject = project;
-        }
-
-        public InfoSubcommand(IOutputSink output)
-        {
-            this.output = output;
         }
 
         public async Task OnExecute(Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>> runnerResolverFunc)
@@ -44,7 +42,7 @@ namespace NSeed.Cli.Subcommands.Info
 
             if (!result.IsSuccessful)
             {
-                output.WriteError(result.Message);
+                Output.WriteError(result.Message);
             }
 
             await Task.Run(() => { });

@@ -23,8 +23,6 @@ namespace NSeed.Cli.Subcommands.New
     [NewValidator]
     internal class NewSubcommand : BaseCommand
     {
-        private readonly IOutputSink output;
-
         [Option("-s|--solution", Description = Resources.New.SolutionDescription)]
         [SolutionDefaultValueProvider]
         public string Solution { get; private set; } = string.Empty;
@@ -52,8 +50,8 @@ namespace NSeed.Cli.Subcommands.New
         public string ResolvedSolutionErrorMessage { get; private set; } = string.Empty;
 
         public NewSubcommand(IOutputSink output)
+            : base(output)
         {
-            this.output = output;
         }
 
         public void SetResolvedSolution(string solution)
@@ -142,22 +140,22 @@ namespace NSeed.Cli.Subcommands.New
                 if (!isSuccessful)
                 {
                     fileSystemService.RemoveTempTemplates();
-                    output.WriteError(message);
+                    Output.WriteError(message);
                     return Task.CompletedTask;
                 }
             }
             else
             {
                 fileSystemService.RemoveTempTemplates();
-                output.WriteError(getTemplateResponse.Message);
+                Output.WriteError(getTemplateResponse.Message);
                 return Task.CompletedTask;
             }
 
             fileSystemService.RemoveTempTemplates();
-            output.WriteConfirmation(Resources.New.SuccessfulRun(ResolvedName));
+            Output.WriteConfirmation(Resources.New.SuccessfulRun(ResolvedName));
 
             if (ResolvedFramework.Type == FrameworkType.NETFramework)
-                output.WriteWarning(Resources.New.NSeedNuGetPackageHasToBeAddedManuallyToTheProject(ResolvedName));
+                Output.WriteWarning(Resources.New.NSeedNuGetPackageHasToBeAddedManuallyToTheProject(ResolvedName));
 
             return Task.CompletedTask;
         }

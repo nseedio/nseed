@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Abstractions;
 using NSeed.Cli.Assets;
 
 namespace NSeed.Cli
@@ -18,5 +19,12 @@ namespace NSeed.Cli
 
         [Option(NoColorShortOption + "|" + NoColorLongOption, Description = Resources.BaseCommand.NoColorDescription)]
         public bool NoColor { get; private set; }
+
+        protected IOutputSink Output { get; }
+
+        protected BaseCommand(IOutputSink output)
+        {
+            Output = output;
+        }
     }
 }
