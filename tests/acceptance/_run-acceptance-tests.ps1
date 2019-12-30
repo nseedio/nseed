@@ -9,8 +9,8 @@ param(
 . (Join-Path $PSScriptRoot "02-copy-initial-solution.ps1")
 . (Join-Path $PSScriptRoot "03-create-new-dotnet-core-seed-bucket.ps1")
 . (Join-Path $PSScriptRoot "04-create-new-dotnet-classic-seed-bucket.ps1")
-. (Join-Path $PSScriptRoot "05-run-info-for-dotnet-core-seed-bucket.ps1")
-. (Join-Path $PSScriptRoot "06-run-info-for-dotnet-classic-seed-bucket.ps1")
+. (Join-Path $PSScriptRoot "05-display-seed-bucket-information-for-dotnet-core-seed-bucket.ps1")
+. (Join-Path $PSScriptRoot "06-display-seed-bucket-information-for-dotnet-classic-seed-bucket.ps1")
 
 $error.clear()
 
@@ -30,6 +30,6 @@ CreateNewDotNetCoreSeedBucket $testDirectoryName
 
 CreateNewDotNetClassicSeedBucket $testDirectoryName
 
-RunInfoForDotNetCoreSeedBucket $testDirectoryName
+DisplaySeedBucketInformationForDotNetCoreSeedBucket $testDirectoryName
 
-RunInfoForDotNetClassicSeedBucket $testDirectoryName
+DisplaySeedBucketInformationForDotNetClassicSeedBucket $testDirectoryName
