@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Abstractions;
 using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
@@ -14,7 +15,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
 {
     public class SolutionValidatorﾠWithﾠInvalidﾠSolution
     {
-        private readonly NewSubcommand subcommand = new NewSubcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand(new Mock<IOutputSink>().Object);
         private readonly Mock<IFileSystemService> mockFileSystemService = new Mock<IFileSystemService>();
         private readonly Mock<IDependencyGraphService> dependencyGraphService = new Mock<IDependencyGraphService>();
 

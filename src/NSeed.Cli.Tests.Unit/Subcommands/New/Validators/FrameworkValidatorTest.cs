@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Moq;
+using NSeed.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Subcommands.New;
 using NSeed.Cli.Subcommands.New.Validators;
@@ -12,7 +14,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private readonly FrameworkValidator validator = new FrameworkValidator();
 
-        private readonly NewSubcommand subcommand = new NewSubcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand(new Mock<IOutputSink>().Object);
 
         public static IEnumerable<object?[]> InvalidFrameworksAndErrorMessages =>
             new[]
@@ -52,7 +54,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         private readonly FrameworkValidator validator = new FrameworkValidator();
 
-        private readonly NewSubcommand subcommand = new NewSubcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand(new Mock<IOutputSink>().Object);
 
         [Theory]
         [InlineData("netcoreapp2.2")]

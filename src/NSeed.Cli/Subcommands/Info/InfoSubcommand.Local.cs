@@ -1,4 +1,5 @@
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Abstractions;
 using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Runners;
@@ -13,6 +14,8 @@ namespace NSeed.Cli.Subcommands.Info
     [InfoValidator]
     internal partial class InfoSubcommand
     {
+        private readonly IOutputSink output;
+
         [Option("-p|--project", Description = Resources.Info.ProjectDescription)]
         [ProjectDefaultValueProvider]
         public string Project { get; private set; } = string.Empty;
@@ -24,9 +27,12 @@ namespace NSeed.Cli.Subcommands.Info
             ResolvedProject = project;
         }
 
-        public async Task OnExecute(
-           CommandLineApplication app,
-           Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>> runnerResolverFunc)
+        public InfoSubcommand(IOutputSink output)
+        {
+            this.output = output;
+        }
+
+        public async Task OnExecute(Func<FrameworkType, IDotNetRunner<InfoSubcommandRunnerArgs>> runnerResolverFunc)
         {
             var runner = runnerResolverFunc(ResolvedProject.Framework.Type);
             var result = runner.Run(new InfoSubcommandRunnerArgs
@@ -38,7 +44,7 @@ namespace NSeed.Cli.Subcommands.Info
 
             if (!result.IsSuccessful)
             {
-                await app.Error.WriteLineAsync(result.Message);
+                output.WriteError(result.Message);
             }
 
             await Task.Run(() => { });

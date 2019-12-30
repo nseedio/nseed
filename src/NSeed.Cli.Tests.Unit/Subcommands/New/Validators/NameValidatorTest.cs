@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
@@ -14,7 +15,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New.Validators
     {
         internal NameValidator Validator { get; }
 
-        internal NewSubcommand Subcommand { get; } = new NewSubcommand();
+        internal NewSubcommand Subcommand { get; } = new NewSubcommand(new Mock<IOutputSink>().Object);
 
         internal Mock<IDependencyGraphService> MockDependencyGraphService { get; } = new Mock<IDependencyGraphService>();
 

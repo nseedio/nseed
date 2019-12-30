@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Moq;
+using NSeed.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Services;
 using NSeed.Cli.Subcommands.New;
@@ -13,7 +14,7 @@ namespace NSeed.Cli.Tests.Unit.Subcommands.New
 {
     public abstract class BaseSubcommand
     {
-        private readonly NewSubcommand subcommand = new NewSubcommand();
+        private readonly NewSubcommand subcommand = new NewSubcommand(new Mock<IOutputSink>().Object);
         private readonly Mock<IDependencyGraphService> mockDependencyGraphService = new Mock<IDependencyGraphService>();
         private readonly DependencyGraphSpec dependencyGraphSpec = new DependencyGraphSpec();
         private readonly List<string> projectNames = new List<string>();

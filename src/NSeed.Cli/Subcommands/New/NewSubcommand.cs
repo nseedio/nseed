@@ -1,5 +1,6 @@
 using DiffLib;
 using McMaster.Extensions.CommandLineUtils;
+using NSeed.Abstractions;
 using NSeed.Cli.Abstractions;
 using NSeed.Cli.Assets;
 using NSeed.Cli.Extensions;
@@ -22,6 +23,8 @@ namespace NSeed.Cli.Subcommands.New
     [NewValidator]
     internal class NewSubcommand : BaseCommand
     {
+        private readonly IOutputSink output;
+
         [Option("-s|--solution", Description = Resources.New.SolutionDescription)]
         [SolutionDefaultValueProvider]
         public string Solution { get; private set; } = string.Empty;
@@ -47,6 +50,11 @@ namespace NSeed.Cli.Subcommands.New
         public bool IsValidResolvedSolution { get; private set; } = false;
 
         public string ResolvedSolutionErrorMessage { get; private set; } = string.Empty;
+
+        public NewSubcommand(IOutputSink output)
+        {
+            this.output = output;
+        }
 
         public void SetResolvedSolution(string solution)
         {
@@ -114,8 +122,7 @@ namespace NSeed.Cli.Subcommands.New
             ResolvedSolutionErrorMessage = errorMessage;
         }
 
-        public async Task OnExecute(
-            CommandLineApplication app,
+        public Task OnExecute(
             IFileSystemService fileSystemService,
             IDotNetRunner<NewSubcommandRunnerArgs> dotNetRunner)
         {
@@ -135,24 +142,24 @@ namespace NSeed.Cli.Subcommands.New
                 if (!isSuccessful)
                 {
                     fileSystemService.RemoveTempTemplates();
-                    await app.Error.WriteLineAsync(message);
-                    return;
+                    output.WriteError(message);
+                    return Task.CompletedTask;
                 }
             }
             else
             {
                 fileSystemService.RemoveTempTemplates();
-                await app.Error.WriteLineAsync(getTemplateResponse.Message);
-                return;
+                output.WriteError(getTemplateResponse.Message);
+                return Task.CompletedTask;
             }
 
             fileSystemService.RemoveTempTemplates();
-            await app.Out.WriteLineAsync(Resources.New.SuccessfulRun(ResolvedName));
+            output.WriteConfirmation(Resources.New.SuccessfulRun(ResolvedName));
 
             if (ResolvedFramework.Type == FrameworkType.NETFramework)
-                await app.Out.WriteLineAsync(Resources.New.NSeedNuGetPackageHasToBeAddedManuallyToTheProject(ResolvedName));
+                output.WriteWarning(Resources.New.NSeedNuGetPackageHasToBeAddedManuallyToTheProject(ResolvedName));
 
-            return;
+            return Task.CompletedTask;
         }
 
         private string GetCommonValue(IList<string> values)
