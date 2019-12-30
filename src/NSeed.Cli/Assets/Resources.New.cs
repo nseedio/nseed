@@ -15,6 +15,17 @@ namespace NSeed.Cli.Assets
 
             public static string SuccessfulRun(string projectName) => $"The seed bucket project '{projectName}' was created successfully.";
 
+            public static string NSeedNuGetPackageHasToBeAddedManuallyToTheProject(string projectName) =>
+                $"The created project does not reference the NSeed NuGet package.{Environment.NewLine}" +
+                $"You need to add the NuGet package to the project manually, by using any of the usual methods for adding a NuGet package to a project.{Environment.NewLine}" +
+                $"For example:{Environment.NewLine}" +
+                $"  - by using the 'Manage NuGet Packages...' option in Visual Studio{Environment.NewLine}" +
+                $"  - by using the Package Manager: Install-Package NSeed -ProjectName {projectName}{Environment.NewLine}" +
+                $"  - by using the Paket CLI:       paket add NSeed"; // TODO: Check Paket docs and add the project name once the airplane lands :-) Also, check if Paket works with .NET Classic.
+
+               // We cannot propose .NET CLI here because adding packages does not work with .NET Classic.
+               // Otherwise we would call it in the command and automatically add the package ;-)
+
             public const string DefaultProjectName = "Seeds";
 
             public const int MinProjectNameCharacters = 3;

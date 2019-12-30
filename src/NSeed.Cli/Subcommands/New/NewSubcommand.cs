@@ -148,6 +148,10 @@ namespace NSeed.Cli.Subcommands.New
 
             fileSystemService.RemoveTempTemplates();
             await app.Out.WriteLineAsync(Resources.New.SuccessfulRun(ResolvedName));
+
+            if (ResolvedFramework.Type == FrameworkType.NETFramework)
+                await app.Out.WriteLineAsync(Resources.New.NSeedNuGetPackageHasToBeAddedManuallyToTheProject(ResolvedName));
+
             return;
         }
 

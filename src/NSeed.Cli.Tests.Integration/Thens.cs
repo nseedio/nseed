@@ -27,9 +27,9 @@ namespace NSeed.Cli.Tests.Integration
             return this;
         }
 
-        internal Thens ShouldShowSuccessMessage(string projectName)
+        internal Thens ShouldShowSuccessMessage(string projectName, bool shouldShowMissingNugetPackageWarning = false)
         {
-            RunStatus.Output.Should().BeEquivalentTo($"{SuccessfulRun(projectName)}\r\n");
+            RunStatus.Output.Should().BeEquivalentTo($"{SuccessfulRun(projectName)}\r\n{(shouldShowMissingNugetPackageWarning ? $"{NSeedNuGetPackageHasToBeAddedManuallyToTheProject(projectName)}\r\n" : string.Empty)}");
             return this;
         }
 

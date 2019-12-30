@@ -175,7 +175,7 @@ namespace NSeed.Cli.Tests.Integration
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
-                .ShouldShowSuccessMessage("ConsoleApp.Seeds")
+                .ShouldShowSuccessMessage("ConsoleApp.Seeds", shouldShowMissingNugetPackageWarning: true)
                 .ShouldContainSeedBucketProject("ConsoleApp.Seeds", Path.Combine(NSeed.IntegrationTestScenariosTempFolderPath, "SingleSolution_WithDotNetClassicFramework", "MyEmptySolution.sln"));
         }
 
