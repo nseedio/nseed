@@ -402,8 +402,9 @@ namespace NSeed.Cli.Tests.Unit.Entities
 
         protected string CreateCsprojFile(string name, string content)
         {
-            TestDirectory = @$"../../../TestData_{Guid.NewGuid()}\";
-            var path = $@"{TestDirectory}{name}.csproj";
+            // TODO: am Please use FileFixture here.
+            TestDirectory = Path.Combine("..", "..", "..", $"TestData_{Guid.NewGuid()}");
+            var path = Path.Combine(TestDirectory, $"{name}.csproj");
             Directory.CreateDirectory(TestDirectory);
             using var tw = new StreamWriter(path, true);
             tw.WriteLine(content);

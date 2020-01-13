@@ -1,14 +1,15 @@
 using NSeed.Cli.Assets;
 using NSeed.Cli.Tests.Integration.Fixtures;
 using System;
-using System.IO;
+using System.Runtime.InteropServices;
 using Xunit;
 using static NSeed.Cli.Assets.Resources.Info;
 using static NSeed.Cli.Tests.Integration.Thens;
 
 namespace NSeed.Cli.Tests.Integration
 {
-    public class InfoSubcommandTest : IClassFixture<NSeedFixture>, IDisposable
+    [Collection("NSeedCollection")]
+    public class InfoSubcommandTest : IDisposable
     {
         private NSeedFixture NSeed { get; }
 
@@ -24,7 +25,7 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NSeedDll_Info_HelpOption()
         {
-            NSeed.Run("NSeed.Cli.dll info --help");
+            NSeed.Run("info --help");
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful()
@@ -34,7 +35,7 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NSeedDll_Info()
         {
-            NSeed.Run("NSeed.Cli.dll info");
+            NSeed.Run("info");
 
             Then(NSeed.Response)
                 .ShouldNotBeSuccessful(Errors.WorkingDirectoryDoesNotContainAnyFile);
@@ -43,34 +44,41 @@ namespace NSeed.Cli.Tests.Integration
         [Fact]
         public void NSeedDll_ProjectNotDefine()
         {
-            NSeed.Run("NSeed.Cli.dll info --project");
+            NSeed.Run("info --project");
 
             Then(NSeed.Response)
-                .ShouldNotBeSuccessful(argOutput: "Missing value for option 'project'.\r\n");
+                .ShouldNotBeSuccessful(argOutput: "Missing value for option 'project'.");
         }
 
-        [Fact]
+        [SkippableFact]
         public void NseedDll_Info_ClassicConsoleApp_NoSeedProject()
         {
-            NSeed.Run("NSeed.Cli.dll info --project ", NSeed.Scenario("NetClassicConsoleApp"));
+            Skip.IfNot(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+
+            NSeed.Run("info --project ", NSeed.Scenario("NetClassicConsoleApp"));
 
             Then(NSeed.Response)
                 .ShouldNotBeSuccessful(Resources.Info.Errors.SeedBucketProjectCouldNotBeFound);
         }
 
-        [Fact]
+        [SkippableFact]
         public void NseedDll_Info_Classic_EmptySeedBucketProject()
         {
-            NSeed.Run("NSeed.Cli.dll info --project ", NSeed.Scenario("EmptySeedBucket.DotNetClassic"));
+            Skip.IfNot(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+
+            NSeed.Run("info --project ", NSeed.Scenario("EmptySeedBucket.DotNetClassic"));
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful();
         }
 
-        [Fact]
+        // TODO Don't skip this fact on LINUX after creating NSeed package 0.2.0 on Nuget.org
+        [SkippableFact]
         public void NseedDll_Info_Core_EmptySeedBucketProject()
         {
-            NSeed.Run("NSeed.Cli.dll info --project ", NSeed.Scenario("EmptySeedBucket.DotNetCore"));
+            Skip.IfNot(RuntimeInformation.IsOSPlatform(OSPlatform.Windows));
+
+            NSeed.Run("info --project ", NSeed.Scenario("EmptySeedBucket.DotNetCore"));
 
             Then(NSeed.Response)
                 .ShouldBeSuccessful();

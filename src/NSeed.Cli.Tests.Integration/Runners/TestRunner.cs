@@ -11,11 +11,9 @@ namespace NSeed.Cli.Tests.Integration.Runners
             return base.RunDotNet(workingDirectory, arguments);
         }
 
-        public RunStatus RunNSeed(string workingDirectory, string[] arguments)
+        public RunStatus RunNSeed(string[] arguments)
         {
-            var nseedToolExeCommand = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".dotnet", "tools", "nseed.exe");
-
-            return Run(nseedToolExeCommand, workingDirectory, arguments);
+            return Run("nseed", string.Empty, arguments);
         }
     }
 }

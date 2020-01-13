@@ -14,6 +14,7 @@ function AssertStepIsSuccessful($message) {
     Write-Host
 }
 
+dotnet build
 
 dotnet test NSeed.Cli.Tests.Integration -c Debug -v n
 AssertStepIsSuccessful "Is test run successful?"

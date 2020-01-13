@@ -105,12 +105,16 @@ namespace NSeed.Cli.Runners
                 var errorTask = ConsumeStreamReaderAsync(process.StandardError, errors);
 
                 // TODO please convert this method to be async method and change all other places to be async where it is used.
-                Task.Run(async () => await Task.WhenAll(outputTask, errorTask)).ConfigureAwait(false).GetAwaiter().GetResult();
+                Task.Run(async () => await Task.WhenAll(outputTask, errorTask)).ConfigureAwait(true).GetAwaiter().GetResult();
 
                 if (!process.HasExited)
                 {
-                    process.Kill();
-                    return new RunStatus(output.ToString(), errors.ToString());
+                    // On Linux, I need to wait for exit instead of killing the process.
+                    // process.Kill();
+                    // Windows are not affected by this change
+                    process.WaitForExit();
+
+                    return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);
                 }
 
                 return new RunStatus(output.ToString(), errors.ToString(), process.ExitCode);

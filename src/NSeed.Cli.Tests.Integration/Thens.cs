@@ -29,23 +29,33 @@ namespace NSeed.Cli.Tests.Integration
 
         internal Thens ShouldShowSuccessMessage(string projectName, bool shouldShowMissingNugetPackageWarning = false)
         {
-            RunStatus.Output.Should().BeEquivalentTo($"{SuccessfulRun(projectName)}\r\n{(shouldShowMissingNugetPackageWarning ? $"{NSeedNuGetPackageHasToBeAddedManuallyToTheProject(projectName)}\r\n" : string.Empty)}");
+            RunStatus.Output.Should().Contain(SuccessfulRun(projectName));
+            if (shouldShowMissingNugetPackageWarning)
+            {
+                RunStatus.Output.Should().Contain(NSeedNuGetPackageHasToBeAddedManuallyToTheProject(projectName));
+            }
+
             return this;
         }
 
         internal Thens ShouldNotBeSuccessful(
             string errorMessage = "",
-            string output = "Specify --help for a list of available options and commands.\r\n",
+            string output = "Specify --help for a list of available options and commands.",
             string argOutput = "")
         {
             RunStatus.IsSuccess.Should().BeFalse();
 
             if (errorMessage.Exists())
             {
-                RunStatus.Errors.Should().BeEquivalentTo($"{errorMessage}\r\n");
+                RunStatus.Errors.Should().Contain(errorMessage);
             }
 
-            RunStatus.Output.Should().Be($"{output}{argOutput}");
+            RunStatus.Output.Should().Contain($"{output}");
+
+            if (argOutput.Exists())
+            {
+                RunStatus.Output.Should().Contain(argOutput);
+            }
 
             return this;
         }
@@ -54,7 +64,7 @@ namespace NSeed.Cli.Tests.Integration
         {
             RunStatus.Output.Should().StartWith("Data seeding tool for .NET.");
             RunStatus.Output.Should().Contain("Usage:");
-            RunStatus.Output.Should().EndWith("Run 'nseed [command] --help' for more information about a command.\r\n\r\n");
+            RunStatus.Output.Should().Contain("Run 'nseed [command] --help' for more information about a command.");
             return this;
         }
 
@@ -63,7 +73,7 @@ namespace NSeed.Cli.Tests.Integration
             RunStatus.Output.Should().StartWith("Display seed bucket information.");
             RunStatus.Output.Should().Contain("Options:");
             RunStatus.Output.Should().Contain($"-p|--project    {ProjectDescription}");
-            RunStatus.Output.Should().EndWith("-?|-h|--help    Show command line help.\r\n\r\n");
+            RunStatus.Output.Should().Contain("-?|-h|--help    Show command line help.");
             return this;
         }
 
@@ -74,7 +84,7 @@ namespace NSeed.Cli.Tests.Integration
             RunStatus.Output.Should().Contain($"-s|--solution   {SolutionDescription}");
             RunStatus.Output.Should().Contain($"-f|--framework  {FrameworkDescription}");
             RunStatus.Output.Should().Contain($"-n|--name       {ProjectNameDescription}");
-            RunStatus.Output.Should().EndWith("-?|-h|--help    Show command line help.\r\n\r\n");
+            RunStatus.Output.Should().Contain("-?|-h|--help    Show command line help.");
             return this;
         }
 

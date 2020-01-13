@@ -14,19 +14,19 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
             Runner = new TestRunner();
 
             RepositorySrcFolderPath = Path.GetFullPath(Path.Combine(CurrentAssemblyPath, "..", "..", "..", "..", ".."));
-            NSeedTestsIntegrationFolderPath = GetNSeedTestsIntegrationFolderPath();
+
+            var repositoryNseedFolderPath = Path.GetFullPath(Path.Combine(RepositorySrcFolderPath, ".."));
+
+            NSeedTestsIntegrationFolderPath = Path.Combine(repositoryNseedFolderPath, "tests", "integration");
 
             ToolNupkgPath = Path.Combine(RepositorySrcFolderPath, "NSeed.Cli", "bin", "Debug");
-            // TODO This will not work if we change framework version.
-            ToolDllPath = Path.Combine(ToolNupkgPath, "netcoreapp2.2");
-            // NugetNSeedPackageCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".nuget", "packages", "nseed");
 
             IntegrationTestScenariosTempFolderPath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid().ToString()}_NSeedIntegrationTestScenarios");
 
-            // var installToolResponse = Runner.RunDotNet(RepositorySrcFolderPath, new string[]
-            // {
-            //      @$"tool install -g --add-source {ToolNupkgPath} NSeed.Cli"
-            // });
+            Runner.RunDotNet(RepositorySrcFolderPath, new string[]
+            {
+                  @$"tool install -g --version 0.2.0 --add-source {ToolNupkgPath} NSeed.Cli"
+            });
         }
 
         public void Dispose()
@@ -37,6 +37,12 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
             });
 
             ClearTestData();
+        }
+
+        public void LogToLinuxConsole(string message)
+        {
+            using var writer = new StreamWriter(Console.OpenStandardOutput());
+            writer.WriteLine($"Test Log: {message}");
         }
 
         internal void CopyIntegrationTestScenariosToTempFolder()
@@ -55,12 +61,8 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
 
         internal void Run(params string[] command)
         {
-            Response = Runner.RunDotNet(ToolDllPath, command);
-        }
-
-        internal void Run(string command)
-        {
-            Response = Runner.RunDotNet(ToolDllPath, new string[] { command });
+            Response = Runner.RunNSeed(command);
+            LogToLinuxConsole($"Output: {Response.Output} Error: {Response.Errors} IsSuccess: {Response.IsSuccess} ExitCode:{Response.ExitCode}");
         }
 
         internal string Scenario(string scenario)
@@ -76,20 +78,10 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
 
         private string NSeedTestsIntegrationFolderPath { get; }
 
-        // private string NugetNSeedPackageCachePath { get; }
-
-        private string ToolDllPath { get; }
-
         private TestRunner Runner { get; }
 
         private string RepositorySrcFolderPath { get; }
 
         private string CurrentAssemblyPath { get; } = Assembly.GetExecutingAssembly().Location;
-
-        private string GetNSeedTestsIntegrationFolderPath()
-        {
-            var temp = Path.Combine(CurrentAssemblyPath, "..", "..", "..", "..", "..", "..");
-            return Path.Combine(temp, "tests", "integration");
-        }
     }
 }
