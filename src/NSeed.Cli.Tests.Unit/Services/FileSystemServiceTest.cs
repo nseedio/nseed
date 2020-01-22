@@ -84,7 +84,7 @@ namespace NSeed.Cli.Tests.Unit.Services
             new object[] { Path.Combine(FileFixture.RootDirectory, "Fit") },
             new object[] { Path.Combine(FileFixture.RootDirectory, "Main") },
             new object[] { Path.Combine(FileFixture.RootDirectory, "Test", "Sub") },
-            new object[] { Path.Combine(FileFixture.RootDirectory, "Pims", "pims") }
+            new object[] { Path.Combine(FileFixture.RootDirectory, "Pims", "Pims") }
         };
 
         public IEnumerator<object[]> GetEnumerator() => ValidPaths.GetEnumerator();
