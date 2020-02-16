@@ -51,3 +51,40 @@ Useful articles to read:
 
 
 ## Results
+
+In the lab we have considered the following approaches:
+
+- [Having a Dedicated ISeedingStartup Interface](having-a-dedicated-iseedingstartup-interface)
+- [Completely Reusing the .NET Core Startup Mechanism](completely-reusing-the-net-core-startup-mechanism)
+- [Base SeedBucketStartup Class with Startup Scope Attributes](base-seedBucketStartup-class-with-startup-scope-attributes)
+
+### Having a Dedicated ISeedingStartup Interface
+
+This was the original approach used in the beginning when the requirements and boundary conditions were not fully understood.
+
+The idea was to have a dedicated interface called `ISeedingStartup` containing the methods like `ConfigureServices()` and `ConfigureConfiguration()`.
+
+The major issue is that all the implementations should implement all the methods (we cannot use default interface implementations, because of the support of .NET Classic) even if some are not needed.
+The question was also how to distinguish between seeding, weeding out, and destroying startups. Should we have a dedicated interface for them?
+
+### Completely Reusing the .NET Core Startup Mechanism
+
+The premise was that seeding Startup and .NET Core Startup are, in their essence, exactly the same thing - initial wiring of the application. Also, the tempting idea was to reuse already existing Startup classes to wire future NSeed executions.
+
+After giving it a proper thought the following became clear:
+
+- Startup classes will never be reused as-is. E.g. during the seeding we will want different implementation of services then during Web development. Also, a lot of wiring in Web Sartups are Web related and have nothing to do with seeding. Moreover, at the projects where we utilize seeding via simple console application the approach was always to extract common wirings to a dedicated common project used in Web and Seeds.
+- Startup classes configure the app's pipline, something completely unrelated to seeding.
+- Startup mechanism is very mighty with lot of estension points and variations that are not relevant to seeding. Supporting it would only caused confusion.
+
+### Base SeedBucketStartup Class with Startup Scope Attributes
+
+This approach takes the best of both previous approaches. A dedicated abstract class called `SeedBucketStartup` containing the methods like `ConfigureServices()` and `ConfigureConfiguration()` that follow the same approach as their counterparts in the .NET Core Startup. All the methods provide standard implementations.
+
+The concrete implementations can optionally be marked with three different attributes:
+
+- SeedingStartup
+- WeedingOutStartup
+- DestroyingStartup
+
+If a concrete implementation does not have any of those attributes set it is considered that it can be used for all three kind of executions.
