@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "DotNetCoreSeeds": {
+      "commandName": "Project"
+    },
+    "RunInfoCommand": {
+      "commandName": "Project",
+      "commandLineArgs": "info"
+    },
+    "RunSeedCommand": {
+      "commandName": "Project",
+      "commandLineArgs": "seed --verbose"
+    }
+  }
+}

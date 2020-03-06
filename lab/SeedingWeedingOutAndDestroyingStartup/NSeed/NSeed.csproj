@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\BuildProperties.Packages.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
+    <Compile Include="..\Common\Abstractions\IOutputSink.cs" Link="Abstractions\IOutputSink.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.BaseCommand.cs" Link="Cli\Assets\Resources.BaseCommand.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Cli\Assets\Resources.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Cli\Assets\Resources.Info.cs" />
+    <Compile Include="..\Common\Cli\Assets\Resources.Seed.cs" Link="Cli\Assets\Resources.Seed.cs" />
+    <Compile Include="..\Common\Cli\BaseCommand.cs" Link="Cli\BaseCommand.cs" />
+    <Compile Include="..\Common\Cli\CommandLineApplicationExecutor.cs" Link="Cli\CommandLineApplicationExecutor.cs" />
+    <Compile Include="..\Common\Cli\ConsoleOutputSink.cs" Link="Cli\ConsoleOutputSink.cs" />
+    <Compile Include="..\Common\Cli\ConsoleUtil.cs" Link="Cli\ConsoleUtil.cs" />
+    <Compile Include="..\Common\Cli\ITextColorsProvider.cs" Link="Cli\ITextColorsProvider.cs" />
+    <Compile Include="..\Common\Cli\MainCommand.cs" Link="Cli\MainCommand.cs" />
+    <Compile Include="..\Common\Cli\Subcommands\Info\InfoSubcommand.cs" Link="Cli\Subcommands\Info\InfoSubcommand.cs" />
+    <Compile Include="..\Common\Cli\Subcommands\Seed\SeedSubcommand.cs" Link="Cli\Subcommands\Seed\SeedSubcommand.cs" />
+    <Compile Include="..\Common\Cli\TextColors.cs" Link="Cli\TextColors.cs" />
+    <Compile Include="..\Common\Cli\TextColorsTheme.cs" Link="Cli\TextColorsTheme.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Keep these at the lowest possible version. -->
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
+    <PackageReference Include="System.Diagnostics.Process" Version="4.1.0" />
+    <PackageReference Include="System.Threading.Thread" Version="4.0.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ThirdParty\CsConsoleFormat\Generation\Fluent\Colors.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Colors.g.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ThirdParty\CsConsoleFormat\Generation\Fluent\Colors.g.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Colors.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Cli\Assets\" />
+    <Folder Include="Abstractions\" />
+  </ItemGroup>  
+
+</Project>

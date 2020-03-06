@@ -1,0 +1,15 @@
+<!-- Build properties used in projects whose outputs are NuGet packages. -->
+<Project>
+  <PropertyGroup>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.2.0</Version>
+    <Authors>NSeed, ironcev</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/nseedio/nseed</PackageProjectUrl>
+    <RepositoryUrl></RepositoryUrl>
+    <PackageIcon>Icon.png</PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Icon.png" Pack="true" Visible="false" PackagePath="\" />
+  </ItemGroup>
+</Project>

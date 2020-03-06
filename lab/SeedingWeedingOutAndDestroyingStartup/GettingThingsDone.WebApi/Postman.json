@@ -1,0 +1,475 @@
+{
+	"info": {
+		"_postman_id": "8ef87831-d210-483f-abbd-35fff1036111",
+		"name": "Getting Things Done",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get JWT bearer token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"username\": \"user\",\r\n\t\"password\": \"user\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/auth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Actions",
+			"item": [
+				{
+					"name": "Get all Actions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Action",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Title\": \"Prepare workshop example\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing Action",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"Id\": 1,\r\n    \"Title\": \"Prepare workshop example\",\r\n\t\"DueDate\": \"2018-12-16T12:00:00+01:00\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Move existing Action to a List",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions/1/move-to/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions",
+								"1",
+								"move-to",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assign existing Action to a Project",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions/1/assign-to/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions",
+								"1",
+								"assign-to",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete existing Action",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/actions/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"actions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Lists",
+			"item": [
+				{
+					"name": "Get all Lists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/lists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"In\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/lists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing List",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\" : 1,\r\n    \"Name\": \"Inbox\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/lists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"lists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Actions in a List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/lists/1/actions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"lists",
+								"1",
+								"actions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete existing List",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/lists/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"lists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Projects",
+			"item": [
+				{
+					"name": "Get all Projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new Project",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Prepare High Performance ASP.NET workshop\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update existing Project",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Id\": 1,\r\n    \"Name\": \"Prepare High Performance ASP.NET advanced workshop\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Actions in a Project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete existing Project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:55555/api/projects/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "55555",
+							"path": [
+								"api",
+								"projects",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
