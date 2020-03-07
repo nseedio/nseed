@@ -27,6 +27,7 @@ namespace DotNetCoreSeeds
             output.WriteMessage("Ensuring database is created.");
 
             var dbContext = serviceProvider.GetRequiredService<GettingThingsDoneDbContext>();
+            dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
         }
     }

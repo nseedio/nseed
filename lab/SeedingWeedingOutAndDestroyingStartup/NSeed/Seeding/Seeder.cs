@@ -68,13 +68,10 @@ namespace NSeed.Seeding
                 SeedInfo? currentSeedInfo;
                 int seedingStepNumber;
                 IServiceCollection serviceCollection = new ServiceCollection();
-                ServiceProvider? serviceProvider;
                 var singleSeedSeedingResults = new List<SingleSeedSeedingReport>();
 
                 try
                 {
-                    serviceProvider = serviceCollection.BuildServiceProvider();
-
                     // TODO: Add creation of SeedingStartup and registration of services.
                     if (seedBucketStartupType != null)
                     {
@@ -91,8 +88,6 @@ namespace NSeed.Seeding
                         startup.InitializeSeeding(serviceCollection, outputSink);
                     }
 
-                    serviceProvider = serviceCollection.BuildServiceProvider();
-
                     // TODO: Add finer granulation of errors and seeding result - CreatingSeedingStartupFailed.
                 }
                 catch (Exception exception)
@@ -102,13 +97,20 @@ namespace NSeed.Seeding
                     return SeedingReport.CreateForBuildingServiceProviderFailed(seedBucketInfo, seedingPlan);
                 }
 
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+
                 for (int i = 0; i < seedingPlan.SeedingSteps.Count; i++)
                 {
                     currentSeedInfo = seedingPlan.SeedingSteps[i];
                     seedingStepNumber = i + 1;
                     try
                     {
-                        var hasSeeded = await SeedSingleSeed(seedingStepNumber, serviceProvider, currentSeedInfo);
+                        bool hasSeeded;
+                        using (var serviceScope = serviceProvider.CreateScope())
+                        {
+                            hasSeeded = await SeedSingleSeed(seedingStepNumber, serviceScope.ServiceProvider, currentSeedInfo);
+                        }
+
                         singleSeedSeedingResults.Add(new SingleSeedSeedingReport(hasSeeded ? SingleSeedSeedingStatus.Seeded : SingleSeedSeedingStatus.Skipped, currentSeedInfo));
                     }
                     catch (Exception exception)
@@ -127,7 +129,7 @@ namespace NSeed.Seeding
                 return SeedingReport.CreateForSucceeded(seedBucketInfo, seedingPlan, singleSeedSeedingResults);
 
                 // Returns true if Seed() is called or false if the seed HasAlreadyYielded().
-                async Task<bool> SeedSingleSeed(int seedingStep, ServiceProvider serviceProvider, SeedInfo seedInfo)
+                async Task<bool> SeedSingleSeed(int seedingStep, IServiceProvider serviceProvider, SeedInfo seedInfo)
                 {
                     System.Diagnostics.Debug.Assert(seedingStep > 0);
 
