@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace NSeed.MetaInfo
@@ -16,6 +17,11 @@ namespace NSeed.MetaInfo
         /// Gets the error message.
         /// </summary>
         public string Message { get; }
+
+        /// <summary>
+        /// Gets the error message with link for more information.
+        /// </summary>
+        public string MessageWithLink => $"{Message}{Environment.NewLine}See: https://nseed.io/error/{Code}";
 
         internal Error(string code, string message)
         {

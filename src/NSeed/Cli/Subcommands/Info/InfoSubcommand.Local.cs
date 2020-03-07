@@ -102,6 +102,11 @@ namespace NSeed.Cli.Subcommands.Info
                 ConsoleRenderer.RenderDocument(GenerateScenariosInfo(), null, renderingBehavior.RenderRect);
             }
 
+            if (numberOfErrors > 0)
+            {
+                ConsoleRenderer.RenderDocument(GenerateErrorsInfo(), null, renderingBehavior.RenderRect);
+            }
+
             Output.WriteLine();
 
             return Task.CompletedTask;
@@ -169,7 +174,7 @@ namespace NSeed.Cli.Subcommands.Info
                     CreateHeading("Seeds"),
                     new Grid
                     {
-                        Margin = new Thickness(1, 0, 1, 1),
+                        Margin = new Thickness(1, 0, 1, 2),
 
                         Stroke = LineThickness.None,
 
@@ -213,7 +218,7 @@ namespace NSeed.Cli.Subcommands.Info
                     CreateHeading("Scenarios"),
                     new Grid
                     {
-                        Margin = new Thickness(1, 0, 1, 0),
+                        Margin = new Thickness(1, 0, 1, 2),
 
                         Stroke = LineThickness.None,
 
@@ -241,6 +246,48 @@ namespace NSeed.Cli.Subcommands.Info
                                 })
                         }
                     }
+                )
+                {
+                    Color = textColors.Message,
+                    Background = textColors.Background
+                };
+            }
+
+            Document GenerateErrorsInfo()
+            {
+                return new Document(
+                   CreateHeading("Errors"),
+                   new Grid
+                   {
+                       Margin = new Thickness(1, 0, 1, 0),
+
+                       Stroke = LineThickness.None,
+
+                       Columns =
+                       {
+                            new Column { Width = GridLength.Star(3) },
+                            new Column { Width = GridLength.Star(3) },
+                            new Column { Width = GridLength.Star(4) }
+                       },
+
+                       Children =
+                       {
+                           CreateInfoGridHeaderCell("Source"),
+                           CreateInfoGridHeaderCell("Source Class"),
+                           CreateInfoGridHeaderCell("Description"),
+                           seedBucketInfo.ContainedSeedables
+                            .SelectMany(seedable => seedable.AllErrors
+                                .Select(error =>
+                                {
+                                    return new[]
+                                    {
+                                        CreateInfoGridValueCell(seedable.FriendlyName, textColors.Message),
+                                        CreateInfoGridValueCell(seedable.Name, textColors.Message),
+                                        CreateInfoGridValueCell(error.MessageWithLink, textColors.Message)
+                                    };
+                                }))
+                       }
+                   }
                 )
                 {
                     Color = textColors.Message,

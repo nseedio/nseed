@@ -34,12 +34,17 @@ namespace NSeed.MetaInfo
         public Type? Type { get; }
 
         /// <summary>
-        /// Gets the full name of the of the NSeed abstraction described with this meta info.
+        /// Gets the full name of the NSeed abstraction described with this meta info.
         /// </summary>
         /// <remarks>
         /// If the <see cref="Type"/> exists, this property is equal to its <see cref="Type.FullName"/>.
         /// </remarks>
         public string FullName { get; }
+
+        /// <summary>
+        /// Gets the class name of the NSeed abstraction described with this meta info.
+        /// </summary>
+        public string Name => GetName();
 
         /// <summary>
         /// Gets the errors that occur directly in the definition of the NSeed abstraction
@@ -106,6 +111,16 @@ namespace NSeed.MetaInfo
             }
 
             return false;
+        }
+
+        private string GetName()
+        {
+            if (FullName is null)
+            {
+                return string.Empty;
+            }
+
+            return FullName.Split('.')?.LastOrDefault() ?? FullName;
         }
     }
 }
