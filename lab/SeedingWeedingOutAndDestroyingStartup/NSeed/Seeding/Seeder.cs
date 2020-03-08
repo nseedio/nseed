@@ -66,11 +66,10 @@ namespace NSeed.Seeding
 
             async Task<SeedingReport> SeedSeedingPlan()
             {
-                SeedInfo? currentSeedInfo;
-                int seedingStepNumber;
-                IServiceCollection serviceCollection = new ServiceCollection();
                 var singleSeedSeedingResults = new List<SingleSeedSeedingReport>();
 
+                IServiceCollection serviceCollection = new ServiceCollection(); // TODO: We should have more of them. Think about lifecycle of the engine services, services in the different stages in the execution, etc.
+                serviceCollection.AddSingleton(outputSink);
                 try
                 {
                     // TODO: Add creation of SeedingStartup and registration of services.
@@ -78,15 +77,20 @@ namespace NSeed.Seeding
                     {
                         outputSink.WriteVerboseMessage($"Creating seed bucket startup of type {seedBucketStartupType} TODO");
 
-                        var startup = (SeedBucketStartup)Activator.CreateInstance(seedBucketStartupType);
+                        var startup = (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
 
-                        outputSink.WriteVerboseMessage($"Creating and configuring service collection TODO");
+                        outputSink.WriteVerboseMessage($"Configuring service collection TODO");
 
-                        serviceCollection = startup.CreateAndConfigureServiceCollection();
+                        startup.ConfigureServices(serviceCollection);
+
+                        // TODO: Check that the configuration does not override IOutputSink. Only the engine can add it. It must be singleton and the same one we have here.
 
                         outputSink.WriteVerboseMessage($"Initializing seeding TODO");
 
-                        startup.InitializeSeeding(serviceCollection, outputSink);
+                        using (var serviceScope = serviceCollection.BuildServiceProvider().CreateScope())
+                        {
+                            startup.InitializeSeeding(serviceScope.ServiceProvider);
+                        }
                     }
 
                     // TODO: Add finer granulation of errors and seeding result - CreatingSeedingStartupFailed.
@@ -100,6 +104,8 @@ namespace NSeed.Seeding
 
                 var serviceProvider = serviceCollection.BuildServiceProvider();
 
+                SeedInfo? currentSeedInfo;
+                int seedingStepNumber;
                 for (int i = 0; i < seedingPlan.SeedingSteps.Count; i++)
                 {
                     currentSeedInfo = seedingPlan.SeedingSteps[i];

@@ -2,6 +2,7 @@ using GettingThingsDone.Contracts.Dto;
 using GettingThingsDone.Contracts.Interface;
 using GettingThingsDone.Contracts.Model;
 using NSeed;
+using NSeed.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,16 +15,30 @@ namespace DotNetCoreSeeds
         private readonly IProjectService projectService;
         private readonly IActionService actionService;
         private readonly IActionListService actionListService;
+        private readonly IOutputSink output;
+        private readonly ISomeSingletonService someSingletonService;
 
-        public MountEverestBaseCampTrack(IProjectService projectService, IActionService actionService, IActionListService actionListService)
+        public MountEverestBaseCampTrack(IProjectService projectService, IActionService actionService, IActionListService actionListService, IOutputSink output, ISomeSingletonService someSingletonService)
         {
+            output.WriteVerboseMessage($"Executing {nameof(MountEverestBaseCampTrack)}.ctor");
+
             this.projectService = projectService;
             this.actionService = actionService;
             this.actionListService = actionListService;
+            this.output = output;
+            this.someSingletonService = someSingletonService;
         }
 
         public async Task Seed()
         {
+            output.WriteVerboseMessage(string.Empty);
+            output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)} ===");
+            output.WriteVerboseMessage($"{nameof(IActionService)} unique value: {actionService.GetHashCode()}");
+            output.WriteVerboseMessage($"{nameof(IOutputSink)} unique value: {output.GetHashCode()}");
+            output.WriteVerboseMessage($"{nameof(ISomeSingletonService)} unique value: {someSingletonService.GetHashCode()}");
+            output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)} ===");
+            output.WriteVerboseMessage(string.Empty);
+
             var project = (await projectService.CreateOrUpdate(new ProjectDto { Name = Yield.MountEverestBaseCampTrackProjectName })).Value;
 
             var actionNames = new[] { "Buy shoes", "Buy socks", "Borrow sleeping bag" };
@@ -51,6 +66,14 @@ namespace DotNetCoreSeeds
 
             public async Task<ProjectDto> GetMountEverestBaseCampTrackProject()
             {
+                Seed.output.WriteVerboseMessage(string.Empty);
+                Seed.output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)}.Yield ===");
+                Seed.output.WriteVerboseMessage($"{nameof(IActionService)} unique value: {Seed.actionService.GetHashCode()}");
+                Seed.output.WriteVerboseMessage($"{nameof(IOutputSink)} unique value: {Seed.output.GetHashCode()}");
+                Seed.output.WriteVerboseMessage($"{nameof(ISomeSingletonService)} unique value: {Seed.someSingletonService.GetHashCode()}");
+                Seed.output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)}.Yield ===");
+                Seed.output.WriteVerboseMessage(string.Empty);
+
                 return (await Seed.projectService.GetAll()).Value.First(project => project.Name == MountEverestBaseCampTrackProjectName);
             }
         }
