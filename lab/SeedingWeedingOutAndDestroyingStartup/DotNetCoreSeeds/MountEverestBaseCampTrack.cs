@@ -1,4 +1,4 @@
-﻿using GettingThingsDone.Contracts.Dto;
+using GettingThingsDone.Contracts.Dto;
 using GettingThingsDone.Contracts.Interface;
 using GettingThingsDone.Contracts.Model;
 using NSeed;
@@ -24,7 +24,7 @@ namespace DotNetCoreSeeds
 
         public async Task Seed()
         {
-            var project = (await projectService.CreateOrUpdate(new ProjectDto { Name = "Mount Everest Base Camp Track" })).Value;
+            var project = (await projectService.CreateOrUpdate(new ProjectDto { Name = Yield.MountEverestBaseCampTrackProjectName })).Value;
 
             var actionNames = new[] { "Buy shoes", "Buy socks", "Borrow sleeping bag" };
             var actions = new List<ActionDto>();
@@ -42,13 +42,17 @@ namespace DotNetCoreSeeds
 
         public async Task<bool> HasAlreadyYielded()
         {
-            return (await projectService.GetAll()).Value.Any(project => project.Name == "Mount Everest Base Camp Track");
+            return (await projectService.GetAll()).Value.Any(project => project.Name == Yield.MountEverestBaseCampTrackProjectName);
         }
 
         internal class Yield : YieldOf<MountEverestBaseCampTrack>
         {
-            // TODO: Use the Yield class to provide the yield of this seed to other seeds.
-            //       To learn how to use the Yield class see TODO-URL.
+            public const string MountEverestBaseCampTrackProjectName = "Mount Everest Base Camp track";
+
+            public async Task<ProjectDto> GetMountEverestBaseCampTrackProject()
+            {
+                return (await Seed.projectService.GetAll()).Value.First(project => project.Name == MountEverestBaseCampTrackProjectName);
+            }
         }
     }
 }

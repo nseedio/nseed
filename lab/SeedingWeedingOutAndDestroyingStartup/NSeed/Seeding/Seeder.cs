@@ -6,6 +6,7 @@ using NSeed.MetaInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace NSeed.Seeding
@@ -139,6 +140,23 @@ namespace NSeed.Seeding
                     var seed = (ISeed)ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, seedInfo.Type);
 
                     // TODO: Create YieldOf objects and assign them to YieldOf properties.
+                    // TODO: Think what to do if the Type or PropertyInfo is null.
+                    foreach (var requiredYield in seedInfo.RequiredYields)
+                    {
+                        // TODO: Check if it is already created. If we have two properties of the same yield type. This must never be the case it should be an error in the seed definition.
+                        // TOOD: Yield access property must be public or internal or protected. It also must have non private setter.
+
+                        var yieldingSeed = (ISeed)ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, requiredYield.YieldingSeed.Type);
+
+                        var yield = ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, requiredYield.Type);
+
+                        var seedPropertyOnYield = yield.GetType().GetProperty("Seed", BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
+
+                        // seedPropertyOnYield.SetValue(yield, yieldingSeed, BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance | BindingFlags.SetProperty, null, null, null);
+                        seedPropertyOnYield.SetValue(yield, yieldingSeed);
+
+                        requiredYield.YieldAccessProperty!.SetValue(seed, yield);
+                    }
 
                     if (await seed.HasAlreadyYielded())
                     {
