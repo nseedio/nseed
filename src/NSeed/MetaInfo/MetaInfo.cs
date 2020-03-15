@@ -120,7 +120,7 @@ namespace NSeed.MetaInfo
                 return string.Empty;
             }
 
-            return FullName.Split('.')?.LastOrDefault() ?? FullName;
+            return FullName.Split('.').LastOrDefault() ?? FullName;
         }
     }
 }
