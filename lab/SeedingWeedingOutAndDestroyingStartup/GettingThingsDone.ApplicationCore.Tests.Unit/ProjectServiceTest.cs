@@ -15,11 +15,18 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             this.output = output;
         }
 
-        [Requires(typeof(DotNetCoreSeedsSeedBucket))]
+        [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket))]
         [Fact]
         public void Test1()
         {
             output.WriteLine($"Test {nameof(Test1)} is running");
+        }
+
+        [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket))]
+        [Fact]
+        public void Test2()
+        {
+            output.WriteLine($"Test {nameof(Test2)} is running");
         }
     }
 }

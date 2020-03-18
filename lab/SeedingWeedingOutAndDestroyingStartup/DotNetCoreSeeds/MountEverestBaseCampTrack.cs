@@ -39,7 +39,9 @@ namespace DotNetCoreSeeds
             output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)} ===");
             output.WriteVerboseMessage(string.Empty);
 
-            var project = (await projectService.CreateOrUpdate(new ProjectDto { Name = Yield.MountEverestBaseCampTrackProjectName })).Value;
+            // We attach the has code just to see in unit tests if a single or a new object is created every time.
+            // This is our lab diagnostics and not the practice that we want to have in real seeds!
+            var project = (await projectService.CreateOrUpdate(new ProjectDto { Name = Yield.MountEverestBaseCampTrackProjectName + GetHashCode() })).Value;
 
             var actionNames = new[] { "Buy shoes", "Buy socks", "Borrow sleeping bag" };
             var actions = new List<ActionDto>();
@@ -57,7 +59,7 @@ namespace DotNetCoreSeeds
 
         public async Task<bool> HasAlreadyYielded()
         {
-            return (await projectService.GetAll()).Value.Any(project => project.Name == Yield.MountEverestBaseCampTrackProjectName);
+            return (await projectService.GetAll()).Value.Any(project => project.Name.StartsWith(Yield.MountEverestBaseCampTrackProjectName));
         }
 
         internal class Yield : YieldOf<MountEverestBaseCampTrack>
@@ -74,7 +76,7 @@ namespace DotNetCoreSeeds
                 Seed.output.WriteVerboseMessage($"=== Service lifecycle info {nameof(MountEverestBaseCampTrack)}.Yield ===");
                 Seed.output.WriteVerboseMessage(string.Empty);
 
-                return (await Seed.projectService.GetAll()).Value.First(project => project.Name == MountEverestBaseCampTrackProjectName);
+                return (await Seed.projectService.GetAll()).Value.First(project => project.Name.StartsWith(MountEverestBaseCampTrackProjectName));
             }
         }
     }
