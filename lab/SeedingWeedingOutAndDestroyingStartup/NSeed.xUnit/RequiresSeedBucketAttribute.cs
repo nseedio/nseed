@@ -37,7 +37,7 @@ namespace NSeed.Xunit
 
             // TODO: Find a Startup within the test assembly.
 
-            var outputSink = new VoidOutputSink();
+            var outputSink = new InternalQueueOutputSink();
             var seedBucketInfoBuilder = new ReflectionBasedSeedBucketInfoBuilder();
 
             var seeder = new Seeder(seedBucketInfoBuilder, outputSink);
@@ -45,7 +45,7 @@ namespace NSeed.Xunit
             var seedingReport = seeder.Seed(seedBucketType).Result;
 
             // TODO: See the best way to get the error message, inner exception and those kind of things. Throw some rich exception accordingly e.g. SeedingSingleSeedFaildException.
-            if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception("Seeding failed.");
+            if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception($"Seeding failed.{Environment.NewLine}{outputSink.GetOutputAsString()}");
         }
     }
 }

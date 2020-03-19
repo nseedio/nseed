@@ -2,9 +2,9 @@ using NSeed.Abstractions;
 
 namespace NSeed.Xunit
 {
-    internal class VoidOutputSink : IOutputSink
+    internal class VoidOutputSink : IOutputSink // TODO: Think of moving to NSeed.
     {
-        public bool AcceptsVerboseMessages => true;
+        public bool AcceptsVerboseMessages => false;
 
         public void WriteConfirmation(string confirmation)
         {
