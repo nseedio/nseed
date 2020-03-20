@@ -47,7 +47,7 @@ namespace NSeed.Seeding
         public Task<SeedingReport> Seed(Type seedBucketType, Type seedBucketStartupType)
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
-            System.Diagnostics.Debug.Assert(seedBucketStartupType.IsSeedBucketType());
+            System.Diagnostics.Debug.Assert(seedBucketStartupType.IsSeedBucketStartupType());
 
             // We know that the seed bucket info builder always returns
             // a seed bucket info and never null; threfore "!".

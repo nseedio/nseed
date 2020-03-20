@@ -1,6 +1,6 @@
 namespace DotNetCoreSeeds
 {
-    internal interface ISomeSingletonService
+    public interface ISomeSingletonService
     {
         int GetUniqueValue();
     }

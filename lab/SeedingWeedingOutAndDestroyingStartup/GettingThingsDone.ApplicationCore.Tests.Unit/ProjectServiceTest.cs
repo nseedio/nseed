@@ -6,6 +6,7 @@ using Xunit.Abstractions;
 
 namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
+    [UseSeedingStartup(typeof(SampleStartupForUnitTests))]
     public class ProjectServiceTest
     {
         private readonly ITestOutputHelper output;

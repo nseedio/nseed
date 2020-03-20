@@ -27,6 +27,8 @@ namespace NSeed.Xunit
             this.seedBucketType = seedBucketType;
         }
 
+        public Type? SeedingStartupType { get; set; }
+
         /// <inheritdoc/>
         public override void Before(MethodInfo methodUnderTest)
         {
@@ -42,10 +44,29 @@ namespace NSeed.Xunit
 
             var seeder = new Seeder(seedBucketInfoBuilder, outputSink);
 
-            var seedingReport = seeder.Seed(seedBucketType).Result;
+            // TODO: Is not null, IsSeedBucketSeedingType etc.
+            var seedingStartupType = SeedingStartupType ?? FindSeedingStartupType();
+
+            var seedingReport = seedingStartupType is null
+                ? seeder.Seed(seedBucketType).Result
+                : seeder.Seed(seedBucketType, seedingStartupType).Result;
 
             // TODO: See the best way to get the error message, inner exception and those kind of things. Throw some rich exception accordingly e.g. SeedingSingleSeedFaildException.
             if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception($"Seeding failed.{Environment.NewLine}{outputSink.GetOutputAsString()}");
+
+            Type? FindSeedingStartupType()
+            {
+                var seedingStartupAttribute = methodUnderTest.GetCustomAttribute<UseSeedingStartupAttribute>();
+                if (seedingStartupAttribute != null) return seedingStartupAttribute.SeedingStartupType; // TODO: Check that it is not null, that is seeding startup type etc.
+
+                seedingStartupAttribute = methodUnderTest.DeclaringType.GetCustomAttribute<UseSeedingStartupAttribute>();
+                if (seedingStartupAttribute != null) return seedingStartupAttribute.SeedingStartupType; // TODO: Check that it is not null, that is seeding startup type etc.
+
+                seedingStartupAttribute = methodUnderTest.DeclaringType.Assembly.GetCustomAttribute<UseSeedingStartupAttribute>();
+                if (seedingStartupAttribute != null) return seedingStartupAttribute.SeedingStartupType; // TODO: Check that it is not null, that is seeding startup type etc.
+
+                return null;
+            }
         }
     }
 }
