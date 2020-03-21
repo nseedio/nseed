@@ -6,11 +6,11 @@ using Xunit.Abstractions;
 
 namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
-    public class UsageOfRequiresSeedsFixture : IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, SampleStartupForUnitTests>>, IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, FirstStartup>>, IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, RentANewApartment, FirstStartup>>
+    public class UsageOfRequiresSeedsFixture01 : IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, SampleStartupForUnitTests>>, IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, FirstStartup>>, IClassFixture<RequiresSeeds<MountEverestBaseCampTrack, RentANewApartment, FirstStartup>>
     {
         private readonly ITestOutputHelper output;
 
-        public UsageOfRequiresSeedsFixture(ITestOutputHelper output)
+        public UsageOfRequiresSeedsFixture01(ITestOutputHelper output)
         {
             this.output = output;
         }
