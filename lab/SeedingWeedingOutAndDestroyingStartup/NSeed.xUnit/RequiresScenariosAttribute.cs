@@ -12,21 +12,21 @@ namespace NSeed.Xunit
     /// TODO.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    public sealed class RequiresSeedsAttribute : BeforeAfterTestAttribute
+    public sealed class RequiresScenariosAttribute : BeforeAfterTestAttribute
     {
-        private readonly Type[] seedTypes;
+        private readonly Type[] scenarioTypes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RequiresSeedsAttribute"/> class.
+        /// Initializes a new instance of the <see cref="RequiresScenariosAttribute"/> class.
         /// </summary>
-        /// <param name="seedTypes">TODO.</param>
-        public RequiresSeedsAttribute(params Type[] seedTypes)
+        /// <param name="scenarioTypes">TODO.</param>
+        public RequiresScenariosAttribute(params Type[] scenarioTypes)
         {
-            // TODO: Check not null, must be seed.
+            // TODO: Check not null, must be scenario.
 
             // TODO: During the execution do all the possible combinations: seedables from the same seed bucket, seed bucket only, several seed buckets, combinations...
 
-            this.seedTypes = seedTypes;
+            this.scenarioTypes = scenarioTypes;
         }
 
         public Type? SeedingStartupType { get; set; }
@@ -50,8 +50,8 @@ namespace NSeed.Xunit
             var seedingStartupType = SeedingStartupType ?? FindSeedingStartupType();
 
             var seedingReport = seedingStartupType is null
-                ? seeder.SeedSeeds(seedTypes).Result
-                : seeder.SeedSeeds(seedingStartupType, seedTypes).Result;
+                ? seeder.SeedScenarios(scenarioTypes).Result
+                : seeder.SeedScenarios(seedingStartupType, scenarioTypes).Result;
 
             // TODO: See the best way to get the error message, inner exception and those kind of things. Throw some rich exception accordingly e.g. SeedingSingleSeedFaildException.
             if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception($"Seeding failed.{Environment.NewLine}{outputSink.GetOutputAsString()}");

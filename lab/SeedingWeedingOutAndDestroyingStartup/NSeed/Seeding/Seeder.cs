@@ -22,13 +22,13 @@ namespace NSeed.Seeding
             this.outputSink = outputSink;
         }
 
-        public Task<SeedingReport> Seed<TSeedBucket>()
+        public Task<SeedingReport> SeedSeedBucket<TSeedBucket>()
             where TSeedBucket : SeedBucket
         {
-            return Seed(typeof(TSeedBucket));
+            return SeedSeedBucket(typeof(TSeedBucket));
         }
 
-        public Task<SeedingReport> Seed(Type seedBucketType)
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType)
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
 
@@ -44,7 +44,7 @@ namespace NSeed.Seeding
             return Seed(seedBucketInfo, seedBucketStartupType);
         }
 
-        public Task<SeedingReport> Seed(Type seedBucketType, Type seedBucketStartupType)
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, Type seedBucketStartupType)
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
             System.Diagnostics.Debug.Assert(seedBucketStartupType.IsSeedBucketStartupType());
@@ -56,26 +56,48 @@ namespace NSeed.Seeding
             return Seed(seedBucketInfo, seedBucketStartupType);
         }
 
-        public Task<SeedingReport> Seed(params Type[] seedsTypes)
+        public Task<SeedingReport> SeedSeeds(params Type[] seedTypes)
         {
             // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
             // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
-            var seedBucketType = seedsTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+            var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return Seed(seedBucketType);
+            return SeedSeedBucket(seedBucketType);
         }
 
-        public Task<SeedingReport> Seed(Type seedBucketStartupType, params Type[] seedsTypes)
+        public Task<SeedingReport> SeedSeeds(Type seedBucketStartupType, params Type[] seedTypes)
         {
             // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
             // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
-            var seedBucketType = seedsTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+            var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return Seed(seedBucketType, seedBucketStartupType);
+            return SeedSeedBucket(seedBucketType, seedBucketStartupType);
+        }
+
+        public Task<SeedingReport> SeedScenarios(params Type[] scenarioTypes)
+        {
+            // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return SeedSeedBucket(seedBucketType);
+        }
+
+        public Task<SeedingReport> SeedScenarios(Type seedBucketStartupType, params Type[] scenarioTypes)
+        {
+            // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartupType);
         }
 
         private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, Type? seedBucketStartupType)

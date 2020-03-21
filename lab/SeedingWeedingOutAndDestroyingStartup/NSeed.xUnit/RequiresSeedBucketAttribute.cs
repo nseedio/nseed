@@ -48,8 +48,8 @@ namespace NSeed.Xunit
             var seedingStartupType = SeedingStartupType ?? FindSeedingStartupType();
 
             var seedingReport = seedingStartupType is null
-                ? seeder.Seed(seedBucketType).Result
-                : seeder.Seed(seedBucketType, seedingStartupType).Result;
+                ? seeder.SeedSeedBucket(seedBucketType).Result
+                : seeder.SeedSeedBucket(seedBucketType, seedingStartupType).Result;
 
             // TODO: See the best way to get the error message, inner exception and those kind of things. Throw some rich exception accordingly e.g. SeedingSingleSeedFaildException.
             if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception($"Seeding failed.{Environment.NewLine}{outputSink.GetOutputAsString()}");

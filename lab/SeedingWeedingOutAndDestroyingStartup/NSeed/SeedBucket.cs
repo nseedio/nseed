@@ -36,7 +36,7 @@ namespace NSeed
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
         public Task Seed(IOutputSink output) // TODO: Think of dependency injection of the engine in generall and especially for IOutputSink.
         {
-            return new Seeder(seedBucketInfoBuilder, output).Seed(GetType());
+            return new Seeder(seedBucketInfoBuilder, output).SeedSeedBucket(GetType());
         }
 
         /// <summary>

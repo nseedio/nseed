@@ -36,5 +36,12 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test3)} is running");
         }
+
+        [RequiresScenarios(typeof(MontEverestScenario))]
+        [Fact]
+        public void Test4()
+        {
+            output.WriteLine($"Test {nameof(Test4)} is running");
+        }
     }
 }
