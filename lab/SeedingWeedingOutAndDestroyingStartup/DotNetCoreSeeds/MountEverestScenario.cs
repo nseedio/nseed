@@ -6,7 +6,7 @@ using System.Text;
 namespace DotNetCoreSeeds
 {
     [Requires(typeof(MountEverestBaseCampTrack))]
-    public class MontEverestScenario : IScenario
+    public class MountEverestScenario : IScenario
     {
     }
 }
