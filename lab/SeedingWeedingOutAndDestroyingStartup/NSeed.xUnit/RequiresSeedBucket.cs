@@ -23,15 +23,15 @@ namespace NSeed.Xunit
     /// TODO.
     /// </summary>
     /// <typeparam name="TSeedBucket">TODO.TODO.</typeparam>
-    /// <typeparam name="TSeedingStartupType">TODO.TODO.TODO.</typeparam>
+    /// <typeparam name="TSeedingStartup">TODO.TODO.TODO.</typeparam>
 #pragma warning disable SA1402 // File may only contain a single type
-    public class RequiresSeedBucket<TSeedBucket, TSeedingStartupType> : RequiresSeedBucketFixture
+    public class RequiresSeedBucket<TSeedBucket, TSeedingStartup> : RequiresSeedBucketFixture
 #pragma warning restore SA1402 // File may only contain a single type
         where TSeedBucket : SeedBucket
-        where TSeedingStartupType : SeedBucketStartup
+        where TSeedingStartup : SeedBucketStartup
     {
         public RequiresSeedBucket()
-            : base(typeof(TSeedBucket), typeof(TSeedingStartupType))
+            : base(typeof(TSeedBucket), typeof(TSeedingStartup))
         {
         }
     }
