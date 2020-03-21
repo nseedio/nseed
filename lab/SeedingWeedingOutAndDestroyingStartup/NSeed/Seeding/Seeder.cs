@@ -56,6 +56,28 @@ namespace NSeed.Seeding
             return Seed(seedBucketInfo, seedBucketStartupType);
         }
 
+        public Task<SeedingReport> Seed(params Type[] seedsTypes)
+        {
+            // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = seedsTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return Seed(seedBucketType);
+        }
+
+        public Task<SeedingReport> Seed(Type seedBucketStartupType, params Type[] seedsTypes)
+        {
+            // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = seedsTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return Seed(seedBucketType, seedBucketStartupType);
+        }
+
         private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, Type? seedBucketStartupType)
         {
             if (seedBucketInfo.HasAnyErrors) return SeedingReport.CreateForSeedBucketHasErrors(seedBucketInfo);

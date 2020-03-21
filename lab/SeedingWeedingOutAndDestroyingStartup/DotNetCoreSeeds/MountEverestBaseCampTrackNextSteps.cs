@@ -10,7 +10,7 @@ using Action = GettingThingsDone.Contracts.Model.Action;
 
 namespace DotNetCoreSeeds
 {
-    internal sealed class MountEverestBaseCampTrackNextSteps : ISeed<Action, ActionList>
+    public sealed class MountEverestBaseCampTrackNextSteps : ISeed<Action, ActionList>
     {
         private readonly IActionService actionService;
         private readonly IActionListService actionListService;

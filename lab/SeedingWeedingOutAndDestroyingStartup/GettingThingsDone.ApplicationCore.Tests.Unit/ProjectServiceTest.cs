@@ -29,5 +29,12 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test2)} is running");
         }
+
+        [RequiresSeeds(typeof(MountEverestBaseCampTrackNextSteps), typeof(RentANewApartment))]
+        [Fact]
+        public void Test3()
+        {
+            output.WriteLine($"Test {nameof(Test3)} is running");
+        }
     }
 }
