@@ -6,11 +6,11 @@ using Xunit.Abstractions;
 
 namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
-    public class UsageOfRequiresScenariosFixture : IClassFixture<RequiresScenarios<MountEverestScenario, SampleStartupForUnitTests>>
+    public class UsageOfRequiresScenariosFixture01 : IClassFixture<RequiresScenarios<MountEverestScenario, SampleStartupForUnitTests>>
     {
         private readonly ITestOutputHelper output;
 
-        public UsageOfRequiresScenariosFixture(ITestOutputHelper output)
+        public UsageOfRequiresScenariosFixture01(ITestOutputHelper output)
         {
             this.output = output;
         }
