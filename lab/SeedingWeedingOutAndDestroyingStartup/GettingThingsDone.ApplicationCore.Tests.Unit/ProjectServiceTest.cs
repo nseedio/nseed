@@ -16,6 +16,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             this.output = output;
         }
 
+        [UseSeedingStartup(typeof(SampleStartupForUnitTests))]
         [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket))]
         [Fact]
         public void Test1()
@@ -23,7 +24,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             output.WriteLine($"Test {nameof(Test1)} is running");
         }
 
-        [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket))]
+        [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket), SeedingStartupType = typeof(FirstStartup))]
         [Fact]
         public void Test2()
         {
@@ -37,7 +38,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             output.WriteLine($"Test {nameof(Test3)} is running");
         }
 
-        [RequiresScenarios(typeof(MontEverestScenario))]
+        [RequiresScenarios(typeof(MontEverestScenario), SeedingStartupType = typeof(FirstStartup))]
         [Fact]
         public void Test4()
         {

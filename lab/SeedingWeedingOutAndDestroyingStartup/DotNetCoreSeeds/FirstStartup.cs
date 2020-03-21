@@ -9,7 +9,7 @@ using System;
 
 namespace DotNetCoreSeeds
 {
-    internal class FirstStartup : SeedBucketStartup
+    public class FirstStartup : SeedBucketStartup
     {
         private readonly IOutputSink output;
 
