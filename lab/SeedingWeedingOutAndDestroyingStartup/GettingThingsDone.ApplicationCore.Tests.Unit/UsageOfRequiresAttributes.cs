@@ -1,6 +1,10 @@
 using DotNetCoreSeeds;
+using GettingThingsDone.ApplicationCore.Services;
+using GettingThingsDone.Contracts.Interface;
 using NSeed.Xunit;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -10,6 +14,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
     public class UsageOfRequiresAttributes
     {
         private readonly ITestOutputHelper output;
+        private readonly ObjectCreator objectCreator = new ObjectCreator();
 
         public UsageOfRequiresAttributes(ITestOutputHelper output)
         {
@@ -19,16 +24,28 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         [UseSeedingStartup(typeof(SampleStartupForUnitTests))]
         [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket))]
         [Fact]
-        public void Test1()
+        public async Task Test1()
         {
             output.WriteLine($"Test {nameof(Test1)} is running");
+
+            var projectService = objectCreator.WithInMemoryDatabase().Create<ProjectService>();
+
+            var project = (await projectService.GetAll()).Value.First(project => project.Name.StartsWith("Mount Everest"));
+
+            output.WriteLine(project.Name);
         }
 
         [RequiresSeedBucket(typeof(DotNetCoreSeedsSeedBucket), SeedingStartupType = typeof(FirstStartup))]
         [Fact]
-        public void Test2()
+        public async Task Test2()
         {
             output.WriteLine($"Test {nameof(Test2)} is running");
+
+            var projectService = objectCreator.WithSqlServerDatabase().Create<ProjectService>();
+
+            var project = (await projectService.GetAll()).Value.First(project => project.Name.StartsWith("Mount Everest"));
+
+            output.WriteLine(project.Name);
         }
 
         [RequiresSeeds(typeof(MountEverestBaseCampTrackNextSteps), typeof(RentANewApartment))]

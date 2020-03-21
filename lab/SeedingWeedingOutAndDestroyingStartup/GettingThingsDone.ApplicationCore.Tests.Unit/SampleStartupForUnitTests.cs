@@ -14,6 +14,8 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
     internal class SampleStartupForUnitTests : SeedBucketStartup
     {
+        public static readonly InMemoryDatabaseRoot GlobalInMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+
         private readonly IOutputSink output;
 
         public SampleStartupForUnitTests(IOutputSink output) // TODO: Validation: can only be parameterless or have IOutputSink as parameter.
@@ -25,8 +27,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteVerboseMessage($"Executing {nameof(SampleStartupForUnitTests)}.{nameof(ConfigureServices)}");
 
-            var inMemoryDatabaseRoot = new InMemoryDatabaseRoot();
-            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase("SharedUnitTestingInMemoryDatabase", inMemoryDatabaseRoot));
+            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase("SharedUnitTestingInMemoryDatabase", GlobalInMemoryDatabaseRoot));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfAsyncRepository<>));
             services.AddScoped<IActionService, ActionService>();
