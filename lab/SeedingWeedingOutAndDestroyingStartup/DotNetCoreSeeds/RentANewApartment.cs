@@ -56,10 +56,12 @@ namespace DotNetCoreSeeds
             return (await projectService.GetAll()).Value.Any(project => project.Name == "Rent a new apartment");
         }
 
-        internal class Yield : YieldOf<RentANewApartment>
+        public class Yield : YieldOf<RentANewApartment>
         {
-            // TODO: Use the Yield class to provide the yield of this seed to other seeds.
-            //       To learn how to use the Yield class see TODO-URL.
+            public async Task<ProjectDto> GetRentANewApartmentProject()
+            {
+                return (await Seed.projectService.GetAll()).Value.First(project => project.Name == "Rent a new apartment");
+            }
         }
     }
 }

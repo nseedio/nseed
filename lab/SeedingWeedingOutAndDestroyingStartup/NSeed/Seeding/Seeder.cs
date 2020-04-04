@@ -100,6 +100,49 @@ namespace NSeed.Seeding
             return SeedSeedBucket(seedBucketType, seedBucketStartupType);
         }
 
+        // TODO: What to return? SeedingReport? How to name the method so that it is clear that it seeds?
+        public async Task<object[]> GetYieldsFor(Type? seedBucketStartupType, params Type[] yieldOfTypes)
+        {
+            // TODO: Checks. All yieldofs, no repeating etc.
+
+            var result = new object[yieldOfTypes.Length];
+
+            // TODO: Get the meta information, check it does not have any errors and out of it the seed types of these yields and seed only those seeds.
+            // TODO: So far just grab the seed bucket and seed it all.
+            var seedBucketType = yieldOfTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+            var seedingReport = seedBucketStartupType != null ? await SeedSeedBucket(seedBucketType, seedBucketStartupType) : await SeedSeedBucket(seedBucketType);
+            if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception(); // TODO: Define how to return data and error status.
+
+            // TODO: Brute force so far and a bunch of copy paste. In the production version refactor everything so that the needed objects are there.
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(outputSink);
+
+            if (seedBucketStartupType != null)
+            {
+                var startup = (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
+
+                startup.ConfigureServices(serviceCollection);
+            }
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            for (var i = 0; i < yieldOfTypes.Length; i++)
+            {
+                var yieldOfType = yieldOfTypes[i];
+
+                var yieldingSeed = (ISeed)ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, yieldOfType.BaseType.GetGenericArguments()[0]);
+
+                var yield = ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, yieldOfType);
+
+                var seedPropertyOnYield = yield.GetType().GetProperty("Seed", BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
+
+                seedPropertyOnYield.SetValue(yield, yieldingSeed);
+
+                result[i] = yield;
+            }
+
+            return result;
+        }
+
         private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, Type? seedBucketStartupType)
         {
             if (seedBucketInfo.HasAnyErrors) return SeedingReport.CreateForSeedBucketHasErrors(seedBucketInfo);

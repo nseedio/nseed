@@ -62,7 +62,7 @@ namespace DotNetCoreSeeds
             return (await projectService.GetAll()).Value.Any(project => project.Name.StartsWith(Yield.MountEverestBaseCampTrackProjectName));
         }
 
-        internal class Yield : YieldOf<MountEverestBaseCampTrack>
+        public class Yield : YieldOf<MountEverestBaseCampTrack>
         {
             public const string MountEverestBaseCampTrackProjectName = "Mount Everest Base Camp track";
 
