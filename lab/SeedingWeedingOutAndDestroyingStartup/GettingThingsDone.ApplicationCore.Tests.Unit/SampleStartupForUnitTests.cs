@@ -14,7 +14,8 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
     internal class SampleStartupForUnitTests : SeedBucketStartup
     {
-        public static readonly InMemoryDatabaseRoot GlobalInMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+        public static readonly InMemoryDatabaseRoot SharedInMemoryDatabaseRoot = new InMemoryDatabaseRoot();
+        public static readonly string SharedInMemoryDatabaseName = "SharedInMemoryDatabase";
 
         private readonly IOutputSink output;
 
@@ -23,11 +24,17 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             this.output = output;
         }
 
+        public string? DatabaseName { get; set; }
+
+        public InMemoryDatabaseRoot? DatabaseRoot { get; set; }
+
         protected override void ConfigureServices(IServiceCollection services)
         {
             output.WriteVerboseMessage($"Executing {nameof(SampleStartupForUnitTests)}.{nameof(ConfigureServices)}");
 
-            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase("SharedUnitTestingInMemoryDatabase", GlobalInMemoryDatabaseRoot));
+            var databaseName = DatabaseName ?? SharedInMemoryDatabaseName;
+            var databaseRoot = DatabaseRoot ?? SharedInMemoryDatabaseRoot;
+            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase(databaseName, databaseRoot));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfAsyncRepository<>));
             services.AddScoped<IActionService, ActionService>();

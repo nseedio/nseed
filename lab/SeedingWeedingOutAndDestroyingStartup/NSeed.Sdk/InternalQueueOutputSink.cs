@@ -2,9 +2,9 @@ using NSeed.Abstractions;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NSeed.Xunit
+namespace NSeed.Sdk
 {
-    internal class InternalQueueOutputSink : IOutputSink // TODO: Move to NSeed.
+    public class InternalQueueOutputSink : IOutputSink // TODO: Move to NSeed.
     {
         internal enum OutputKind
         {

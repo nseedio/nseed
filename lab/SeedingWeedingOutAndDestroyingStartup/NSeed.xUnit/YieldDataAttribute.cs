@@ -1,5 +1,6 @@
 using NSeed.Discovery.SeedBucket.ReflectionBased;
 using NSeed.Extensions;
+using NSeed.Sdk;
 using NSeed.Seeding;
 using System;
 using System.Collections.Generic;

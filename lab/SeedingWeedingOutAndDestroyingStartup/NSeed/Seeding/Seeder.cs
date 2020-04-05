@@ -41,7 +41,7 @@ namespace NSeed.Seeding
 
             var seedBucketStartupType = seedBucketInfo.Startups.FirstOrDefault().Type;
 
-            return Seed(seedBucketInfo, seedBucketStartupType);
+            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType));
         }
 
         public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, Type seedBucketStartupType)
@@ -53,7 +53,18 @@ namespace NSeed.Seeding
             // a seed bucket info and never null; threfore "!".
             var seedBucketInfo = seedBucketInfoBuilder.BuildFrom(seedBucketType)!;
 
-            return Seed(seedBucketInfo, seedBucketStartupType);
+            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType));
+        }
+
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, SeedBucketStartup seedBucketStartup)
+        {
+            System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
+
+            // We know that the seed bucket info builder always returns
+            // a seed bucket info and never null; threfore "!".
+            var seedBucketInfo = seedBucketInfoBuilder.BuildFrom(seedBucketType)!;
+
+            return Seed(seedBucketInfo, seedBucketStartup);
         }
 
         public Task<SeedingReport> SeedSeeds(params Type[] seedTypes)
@@ -78,6 +89,17 @@ namespace NSeed.Seeding
             return SeedSeedBucket(seedBucketType, seedBucketStartupType);
         }
 
+        public Task<SeedingReport> SeedSeeds(SeedBucketStartup seedBucketStartup, params Type[] seedTypes)
+        {
+            // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartup);
+        }
+
         public Task<SeedingReport> SeedScenarios(params Type[] scenarioTypes)
         {
             // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
@@ -98,6 +120,17 @@ namespace NSeed.Seeding
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
             return SeedSeedBucket(seedBucketType, seedBucketStartupType);
+        }
+
+        public Task<SeedingReport> SeedScenarios(SeedBucketStartup seedBucketStartup, params Type[] scenarioTypes)
+        {
+            // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
+            // TODO: Workaround so far. Just seed the whole bucket.
+            // TODO: Workaround so far. Just pick up the first seed bucket.
+
+            var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartup);
         }
 
         // TODO: What to return? SeedingReport? How to name the method so that it is clear that it seeds?
@@ -143,7 +176,20 @@ namespace NSeed.Seeding
             return result;
         }
 
-        private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, Type? seedBucketStartupType)
+        private SeedBucketStartup? CreateSeedBucketStartup(Type? seedBucketStartupType)
+        {
+            // TODO: Checks or Debug.Asserts?
+            if (seedBucketStartupType is null) return null;
+
+            outputSink.WriteVerboseMessage($"Creating seed bucket startup of type {seedBucketStartupType} TODO");
+
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(outputSink);
+
+            return (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
+        }
+
+        private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, SeedBucketStartup? seedBucketStartup)
         {
             if (seedBucketInfo.HasAnyErrors) return SeedingReport.CreateForSeedBucketHasErrors(seedBucketInfo);
 
@@ -160,15 +206,11 @@ namespace NSeed.Seeding
                 try
                 {
                     // TODO: Add creation of SeedingStartup and registration of services.
-                    if (seedBucketStartupType != null)
+                    if (seedBucketStartup != null)
                     {
-                        outputSink.WriteVerboseMessage($"Creating seed bucket startup of type {seedBucketStartupType} TODO");
-
-                        var startup = (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
-
                         outputSink.WriteVerboseMessage($"Configuring service collection TODO");
 
-                        startup.ConfigureServices(serviceCollection);
+                        seedBucketStartup.ConfigureServices(serviceCollection);
 
                         // TODO: Check that the configuration does not override IOutputSink. Only the engine can add it. It must be singleton and the same one we have here.
 
@@ -176,7 +218,7 @@ namespace NSeed.Seeding
 
                         using (var serviceScope = serviceCollection.BuildServiceProvider().CreateScope())
                         {
-                            startup.InitializeSeeding(serviceScope.ServiceProvider);
+                            seedBucketStartup.InitializeSeeding(serviceScope.ServiceProvider);
                         }
                     }
 

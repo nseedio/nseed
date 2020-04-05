@@ -28,7 +28,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test1)} is running");
 
-            var projectService = objectCreator.WithInMemoryDatabase().Create<ProjectService>();
+            var projectService = objectCreator.WithSharedInMemoryDatabase().Create<ProjectService>();
 
             var project = (await projectService.GetAll()).Value.First(project => project.Name.StartsWith("Mount Everest"));
 

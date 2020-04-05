@@ -19,7 +19,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             var services = new ServiceCollection();
 
-            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase("SharedUnitTestingInMemoryDatabase", SampleStartupForUnitTests.GlobalInMemoryDatabaseRoot));
+            services.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase(SampleStartupForUnitTests.SharedInMemoryDatabaseName, SampleStartupForUnitTests.SharedInMemoryDatabaseRoot));
 
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfAsyncRepository<>));
             services.AddScoped<IActionService, ActionService>();
@@ -34,11 +34,20 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 
         public ObjectCreator(IServiceCollection serviceCollection) => this.serviceCollection = serviceCollection;
 
-        public ObjectCreator WithInMemoryDatabase()
+        public ObjectCreator WithSharedInMemoryDatabase()
         {
             RemoveRegisterdDbContextServices();
 
-            serviceCollection.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase("SharedUnitTestingInMemoryDatabase", SampleStartupForUnitTests.GlobalInMemoryDatabaseRoot));
+            serviceCollection.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase(SampleStartupForUnitTests.SharedInMemoryDatabaseName, SampleStartupForUnitTests.SharedInMemoryDatabaseRoot));
+
+            return this;
+        }
+
+        public ObjectCreator WithLocalInMemoryDatabase(string databaseName, InMemoryDatabaseRoot databaseRoot)
+        {
+            RemoveRegisterdDbContextServices();
+
+            serviceCollection.AddDbContextPool<GettingThingsDoneDbContext>(options => options.UseInMemoryDatabase(databaseName, databaseRoot));
 
             return this;
         }

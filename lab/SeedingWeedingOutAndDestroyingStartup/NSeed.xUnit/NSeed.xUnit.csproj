@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NSeed.Sdk\NSeed.Sdk.csproj" />
     <ProjectReference Include="..\NSeed\NSeed.csproj" />
   </ItemGroup>
 

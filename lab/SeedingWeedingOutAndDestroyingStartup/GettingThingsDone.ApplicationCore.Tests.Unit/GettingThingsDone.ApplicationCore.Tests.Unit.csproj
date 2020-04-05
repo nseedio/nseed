@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotNetCoreSeeds\DotNetCoreSeeds.csproj" />
+    <ProjectReference Include="..\NSeed.Sdk\NSeed.Sdk.csproj" />
     <ProjectReference Include="..\NSeed.xUnit\NSeed.xUnit.csproj" />
   </ItemGroup>
 
