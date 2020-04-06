@@ -73,6 +73,18 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
             await Seed.Seeds<MountEverestBaseCampTrackNextSteps, RentANewApartment>(startup, outputSink);
 
             output.WriteLine(outputSink.GetOutputAsString());
+
+            var projectService = objectCreator.WithLocalInMemoryDatabase(databaseName, databaseRoot).Create<IProjectService>();
+            var projects = (await projectService.GetAll()).Value;
+            Assert.Equal(2, projects.Count);
+
+            projectService = objectCreator.WithSharedInMemoryDatabase().Create<IProjectService>();
+            projects = (await projectService.GetAll()).Value;
+            Assert.Empty(projects);
+
+            projectService = objectCreator.WithLocalInMemoryDatabase(Guid.NewGuid().ToString(), new InMemoryDatabaseRoot()).Create<IProjectService>();
+            projects = (await projectService.GetAll()).Value;
+            Assert.Empty(projects);
         }
     }
 }

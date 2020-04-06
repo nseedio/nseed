@@ -71,7 +71,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 
         public TService Create<TService>()
         {
-            return ActivatorUtilities.CreateInstance<TService>(serviceCollection.BuildServiceProvider());
+            return serviceCollection.BuildServiceProvider().GetRequiredService<TService>();
         }
 
         private void RemoveRegisterdDbContextServices()

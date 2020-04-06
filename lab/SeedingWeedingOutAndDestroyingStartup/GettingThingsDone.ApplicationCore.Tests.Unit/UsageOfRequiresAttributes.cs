@@ -28,7 +28,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test1)} is running");
 
-            var projectService = objectCreator.WithSharedInMemoryDatabase().Create<ProjectService>();
+            var projectService = objectCreator.WithSharedInMemoryDatabase().Create<IProjectService>();
 
             var project = (await projectService.GetAll()).Value.First(project => project.Name.StartsWith("Mount Everest"));
 
@@ -41,7 +41,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test2)} is running");
 
-            var projectService = objectCreator.WithSqlServerDatabase().Create<ProjectService>();
+            var projectService = objectCreator.WithSqlServerDatabase().Create<IProjectService>();
 
             var project = (await projectService.GetAll()).Value.First(project => project.Name.StartsWith("Mount Everest"));
 
