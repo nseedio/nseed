@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 // Yields.Get
 // Should we use options builders instead of plain method parameters. Should we return some information instead of just Task?
 // Should we have async and non async methods and suffix the async ones with async? It is confusing in tests and easy to forget to await.
+// The options that we can have:
+// - seeding startup type or object
+// - seeding startup defined in place with lambdas
+// - IOutputSink, WithVoidOutputSink, WithInMemoryBufferOutputSink, WithTestOutputHelperOutputSink
 
 namespace NSeed.Sdk
 {

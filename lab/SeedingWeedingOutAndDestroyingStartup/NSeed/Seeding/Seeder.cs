@@ -133,6 +133,11 @@ namespace NSeed.Seeding
             return SeedSeedBucket(seedBucketType, seedBucketStartup);
         }
 
+        public Task<object[]> GetYieldsFor(params Type[] yieldOfTypes)
+        {
+            return GetYieldsFor((Type?)null, yieldOfTypes);
+        }
+
         // TODO: What to return? SeedingReport? How to name the method so that it is clear that it seeds?
         public async Task<object[]> GetYieldsFor(Type? seedBucketStartupType, params Type[] yieldOfTypes)
         {
@@ -150,12 +155,56 @@ namespace NSeed.Seeding
             IServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(outputSink);
 
+            // TODO: Ugly workaround just to quickly get the seed bucket startup type. All this will need a super heavy refactoring one day it goes productive :-)
+            if (seedBucketStartupType is null)
+            {
+                seedBucketStartupType = seedBucketType.Assembly.GetTypes().FirstOrDefault(type => type.IsSeedBucketStartupType());
+            }
+
             if (seedBucketStartupType != null)
             {
                 var startup = (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
 
                 startup.ConfigureServices(serviceCollection);
             }
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            for (var i = 0; i < yieldOfTypes.Length; i++)
+            {
+                var yieldOfType = yieldOfTypes[i];
+
+                var yieldingSeed = (ISeed)ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, yieldOfType.BaseType.GetGenericArguments()[0]);
+
+                var yield = ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, yieldOfType);
+
+                var seedPropertyOnYield = yield.GetType().GetProperty("Seed", BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
+
+                seedPropertyOnYield.SetValue(yield, yieldingSeed);
+
+                result[i] = yield;
+            }
+
+            return result;
+        }
+
+        // TODO: A shameful copy-paste.
+        public async Task<object[]> GetYieldsFor(SeedBucketStartup seedBucketStartup, params Type[] yieldOfTypes)
+        {
+            // TODO: Checks. All yieldofs, no repeating etc.
+
+            var result = new object[yieldOfTypes.Length];
+
+            // TODO: Get the meta information, check it does not have any errors and out of it the seed types of these yields and seed only those seeds.
+            // TODO: So far just grab the seed bucket and seed it all.
+            var seedBucketType = yieldOfTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+            var seedingReport = await SeedSeedBucket(seedBucketType, seedBucketStartup);
+            if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception(); // TODO: Define how to return data and error status.
+
+            // TODO: Brute force so far and a bunch of copy paste. In the production version refactor everything so that the needed objects are there.
+            IServiceCollection serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton(outputSink);
+
+            seedBucketStartup.ConfigureServices(serviceCollection);
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
             for (var i = 0; i < yieldOfTypes.Length; i++)

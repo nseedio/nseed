@@ -12,12 +12,12 @@ using Xunit.Abstractions;
 
 namespace GettingThingsDone.ApplicationCore.Tests.Unit
 {
-    public class UsageOfSeedSdk
+    public class UsageOfGetYieldSdk
     {
         private readonly ITestOutputHelper output;
         private readonly ObjectCreator objectCreator = new ObjectCreator();
 
-        public UsageOfSeedSdk(ITestOutputHelper output)
+        public UsageOfGetYieldSdk(ITestOutputHelper output)
         {
             this.output = output;
         }
@@ -27,8 +27,14 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test1)} is running");
 
-            // Seed seed using the default startup found in the bucket.
-            await Seed.Seeds<MountEverestBaseCampTrackNextSteps, RentANewApartment>();
+            // Get yield using the default startup found in the bucket.
+            var (baseCampTrack, newApartment) = await Get.Yields<MountEverestBaseCampTrack.Yield, RentANewApartment.Yield>();
+
+            var baseCampTrackProject = await baseCampTrack.GetMountEverestBaseCampTrackProject();
+            var newApartmentProject = await newApartment.GetRentANewApartmentProject();
+
+            output.WriteLine(baseCampTrackProject.Name);
+            output.WriteLine(newApartmentProject.Name);
         }
 
         [Fact]
@@ -36,8 +42,14 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
         {
             output.WriteLine($"Test {nameof(Test2)} is running");
 
-            // Seed seeds using the specified startup type.
-            await Seed.Seeds<MountEverestBaseCampTrackNextSteps, RentANewApartment>(typeof(FirstStartup));
+            // Get yield using the specified startup type.
+            var (baseCampTrack, newApartment) = await Get.Yields<MountEverestBaseCampTrack.Yield, RentANewApartment.Yield>(typeof(FirstStartup));
+
+            var baseCampTrackProject = await baseCampTrack.GetMountEverestBaseCampTrackProject();
+            var newApartmentProject = await newApartment.GetRentANewApartmentProject();
+
+            output.WriteLine(baseCampTrackProject.Name);
+            output.WriteLine(newApartmentProject.Name);
         }
 
         [Fact]
@@ -61,7 +73,7 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
                 DatabaseRoot = databaseRoot
             };
 
-            await Seed.Seeds<MountEverestBaseCampTrackNextSteps, RentANewApartment>(startup, outputSink);
+            var (baseCampTrack, newApartment) = await Get.Yields<MountEverestBaseCampTrack.Yield, RentANewApartment.Yield>(startup, outputSink);
 
             output.WriteLine(outputSink.GetOutputAsString());
 
