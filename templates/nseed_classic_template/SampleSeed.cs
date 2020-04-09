@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace SeedsProject
 {
     // TODO: To learn how to write seeds see TODO-URL.
-    internal sealed class SampleSeed : ISeed
+    public sealed class SampleSeed : ISeed
     {
         public Task Seed()
         {
@@ -18,7 +18,7 @@ namespace SeedsProject
         }
     }
 
-    internal class Yield : YieldOf<SampleSeed>
+    public class Yield : YieldOf<SampleSeed>
     {
         // TODO: Use the Yield class to provide the yield of this seed to other seeds.
         //       To learn how to use the Yield class see TODO-URL.
