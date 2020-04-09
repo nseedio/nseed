@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("NSeed")]
 [assembly: AssemblyProduct("NSeed")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCopyright("Copyright © 2019 NSeed")]
+[assembly: AssemblyCopyright("Copyright © 2019 - 2020 NSeed")]
 
 [assembly: AssemblyVersion("0.3.0")]
 
