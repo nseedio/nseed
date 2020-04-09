@@ -11,10 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCopyright("Copyright © 2019 NSeed")]
 
-[assembly: AssemblyVersion("0.2.0")]
+[assembly: AssemblyVersion("0.3.0")]
 
 // AssemblyFileVersion is not set explicitly. This automatically makes it same as the AssemblyVersion.
-[assembly: AssemblyInformationalVersion("0.2.0")]
+[assembly: AssemblyInformationalVersion("0.3.0")]
 
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en-US")]

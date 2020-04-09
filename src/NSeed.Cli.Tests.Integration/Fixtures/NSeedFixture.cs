@@ -25,7 +25,7 @@ namespace NSeed.Cli.Tests.Integration.Fixtures
 
             Runner.RunDotNet(RepositorySrcFolderPath, new string[]
             {
-                  @$"tool install -g --version 0.2.0 --add-source {ToolNupkgPath} NSeed.Cli"
+                  @$"tool install -g --version 0.3.0 --add-source {ToolNupkgPath} NSeed.Cli"
             });
         }
 
