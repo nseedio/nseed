@@ -3,7 +3,6 @@
   <Import Project="..\BuildProperties.Packages.props" />
 
   <PropertyGroup>
-    <Title>NSeed</Title>
     <Description>Data seeding framework for .NET.</Description>
   </PropertyGroup>
 
