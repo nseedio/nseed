@@ -1,0 +1,14 @@
+<!-- !!!! WARNING: At the moment this file must be kept manually in sync with CHANGELOG.md. !!!! -->
+
+<Project>
+  <PropertyGroup>
+    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.3.0'))">
+Added
+=====
+All added features are in the experimental phase and lab-quality:
+- Get.Yields() methods.
+- Seed.Seeds() methods.
+- InternalQueueOutputSink class.
+    </PackageReleaseNotes>
+  </PropertyGroup>
+</Project>
