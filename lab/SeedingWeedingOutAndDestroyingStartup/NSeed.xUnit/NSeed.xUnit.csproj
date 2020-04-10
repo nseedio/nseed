@@ -1,5 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\BuildProperties.Packages.props" />
+
+  <PropertyGroup>
+    <Description>NSeed extension for xUnit. It turns NSeed into a declarative framework for using seeds in unit tests.</Description>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>

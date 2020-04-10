@@ -1,5 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\BuildProperties.Packages.props" />
+
+  <PropertyGroup>
+    <Description>SDK library for using NSeed in advanced scenarios. For example, for seeding seeds from your programs or for gaining full control over the seeding in unit tests.</Description>
+  </PropertyGroup>
+
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
