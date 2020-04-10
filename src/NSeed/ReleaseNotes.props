@@ -1,0 +1,27 @@
+<!-- !!!! WARNING: At the moment this file must be kept manually in sync with CHANGELOG.md. !!!! -->
+
+<Project>
+  <PropertyGroup>
+    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.2.0'))">
+Added
+=====
+* SeedBucket handles command-line arguments.
+* IScenario interface.
+* Requires attribute.
+* Description attribute.
+* YieldOf base abstract class.
+
+Changed
+=======
+* ISeed.OutputAlreadyExists() renamed to ISeed.HasAlreadyYielded().
+    </PackageReleaseNotes>
+
+    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.1.0'))">
+Added
+=====
+* ISeed interface.
+* FriendlyName attribute.
+* Empty abstract SeedBucket base class.
+    </PackageReleaseNotes>
+  </PropertyGroup>
+</Project>

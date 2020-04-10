@@ -1,4 +1,5 @@
 ﻿<!-- Build properties used in test projects. -->
+
 <Project>
   <PropertyGroup>
     <!--
@@ -10,4 +11,5 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
   </PropertyGroup>
+
 </Project>

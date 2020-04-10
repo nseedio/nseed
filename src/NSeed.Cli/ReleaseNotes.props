@@ -1,0 +1,18 @@
+<!-- !!!! WARNING: At the moment this file must be kept manually in sync with CHANGELOG.md. !!!! -->
+
+<Project>
+  <PropertyGroup>
+    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.2.0'))">
+Added
+=====
+* Fully functional info command that prints seed bucket summary, seeds, scenarios, and errors.
+* Fully functional new command that creates a new seed bucket project.
+    </PackageReleaseNotes>
+
+    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.1.0'))">
+Added
+=====
+* Non-functional CLI interface for the new command with --solution, --framework, and --name options.
+    </PackageReleaseNotes>
+  </PropertyGroup>
+</Project>
