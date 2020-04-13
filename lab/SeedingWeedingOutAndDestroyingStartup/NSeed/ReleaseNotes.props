@@ -10,6 +10,11 @@ $(LabQualityWarningAdded)
 * The info command displays errors.
     </Added>
 
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab2'))">
+$(Added.Trim())
+* [lab2]: ISeedableFilter interface with concrete implementations: FullNameEqualsSeedableFilter, FullNameContainsSeedableFilter, AcceptAllSeedableFilter.
+    </Added>
+
     <Added Condition="'$(VersionPrefix)' == '0.2.0'">
 * SeedBucket handles command-line arguments.
 * IScenario interface.
