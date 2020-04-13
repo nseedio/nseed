@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSeed.Abstractions;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Extensions;
+using NSeed.Filtering;
 using NSeed.MetaInfo;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace NSeed.Seeding
             return SeedSeedBucket(typeof(TSeedBucket));
         }
 
-        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType)
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, ISeedableFilter? filter = null) // TODO: Design the API properly, see where to have the filter in public methods etc.
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
 
@@ -41,10 +42,10 @@ namespace NSeed.Seeding
 
             var seedBucketStartupType = seedBucketInfo.Startups.FirstOrDefault().Type;
 
-            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType));
+            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType), filter ?? AcceptAllSeedableFilter.Instance);
         }
 
-        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, Type seedBucketStartupType)
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, Type seedBucketStartupType, ISeedableFilter? filter = null) // TODO: Design API...
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
             System.Diagnostics.Debug.Assert(seedBucketStartupType.IsSeedBucketStartupType());
@@ -53,10 +54,10 @@ namespace NSeed.Seeding
             // a seed bucket info and never null; threfore "!".
             var seedBucketInfo = seedBucketInfoBuilder.BuildFrom(seedBucketType)!;
 
-            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType));
+            return Seed(seedBucketInfo, CreateSeedBucketStartup(seedBucketStartupType), filter ?? AcceptAllSeedableFilter.Instance);
         }
 
-        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, SeedBucketStartup seedBucketStartup)
+        public Task<SeedingReport> SeedSeedBucket(Type seedBucketType, SeedBucketStartup seedBucketStartup, ISeedableFilter? filter = null) // TODO: Design API...
         {
             System.Diagnostics.Debug.Assert(seedBucketType.IsSeedBucketType());
 
@@ -64,7 +65,7 @@ namespace NSeed.Seeding
             // a seed bucket info and never null; threfore "!".
             var seedBucketInfo = seedBucketInfoBuilder.BuildFrom(seedBucketType)!;
 
-            return Seed(seedBucketInfo, seedBucketStartup);
+            return Seed(seedBucketInfo, seedBucketStartup, filter ?? AcceptAllSeedableFilter.Instance);
         }
 
         public Task<SeedingReport> SeedSeeds(params Type[] seedTypes)
@@ -75,7 +76,9 @@ namespace NSeed.Seeding
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return SeedSeedBucket(seedBucketType);
+            var filter = new FullNameEqualsSeedableFilter(seedTypes.Select(type => type.FullName).ToArray());
+
+            return SeedSeedBucket(seedBucketType, filter);
         }
 
         public Task<SeedingReport> SeedSeeds(Type seedBucketStartupType, params Type[] seedTypes)
@@ -86,7 +89,9 @@ namespace NSeed.Seeding
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return SeedSeedBucket(seedBucketType, seedBucketStartupType);
+            var filter = new FullNameEqualsSeedableFilter(seedTypes.Select(type => type.FullName).ToArray());
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartupType, filter);
         }
 
         public Task<SeedingReport> SeedSeeds(SeedBucketStartup seedBucketStartup, params Type[] seedTypes)
@@ -97,7 +102,9 @@ namespace NSeed.Seeding
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return SeedSeedBucket(seedBucketType, seedBucketStartup);
+            var filter = new FullNameEqualsSeedableFilter(seedTypes.Select(type => type.FullName).ToArray());
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartup, filter);
         }
 
         public Task<SeedingReport> SeedScenarios(params Type[] scenarioTypes)
@@ -107,6 +114,8 @@ namespace NSeed.Seeding
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
+
+            var filter = new FullNameEqualsSeedableFilter(scenarioTypes.Select(type => type.FullName).ToArray());
 
             return SeedSeedBucket(seedBucketType);
         }
@@ -119,7 +128,9 @@ namespace NSeed.Seeding
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return SeedSeedBucket(seedBucketType, seedBucketStartupType);
+            var filter = new FullNameEqualsSeedableFilter(scenarioTypes.Select(type => type.FullName).ToArray());
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartupType, filter);
         }
 
         public Task<SeedingReport> SeedScenarios(SeedBucketStartup seedBucketStartup, params Type[] scenarioTypes)
@@ -130,7 +141,9 @@ namespace NSeed.Seeding
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
 
-            return SeedSeedBucket(seedBucketType, seedBucketStartup);
+            var filter = new FullNameEqualsSeedableFilter(scenarioTypes.Select(type => type.FullName).ToArray());
+
+            return SeedSeedBucket(seedBucketType, seedBucketStartup, filter);
         }
 
         public Task<object[]> GetYieldsFor(params Type[] yieldOfTypes)
@@ -148,7 +161,9 @@ namespace NSeed.Seeding
             // TODO: Get the meta information, check it does not have any errors and out of it the seed types of these yields and seed only those seeds.
             // TODO: So far just grab the seed bucket and seed it all.
             var seedBucketType = yieldOfTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
-            var seedingReport = seedBucketStartupType != null ? await SeedSeedBucket(seedBucketType, seedBucketStartupType) : await SeedSeedBucket(seedBucketType);
+            var seedTypes = yieldOfTypes.Select(yieldOfType => yieldOfType.BaseType.GetGenericArguments()[0]);
+            var filter = new FullNameEqualsSeedableFilter(seedTypes.Select(type => type.FullName).ToArray());
+            var seedingReport = seedBucketStartupType != null ? await SeedSeedBucket(seedBucketType, seedBucketStartupType, filter) : await SeedSeedBucket(seedBucketType, filter);
             if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception(); // TODO: Define how to return data and error status.
 
             // TODO: Brute force so far and a bunch of copy paste. In the production version refactor everything so that the needed objects are there.
@@ -197,7 +212,9 @@ namespace NSeed.Seeding
             // TODO: Get the meta information, check it does not have any errors and out of it the seed types of these yields and seed only those seeds.
             // TODO: So far just grab the seed bucket and seed it all.
             var seedBucketType = yieldOfTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
-            var seedingReport = await SeedSeedBucket(seedBucketType, seedBucketStartup);
+            var seedTypes = yieldOfTypes.Select(yieldOfType => yieldOfType.BaseType.GetGenericArguments()[0]);
+            var filter = new FullNameEqualsSeedableFilter(seedTypes.Select(type => type.FullName).ToArray());
+            var seedingReport = await SeedSeedBucket(seedBucketType, seedBucketStartup, filter);
             if (seedingReport.Status != SeedingStatus.Succeeded) throw new Exception(); // TODO: Define how to return data and error status.
 
             // TODO: Brute force so far and a bunch of copy paste. In the production version refactor everything so that the needed objects are there.
@@ -238,11 +255,11 @@ namespace NSeed.Seeding
             return (SeedBucketStartup)ActivatorUtilities.GetServiceOrCreateInstance(serviceCollection.BuildServiceProvider(), seedBucketStartupType);
         }
 
-        private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, SeedBucketStartup? seedBucketStartup)
+        private async Task<SeedingReport> Seed(SeedBucketInfo seedBucketInfo, SeedBucketStartup? seedBucketStartup, ISeedableFilter filter)
         {
             if (seedBucketInfo.HasAnyErrors) return SeedingReport.CreateForSeedBucketHasErrors(seedBucketInfo);
 
-            var seedingPlan = SeedingPlan.CreateFor(seedBucketInfo);
+            var seedingPlan = SeedingPlan.CreateFor(seedBucketInfo, filter);
 
             return await SeedSeedingPlan();
 

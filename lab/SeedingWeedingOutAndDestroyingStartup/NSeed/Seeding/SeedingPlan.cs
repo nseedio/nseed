@@ -1,3 +1,4 @@
+using NSeed.Filtering;
 using NSeed.MetaInfo;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +14,12 @@ namespace NSeed.Seeding
             SeedingSteps = seedingSteps;
         }
 
-        public static SeedingPlan CreateFor(SeedBucketInfo seedBucketInfo)
+        public static SeedingPlan CreateFor(SeedBucketInfo seedBucketInfo, ISeedableFilter filter)
         {
             System.Diagnostics.Debug.Assert(!seedBucketInfo.HasAnyErrors);
 
             var seedingSteps = new List<SeedInfo>(seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Count());
-            foreach (var seedableInfo in seedBucketInfo.ContainedSeedables)
+            foreach (var seedableInfo in seedBucketInfo.ContainedSeedables.Where(seedable => filter.Accepts(seedable)))
                 RecursivelyBuildSeedingSteps(seedableInfo);
 
             return new SeedingPlan(seedingSteps);
