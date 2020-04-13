@@ -2,16 +2,16 @@
 
 <Project>
   <PropertyGroup>
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.3.0'))">
-Added
-=====
-All added features are in the experimental phase and lab-quality:
+
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab'))">
+$(LabQualityWarningAdded)
 * RequiresSeeds attribute and fixtures.
 * RequiresScenarios attribute and fixtures.
 * RequiresSeedBucket attribute and fixtures.
 * UseSeedingStartup attribute.
 * YieldData attribute.
 * VoidOutputSink class.
-    </PackageReleaseNotes>
+    </Added>
+
   </PropertyGroup>
 </Project>

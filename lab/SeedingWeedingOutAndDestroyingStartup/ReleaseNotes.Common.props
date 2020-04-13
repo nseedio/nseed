@@ -1,0 +1,30 @@
+<!-- Build properties that create NuGet package release notes with Added, Changed, and Fixed sections. -->
+<Project>
+  <PropertyGroup>
+
+    <PackageReleaseNotes></PackageReleaseNotes>
+
+    <PackageReleaseNotes Condition="'$(Added)' != ''">
+Added
+=====
+$(Added.Trim())
+    </PackageReleaseNotes>
+
+    <PackageReleaseNotes Condition="'$(Changed)' != ''">
+$(PackageReleaseNotes)
+Changed
+=======
+$(Changed.Trim())
+    </PackageReleaseNotes>
+
+    <PackageReleaseNotes Condition="'$(Fixed)' != ''">
+$(PackageReleaseNotes)
+Fixed
+=======
+$(Fixed.Trim())
+    </PackageReleaseNotes>
+
+    <PackageReleaseNotes>$(PackageReleaseNotes.Trim())</PackageReleaseNotes>
+
+  </PropertyGroup>
+</Project>

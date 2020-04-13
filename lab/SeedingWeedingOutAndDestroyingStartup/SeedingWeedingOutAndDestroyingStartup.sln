@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		BuildProperties.Packages.props = BuildProperties.Packages.props
 		BuildProperties.Tests.props = BuildProperties.Tests.props
 		Directory.Build.props = Directory.Build.props
+		ReleaseNotes.Common.props = ReleaseNotes.Common.props
 		StyleCop.json = StyleCop.json
 	EndProjectSection
 EndProject

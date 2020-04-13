@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <VersionPrefix>0.3.0</VersionPrefix>
-    <VersionSuffix>lab2</VersionSuffix>
+    <VersionSuffix>lab1</VersionSuffix>
 
     <PackageVersion>$(VersionPrefix)</PackageVersion>
     <PackageVersion Condition="'$(VersionSuffix)' != ''">$(PackageVersion)-$(VersionSuffix)</PackageVersion>
@@ -37,7 +37,17 @@
     <None Include="Icon.png" Pack="true" Visible="false" PackagePath="\" />
   </ItemGroup>
 
-  <Import Project="$(MSBuildProjectDirectory)/ReleaseNotes.props"
-          Condition="Exists('$(MSBuildProjectDirectory)/ReleaseNotes.props')" />
+  <PropertyGroup>
+    <Added></Added>
+    <Changed></Changed>
+    <Fixed></Fixed>
+    <LabQualityWarningAdded>All added features are in the experimental phase and lab-quality:</LabQualityWarningAdded>
+    <LabQualityWarningChanged>All changes are in the experimental phase and lab-quality:</LabQualityWarningChanged>
+    <LabQualityWarningFixed>All fixes are in the experimental phase and lab-quality:</LabQualityWarningFixed>
+  </PropertyGroup>
+
+  <Import Project="$(MSBuildProjectDirectory)/ReleaseNotes.props" />
+
+  <Import Project="$(MSBuildThisFileDirectory)/ReleaseNotes.Common.props" />
 
 </Project>

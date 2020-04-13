@@ -2,35 +2,31 @@
 
 <Project>
   <PropertyGroup>
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.3.0'))">
-Added
-=====
-All added features are in the experimental phase and lab-quality:
+
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab'))">
+$(LabQualityWarningAdded)
 * Seeding of seeds and scenarios.
 * SeedBucketStartup abstract class.
 * The info command displays errors.
-    </PackageReleaseNotes>
+    </Added>
 
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.2.0'))">
-Added
-=====
+    <Added Condition="'$(VersionPrefix)' == '0.2.0'">
 * SeedBucket handles command-line arguments.
 * IScenario interface.
 * Requires attribute.
 * Description attribute.
 * YieldOf base abstract class.
+    </Added>
 
-Changed
-=======
+    <Changed Condition="'$(VersionPrefix)' == '0.2.0'">
 * ISeed.OutputAlreadyExists() renamed to ISeed.HasAlreadyYielded().
-    </PackageReleaseNotes>
+    </Changed>
 
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.1.0'))">
-Added
-=====
+    <Added Condition="'$(VersionPrefix)' == '0.1.0'">
 * ISeed interface.
 * FriendlyName attribute.
 * Empty abstract SeedBucket base class.
-    </PackageReleaseNotes>
+    </Added>
+
   </PropertyGroup>
 </Project>

@@ -2,17 +2,15 @@
 
 <Project>
   <PropertyGroup>
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.2.0'))">
-Added
-=====
-* Fully functional info command that prints seed bucket summary, seeds, scenarios, and errors.
-* Fully functional new command that creates a new seed bucket project.
-    </PackageReleaseNotes>
 
-    <PackageReleaseNotes Condition="$(VersionPrefix.StartsWith('0.1.0'))">
-Added
-=====
+    <Added Condition="'$(VersionPrefix)' == '0.2.0'">
+* Info command prints seed bucket summary, seeds, scenarios, and errors.
+* New command creates a new seed bucket project.
+    </Added>
+
+    <Added Condition="'$(VersionPrefix)' == '0.1.0'">
 * Non-functional CLI interface for the new command with --solution, --framework, and --name options.
-    </PackageReleaseNotes>
+    </Added>
+
   </PropertyGroup>
 </Project>
