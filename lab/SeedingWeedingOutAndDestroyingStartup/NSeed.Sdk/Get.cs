@@ -20,6 +20,12 @@ namespace NSeed.Sdk
             return (TYieldOf)(await SeedAndGetYields(seedBucketStartupType, null, null, typeof(TYieldOf)))[0];
         }
 
+        public static async Task<TYieldOf> Yield<TYieldOf>(SeedBucketStartup seedBucketStartup, IOutputSink? outputSink = null)
+        {
+            // TODO: Chek type is yield.
+            return (TYieldOf)(await SeedAndGetYields(null, seedBucketStartup, outputSink, typeof(TYieldOf)))[0];
+        }
+
         public static async Task<(TYieldOf1, TYieldOf2)> Yields<TYieldOf1, TYieldOf2>()
         {
             var yields = await SeedAndGetYields(null, null, null, typeof(TYieldOf1), typeof(TYieldOf2));

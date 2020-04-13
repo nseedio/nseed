@@ -5,9 +5,14 @@
 
     <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab'))">
 $(LabQualityWarningAdded)
-- Get.Yields() methods.
-- Seed.Seeds() methods.
-- InternalQueueOutputSink class.
+* Get.Yields() methods.
+* Seed.Seeds() methods.
+* InternalQueueOutputSink class.
+    </Added>
+
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab2'))">
+$(Added.Trim())
+* [lab2]: Get.Yield() method override that accepts SeedBucketStartup and IOutputSink.
     </Added>
 
   </PropertyGroup>
