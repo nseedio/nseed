@@ -91,6 +91,10 @@ namespace NSeed.Cli.Subcommands.Info
             int numberOfErrors = seedBucketInfo.AllErrors.Count();
             int numberOfStartups = seedBucketInfo.Startups.Count();
 
+            bool seedsHaveDescriptions = seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Any(seed => seed.HasDescription());
+            bool scenariosHaveDescriptions = seedBucketInfo.ContainedSeedables.OfType<ScenarioInfo>().Any(scenario => scenario.HasDescription());
+            bool startupsHaveDescriptions = seedBucketInfo.Startups.Any(startup => startup.HasDescription());
+
             ConsoleRenderer.RenderDocument(GenerateSummary(), null, renderingBehavior.RenderRect);
 
             if (numberOfSeeds > 0)
@@ -183,14 +187,14 @@ namespace NSeed.Cli.Subcommands.Info
                         {
                             new Column { Width = GridLength.Star(3) },
                             new Column { Width = GridLength.Star(3) },
-                            new Column { Width = GridLength.Star(4) }
+                            seedsHaveDescriptions ? new Column { Width = GridLength.Star(4) } : null
                         },
 
                         Children =
                         {
                             CreateInfoGridHeaderCell("Name"),
                             CreateInfoGridHeaderCell("Creates"),
-                            CreateInfoGridHeaderCell("Description"),
+                            seedsHaveDescriptions ? CreateInfoGridHeaderCell("Description") : null,
                             seedBucketInfo.ContainedSeedables
                                 .OfType<SeedInfo>()
                                 .OrderBy(seed => seed.FriendlyName)
@@ -201,7 +205,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     {
                                         CreateInfoGridValueCell(seed.FriendlyName, textColor),
                                         CreateInfoGridValueCell(string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName)), textColor),
-                                        CreateInfoGridValueCell(seed.Description, textColor)
+                                        seedsHaveDescriptions ? CreateInfoGridValueCell(seed.Description, textColor) : null
                                     };
                                 })
                         }
@@ -226,13 +230,13 @@ namespace NSeed.Cli.Subcommands.Info
                         Columns =
                         {
                             new Column { Width = GridLength.Star(4) },
-                            new Column { Width = GridLength.Star(6) }
+                            scenariosHaveDescriptions ? new Column { Width = GridLength.Star(6) } : null
                         },
 
                         Children =
                         {
                             CreateInfoGridHeaderCell("Name"),
-                            CreateInfoGridHeaderCell("Description"),
+                            scenariosHaveDescriptions ? CreateInfoGridHeaderCell("Description") : null,
                             seedBucketInfo.ContainedSeedables
                                 .OfType<ScenarioInfo>()
                                 .OrderBy(scenario => scenario.FriendlyName)
@@ -242,7 +246,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     return new[]
                                     {
                                         CreateInfoGridValueCell(scenario.FriendlyName, textColor),
-                                        CreateInfoGridValueCell(scenario.Description, textColor)
+                                        scenariosHaveDescriptions ? CreateInfoGridValueCell(scenario.Description, textColor) : null
                                     };
                                 })
                         }
@@ -268,14 +272,14 @@ namespace NSeed.Cli.Subcommands.Info
                         {
                             new Column { Width = GridLength.Star(3) },
                             new Column { Width = GridLength.Star(3) },
-                            new Column { Width = GridLength.Star(4) }
+                            startupsHaveDescriptions ? new Column { Width = GridLength.Star(4) } : null
                         },
 
                         Children =
                         {
                             CreateInfoGridHeaderCell("Name"),
                             CreateInfoGridHeaderCell("Used in"),
-                            CreateInfoGridHeaderCell("Description"),
+                            startupsHaveDescriptions ? CreateInfoGridHeaderCell("Description") : null,
                             seedBucketInfo.Startups
                                 .OrderBy(startup => startup.FriendlyName)
                                 .Select(startup =>
@@ -285,7 +289,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     {
                                         CreateInfoGridValueCell(startup.FriendlyName, textColor),
                                         CreateInfoGridValueCell("<TODO>", textColor),
-                                        CreateInfoGridValueCell(startup.Description, textColor)
+                                        startupsHaveDescriptions ? CreateInfoGridValueCell(startup.Description, textColor) : null
                                     };
                                 })
                         }

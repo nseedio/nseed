@@ -7,6 +7,7 @@ The format of the file is based on [Keep a Changelog](http://keepachangelog.com/
 ### Added
 All added features are in the experimental phase and lab-quality:
 - `AlwaysRequired` attribute.
+- `info` command do not display description columns if there is no at least one description available.
 
 ## [0.3.0-lab2] - 2020-04-13 
 ### Added
@@ -18,7 +19,7 @@ All added features are in the experimental phase and lab-quality:
 All added features are in the experimental phase and lab-quality:
 - Seeding of seeds and scenarios.
 - `SeedBucketStartup` abstract class.
-- The `info` command displays errors.
+- `info` command displays errors.
 
 ## [0.2.0] - 2020-03-07
 ### Added
