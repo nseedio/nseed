@@ -11,6 +11,11 @@ namespace NSeed.MetaInfo
     public sealed class SeedInfo : SeedableInfo
     {
         /// <summary>
+        /// Gets a value indicating whether TODO.
+        /// </summary>
+        public bool IsAlwaysRequired { get; }
+
+        /// <summary>
         /// Gets types of entities yielded by this seed.
         /// </summary>
         public IReadOnlyCollection<EntityInfo> YieldedEntities { get; }
@@ -48,6 +53,7 @@ namespace NSeed.MetaInfo
             string fullName,
             string friendlyName,
             string description,
+            bool isAlwaysRequired,
             IReadOnlyCollection<SeedableInfo> explicitlyRequiredSeedables,
             IReadOnlyCollection<EntityInfo> yieldedEntities,
             ProvidedYieldInfo? yield,
@@ -64,6 +70,8 @@ namespace NSeed.MetaInfo
                 requiredYield.YieldingSeed.Type != null &&
                 requiredYield.Type.IsYieldTypeOfSeed(requiredYield.YieldingSeed.Type) &&
                 requiredYield.RequiringSeed == null));
+
+            IsAlwaysRequired = isAlwaysRequired;
 
             YieldedEntities = yieldedEntities;
 

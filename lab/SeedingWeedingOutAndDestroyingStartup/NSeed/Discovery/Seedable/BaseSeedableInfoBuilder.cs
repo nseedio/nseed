@@ -16,6 +16,7 @@ namespace NSeed.Discovery.Seedable
         private readonly IFullNameExtractor<TSeedableImplementation> fullNameExtractor;
         private readonly IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor;
         private readonly IDescriptionExtractor<TSeedableImplementation> descriptionExtractor;
+        private readonly ISeedAlwaysRequiredExtractor<TSeedableImplementation> alwaysRequiredExtractor;
         private readonly ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor;
         private readonly ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor;
         private readonly IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation> explicitlyRequiredSeedablesExtractor;
@@ -30,6 +31,7 @@ namespace NSeed.Discovery.Seedable
             IFullNameExtractor<TSeedableImplementation> fullNameExtractor,
             IFriendlyNameExtractor<TSeedableImplementation> friendlyNameExtractor,
             IDescriptionExtractor<TSeedableImplementation> descriptionExtractor,
+            ISeedAlwaysRequiredExtractor<TSeedableImplementation> alwaysRequiredExtractor,
             ISeedEntitiesExtractor<TSeedableImplementation> entitiesExtractor,
             ISeedProvidedYieldExtractor<TSeedableImplementation> providedYieldExtractor,
             Func<ISeedableInfoBuilder<TSeedableImplementation>, IExplicitlyRequiredSeedablesExtractor<TSeedableImplementation>> explicitlyRequiredSeedablesExtractorFactory,
@@ -40,6 +42,7 @@ namespace NSeed.Discovery.Seedable
             this.fullNameExtractor = fullNameExtractor;
             this.friendlyNameExtractor = friendlyNameExtractor;
             this.descriptionExtractor = descriptionExtractor;
+            this.alwaysRequiredExtractor = alwaysRequiredExtractor;
             this.entitiesExtractor = entitiesExtractor;
             this.providedYieldExtractor = providedYieldExtractor;
             explicitlyRequiredSeedablesExtractor = explicitlyRequiredSeedablesExtractorFactory(this);
@@ -72,6 +75,7 @@ namespace NSeed.Discovery.Seedable
             string fullName = fullNameExtractor.ExtractFrom(implementation);
             string friendlyName = friendlyNameExtractor.ExtractFrom(implementation);
             string description = descriptionExtractor.ExtractFrom(implementation);
+            bool isAlwaysRequired = alwaysRequiredExtractor.ExtractFrom(implementation);
             var explicitelyRequires = explicitlyRequiredSeedablesExtractor.ExtractFrom(implementation);
 
             return isSeedImplementation
@@ -82,6 +86,7 @@ namespace NSeed.Discovery.Seedable
                       fullName,
                       friendlyName,
                       description,
+                      isAlwaysRequired,
                       explicitelyRequires,
                       entitiesExtractor.ExtractFrom(implementation),
                       providedYieldExtractor.ExtractFrom(implementation),

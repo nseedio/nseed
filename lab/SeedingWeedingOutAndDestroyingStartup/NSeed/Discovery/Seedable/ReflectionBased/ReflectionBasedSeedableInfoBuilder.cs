@@ -12,6 +12,7 @@ namespace NSeed.Discovery.Seedable.ReflectionBased
                   new ReflectionBasedFullNameExtractor(),
                   new ReflectionBasedFriendlyNameExtractor(),
                   new ReflectionBasedDescriptionExtractor(),
+                  new ReflectionBasedSeedAlwaysRequiredExtractor(),
                   new ReflectionBasedSeedEntitiesExtractor(),
                   new ReflectionBasedSeedProvidedYieldExtractor(),
                   builder => new ReflectionBasedExplicitlyRequiredSeedablesExtractor(builder),

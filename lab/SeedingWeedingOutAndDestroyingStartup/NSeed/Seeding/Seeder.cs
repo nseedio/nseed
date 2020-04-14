@@ -261,6 +261,9 @@ namespace NSeed.Seeding
 
             var seedingPlan = SeedingPlan.CreateFor(seedBucketInfo, filter);
 
+            // TODO: Check if the seeding plan is empty and return appropriate report.
+            //       In the report show the used filter. "... no seeds or scenarios that satisfied the given filter: ...". Add the FriendlyDescription property to the ISeedablesFilter.
+
             return await SeedSeedingPlan();
 
             async Task<SeedingReport> SeedSeedingPlan()

@@ -76,7 +76,8 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 
             var projectService = objectCreator.WithLocalInMemoryDatabase(databaseName, databaseRoot).Create<IProjectService>();
             var projects = (await projectService.GetAll()).Value;
-            Assert.Equal(2, projects.Count);
+            Assert.Contains(projects, project => project.Name == SomeAlwaysRequiredProject.Yield.SomeAlwaysRequiredProjectName);
+            Assert.Equal(3, projects.Count);
 
             projectService = objectCreator.WithLocalInMemoryDatabase(Guid.NewGuid().ToString(), new InMemoryDatabaseRoot()).Create<IProjectService>();
             projects = (await projectService.GetAll()).Value;
@@ -110,7 +111,8 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
 
             var projectService = objectCreator.WithLocalInMemoryDatabase(databaseName, databaseRoot).Create<IProjectService>();
             var projects = (await projectService.GetAll()).Value;
-            Assert.Single(projects);
+            Assert.Contains(projects, project => project.Name == SomeAlwaysRequiredProject.Yield.SomeAlwaysRequiredProjectName);
+            Assert.Equal(2, projects.Count);
 
             projectService = objectCreator.WithLocalInMemoryDatabase(Guid.NewGuid().ToString(), new InMemoryDatabaseRoot()).Create<IProjectService>();
             projects = (await projectService.GetAll()).Value;

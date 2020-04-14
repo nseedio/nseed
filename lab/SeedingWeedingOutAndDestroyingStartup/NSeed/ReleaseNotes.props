@@ -15,6 +15,11 @@ $(Added.Trim())
 * [lab2]: ISeedableFilter interface with concrete implementations: FullNameEqualsSeedableFilter, FullNameContainsSeedableFilter, AcceptAllSeedableFilter.
     </Added>
 
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab3'))">
+$(Added.Trim())
+* [lab3]: AlwaysRequired attribute.
+    </Added>
+
     <Added Condition="'$(VersionPrefix)' == '0.2.0'">
 * SeedBucket handles command-line arguments.
 * IScenario interface.
