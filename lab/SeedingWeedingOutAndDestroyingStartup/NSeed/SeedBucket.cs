@@ -3,6 +3,7 @@ using NSeed.Abstractions;
 using NSeed.Cli;
 using NSeed.Discovery.SeedBucket;
 using NSeed.Discovery.SeedBucket.ReflectionBased;
+using NSeed.Filtering;
 using NSeed.MetaInfo;
 using NSeed.Seeding;
 using System;
@@ -33,10 +34,11 @@ namespace NSeed
         /// TODO.
         /// </summary>
         /// <param name="output">TODO. TODO.</param>
+        /// <param name="filter">TODO. TODO. TODO.</param>
         /// <returns>A <see cref="Task{TResult}"/> representing the result of the asynchronous operation.</returns>
-        public Task Seed(IOutputSink output) // TODO: Think of dependency injection of the engine in generall and especially for IOutputSink.
+        public Task Seed(IOutputSink output, ISeedableFilter? filter = null) // TODO: Think of dependency injection of the engine in generall and especially for IOutputSink.
         {
-            return new Seeder(seedBucketInfoBuilder, output).SeedSeedBucket(GetType());
+            return new Seeder(seedBucketInfoBuilder, output).SeedSeedBucket(GetType(), filter);
         }
 
         /// <summary>

@@ -20,11 +20,19 @@ namespace NSeed.Cli
         [Option(NoColorShortOption + "|" + NoColorLongOption, Description = Resources.BaseCommand.NoColorDescription)]
         public bool NoColor { get; private set; }
 
+        public const string FilterLongName = "filter";
+        public const string FilterLongOption = "--" + FilterLongName;
+        public const string FilterShortOption = "-f";
+
+        [Option(FilterShortOption + "|" + FilterLongOption, Description = Resources.BaseCommand.FilterDescription)]
+        public string Filter { get; private set; }
+
         protected IOutputSink Output { get; }
 
         protected BaseCommand(IOutputSink output)
         {
             Output = output;
+            Filter = string.Empty;
         }
     }
 }

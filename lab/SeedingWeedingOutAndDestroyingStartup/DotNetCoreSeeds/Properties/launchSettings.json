@@ -7,9 +7,17 @@
       "commandName": "Project",
       "commandLineArgs": "info"
     },
+    "RunInfoCommandWithFilter": {
+      "commandName": "Project",
+      "commandLineArgs": "info --filter Apartment"
+    },
     "RunSeedCommand": {
       "commandName": "Project",
       "commandLineArgs": "seed --verbose"
+    },
+    "RunSeedCommandWithFilter": {
+      "commandName": "Project",
+      "commandLineArgs": "seed --verbose --filter Apartment"
     }
   }
 }

@@ -6,6 +6,7 @@ namespace NSeed.Cli.Assets
         {
             public const string VerboseDescription = "Show verbose output.";
             public const string NoColorDescription = "Do not use colored output.";
+            public const string FilterDescription = "Filter Seeds by provided name.";
         }
     }
 }

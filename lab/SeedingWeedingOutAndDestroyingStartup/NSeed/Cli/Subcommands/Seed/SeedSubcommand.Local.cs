@@ -1,5 +1,6 @@
 using Alba.CsConsoleFormat;
 using NSeed.Abstractions;
+using NSeed.Filtering;
 using NSeed.MetaInfo;
 using System;
 using System.Linq;
@@ -83,8 +84,8 @@ namespace NSeed.Cli.Subcommands.Seed
         public async Task OnExecute()
         {
             Output.WriteLine();
-
-            await seedBucket.Seed(Output);
+            var seedableFilter = !string.IsNullOrEmpty(Filter) ? new FullNameContainsSeedableFilter(Filter) : null;
+            await seedBucket.Seed(Output, seedableFilter);
         }
     }
 }
