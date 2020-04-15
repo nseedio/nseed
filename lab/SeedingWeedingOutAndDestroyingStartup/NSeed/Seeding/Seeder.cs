@@ -37,8 +37,8 @@ namespace NSeed.Seeding
             // a seed bucket info and never null; threfore "!".
             var seedBucketInfo = seedBucketInfoBuilder.BuildFrom(seedBucketType)!;
 
-            // TODO: Return proper seeding report if there is more then one seeding.
-            if (seedBucketInfo.Startups.Count() > 1) throw new Exception("TODO: Return proper seeding report if there is more then one seeding.");
+            // TODO: Return proper seeding report if there is more then one seeding startup available.
+            if (seedBucketInfo.Startups.Count() > 1) throw new Exception("TODO: Return proper seeding report if there is more then one seeding startup available.");
 
             var seedBucketStartupType = seedBucketInfo.Startups.FirstOrDefault().Type;
 
@@ -71,7 +71,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedSeeds(params Type[] seedTypes)
         {
             // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -84,7 +83,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedSeeds(Type seedBucketStartupType, params Type[] seedTypes)
         {
             // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -97,7 +95,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedSeeds(SeedBucketStartup seedBucketStartup, params Type[] seedTypes)
         {
             // TODO: Checks. Not null, all seeds from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = seedTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -110,7 +107,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedScenarios(params Type[] scenarioTypes)
         {
             // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -123,7 +119,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedScenarios(Type seedBucketStartupType, params Type[] scenarioTypes)
         {
             // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -136,7 +131,6 @@ namespace NSeed.Seeding
         public Task<SeedingReport> SeedScenarios(SeedBucketStartup seedBucketStartup, params Type[] scenarioTypes)
         {
             // TODO: Checks. Not null, all scenarios from the same seed bucket etc, must have seed bucket.
-            // TODO: Workaround so far. Just seed the whole bucket.
             // TODO: Workaround so far. Just pick up the first seed bucket.
 
             var seedBucketType = scenarioTypes.First().Assembly.GetTypes().First(type => typeof(SeedBucket).IsAssignableFrom(type));
@@ -247,7 +241,7 @@ namespace NSeed.Seeding
             // TODO: Checks or Debug.Asserts?
             if (seedBucketStartupType is null) return null;
 
-            outputSink.WriteVerboseMessage($"Creating seed bucket startup of type {seedBucketStartupType} TODO");
+            outputSink.WriteVerboseMessage($"Creating seed bucket startup of type {seedBucketStartupType}");
 
             IServiceCollection serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton(outputSink);
@@ -277,13 +271,13 @@ namespace NSeed.Seeding
                     // TODO: Add creation of SeedingStartup and registration of services.
                     if (seedBucketStartup != null)
                     {
-                        outputSink.WriteVerboseMessage($"Configuring service collection TODO");
+                        outputSink.WriteVerboseMessage($"Configuring service collection");
 
                         seedBucketStartup.ConfigureServices(serviceCollection);
 
                         // TODO: Check that the configuration does not override IOutputSink. Only the engine can add it. It must be singleton and the same one we have here.
 
-                        outputSink.WriteVerboseMessage($"Initializing seeding TODO");
+                        outputSink.WriteVerboseMessage($"Initializing seeding");
 
                         using (var serviceScope = serviceCollection.BuildServiceProvider().CreateScope())
                         {
@@ -329,7 +323,7 @@ namespace NSeed.Seeding
                     }
                 }
 
-                outputSink.WriteConfirmation($"Seeding completed TODO");
+                outputSink.WriteConfirmation($"Seeding completed");
 
                 return SeedingReport.CreateForSucceeded(seedBucketInfo, seedingPlan, singleSeedSeedingResults);
 
@@ -338,7 +332,7 @@ namespace NSeed.Seeding
                 {
                     System.Diagnostics.Debug.Assert(seedingStep > 0);
 
-                    outputSink.WriteVerboseMessage($"Creating seed {seedInfo.FriendlyName} TODO");
+                    outputSink.WriteVerboseMessage($"Creating seed {seedInfo.FriendlyName}");
 
                     // TODO: Check if seedInfo.Type exists. Where to check that? Seeding should work only if Type exists. Where to add those checks?
                     var seed = (ISeed)ActivatorUtilities.GetServiceOrCreateInstance(serviceProvider, seedInfo.Type);
@@ -364,15 +358,15 @@ namespace NSeed.Seeding
 
                     if (await seed.HasAlreadyYielded())
                     {
-                        outputSink.WriteMessage($"Skipping {seedInfo.FriendlyName} TODO");
+                        outputSink.WriteMessage($"Skipping {seedInfo.FriendlyName}");
                         return false;
                     }
 
-                    outputSink.WriteMessage($"Seeding {seedInfo.FriendlyName} TODO");
+                    outputSink.WriteMessage($"Seeding {seedInfo.FriendlyName}");
 
                     await seed.Seed();
 
-                    outputSink.WriteMessage($"Seeding {seedInfo.FriendlyName} completed TODO");
+                    outputSink.WriteMessage($"Seeding {seedInfo.FriendlyName} completed");
 
                     return true;
                 }
