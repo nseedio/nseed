@@ -3,14 +3,14 @@ All notable changes to the "NSeed" NuGet package will be documented in this file
 
 The format of the file is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [0.3.0-lab3] - Unreleased
+## [0.3.0-lab3] - 2020-04-15 
 ### Added
 All added features are in the experimental phase and lab-quality:
 - `info` command displays seed, scenario, and startup type name below their friendly names.
 - `info` command displays yielded entity types without the common namespace. 
 - `seed` command supports --filter option.
 - `AlwaysRequired` attribute.
-- `info` command do not display description columns if there is no at least one description available.
+- `info` command does not display description columns if there is no at least one description available.
 
 ## [0.3.0-lab2] - 2020-04-13 
 ### Added
