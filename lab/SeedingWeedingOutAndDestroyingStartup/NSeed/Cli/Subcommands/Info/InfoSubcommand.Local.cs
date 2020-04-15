@@ -1,5 +1,6 @@
 using Alba.CsConsoleFormat;
 using NSeed.Abstractions;
+using NSeed.Algorithms;
 using NSeed.MetaInfo;
 using System;
 using System.Linq;
@@ -200,11 +201,15 @@ namespace NSeed.Cli.Subcommands.Info
                                 .OrderBy(seed => seed.FriendlyName)
                                 .Select(seed =>
                                 {
+                                    var yieldedEntitesFullNames = seed.YieldedEntities.Select(entity => entity.FullName).ToArray();
+                                    int commonNamespaceLength = StringAlgorithms.GetDeepestCommonNamespaceLength(yieldedEntitesFullNames);
+                                    yieldedEntitesFullNames = yieldedEntitesFullNames.Select(entityName => entityName.Substring(commonNamespaceLength)).ToArray();
+
                                     var textColor = GetCellTextColor(seed);
                                     return new[]
                                     {
                                         CreateInfoGridValueCell(seed.FriendlyName, textColor),
-                                        CreateInfoGridValueCell(string.Join(Environment.NewLine, seed.YieldedEntities.Select(entity => entity.FullName)), textColor),
+                                        CreateInfoGridValueCell(string.Join(Environment.NewLine, yieldedEntitesFullNames), textColor),
                                         seedsHaveDescriptions ? CreateInfoGridValueCell(seed.Description, textColor) : null
                                     };
                                 })

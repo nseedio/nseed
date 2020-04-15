@@ -1,3 +1,4 @@
+using NSeed.Extensions;
 using NSeed.MetaInfo;
 using System.Linq;
 
@@ -21,6 +22,6 @@ namespace NSeed.Filtering
         }
 
         /// <inheritdoc/>
-        public bool Accepts(SeedableInfo seedableInfo) => partsOfSeedableFullName.Any(part => seedableInfo.FullName.IndexOf(part, System.StringComparison.InvariantCultureIgnoreCase) >= 0);
+        public bool Accepts(SeedableInfo seedableInfo) => partsOfSeedableFullName.Any(part => seedableInfo.FullName.Contains(part, System.StringComparison.InvariantCultureIgnoreCase));
     }
 }

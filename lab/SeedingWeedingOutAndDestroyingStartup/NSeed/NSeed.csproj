@@ -14,6 +14,7 @@
   <ItemGroup>
     <Compile Include="..\AssemblyInfo.Common.cs" Link="Properties\AssemblyInfo.Common.cs" />
     <Compile Include="..\Common\Abstractions\IOutputSink.cs" Link="Abstractions\IOutputSink.cs" />
+    <Compile Include="..\Common\Algorithms\StringAlgorithms.cs" Link="Algorithms\StringAlgorithms.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.BaseCommand.cs" Link="Cli\Assets\Resources.BaseCommand.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.cs" Link="Cli\Assets\Resources.cs" />
     <Compile Include="..\Common\Cli\Assets\Resources.Info.cs" Link="Cli\Assets\Resources.Info.cs" />
@@ -60,6 +61,7 @@
 
   <ItemGroup>
     <Folder Include="Cli\Assets\" />
+    <Folder Include="Algorithms\" />
   </ItemGroup>  
 
 </Project>
