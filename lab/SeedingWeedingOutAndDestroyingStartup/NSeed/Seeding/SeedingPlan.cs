@@ -24,9 +24,11 @@ namespace NSeed.Seeding
             if (!seedBucketInfo.ContainedSeedables.Any(seedable => filter.Accepts(seedable)))
                 return Empty;
 
-            var alwaysRequiredSeeds = seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Where(seed => seed.IsAlwaysRequired);
+            IEnumerable<SeedableInfo> alwaysRequiredSeeds = seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Where(seed => seed.IsAlwaysRequired);
             var filteredSeedables = seedBucketInfo.ContainedSeedables.Where(seedable => filter.Accepts(seedable));
-            var seedablesToSeed = filteredSeedables.Union(alwaysRequiredSeeds);
+
+            // Always required seeds must be at the beginning so that we ensure that they are always created first.
+            var seedablesToSeed = alwaysRequiredSeeds.Union(filteredSeedables);
 
             var seedingSteps = new List<SeedInfo>(seedBucketInfo.ContainedSeedables.OfType<SeedInfo>().Count());
             foreach (var seedableInfo in seedablesToSeed)
