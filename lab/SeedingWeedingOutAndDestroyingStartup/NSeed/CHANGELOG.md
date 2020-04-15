@@ -6,6 +6,9 @@ The format of the file is based on [Keep a Changelog](http://keepachangelog.com/
 ## [0.3.0-lab3] - Unreleased
 ### Added
 All added features are in the experimental phase and lab-quality:
+- `info` command displays seed, scenario, and startup type name below their friendly names.
+- `info` command displays yielded entity types without the common namespace. 
+- `seed` command supports --filter option.
 - `AlwaysRequired` attribute.
 - `info` command do not display description columns if there is no at least one description available.
 

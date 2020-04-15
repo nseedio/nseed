@@ -17,6 +17,9 @@ $(Added.Trim())
 
     <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab3'))">
 $(Added.Trim())
+* [lab3]: Info command displays seed, scenario, and startup type name below their friendly names.
+* [lab3]: Info command displays yielded entity types without the common namespace. 
+* [lab3]: Seed command supports --filter option.
 * [lab3]: AlwaysRequired attribute.
 * [lab3]: Info command do not display description columns if there is no at least one description available.
     </Added>
