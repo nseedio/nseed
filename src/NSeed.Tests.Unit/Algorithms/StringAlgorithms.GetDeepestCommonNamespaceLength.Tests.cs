@@ -150,5 +150,21 @@ namespace NSeed.Tests.Unit.Algorithms
 
             length.Should().Be(@namespace.Length + 1);
         }
+
+        [Theory]
+        [InlineData("A")]
+        [InlineData("A.B")]
+        [InlineData("A.B.C")]
+        public void Returnsﾠexpectedﾠlengthﾠwhenﾠsingleﾠtypeﾠnameﾠstartsﾠwithﾠnamespace(string @namespace)
+        {
+            var typeNames = new[]
+            {
+                $"{@namespace}.SomeName"
+            };
+
+            var length = StringAlgorithms.GetDeepestCommonNamespaceLength(typeNames);
+
+            length.Should().Be(@namespace.Length + 1);
+        }
     }
 }

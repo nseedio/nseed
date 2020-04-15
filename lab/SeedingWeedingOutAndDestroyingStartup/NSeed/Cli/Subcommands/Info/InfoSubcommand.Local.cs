@@ -208,7 +208,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     var textColor = GetCellTextColor(seed);
                                     return new[]
                                     {
-                                        CreateInfoGridValueCell(seed.FriendlyName, textColor),
+                                        CreateInfoGridValueCell($"{seed.FriendlyName}{Environment.NewLine}{seed.Name}", textColor),
                                         CreateInfoGridValueCell(string.Join(Environment.NewLine, yieldedEntitesFullNames), textColor),
                                         seedsHaveDescriptions ? CreateInfoGridValueCell(seed.Description, textColor) : null
                                     };
@@ -250,7 +250,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     var textColor = GetCellTextColor(scenario);
                                     return new[]
                                     {
-                                        CreateInfoGridValueCell(scenario.FriendlyName, textColor),
+                                        CreateInfoGridValueCell($"{scenario.FriendlyName}{Environment.NewLine}{scenario.Name}", textColor),
                                         scenariosHaveDescriptions ? CreateInfoGridValueCell(scenario.Description, textColor) : null
                                     };
                                 })
@@ -292,7 +292,7 @@ namespace NSeed.Cli.Subcommands.Info
                                     var textColor = GetCellTextColor(startup);
                                     return new[]
                                     {
-                                        CreateInfoGridValueCell(startup.FriendlyName, textColor),
+                                        CreateInfoGridValueCell($"{startup.FriendlyName}{Environment.NewLine}{startup.Name}", textColor),
                                         CreateInfoGridValueCell("<TODO>", textColor),
                                         startupsHaveDescriptions ? CreateInfoGridValueCell(startup.Description, textColor) : null
                                     };
