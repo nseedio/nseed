@@ -10,12 +10,12 @@ $(LabQualityWarningAdded)
 * Info command displays errors.
     </Added>
 
-    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab2'))">
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab'))"> <!-- lab2 -->
 $(Added.Trim())
 * [lab2]: ISeedableFilter interface with concrete implementations: FullNameEqualsSeedableFilter, FullNameContainsSeedableFilter, AcceptAllSeedableFilter.
     </Added>
 
-    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab3'))">
+    <Added Condition="'$(VersionPrefix)' == '0.3.0' And $(VersionSuffix.StartsWith('lab'))"> <!-- lab3 -->
 $(Added.Trim())
 * [lab3]: Info command displays seed, scenario, and startup type name below their friendly names.
 * [lab3]: Info command displays yielded entity types without the common namespace. 
