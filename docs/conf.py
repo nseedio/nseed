@@ -24,8 +24,14 @@ project = 'NSeed'
 copyright = '2020, Igor Roncevic & Andrej Matijevic'
 author = 'Igor Roncevic & Andrej Matijevic'
 
-# The full version, including alpha/beta/rc tags
-release = '1.0.0'
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+version = u''
+# The full version, including alpha/beta/rc tags.
+release = u''
 
 
 # -- General configuration ---------------------------------------------------
