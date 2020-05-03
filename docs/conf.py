@@ -17,6 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
+# The master toctree document.
+master_doc = 'index'
+
 project = 'NSeed'
 copyright = '2020, Igor Roncevic & Andrej Matijevic'
 author = 'Igor Roncevic & Andrej Matijevic'
