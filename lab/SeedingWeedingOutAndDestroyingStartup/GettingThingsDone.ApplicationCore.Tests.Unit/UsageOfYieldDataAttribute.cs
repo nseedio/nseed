@@ -14,7 +14,8 @@ namespace GettingThingsDone.ApplicationCore.Tests.Unit
     public class UsageOfYieldDataAttribute
     {
         private readonly ITestOutputHelper output;
-        private readonly ObjectCreator objectCreator = new ObjectCreator();
+
+        // private readonly ObjectCreator objectCreator = new ObjectCreator();
 
         public UsageOfYieldDataAttribute(ITestOutputHelper output)
         {
