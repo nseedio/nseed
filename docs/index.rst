@@ -6,24 +6,31 @@ NSeed is Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonum
 
 .. toctree::
    :maxdepth: 2
-   :caption: Overview
-   
-   overview/Getting-started
-   overview/NSeed-with-xUnit
+   :caption: Introduction
+
+   introduction/gettingStartedGuide
+   introduction/terminology
+   introduction/nSeedCli
 
 .. toctree::
    :maxdepth: 2
-   :caption: Features
+   :caption: Quickstarts
 
-   features/Cli
-   features/Seed-bucket
-   features/Seed-scenario
-   features/Seed
+   quickstarts/creatingFirstSeedBucketProject
+   quickstarts/creatingFirstSeed
+   quickstarts/yieldsAndDependentSeeds
+   quickstarts/creatingFirstScenario
+
+.. toctree::
+   :maxdepth: 2
+   :caption: NSeed and xUnit
+
+   nSeedAndxUnit/nSeedAndxUnit
 
 Examples
 ========
 
-The source code contains unit tests for all of the features listed above. Use the GitHub search to find relevant examples.
+The source code contains examples for all of the features listed above. Use the GitHub search to find relevant examples.
 
 Housekeeping
 ============
